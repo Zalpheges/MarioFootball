@@ -449,6 +449,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1642756263}
   - component: {fileID: 1642756262}
+  - component: {fileID: 1642756264}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -468,6 +469,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ff4baedbbf009f459e8492fba7370d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  debugMatch: {fileID: 1642756264}
 --- !u!4 &1642756263
 Transform:
   m_ObjectHideFlags: 0
@@ -482,6 +484,23 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1642756264
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1642756261}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09eb34fcacb82354f823900c48510f76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  captain1: {fileID: 11400000, guid: e32174f7889a0ab429aeae9b2b0b2040, type: 2}
+  captain2: {fileID: 11400000, guid: e32174f7889a0ab429aeae9b2b0b2040, type: 2}
+  mate1: {fileID: 11400000, guid: e32174f7889a0ab429aeae9b2b0b2040, type: 2}
+  mate2: {fileID: 11400000, guid: e32174f7889a0ab429aeae9b2b0b2040, type: 2}
+  goalKeeper: {fileID: 11400000, guid: e32174f7889a0ab429aeae9b2b0b2040, type: 2}
 --- !u!1 &1949877267
 GameObject:
   m_ObjectHideFlags: 0
@@ -1491,6 +1510,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d434d2f558bda974a9ec40e67fa9e32c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  team1: {fileID: 8875840102547248346}
+  team2: {fileID: 8875840102387356478}
 --- !u!23 &8875840104054592024
 MeshRenderer:
   m_ObjectHideFlags: 0

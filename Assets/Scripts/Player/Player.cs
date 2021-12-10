@@ -31,7 +31,7 @@ public class Player : MonoBehaviour
     public bool IsDoped { get; private set; }
     public bool CanMove => State == PlayerState.Moving;
 
-    public bool IsPiloted { get; private set; }
+    public bool IsPiloted { get; set; } = false;
 
     private void Awake()
     {
@@ -50,6 +50,11 @@ public class Player : MonoBehaviour
         Vector3 move = IsPiloted ? Team.Brain.Move() : IABrain.Move();
 
         transform.position += move;
+    }
+
+    public void Pilot()
+    {
+        IsPiloted = true;
     }
 
     private void OnCollisionEnter(Collision collision)

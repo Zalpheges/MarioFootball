@@ -1,4 +1,6 @@
-public class Match
+using UnityEngine;
+
+public class Match : MonoBehaviour
 {
     public PlayerSpecs captain1;
     public PlayerSpecs captain2;
