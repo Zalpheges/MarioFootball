@@ -15,4 +15,6 @@ public class PlayerSpecs : ScriptableObject
 
     [Range(0f, 5f)]
     public float stunTime = 1f;
+
+    public GameObject prefab;
 }
