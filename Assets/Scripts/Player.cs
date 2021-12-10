@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public enum State
+    public enum PlayerState
     {
         Moving,
         Tackling,
@@ -12,24 +12,26 @@ public class Player : MonoBehaviour
         Shocked
     }
 
-    private PlayerSpecs playerSpecs;
+    [SerializeField] private PlayerSpecs specs;
 
-    public State state { get; private set; }
-
-    public bool CanGetBall => !IsStunned && state != State.Headbutting && !HasBall;
-    public bool IsStunned => state == State.Shocked || state == State.Falling;
-
-    public bool IsPiloted { get; private set; }
-    public bool HasBall { get; private set; }
-    public bool IsDoped { get; private set; }
-
-    public bool CanMove => state == State.Moving;
+    private Ball ball;
 
     private Animator animator;
     private Rigidbody rgbd;
 
-    [SerializeField] private PlayerBrain PilotedBrain;
     [SerializeField] private PlayerBrain IABrain;
+
+    public PlayerState State { get; private set; }
+    public Team Team { get; private set; }
+
+    public bool CanGetBall => !IsStunned && State != PlayerState.Headbutting && !HasBall;
+    public bool IsStunned => State == PlayerState.Shocked || State == PlayerState.Falling;
+
+    public bool HasBall { get => ball; }
+    public bool IsDoped { get; private set; }
+    public bool CanMove => State == PlayerState.Moving;
+
+    public bool IsPiloted { get; private set; }
 
     private void Awake()
     {
@@ -37,9 +39,15 @@ public class Player : MonoBehaviour
         rgbd = GetComponent<Rigidbody>();
     }
 
+    private void Start()
+    {
+        rgbd.mass = specs.weight;
+        gameObject.name = specs.name;
+    }
+
     private void Update()
     {
-        Vector3 move = IsPiloted ? PilotedBrain.Move() : IABrain.Move();
+        Vector3 move = IsPiloted ? Team.Brain.Move() : IABrain.Move();
 
         transform.position += move;
     }
