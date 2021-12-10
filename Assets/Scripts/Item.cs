@@ -1,16 +1,10 @@
 using UnityEngine;
 
-public class Item : MonoBehaviour
+public abstract class Item : MonoBehaviour
 {
     private Team team;
 
-    void Start()
-    {
+    protected abstract void OnTriggerEnter(Collider other);
+    protected abstract void Move();
 
-    }
-
-    void Update()
-    {
-        
-    }
 }
