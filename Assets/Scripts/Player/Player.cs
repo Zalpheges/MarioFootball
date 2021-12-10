@@ -22,7 +22,7 @@ public class Player : MonoBehaviour
     [SerializeField] private PlayerBrain IABrain;
 
     public PlayerState State { get; private set; }
-    public Team Team { get; private set; }
+    public Team Team { get; set; }
 
     public bool CanGetBall => !IsStunned && State != PlayerState.Headbutting && !HasBall;
     public bool IsStunned => State == PlayerState.Shocked || State == PlayerState.Falling;
@@ -50,11 +50,6 @@ public class Player : MonoBehaviour
         Vector3 move = IsPiloted ? Team.Brain.Move() : IABrain.Move();
 
         transform.position += move;
-    }
-
-    public void Pilot()
-    {
-        IsPiloted = true;
     }
 
     private void OnCollisionEnter(Collision collision)
