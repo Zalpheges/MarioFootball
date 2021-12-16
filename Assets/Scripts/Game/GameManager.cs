@@ -22,7 +22,12 @@ public class GameManager : MonoBehaviour
         matches = new Queue<Match>();
         matches.Enqueue(debugMatch);
     }
-
+    /// <summary>
+    /// Fournit les coéquipiers à chaque équipe, les place, et instancie le ballon
+    /// </summary>
+    /// <param name="team1">Spermatozoïde n°1</param>
+    /// <param name="team2">Spermatozoïde n°2</param>
+    /// <returns>RIENG</returns>
     public static void BreedMePlease(Team team1, Team team2)
     {
         Match match = instance.matches.Dequeue();
@@ -52,15 +57,14 @@ public class GameManager : MonoBehaviour
 
         Field.Init(Instantiate(PrefabManager.Ball).GetComponent<Ball>());
     }
-
     private IEnumerator Match()
     {
         yield return new WaitForSeconds(instance.debugMatchDuration);
 
         instance.currentResult.duration = instance.debugMatchDuration;
 
-        instance.currentResult.scoreTeam1 = Field.Team2.Score;
-        instance.currentResult.scoreTeam2 = Field.Team1.Score;
+        instance.currentResult.scoreTeam1 = Field.Team2.ConcededGoals;
+        instance.currentResult.scoreTeam2 = Field.Team1.ConcededGoals;
 
         instance.results.Enqueue(instance.currentResult);
     }

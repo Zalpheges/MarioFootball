@@ -43,7 +43,10 @@ public class Field : MonoBehaviour
 
         GameManager.BreedMePlease(team1, team2);
     }
-
+    /// <summary>
+    /// Assigne le ballon créé puis le positionne ainsi que les joueurs
+    /// </summary>
+    /// <param name="ball">Le ballon</param>
     public static void Init(Ball ball)
     {
         instance.ball = ball;

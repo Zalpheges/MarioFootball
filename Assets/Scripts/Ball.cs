@@ -17,7 +17,9 @@ public class Ball : MonoBehaviour
     {
         
     }
-
+    /// <summary>
+    /// Dessine une traînée derrière la balle
+    /// </summary>
     private void DrawTrail()
     {
 
