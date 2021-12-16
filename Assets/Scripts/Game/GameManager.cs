@@ -42,18 +42,20 @@ public class GameManager : MonoBehaviour
         for (int i = 1; i < 4; ++i)
             teammates[i] = Player.CreatePlayer(match.mate1.prefab, team1);
 
-        Player goal = Player.CreatePlayer(match.goalKeeper.prefab, team1, true, true);
+        Player goal1 = Player.CreatePlayer(match.goalKeeper.prefab, team1, true, true);
 
-        team1.Init(teammates, goal);
+        team1.Init(teammates, goal1);
+
+        teammates = new Player[4];
 
         teammates[0] = Player.CreatePlayer(match.captain2.prefab, team2);
 
         for (int i = 1; i < 4; ++i)
             teammates[i] = Player.CreatePlayer(match.mate2.prefab, team2);
 
-        goal = Player.CreatePlayer(match.goalKeeper.prefab, team2, true);
+        Player goal2 = Player.CreatePlayer(match.goalKeeper.prefab, team2, true);
 
-        team2.Init(teammates, goal);
+        team2.Init(teammates, goal2);
 
         Field.Init(Instantiate(PrefabManager.Ball).GetComponent<Ball>());
     }
