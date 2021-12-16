@@ -71,6 +71,8 @@ public class Player : MonoBehaviour
 
         if (Team == Field.Team1)
             gameObject.name += "team1";
+        else
+            gameObject.name += "team2";
     }
 
     private void Update()
