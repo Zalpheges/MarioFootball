@@ -35,7 +35,7 @@ public class Player : MonoBehaviour
 
     bool fdp = false;
 
-    public static Player CreatePlayer(GameObject prefab, Team team, bool isGoalKeeper = false, bool isFDP = false)
+    public static Player CreatePlayer(GameObject prefab, Team team, bool isGoalKeeper = false)
     {
         Player player = Instantiate(prefab).GetComponent<Player>();
 
@@ -46,8 +46,6 @@ public class Player : MonoBehaviour
         player.Team = team;
 
         player.GetComponent<Rigidbody>().isKinematic = true;
-
-        player.fdp = isFDP;
 
         return player;
     }
@@ -62,17 +60,6 @@ public class Player : MonoBehaviour
     {
         rgbd.mass = specs.weight;
         gameObject.name = specs.name;
-
-        if (fdp)
-            gameObject.name = "fdp de merde";
-
-        if (fdp)
-            Debug.Log(transform.position);
-
-        if (Team == Field.Team1)
-            gameObject.name += "team1";
-        else
-            gameObject.name += "team2";
     }
 
     private void Update()
@@ -80,9 +67,6 @@ public class Player : MonoBehaviour
         Vector3 move = IsPiloted ? Team.Brain.Move(Team) : IABrain.Move(Team);
 
         transform.position += move;
-
-        if (fdp)
-            Debug.Log(transform.position);
     }
 
     private void OnCollisionEnter(Collision collision)
