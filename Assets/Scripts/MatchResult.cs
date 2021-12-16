@@ -1,20 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-// TODO : Do class MatchResults
-
-public class MatchResult : MonoBehaviour
+public class MatchResult
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public Match match;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public int scoreTeam1;
+    public int scoreTeam2;
+
+    public float duration;
 }

@@ -19,10 +19,10 @@ public class Player : MonoBehaviour
     private Animator animator;
     private Rigidbody rgbd;
 
-    [SerializeField] private PlayerBrain IABrain;
+    [SerializeField] public PlayerBrain IABrain;
 
     public PlayerState State { get; private set; }
-    public Team Team { get; set; }
+    public Team Team { get; private set; }
 
     public bool CanGetBall => !IsStunned && State != PlayerState.Headbutting && !HasBall;
     public bool IsStunned => State == PlayerState.Shocked || State == PlayerState.Falling;
@@ -32,6 +32,18 @@ public class Player : MonoBehaviour
     public bool CanMove => State == PlayerState.Moving;
 
     public bool IsPiloted { get; set; } = false;
+
+    public static Player CreatePlayer(GameObject prefab, Team team, bool isGoalKeeper = false)
+    {
+        Player player = Instantiate(prefab).GetComponent<Player>();
+        player.gameObject.AddComponent(isGoalKeeper ? team.GoalBrainType : team.TeamBrainType);
+
+        player.IABrain = player.GetComponent<PlayerBrain>();
+
+        player.Team = team;
+
+        return player;
+    }
 
     private void Awake()
     {
