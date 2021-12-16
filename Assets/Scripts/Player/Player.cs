@@ -47,7 +47,7 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        Vector3 move = IsPiloted ? Team.Brain.Move() : IABrain.Move();
+        Vector3 move = IsPiloted ? Team.Brain.Move(Team) : IABrain.Move(Team);
 
         transform.position += move;
     }

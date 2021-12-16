@@ -21,7 +21,7 @@ public class Field : MonoBehaviour
     public static Vector3 TopRightCorner => instance.topRightCorner;
     public static Team Team1 => instance.team1;
     public static Team Team2 => instance.team2;
-
+    public static GameObject Ball => instance.ball;
 
     private void Awake()
     {
@@ -38,8 +38,9 @@ public class Field : MonoBehaviour
         GameManager.BreedMePlease(team1, team2);
     }
 
-    public static void Init(GameObject ball)
+    public static void KickOff()
     {
-        instance.ball = ball;
+        instance.ball = Instantiate(PrefabManager.instance.Ball, instance.transform.position, Quaternion.identity);
+        
     }
 }

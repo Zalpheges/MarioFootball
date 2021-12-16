@@ -47,7 +47,7 @@ public class GameManager : MonoBehaviour
         team1.Init(firstTeam);
         team2.Init(secondTeam);
 
-        //Field.Init();
+        //Field.KickOff();
     }
 
     private void Update()
