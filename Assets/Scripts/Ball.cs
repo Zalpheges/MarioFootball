@@ -12,7 +12,7 @@ public class Ball : MonoBehaviour
     private bool isFree;
     private Color trailColorBegin;
     private Color trailColorEnd;
-    public <T> 
+
     private void Move()
     {
         

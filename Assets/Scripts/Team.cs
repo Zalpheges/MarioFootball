@@ -4,11 +4,11 @@ using System;
 
 public class Team : MonoBehaviour
 {
-    public string _ateamBrainType;
-    public Type TeamBrainType => Type.GetType(_ateamBrainType);
+    [SerializeField] private string ateamBrainType;
+    public Type TeamBrainType => Type.GetType(ateamBrainType);
 
-    public string _agoalBrainType;
-    public Type GoalBrainType => Type.GetType(_agoalBrainType);
+    [SerializeField] private string agoalBrainType;
+    public Type GoalBrainType => Type.GetType(agoalBrainType);
 
     public Player[] Players { get; private set; }
     public Player Goal { get; private set; }
