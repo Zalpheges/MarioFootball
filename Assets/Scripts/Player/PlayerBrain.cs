@@ -2,6 +2,8 @@ using UnityEngine;
 
 public abstract class PlayerBrain : MonoBehaviour
 {
+    
+
     protected Player Player { get; private set; }
 
     protected Team Allies => Player.Team;
@@ -23,4 +25,6 @@ public abstract class PlayerBrain : MonoBehaviour
     /// <param name="team">L'équipe du joueur</param>
     /// <returns>Le vecteur de déplacement.</returns>
     public abstract Vector3 Move();
+
+    public abstract Action Act();
 }

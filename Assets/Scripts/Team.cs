@@ -47,11 +47,11 @@ public class Team : MonoBehaviour
     /// Initialise les joueurs et la file d'items de l'équipe
     /// </summary>
     /// <param name="players">Les joueurs sans le gardien</param>
-    /// <param name="goal">Le gardien</param>
-    public void Init(Player[] players, Player goal)
+    /// <param name="goalKeeper">Le gardien</param>
+    public void Init(Player[] players, Player goalKeeper)
     {
         Players = players;
-        Goal = goal;
+        Goal = goalKeeper;
 
         items = new Queue<Item>(itemCapacity);
 

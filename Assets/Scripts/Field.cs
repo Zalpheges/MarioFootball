@@ -77,7 +77,7 @@ public class Field : MonoBehaviour
         GameManager.BreedMePlease(team1, team2);
     }
     /// <summary>
-    /// Assigne le ballon créé puis le positionne ainsi que les joueurs
+    /// Assigne le ballon crï¿½ï¿½ puis le positionne ainsi que les joueurs
     /// </summary>
     /// <param name="ball">Le ballon</param>
     public static void Init(Ball ball)
@@ -93,7 +93,6 @@ public class Field : MonoBehaviour
     private void SetTeamPosition()
     {
         Team1.Players[0].transform.position = VectorToPosition(attackPosCaptain);
-        Team1.Players[0].IsPiloted = true;
         Team1.Players[1].transform.position = VectorToPosition(attackPosMate1);
         Team1.Players[2].transform.position = VectorToPosition(attackPosMate2);
         Team1.Players[3].transform.position = VectorToPosition(attackPosMate3);
