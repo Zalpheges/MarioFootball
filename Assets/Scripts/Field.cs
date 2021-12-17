@@ -73,6 +73,7 @@ public class Field : MonoBehaviour
     private void SetTeamPosition()
     {
         Team1.Players[0].transform.position = VectorToPosition(attackPosCaptain);
+        Team1.Players[0].IsPiloted = true;
         Team1.Players[1].transform.position = VectorToPosition(attackPosMate1);
         Team1.Players[2].transform.position = VectorToPosition(attackPosMate2);
         Team1.Players[3].transform.position = VectorToPosition(attackPosMate3);
