@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 using System;
 
 public class Team : MonoBehaviour
@@ -11,6 +12,7 @@ public class Team : MonoBehaviour
     public Type GoalBrainType => Type.GetType(agoalBrainType);
 
     public Player[] Players { get; private set; }
+    public PlayerBrain[] Brains { get; private set; }
     public Player Goal { get; private set; }
 
     public int ConcededGoals { get; private set; }
@@ -18,6 +20,11 @@ public class Team : MonoBehaviour
 
     private Queue<Item> items;
     private int itemCapacity = 3;
+
+    private void Awake()
+    {
+        Brain = GetComponentInChildren<PlayerBrain>();
+    }
 
     /// <summary>
     /// Ajoute un item à la file d'items de l'équipe, dans le cas où celle-ci n'est pas pleine
@@ -47,6 +54,8 @@ public class Team : MonoBehaviour
         Goal = goal;
 
         items = new Queue<Item>(itemCapacity);
+
+        Brains = Players.Select(player => player.IABrain).ToArray();
     }
 
     private void OnCollisionEnter(Collision collision)

@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
         matches = new Queue<Match>();
         matches.Enqueue(debugMatch);
     }
+
     /// <summary>
     /// Fournit les coéquipiers à chaque équipe, les place, et instancie le ballon
     /// </summary>
@@ -38,6 +39,7 @@ public class GameManager : MonoBehaviour
         Player[] teammates = new Player[4];
 
         teammates[0] = Player.CreatePlayer(match.captain1.prefab, team1);
+        teammates[0].IsPiloted = true;
 
         for (int i = 1; i < 4; ++i)
             teammates[i] = Player.CreatePlayer(match.mate1.prefab, team1);
@@ -49,6 +51,7 @@ public class GameManager : MonoBehaviour
         teammates = new Player[4];
 
         teammates[0] = Player.CreatePlayer(match.captain2.prefab, team2);
+        teammates[0].IsPiloted = true;
 
         for (int i = 1; i < 4; ++i)
             teammates[i] = Player.CreatePlayer(match.mate2.prefab, team2);

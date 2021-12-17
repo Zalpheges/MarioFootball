@@ -1,4 +1,3 @@
-using UnityEngine;
 using System.Reflection;
 using UnityEditor;
 using System.Linq;
@@ -14,13 +13,13 @@ public class TeamEditor : Editor
 
     private string[] brainTypes;
 
-    private void OnEnable()
+    public override void OnInspectorGUI()
     {
         System.Type[] types = Assembly.GetAssembly(typeof(PlayerBrain)).GetTypes();
         System.Type[] possible = (from System.Type type in types where type.IsSubclassOf(typeof(PlayerBrain)) select type).ToArray();
 
         brainTypes = possible.Select(type => type.Name).ToArray();
-
+            
         teamType = serializedObject.FindProperty("ateamBrainType");
         goalType = serializedObject.FindProperty("agoalBrainType");
 
@@ -32,10 +31,7 @@ public class TeamEditor : Editor
             if (brainTypes[i] == goalType.stringValue)
                 goalIndex = i;
         }
-    }
 
-    public override void OnInspectorGUI()
-    {
         serializedObject.Update();
 
         teamIndex = EditorGUILayout.Popup("Team Brain Type", teamIndex, brainTypes);

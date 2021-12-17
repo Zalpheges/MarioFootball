@@ -35,6 +35,21 @@ public class Field : MonoBehaviour
     private Vector3 topRightCorner;
     public static Vector3 TopRightCorner => instance.topRightCorner;
 
+    private float heightOneThird;
+    public static float HeightOneThird => instance.heightOneThird;
+
+    private float heightTwoThirds;
+    public static float HeightTwoThirds => instance.heightTwoThirds;
+
+    private float heightOneSixths;
+    public static float HeightOneSixths => instance.heightOneSixths;
+
+    private float heightThreeSixths;
+    public static float HeightThreeSixths => instance.heightThreeSixths;
+
+    private float heightFiveSixths;
+    public static float HeightFiveSixths => instance.heightFiveSixths;
+
     // TODO Bryan : R�cup�rer positions initiales
 
     private Ball ball;
@@ -47,10 +62,17 @@ public class Field : MonoBehaviour
 
     private void Start()
     {
-        bottomLeftCorner = new Vector3(width / 2, 0, height / 2) - transform.position;
-        bottomRightCorner = new Vector3(width / 2, 0, -height / 2) + transform.position;
-        topLeftCorner = new Vector3(-width / 2, 0, height / 2) + transform.position;
-        topRightCorner = new Vector3(width / 2, 0, height / 2) + transform.position;
+        bottomLeftCorner = new Vector3(height / 2, 0, -width / 2) + transform.position;
+        bottomRightCorner = new Vector3(height / 2, 0, width / 2) + transform.position;
+        topLeftCorner = new Vector3(-height / 2, 0, -width / 2) + transform.position;
+        topRightCorner = new Vector3(-height / 2, 0, width / 2) + transform.position;
+
+        heightOneThird = topLeftCorner.x + height / 3f;
+        heightTwoThirds = topLeftCorner.x + height * 2f / 3f;
+
+        heightOneSixths = topLeftCorner.x + height / 6f;
+        heightThreeSixths = topLeftCorner.x + height * 3f / 6f;
+        heightFiveSixths = topLeftCorner.x + height * 5f / 6f;
 
         GameManager.BreedMePlease(team1, team2);
     }

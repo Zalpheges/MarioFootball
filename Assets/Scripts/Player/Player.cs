@@ -33,7 +33,7 @@ public class Player : MonoBehaviour
 
     public bool IsPiloted { get; set; } = false;
 
-    bool fdp = false;
+    public Vector3 Position => transform.position;
 
     public static Player CreatePlayer(GameObject prefab, Team team, bool isGoalKeeper = false)
     {
@@ -60,13 +60,18 @@ public class Player : MonoBehaviour
     {
         rgbd.mass = specs.weight;
         gameObject.name = specs.name;
+
+        if (Team == Field.Team1)
+            gameObject.name += " team1";
+        else
+            gameObject.name += " team2";
     }
 
     private void Update()
     {
-        Vector3 move = IsPiloted ? Team.Brain.Move(Team) : IABrain.Move(Team);
+        Vector3 move = IsPiloted ? Team.Brain.Move() : IABrain.Move();
 
-        transform.position += move;
+        transform.position = move;
     }
 
     private void OnCollisionEnter(Collision collision)
