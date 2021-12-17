@@ -27,6 +27,33 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "Menu Nav",
+            "id": "ad65cc47-7d45-4557-aac8-c80fca58c7f8",
+            "actions": [
+                {
+                    "name": "Select",
+                    "type": "Button",
+                    "id": "3c3352a4-40b5-43e9-91f8-21302862a4b3",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "24d5208f-f586-4bce-86b7-ab8c62da68a6",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Select",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": []

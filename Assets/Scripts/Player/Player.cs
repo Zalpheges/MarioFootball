@@ -75,7 +75,7 @@ public class Player : MonoBehaviour
             && move.z < Field.TopRightCorner.z
             && move.z > Field.TopLeftCorner.z)
         {
-            transform.position += move;
+            transform.position = move;
         }
     }
 

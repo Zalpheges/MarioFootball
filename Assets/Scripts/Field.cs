@@ -87,8 +87,6 @@ public class Field : MonoBehaviour
         ball.transform.position = instance.transform.position;
 
         instance.SetTeamPosition();
-
-        // TODO Bryan : Positionner les joueurs
     }
 
 
