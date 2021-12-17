@@ -85,6 +85,6 @@ public class HolyBrain : PlayerBrain
         else if (this.placement == Placement.Center)
             desiredX = Field.HeightThreeSixths;
 
-        return new Vector3(desiredX, 1f, capz);
+        return new Vector3(desiredX, 1f, capz) - transform.position;
     }
 }

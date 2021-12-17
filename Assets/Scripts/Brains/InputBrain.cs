@@ -3,30 +3,14 @@ using UnityEngine.InputSystem;
 
 public class InputBrain : PlayerBrain
 {
-    private float speed = 2;
     private Vector2 movementInput;
-    /// <summary>
-    /// Calcule le d�placement que la manette applique au joueur 
-    /// </summary>
-    /// <param name="team">L'�quipe du joueur</param>
-    /// <returns>Le vecteur de d�placement.</returns>
     public override Vector3 Move()
     {
-        if (movementInput.x != 0 || movementInput.y != 0)
-        {
-            return new Vector3(movementInput.x, 0, movementInput.y).normalized;
-
-            //rb.MovePosition(rb.position + direction * speed * Time.deltaTime);
-
-            //target = Quaternion.LookRotation(direction, Vector3.up);
-        }
-        //rb.MoveRotation(Quaternion.Slerp(rb.rotation, target, Time.deltaTime * 10));
-
-        return Vector3.zero;
+        return new Vector3(-movementInput.y, 0, movementInput.x).normalized;
     }
 
-    public void OnMove(InputAction.CallbackContext input)
-    {
-        movementInput = input.ReadValue<Vector2>();
+    public void OnMove(InputAction.CallbackContext input)
+    {
+        movementInput = input.ReadValue<Vector2>();
     }
 }

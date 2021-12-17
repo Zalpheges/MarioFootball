@@ -16,14 +16,14 @@ public class Team : MonoBehaviour
     public Player Goal { get; private set; }
 
     public int ConcededGoals { get; private set; }
-    public PlayerBrain Brain { get; private set; }
+    public InputBrain Brain { get; private set; }
 
     private Queue<Item> items;
     private int itemCapacity = 3;
 
     private void Awake()
     {
-        Brain = GetComponentInChildren<PlayerBrain>();
+        Brain = GetComponent<InputBrain>();
     }
 
     /// <summary>

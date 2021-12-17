@@ -69,9 +69,14 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        Vector3 move = IsPiloted ? Team.Brain.Move() : IABrain.Move();
-
-        transform.position = move;
+        Vector3 move = transform.position + (IsPiloted ? Team.Brain.Move() : IABrain.Move());
+        if (move.x < Field.BottomLeftCorner.x
+            && move.x > Field.TopLeftCorner.x
+            && move.z < Field.TopRightCorner.z
+            && move.z > Field.TopLeftCorner.z)
+        {
+            transform.position += move;
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
