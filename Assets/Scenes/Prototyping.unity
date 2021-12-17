@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0.99999905, b: 0.99999905, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -777,7 +777,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8875840102387356477}
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 5, z: -48.7}
+  m_LocalPosition: {x: 0, y: 5, z: 48.7}
   m_LocalScale: {x: 7.5, y: 10, z: 15}
   m_Children:
   - {fileID: 1949877268}
@@ -826,7 +826,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8875840102547248345}
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 5, z: 48.7}
+  m_LocalPosition: {x: 0, y: 5, z: -48.7}
   m_LocalScale: {x: 7.5, y: 10, z: 15}
   m_Children:
   - {fileID: 68558876}
@@ -1360,14 +1360,14 @@ MonoBehaviour:
   height: 45
   team1: {fileID: 8875840102547248346}
   team2: {fileID: 8875840102387356478}
-  attackPosCaptain: {x: 0, y: 0}
-  attackPosMate1: {x: -0.1, y: -0.05}
-  attackPosMate2: {x: 0.1, y: -0.05}
-  attackPosMate3: {x: 0.05, y: -0.3}
-  defPosCaptain: {x: -0.3, y: -0.05}
-  defPosMate1: {x: 0.05, y: -0.05}
-  defPosMate2: {x: -0.3, y: -0.1}
-  defPosMate3: {x: -0.3, y: 0.5}
+  attackPosCaptain: {x: 0, y: -0.05}
+  attackPosMate1: {x: -0.5, y: -0.1}
+  attackPosMate2: {x: 0.5, y: -0.1}
+  attackPosMate3: {x: 0.1, y: -0.3}
+  defPosCaptain: {x: -0.3, y: -0.1}
+  defPosMate1: {x: 0.05, y: -0.15}
+  defPosMate2: {x: 0.5, y: -0.3}
+  defPosMate3: {x: -0.5, y: -0.3}
 --- !u!23 &8875840104054592024
 MeshRenderer:
   m_ObjectHideFlags: 0
