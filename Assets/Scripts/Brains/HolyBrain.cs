@@ -10,10 +10,18 @@ public class HolyBrain : PlayerBrain
         Center
     }
 
-    public Placement placement = Placement.Unassigned;
+    private Placement placement = Placement.Unassigned;
 
     public override Vector3 Move()
     {
+        foreach (HolyBrain brain in Allies.Brains)
+        {
+            if (brain.Player != Player)
+            {
+                brain.placement = Placement.Center;
+            }
+        }
+
         Vector3 position = transform.position;
         Placement placement = Placement.LeftWing;
 
@@ -76,7 +84,7 @@ public class HolyBrain : PlayerBrain
         float capz = 0f;
         foreach (Player player in Allies.Players)
             if (player.IsPiloted)
-                capz = player.Position.z;
+                capz = player.transform.position.z;
 
         float desiredX = Field.HeightOneSixths;
 

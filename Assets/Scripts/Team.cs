@@ -13,7 +13,7 @@ public class Team : MonoBehaviour
 
     public Player[] Players { get; private set; }
     public PlayerBrain[] Brains { get; private set; }
-    public Player Goal { get; private set; }
+    public Player GoalKeeper { get; private set; }
 
     public int ConcededGoals { get; private set; }
     public PlayerBrain Brain { get; private set; }
@@ -48,10 +48,10 @@ public class Team : MonoBehaviour
     /// </summary>
     /// <param name="players">Les joueurs sans le gardien</param>
     /// <param name="goal">Le gardien</param>
-    public void Init(Player[] players, Player goal)
+    public void Init(Player[] players, Player goalKeeper)
     {
         Players = players;
-        Goal = goal;
+        GoalKeeper = goalKeeper;
 
         items = new Queue<Item>(itemCapacity);
 
