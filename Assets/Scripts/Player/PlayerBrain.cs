@@ -22,5 +22,5 @@ public abstract class PlayerBrain : MonoBehaviour
     /// </summary>
     /// <param name="team">L'équipe du joueur</param>
     /// <returns>Le vecteur de déplacement.</returns>
-    public abstract Vector3 Move();
+    public abstract Action GetAction();
 }

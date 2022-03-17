@@ -20,8 +20,8 @@ public class TeamEditor : Editor
 
         brainTypes = possible.Select(type => type.Name).ToArray();
             
-        teamType = serializedObject.FindProperty("ateamBrainType");
-        goalType = serializedObject.FindProperty("agoalBrainType");
+        teamType = serializedObject.FindProperty("_ateamBrainType");
+        goalType = serializedObject.FindProperty("_agoalBrainType");
 
         for (int i = 0; i < brainTypes.Length; ++i)
         {

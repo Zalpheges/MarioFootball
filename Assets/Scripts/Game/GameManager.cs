@@ -4,23 +4,37 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private Match debugMatch;
-    [SerializeField] private float debugMatchDuration = 60f;
+    [SerializeField]
+    private Match _debugMatch;
 
-    private static GameManager instance;
-    private Queue<Match> matches;
-    private Queue<MatchResult> results;
-    private MatchResult currentResult;
+    [SerializeField]
+    private float _debugMatchDuration = 60f;
+
+    private static GameManager _instance;
+
+    private Queue<Match> _matches;
+    private Queue<MatchResult> _results;
+    private MatchResult _currentResult;
 
     private void Awake()
     {
-        instance = this;
+        _instance = this;
+
+        if (_instance == null)
+        {
+            _instance = this;
+            DontDestroyOnLoad(this);
+        }
+        else
+            Destroy(this);
+
+        _matches = new Queue<Match>();
+        _matches.Enqueue(_debugMatch);
     }
 
     private void Start()
     {
-        matches = new Queue<Match>();
-        matches.Enqueue(debugMatch);
+
     }
 
     /// <summary>
@@ -31,32 +45,40 @@ public class GameManager : MonoBehaviour
     /// <returns>RIENG</returns>
     public static void BreedMePlease(Team team1, Team team2)
     {
-        Match match = instance.matches.Dequeue();
+        Match match = _instance._matches.Dequeue();
 
-        instance.currentResult = new MatchResult();
-        instance.currentResult.match = match;
+        _instance._currentResult = new MatchResult();
+        _instance._currentResult.Match = match;
 
         Player[] teammates = new Player[4];
 
-        teammates[0] = Player.CreatePlayer(match.captain1.prefab, team1);
+        teammates[0] = Player.CreatePlayer(match.Captain1.Prefab, team1);
         teammates[0].IsPiloted = true;
 
         for (int i = 1; i < 4; ++i)
-            teammates[i] = Player.CreatePlayer(match.mate1.prefab, team1);
+        {
+            teammates[i] = Player.CreatePlayer(match.Mate1.Prefab, team1);
+            teammates[i].gameObject.SetActive(i == 0);
+        }
 
-        Player goal1 = Player.CreatePlayer(match.goalKeeper.prefab, team1, true);
+        Player goal1 = Player.CreatePlayer(match.GoalKeeper.Prefab, team1, true);
+        goal1.gameObject.SetActive(false);
 
         team1.Init(teammates, goal1);
 
         teammates = new Player[4];
 
-        teammates[0] = Player.CreatePlayer(match.captain2.prefab, team2);
-        teammates[0].IsPiloted = true;
+        teammates[0] = Player.CreatePlayer(match.Captain2.Prefab, team2);
+        //teammates[0].IsPiloted = true;
 
         for (int i = 1; i < 4; ++i)
-            teammates[i] = Player.CreatePlayer(match.mate2.prefab, team2);
+        {
+            teammates[i] = Player.CreatePlayer(match.Mate2.Prefab, team2);
+            teammates[i].gameObject.SetActive(i == 0);
+        }
 
-        Player goal2 = Player.CreatePlayer(match.goalKeeper.prefab, team2, true);
+        Player goal2 = Player.CreatePlayer(match.GoalKeeper.Prefab, team2, true);
+        goal2.gameObject.SetActive(false);
 
         team2.Init(teammates, goal2);
 
@@ -65,13 +87,13 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator Match()
     {
-        yield return new WaitForSeconds(instance.debugMatchDuration);
+        yield return new WaitForSeconds(_instance._debugMatchDuration);
 
-        instance.currentResult.duration = instance.debugMatchDuration;
+        _instance._currentResult.Duration = _instance._debugMatchDuration;
 
-        instance.currentResult.scoreTeam1 = Field.Team2.ConcededGoals;
-        instance.currentResult.scoreTeam2 = Field.Team1.ConcededGoals;
+        _instance._currentResult.ScoreTeam1 = Field.Team2.ConcededGoals;
+        _instance._currentResult.ScoreTeam2 = Field.Team1.ConcededGoals;
 
-        instance.results.Enqueue(instance.currentResult);
+        _instance._results.Enqueue(_instance._currentResult);
     }
 }

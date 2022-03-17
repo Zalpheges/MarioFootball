@@ -2,10 +2,10 @@ using UnityEngine;
 
 public class MatchResult
 {
-    public Match match;
+    public Match Match;
 
-    public int scoreTeam1;
-    public int scoreTeam2;
+    public int ScoreTeam1;
+    public int ScoreTeam2;
 
-    public float duration;
+    public float Duration;
 }

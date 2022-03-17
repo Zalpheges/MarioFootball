@@ -250,80 +250,6 @@ Transform:
   m_Father: {fileID: 8875840103885984178}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &349318936
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 349318938}
-  - component: {fileID: 349318937}
-  m_Layer: 0
-  m_Name: temp
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &349318937
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 349318936}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 621567455fd1c4ceb811cc8a00b6a1a5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_NotificationBehavior: 0
-  m_MaxPlayerCount: -1
-  m_AllowJoining: 0
-  m_JoinBehavior: 2
-  m_PlayerJoinedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_PlayerLeftEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_JoinAction:
-    m_UseReference: 0
-    m_Action:
-      m_Name: 
-      m_Type: 0
-      m_ExpectedControlType: 
-      m_Id: 
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings: []
-    m_Reference: {fileID: 0}
-  m_PlayerPrefab: {fileID: 768283636445659015, guid: 2d251407ec186d94682db68a04a9db90, type: 3}
-  m_SplitScreen: 0
-  m_MaintainAspectRatioInSplitScreen: 0
-  m_FixedNumberOfSplitScreens: -1
-  m_SplitScreenRect:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
---- !u!4 &349318938
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 349318936}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1109798516
 GameObject:
   m_ObjectHideFlags: 0
@@ -544,8 +470,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ff4baedbbf009f459e8492fba7370d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debugMatch: {fileID: 1642756264}
-  debugMatchDuration: 60
+  _debugMatch: {fileID: 1642756264}
+  _debugMatchDuration: 60
 --- !u!4 &1642756263
 Transform:
   m_ObjectHideFlags: 0
@@ -572,11 +498,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09eb34fcacb82354f823900c48510f76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  captain1: {fileID: 11400000, guid: e32174f7889a0ab429aeae9b2b0b2040, type: 2}
-  captain2: {fileID: 11400000, guid: e32174f7889a0ab429aeae9b2b0b2040, type: 2}
-  mate1: {fileID: 11400000, guid: e32174f7889a0ab429aeae9b2b0b2040, type: 2}
-  mate2: {fileID: 11400000, guid: e32174f7889a0ab429aeae9b2b0b2040, type: 2}
-  goalKeeper: {fileID: 11400000, guid: e32174f7889a0ab429aeae9b2b0b2040, type: 2}
+  Captain1: {fileID: 11400000, guid: e32174f7889a0ab429aeae9b2b0b2040, type: 2}
+  Captain2: {fileID: 11400000, guid: e32174f7889a0ab429aeae9b2b0b2040, type: 2}
+  Mate1: {fileID: 11400000, guid: e32174f7889a0ab429aeae9b2b0b2040, type: 2}
+  Mate2: {fileID: 11400000, guid: e32174f7889a0ab429aeae9b2b0b2040, type: 2}
+  GoalKeeper: {fileID: 11400000, guid: e32174f7889a0ab429aeae9b2b0b2040, type: 2}
 --- !u!114 &1642756265
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -589,7 +515,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4125deaffafe701439bdf2e27157db74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ball: {fileID: 266137186057966708, guid: 5f9a23016bc8ab94fb2a55df45b2bfa2, type: 3}
+  _ball: {fileID: 266137186057966708, guid: 5f9a23016bc8ab94fb2a55df45b2bfa2, type: 3}
 --- !u!1 &1949877267
 GameObject:
   m_ObjectHideFlags: 0
@@ -890,8 +816,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e55b22583b79c79439ddb8f7e7dcc3cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ateamBrainType: HolyBrain
-  agoalBrainType: HolyBrain
+  _ateamBrainType: HolyBrain
+  _agoalBrainType: HolyBrain
 --- !u!4 &8875840102547248344
 Transform:
   m_ObjectHideFlags: 0
@@ -941,8 +867,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e55b22583b79c79439ddb8f7e7dcc3cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ateamBrainType: HolyBrain
-  agoalBrainType: HolyBrain
+  _ateamBrainType: HolyBrain
+  _agoalBrainType: HolyBrain
 --- !u!114 &8875840102547248347
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1490,18 +1416,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d434d2f558bda974a9ec40e67fa9e32c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 90
-  height: 45
-  team1: {fileID: 8875840102547248346}
-  team2: {fileID: 8875840102387356478}
-  attackPosCaptain: {x: 0, y: -0.05}
-  attackPosMate1: {x: -0.5, y: -0.1}
-  attackPosMate2: {x: 0.5, y: -0.1}
-  attackPosMate3: {x: 0.1, y: -0.3}
-  defPosCaptain: {x: -0.3, y: -0.1}
-  defPosMate1: {x: 0.05, y: -0.15}
-  defPosMate2: {x: 0.5, y: -0.3}
-  defPosMate3: {x: -0.5, y: -0.3}
+  _width: 90
+  _height: 45
+  _team1: {fileID: 8875840102547248346}
+  _team2: {fileID: 8875840102387356478}
+  _attackPosCaptain: {x: 0, y: -0.05}
+  _attackPosMate1: {x: -0.5, y: -0.1}
+  _attackPosMate2: {x: 0.5, y: -0.1}
+  _attackPosMate3: {x: 0.1, y: -0.3}
+  _defPosCaptain: {x: -0.3, y: -0.1}
+  _defPosMate1: {x: 0.05, y: -0.15}
+  _defPosMate2: {x: 0.5, y: -0.3}
+  _defPosMate3: {x: -0.5, y: -0.3}
 --- !u!23 &8875840104054592024
 MeshRenderer:
   m_ObjectHideFlags: 0

@@ -12,12 +12,14 @@ public class Player : MonoBehaviour
         Shocked
     }
 
-    [SerializeField] private PlayerSpecs specs;
+    [SerializeField]
+    private PlayerSpecs _specs;
 
-    private Animator animator;
-    private Rigidbody rgbd;
+    private Animator _animator;
+    private Rigidbody _rgbd;
 
-    [SerializeField] public PlayerBrain IABrain { get; private set; }
+    [SerializeField]
+    public PlayerBrain IABrain { get; private set; }
 
     public PlayerState State { get; private set; }
     public Team Team { get; private set; }
@@ -48,14 +50,14 @@ public class Player : MonoBehaviour
 
     private void Awake()
     {
-        animator = GetComponent<Animator>();
-        rgbd = GetComponent<Rigidbody>();
+        _animator = GetComponent<Animator>();
+        _rgbd = GetComponent<Rigidbody>();
     }
 
     private void Start()
     {
-        rgbd.mass = specs.weight;
-        gameObject.name = specs.name;
+        _rgbd.mass = _specs.Weight;
+        gameObject.name = _specs.name;
 
         if (Team == Field.Team1)
             gameObject.name += " team1";
@@ -65,9 +67,18 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        Vector3 move = IsPiloted ? Team.Brain.Move() : IABrain.Move();
+        Action action = IsPiloted ? Team.Brain.GetAction() : IABrain.GetAction();
 
-        transform.position = move;
+        switch (action.ActionType)
+        {
+            case Action.Type.Move:
+                transform.position += action.DeltaMove * 10f * _specs.Speed * Time.deltaTime;
+
+                break;
+
+            default:
+                break;
+        }
     }
 
     private void OnCollisionEnter(Collision collision)

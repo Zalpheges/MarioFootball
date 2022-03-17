@@ -2,13 +2,15 @@ using UnityEngine;
 
 public class PrefabManager : MonoBehaviour
 {
-    public static PrefabManager instance;
+    private static PrefabManager _instance;
 
-    [SerializeField] private GameObject ball;
-    public static GameObject Ball => instance.ball;
+    [SerializeField]
+    private GameObject _ball;
+
+    public static GameObject Ball => _instance._ball;
 
     private void Awake()
     {
-        instance = this;
+        _instance = this;
     }
 }

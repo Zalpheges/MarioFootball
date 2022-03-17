@@ -1,32 +1,22 @@
-using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine;
 
 public class InputBrain : PlayerBrain
 {
-    private float speed = 2;
-    private Vector2 movementInput;
+    private Vector2 _movementInput;
+
     /// <summary>
     /// Calcule le d�placement que la manette applique au joueur 
     /// </summary>
     /// <param name="team">L'�quipe du joueur</param>
     /// <returns>Le vecteur de d�placement.</returns>
-    public override Vector3 Move()
+    public override Action GetAction()
     {
-        if (movementInput.x != 0 || movementInput.y != 0)
-        {
-            return new Vector3(movementInput.x, 0, movementInput.y).normalized;
-
-            //rb.MovePosition(rb.position + direction * speed * Time.deltaTime);
-
-            //target = Quaternion.LookRotation(direction, Vector3.up);
-        }
-        //rb.MoveRotation(Quaternion.Slerp(rb.rotation, target, Time.deltaTime * 10));
-
-        return Vector3.zero;
+        return Action.Move(new Vector3(_movementInput.x, 0, _movementInput.y).normalized);
     }
 
-    public void OnMove(InputAction.CallbackContext input)
-    {
-        movementInput = input.ReadValue<Vector2>();
+    public void OnMove(InputAction.CallbackContext input)
+    {
+        _movementInput = input.ReadValue<Vector2>();
     }
 }

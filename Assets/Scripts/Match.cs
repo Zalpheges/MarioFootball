@@ -2,10 +2,10 @@ using UnityEngine;
 
 public class Match : MonoBehaviour
 {
-    public PlayerSpecs captain1;
-    public PlayerSpecs captain2;
-    public PlayerSpecs mate1;
-    public PlayerSpecs mate2;
+    public PlayerSpecs Captain1;
+    public PlayerSpecs Captain2;
+    public PlayerSpecs Mate1;
+    public PlayerSpecs Mate2;
 
-    public PlayerSpecs goalKeeper;
+    public PlayerSpecs GoalKeeper;
 }

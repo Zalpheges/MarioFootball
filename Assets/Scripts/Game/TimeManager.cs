@@ -3,104 +3,111 @@ using System.Collections;
 
 public class TimeManager : MonoBehaviour
 {
-    bool _isPlaying = true;
-    bool isRunning = false;
+    private bool _isRunning = false;
+    public static bool IsPlaying { get; private set; }
 
-    public static bool isPlaying { get => instance._isPlaying; private set => instance._isPlaying = value; }
+    private float _toTimeScale = 1f;
+    private float _shadeDuration = 0f;
 
-    float toTimeScale = 1f;
-    float shadeDuration = 0f;
+    private float _atPauseTimeScale = 0f;
 
-    float atPauseTimeScale = 0f;
-
-    private static TimeManager instance;
+    private static TimeManager _instance;
     
     private void Awake()
     {
-        if (instance != null && instance != this)
+        if (_instance != null && _instance != this)
             Destroy(gameObject);
 
-        instance = this;
+        _instance = this;
     }
 
     void Update()
     {
-        if (isPlaying)
+        if (IsPlaying)
         {
-            Time.timeScale = Mathf.MoveTowards(Time.timeScale, toTimeScale, (1f / shadeDuration) * Time.unscaledDeltaTime);
+            Time.timeScale = Mathf.MoveTowards(Time.timeScale, _toTimeScale, (1f / _shadeDuration) * Time.unscaledDeltaTime);
             Time.fixedDeltaTime = Time.timeScale * .02f;
         }
     }
 
     public static void Pause()
     {
-        isPlaying = false;
-        instance.atPauseTimeScale = Time.timeScale;
+        IsPlaying = false;
+        _instance._atPauseTimeScale = Time.timeScale;
         Time.timeScale = 0f;
     }
 
     public static void Play()
     {
-        isPlaying = true;
-        Time.timeScale = instance.atPauseTimeScale;
+        IsPlaying = true;
+        Time.timeScale = _instance._atPauseTimeScale;
     }
 
     public static void SlowDown(float scale, float duration)
     {
-        if (!instance.isRunning) instance.StartCoroutine(instance._SlowDown(scale, duration, 0f, 0f));
+        if (!_instance._isRunning)
+            _instance.StartCoroutine(_instance._SlowDown(scale, duration, 0f, 0f));
     }
 
     public static void SlowDown(float scale, float duration, float preShading)
     {
-        if (!instance.isRunning) instance.StartCoroutine(instance._SlowDown(scale, duration, preShading, 0f));
+        if (!_instance._isRunning)
+            _instance.StartCoroutine(_instance._SlowDown(scale, duration, preShading, 0f));
     }
     
 
     public static void SlowDown(float scale, float duration, float preShading, float postShading)
     {
-        if (!instance.isRunning) instance.StartCoroutine(instance._SlowDown(scale, duration, preShading, postShading));
+        if (!_instance._isRunning)
+            _instance.StartCoroutine(_instance._SlowDown(scale, duration, preShading, postShading));
     }
     
     public IEnumerator _SlowDown(float scale, float duration, float preShading, float postShading)
     {
-        isRunning = true;
+        _isRunning = true;
 
-        toTimeScale = scale;
-        shadeDuration = preShading;
+        _toTimeScale = scale;
+        _shadeDuration = preShading;
 
         float wait = preShading;
         float waited = 0f;
 
         while (waited < wait)
         {
-            if (instance._isPlaying) waited += Time.unscaledDeltaTime;
+            if (IsPlaying)
+                waited += Time.unscaledDeltaTime;
+
             yield return null;
         }
 
-        shadeDuration = 0f;
+        _shadeDuration = 0f;
 
         wait = duration;
         waited = 0f;
         while (waited < wait)
         {
-            if (instance._isPlaying) waited += Time.unscaledDeltaTime;
+            if (IsPlaying)
+                waited += Time.unscaledDeltaTime;
+
             yield return null;
         }
 
-        toTimeScale = 1f;
-        shadeDuration = postShading;
+        _toTimeScale = 1f;
+        _shadeDuration = postShading;
 
         wait = postShading;
         waited = 0f;
 
         while (waited < wait)
         {
-            if (instance._isPlaying) waited += Time.unscaledDeltaTime;
+            if (IsPlaying)
+                waited += Time.unscaledDeltaTime;
+
             yield return null;
         }
 
-        shadeDuration = 0f;
+        _shadeDuration = 0f;
 
-        isRunning = false;
+        _isRunning = false;
     }
 }

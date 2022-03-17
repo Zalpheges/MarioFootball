@@ -2,9 +2,8 @@ using UnityEngine;
 
 public abstract class Item : MonoBehaviour
 {
-    private Team team;
+    public Team Team { get; set; }
 
-    protected abstract void OnTriggerEnter(Collider other);
     protected abstract void Move();
-
+    protected abstract void OnTriggerEnter(Collider other);
 }

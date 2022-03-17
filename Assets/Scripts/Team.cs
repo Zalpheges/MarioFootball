@@ -5,11 +5,15 @@ using System;
 
 public class Team : MonoBehaviour
 {
-    [SerializeField] private string ateamBrainType;
-    public Type TeamBrainType => Type.GetType(ateamBrainType);
+    [SerializeField]
+    private string _ateamBrainType;
 
-    [SerializeField] private string agoalBrainType;
-    public Type GoalBrainType => Type.GetType(agoalBrainType);
+    public Type TeamBrainType => Type.GetType(_ateamBrainType);
+
+    [SerializeField]
+    private string _agoalBrainType;
+
+    public Type GoalBrainType => Type.GetType(_agoalBrainType);
 
     public Player[] Players { get; private set; }
     public PlayerBrain[] Brains { get; private set; }
@@ -18,8 +22,8 @@ public class Team : MonoBehaviour
     public int ConcededGoals { get; private set; }
     public PlayerBrain Brain { get; private set; }
 
-    private Queue<Item> items;
-    private int itemCapacity = 3;
+    private Queue<Item> _items;
+    private int _itemCapacity = 3;
 
     private void Awake()
     {
@@ -40,7 +44,7 @@ public class Team : MonoBehaviour
     /// <returns>L'item supprimé</returns>
     public Item GetItem()
     {
-        return items.Dequeue();
+        return _items.Dequeue();
     }
 
     /// <summary>
@@ -53,7 +57,7 @@ public class Team : MonoBehaviour
         Players = players;
         GoalKeeper = goalKeeper;
 
-        items = new Queue<Item>(itemCapacity);
+        _items = new Queue<Item>(_itemCapacity);
 
         Brains = Players.Select(player => player.IABrain).ToArray();
     }
