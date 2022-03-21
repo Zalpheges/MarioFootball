@@ -75,6 +75,30 @@ public class Player : MonoBehaviour
                 transform.position += action.DeltaMove * 10f * _specs.Speed * Time.deltaTime;
 
                 break;
+            case Action.Type.Shoot:
+
+                break;
+            case Action.Type.Throw:
+
+                break;
+            case Action.Type.Headbutt:
+
+                break;
+            case Action.Type.Tackle:
+
+                break;
+            case Action.Type.ChangePlayer:
+
+                break;
+            case Action.Type.Dribble:
+
+                break;
+            case Action.Type.LobPass:
+
+                break;
+            case Action.Type.Pass:
+
+                break;
 
             default:
                 break;
