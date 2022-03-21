@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
+using System.Linq;
 
 public class GameManager : MonoBehaviour
 {
@@ -15,11 +16,11 @@ public class GameManager : MonoBehaviour
     private Queue<Match> _matches;
     private Queue<MatchResult> _results;
     private MatchResult _currentResult;
+    private Chrono _chrono;
+    private float _timer = 0f;
 
     private void Awake()
     {
-        _instance = this;
-
         if (_instance == null)
         {
             _instance = this;
@@ -34,7 +35,22 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        _chrono = new Chrono(5, 0);
+        Debug.Log("fdp");
+    }
 
+    private void Update()
+    {
+        Debug.Log("salefdpdemerde");
+        UIManager.SetChrono(_chrono);
+        _timer += Time.deltaTime;
+        if (_timer >= 1f)
+        {
+            --_chrono;
+            if(_chrono.Finished)
+                Debug.Log("Match end");
+            --_timer;
+        }
     }
 
     /// <summary>
@@ -47,10 +63,13 @@ public class GameManager : MonoBehaviour
     {
         Match match = _instance._matches.Dequeue();
 
-        _instance._currentResult = new MatchResult();
-        _instance._currentResult.Match = match;
+        _instance._currentResult = new MatchResult
+        {
+            Match = match
+        };
 
         Player[] teammates = new Player[4];
+
 
         teammates[0] = Player.CreatePlayer(match.Captain1.Prefab, team1);
         teammates[0].IsPiloted = true;
@@ -83,6 +102,18 @@ public class GameManager : MonoBehaviour
         team2.Init(teammates, goal2);
 
         Field.Init(Instantiate(PrefabManager.Ball).GetComponent<Ball>());
+
+        Player[] allPlayers = new Player[team1.Players.Length + team2.Players.Length];
+        team1.Players.CopyTo(allPlayers, 0);
+        team2.Players.CopyTo(allPlayers, team1.Players.Length);
+        CameraManager.Init(allPlayers.Select(player => player.transform).ToArray(), Field.Ball.transform);
+        _instance.StartCoroutine("Wait", allPlayers[0].transform);
+    }
+
+    private IEnumerator Wait(Transform t)
+    {
+        yield return new WaitForSeconds(5);
+        CameraManager.Follow(t);
     }
 
     private IEnumerator Match()
