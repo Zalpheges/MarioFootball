@@ -7,7 +7,11 @@ public class PrefabManager : MonoBehaviour
     [SerializeField]
     private GameObject _ball;
 
+    [SerializeField]
+    private GameObject _virtualCamera;
+
     public static GameObject Ball => _instance._ball;
+    public static GameObject VirtualCamera => _instance._virtualCamera;
 
     private void Awake()
     {
