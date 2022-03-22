@@ -76,6 +76,8 @@ public class Player : MonoBehaviour
 
                 break;
             case Action.Type.Shoot:
+                if (HasBall)
+                    Shoot();
 
                 break;
             case Action.Type.Throw:
@@ -97,12 +99,6 @@ public class Player : MonoBehaviour
 
                 break;
             case Action.Type.Pass:
-
-                break;
-
-            case Action.Type.Shoot:
-                if (HasBall)
-                    Shoot(); 
 
                 break;
 
@@ -128,7 +124,7 @@ public class Player : MonoBehaviour
             Field.Ball.Shoot(goal.position + goal.right * sign * range, 33f);
 
             string direction = sign < 0 ? "gauche" : "droite";
-            Debug.Log($"Distance > 45m ({distance}) - Tir non cadré à {direction} ({range}m).");
+            //Debug.Log($"Distance > 45m ({distance}) - Tir non cadré à {direction} ({range}m).");
         }
         else
         {
@@ -139,7 +135,7 @@ public class Player : MonoBehaviour
                 Field.Ball.Shoot(goal.position + goal.right * sign * Field.GoalWidth / 2f, 33f);
 
                 string direction = sign < 0 ? "gauche" : "droit";
-                Debug.Log($"Distance < 45m ({distance}) - Tir sur poteau {direction}.");
+                //Debug.Log($"Distance < 45m ({distance}) - Tir sur poteau {direction}.");
             }
             else
             {
@@ -155,7 +151,7 @@ public class Player : MonoBehaviour
 
                 Field.Ball.Shoot(endPosition, interpolator, 33f);
 
-                Debug.Log($"Distance < 45m ({distance}) - Tir cadré ({x} ; {y}).");
+                //Debug.Log($"Distance < 45m ({distance}) - Tir cadré ({x} ; {y}).");
             }
         }
     }
