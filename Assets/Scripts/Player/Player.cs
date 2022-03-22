@@ -27,7 +27,7 @@ public class Player : MonoBehaviour
     public bool CanGetBall => !IsStunned && State != PlayerState.Headbutting && !HasBall;
     public bool IsStunned => State == PlayerState.Shocked || State == PlayerState.Falling;
 
-    public bool HasBall { get => Field.Ball.transform.parent == transform; }
+    public bool HasBall => Field.Ball.transform.parent == transform;
     public bool IsDoped { get; private set; }
     public bool CanMove => State == PlayerState.Moving;
 
