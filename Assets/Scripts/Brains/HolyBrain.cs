@@ -2,18 +2,20 @@ using UnityEngine;
 
 public class HolyBrain : PlayerBrain
 {
-    public enum Placement
-    {
-        Unassigned,
-        RightWing,
-        LeftWing,
-        Center
-    }
+    private BasicTree _basicTree;
 
-    private Placement placement = Placement.Unassigned;
+    public Action actionToPerform;
+
+    private void Start()
+    {
+        _basicTree = this.gameObject.AddComponent<BasicTree>();
+        _basicTree.Initialize(Field.Ball.transform, this.gameObject.transform, this.Player.HasBall);
+    }
 
     public override Action GetAction()
     {
-        return Action.Move(Vector3.left);
+        if (actionToPerform == null && !Player.HasBall)
+            return Action.Move(Vector3.zero);
+        return actionToPerform;
     }
 }

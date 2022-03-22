@@ -91,6 +91,7 @@ public class InputBrain : PlayerBrain
     {
         _rightStickInput = input.ReadValue<Vector2>();
     }
+
     public void WestButton(InputAction.CallbackContext context)
     {
         shootForce = 10;
