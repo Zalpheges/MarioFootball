@@ -2,13 +2,23 @@ using UnityEngine;
 
 public class Field : MonoBehaviour
 {
-    private static Field instance;
+    private static Field _instance;
 
     [SerializeField]
     private float _width;
+    public static float Width => _instance._width;
 
     [SerializeField]
     private float _height;
+    public static float Height => _instance._height;
+
+    [SerializeField]
+    private float _goalWidth;
+    public static float GoalWidth => _instance._goalWidth;
+
+    [SerializeField]
+    private float _goalHeight;
+    public static float GoalHeight => _instance._goalHeight;
 
     [SerializeField]
     private Team _team1, _team2;
@@ -37,42 +47,42 @@ public class Field : MonoBehaviour
     [SerializeField]
     private Vector2 _defPosMate3;
 
-    public static Team Team1 => instance._team1;
-    public static Team Team2 => instance._team2;
+    public static Team Team1 => _instance._team1;
+    public static Team Team2 => _instance._team2;
 
     private Vector3 _bottomLeftCorner;
-    public static Vector3 BottomLeftCorner => instance._bottomLeftCorner;
+    public static Vector3 BottomLeftCorner => _instance._bottomLeftCorner;
 
     private Vector3 _bottomRightCorner;
-    public static Vector3 BottomRightCorner => instance._bottomRightCorner;
+    public static Vector3 BottomRightCorner => _instance._bottomRightCorner;
 
     private Vector3 _topLeftCorner;
-    public static Vector3 TopLeftCorner => instance._topLeftCorner;
+    public static Vector3 TopLeftCorner => _instance._topLeftCorner;
 
     private Vector3 _topRightCorner;
-    public static Vector3 TopRightCorner => instance._topRightCorner;
+    public static Vector3 TopRightCorner => _instance._topRightCorner;
 
     private float _heightOneThird;
-    public static float HeightOneThird => instance._heightOneThird;
+    public static float HeightOneThird => _instance._heightOneThird;
 
     private float _heightTwoThirds;
-    public static float HeightTwoThirds => instance._heightTwoThirds;
+    public static float HeightTwoThirds => _instance._heightTwoThirds;
 
     private float _heightOneSixths;
-    public static float HeightOneSixths => instance._heightOneSixths;
+    public static float HeightOneSixths => _instance._heightOneSixths;
 
     private float _heightThreeSixths;
-    public static float HeightThreeSixths => instance._heightThreeSixths;
+    public static float HeightThreeSixths => _instance._heightThreeSixths;
 
     private float _heightFiveSixths;
-    public static float HeightFiveSixths => instance._heightFiveSixths;
+    public static float HeightFiveSixths => _instance._heightFiveSixths;
 
     private Ball _ball;
-    public static Ball Ball => instance._ball;
+    public static Ball Ball => _instance._ball;
 
     private void Awake()
     {
-        instance = this;
+        _instance = this;
     }
 
     private void Start()
@@ -98,11 +108,11 @@ public class Field : MonoBehaviour
     /// <param name="ball">Le ballon</param>
     public static void Init(Ball ball)
     {
-        instance._ball = ball;
+        _instance._ball = ball;
 
-        ball.transform.position = instance.transform.position;
+        ball.transform.position = _instance.transform.position;
 
-        instance.SetTeamPosition();
+        _instance.SetTeamPosition();
     }
 
     private void SetTeamPosition()

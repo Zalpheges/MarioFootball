@@ -34,7 +34,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-
+        Random.InitState(System.DateTime.Now.Millisecond);
     }
 
     /// <summary>

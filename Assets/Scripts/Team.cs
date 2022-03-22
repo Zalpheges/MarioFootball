@@ -62,8 +62,17 @@ public class Team : MonoBehaviour
         Brains = Players.Select(player => player.IABrain).ToArray();
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        ++ConcededGoals;
+        Ball ball = other.GetComponent<Ball>();
+
+        if (ball)
+        {
+            ++ConcededGoals;
+
+            ball.Free();
+
+            Field.Ball.transform.position = Field.Team1.Players[0].transform.position;
+        }
     }
 }
