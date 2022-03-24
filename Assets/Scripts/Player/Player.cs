@@ -76,30 +76,31 @@ public class Player : MonoBehaviour
 
                 break;
             case Action.Type.Shoot:
+                Debug.Log("Shoot");
                 if (HasBall)
                     Shoot();
 
                 break;
             case Action.Type.Throw:
-
+                Debug.Log("Throw");
                 break;
             case Action.Type.Headbutt:
-
+                Debug.Log("HeadButt");
                 break;
             case Action.Type.Tackle:
-
+                Debug.Log("Tackle");
                 break;
             case Action.Type.ChangePlayer:
-
+                Debug.Log("ChangePlayer");
                 break;
             case Action.Type.Dribble:
-
+                Debug.Log("Drible");
                 break;
             case Action.Type.LobPass:
-
+                Debug.Log("LobPass");
                 break;
             case Action.Type.Pass:
-
+                Debug.Log("Pass");
                 break;
 
             default:
