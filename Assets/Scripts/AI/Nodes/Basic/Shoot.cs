@@ -11,7 +11,7 @@ public class Shoot : Node
 
     public override NodeState Evaluate()
     {
-        _parentTree.GetComponent<HolyBrain>().actionToPerform = Action.Shoot(0, Vector3.zero, Vector3.zero, 0) ;
+        //_parentTree.GetComponent<HolyBrain>().actionToPerform = Action.Shoot(0, Vector3.zero, Vector3.zero, 0) ;
         return NodeState.SUCCESS;
     }
 }

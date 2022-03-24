@@ -20,7 +20,7 @@ public class BasicTree : BehaviorTree.Tree
         return root;
     }
 
-    public void Initialize(Transform iBallPosition, Transform iPlayerPosition, bool iHasBall)
+    public void UpdateVars(Transform iBallPosition, Transform iPlayerPosition, bool iHasBall)
     {
         _ballPosition = iBallPosition;
         _playerPosition = iPlayerPosition;

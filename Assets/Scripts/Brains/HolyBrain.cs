@@ -9,7 +9,11 @@ public class HolyBrain : PlayerBrain
     private void Start()
     {
         _basicTree = this.gameObject.AddComponent<BasicTree>();
-        _basicTree.Initialize(Field.Ball.transform, this.gameObject.transform, this.Player.HasBall);
+    }
+
+    private void Update()
+    {
+        _basicTree.UpdateVars(Field.Ball.transform, transform, Player.HasBall);
     }
 
     public override Action GetAction()
