@@ -31,27 +31,29 @@ public class InputBrain : PlayerBrain
     //-------------------------------------------------------Revoir tout les return de GetAction() !!!!
     public override Action GetAction()
     {
-        if(westButtonPressed) // Tire|Tacle
+        if (westButtonPressed) // Tire|Tacle
         {
-            westButtonPressed = false;
+            westButtonPressed = !westButtonPressed;
 
-            if (true)
+            if (Player.HasBall)
             {
                 return Action.Shoot(shootForce, _rightStickInput, Vector3.zero, 5);
             }
-                
             else
                 return Action.Tackle(_rightStickInput);
         }
-        else if(eastButton) //Throw
+        else if (eastButton) //Throw
         {
+            eastButton = !eastButton;
             return Action.Throw(_rightStickInput);
         }
         else if(southButton) // ChangePlayer/Pass
         {
-            if (true)
+            southButton = !southButton;
+
+            if (Player.HasBall)
             {
-                if (leftTrigger)
+                if (leftTrigger)  
                 {
                     return Action.Pass(_rightStickInput, Vector3.zero, Vector3.zero, Vector3.zero, 2); // With bezier point
                 }
@@ -63,14 +65,16 @@ public class InputBrain : PlayerBrain
         }
         else if(northButton) // Drible/HeadBut
         {
-            if (true)
+            northButton = !northButton;
+
+            if (Player.HasBall)
                 return Action.Dribble();
             else
                 return Action.Headbutt(_rightStickInput);
         }
         else 
         {
-            return Action.Move(new Vector3(_movementInput.x, 0, _movementInput.y).normalized);
+            return Action.Move(new Vector3(-_movementInput.y, 0, _movementInput.x).normalized);
         }
     }
 
@@ -103,22 +107,27 @@ public class InputBrain : PlayerBrain
     public void EastButton(InputAction.CallbackContext context)
     {
 
-        if(context.phase== InputActionPhase.Started || context.phase == InputActionPhase.Canceled)
+        if(context.phase== InputActionPhase.Performed )
             eastButton = !eastButton;
     }
 
-    public void NorthButton()
+    public void NorthButton(InputAction.CallbackContext context)
     {
+        if (context.phase == InputActionPhase.Performed )
             northButton = !northButton;
     }
 
-    public void SouthButton()
+    public void SouthButton(InputAction.CallbackContext context)
     {
+        if (context.phase == InputActionPhase.Performed )
             southButton = !southButton;
     }
 
-    public void LeftTrigger()
+    public void LeftTrigger(InputAction.CallbackContext context)
     {
-            leftTrigger = !leftTrigger;
+        if (context.phase == InputActionPhase.Performed)
+            leftTrigger = true;
+        if (context.phase == InputActionPhase.Canceled)
+            leftTrigger = false;
     }
 }
