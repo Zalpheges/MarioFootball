@@ -17,4 +17,4 @@ MonoBehaviour:
   Accuracy: 0.7
   Speed: 4
   StunTime: 1
-  Prefab: {fileID: 768283636445659015, guid: 2d251407ec186d94682db68a04a9db90, type: 3}
+  Prefab: {fileID: 6172146800527969744, guid: 6baf0259e1bc5ab4cb382b98d27d06a2, type: 3}
