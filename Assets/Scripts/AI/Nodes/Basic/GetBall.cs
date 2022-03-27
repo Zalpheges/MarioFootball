@@ -21,7 +21,6 @@ public class GetBall : Node
         Displacement.Normalize();
         Displacement.y = 0f;
         _parentTree.GetComponent<HolyBrain>().actionToPerform = Action.Move(Displacement);
-        Debug.Log(Displacement);
 
         return NodeState.FAILURE;
     }

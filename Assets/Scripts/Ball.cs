@@ -127,7 +127,6 @@ public class Ball : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log(_isFree);
 
         if (!_isFree)
         {
