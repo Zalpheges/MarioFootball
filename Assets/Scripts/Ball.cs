@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 [RequireComponent(typeof(Rigidbody))]
 public class Ball : MonoBehaviour
@@ -15,13 +16,24 @@ public class Ball : MonoBehaviour
     private Vector3 _lastVelocity;
     private float _bezierTime;
 
+    public Player Shooter { get; private set; }
     public Player Target { get; private set; }
 
     private Rigidbody _rgdb;
+    private Player Parent => transform.parent?.GetComponent<Player>();
+
+    IEnumerator SlowDown()
+    {
+        yield return new WaitForSeconds(1f);
+
+        //Time.timeScale = 0.1f;
+    }
 
     private void Awake()
     {
         _rgdb = GetComponent<Rigidbody>();
+
+        StartCoroutine(SlowDown());
     }
 
     private void Update()
@@ -34,20 +46,17 @@ public class Ball : MonoBehaviour
 
             if (_bezierTime >= 1f)
             {
-                _rgdb.position = _endPoint;
-
                 StopMoving();
             }
             else
             {
-                float coeff = 1 - _bezierTime;
-                Vector3 newPosition = Mathf.Pow(coeff, 2f) * _startPoint + 2f * _bezierTime * coeff * _interpolator + Mathf.Pow(_bezierTime, 2f) * _endPoint;
+                Vector3 lastPosition = _rgdb.position;
+                Vector3 newPosition = ComputeBezierPosition(_startPoint, _interpolator, _endPoint, _bezierTime);
 
-                _lastVelocity = newPosition - _rgdb.position;
+                _rgdb.MovePosition(newPosition);
 
-                _rgdb.position = newPosition;
+                _rgdb.velocity = (newPosition - lastPosition) / (Time.deltaTime / (length / _speed));
             }
-
         }
         else if (!_isFree)
             transform.localPosition = new Vector3(0, -0.9f + 0.5f, 1.5f);
@@ -64,6 +73,8 @@ public class Ball : MonoBehaviour
 
     public void Shoot(Vector3 to, float force)
     {
+        Shooter = Parent;
+
         Free();
 
         ResetMovements();
@@ -73,6 +84,8 @@ public class Ball : MonoBehaviour
 
     public void Shoot(Vector3 to, Vector3 interpolator, float force)
     {
+        Shooter = Parent;
+
         Free();
 
         StartMoving();
@@ -141,7 +154,7 @@ public class Ball : MonoBehaviour
 
     public void Take(Transform parent)
     {
-        if (_isFree)
+        if (_isFree && parent != Shooter?.transform)
         {
             _isFree = false;
 
@@ -149,6 +162,7 @@ public class Ball : MonoBehaviour
             Target = null;
 
             StopMoving();
+            ResetMovements();
         }
     }
 
@@ -156,31 +170,30 @@ public class Ball : MonoBehaviour
     {
         _isMoving = true;
 
-        SetKinematic();
+        _rgdb.useGravity = false;
+
+        ResetMovements();
     }
 
     private void StopMoving()
     {
         _isMoving = false;
 
+        Shooter = null;
+
         _rgdb.useGravity = true;
-
-        ResetMovements();
-
-        _rgdb.velocity = _lastVelocity;
-    }
-
-    private void SetKinematic()
-    {
-        _rgdb.useGravity = false;
-
-        ResetMovements();
     }
 
     private void ResetMovements()
     {
         _rgdb.velocity = Vector3.zero;
         _rgdb.angularVelocity = Vector3.zero;
+    }
+
+    private Vector3 ComputeBezierPosition(Vector3 start, Vector3 interpolation, Vector3 end, float completion)
+    {
+        float coeff = 1 - completion;
+        return Mathf.Pow(coeff, 2f) * start + 2f * completion * coeff * interpolation + Mathf.Pow(completion, 2f) * end;
     }
 
     #endregion

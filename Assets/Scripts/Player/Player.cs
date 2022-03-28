@@ -16,7 +16,7 @@ public class Player : MonoBehaviour
     private PlayerSpecs _specs;
 
     private Animator _animator;
-    private Rigidbody _rgbd;
+    private Rigidbody _rgdb;
 
     #region Debug
 
@@ -63,12 +63,12 @@ public class Player : MonoBehaviour
     private void Awake()
     {
         _animator = GetComponent<Animator>();
-        _rgbd = GetComponent<Rigidbody>();
+        _rgdb = GetComponent<Rigidbody>();
     }
 
     private void Start()
     {
-        _rgbd.mass = _specs.Weight;
+        _rgdb.mass = _specs.Weight;
         gameObject.name = _specs.name;
 
         if (Team == Field.Team1)
@@ -89,7 +89,7 @@ public class Player : MonoBehaviour
         switch (action.ActionType)
         {
             case Action.Type.Move:
-                _rgbd.position += deltaMove * 10f * _specs.Speed * Time.deltaTime;
+                _rgdb.MovePosition(_rgdb.position + deltaMove * 20f * _specs.Speed * Time.deltaTime);
 
                 break;
 
@@ -156,7 +156,7 @@ public class Player : MonoBehaviour
             MissedShoot(goal);
         else
         {
-            if (Random.value > _specs.Accuracy)
+            if (Random.value > _specs.Accuracy + 1000f)
                 GoalPostShoot(goal);
             else
                 ShootOnTarget(goal);
@@ -171,9 +171,9 @@ public class Player : MonoBehaviour
         Field.Ball.Shoot(goal.position + goal.right * sign * range, 33f);
 
         // Debug
-        float distance = Mathf.Abs(goal.position.z - transform.position.z);
+        float distance = Vector3.Distance(goal.position, _rgdb.position);
         string direction = sign < 0 ? "gauche" : "droite";
-        //Debug.Log($"Distance > 45m ({distance}) - Tir non cadr� � {direction} ({range}m).");
+        Debug.Log($"Distance > 45m ({distance}) - Tir non cadr� � {direction} ({range}m).");
     }
 
     private void GoalPostShoot(Transform goal)
@@ -183,9 +183,9 @@ public class Player : MonoBehaviour
         Field.Ball.Shoot(goal.position + goal.right * sign * Field.GoalWidth / 2f, 33f);
 
         // Debug
-        float distance = Mathf.Abs(goal.position.z - transform.position.z);
+        float distance = Vector3.Distance(goal.position, _rgdb.position);
         string direction = sign < 0 ? "gauche" : "droit";
-        //Debug.Log($"Distance < 45m ({distance}) - Tir sur poteau {direction}.");
+        Debug.Log($"Distance < 45m ({distance}) - Tir sur poteau {direction}.");
     }
 
     private void ShootOnTarget(Transform goal)
@@ -194,17 +194,17 @@ public class Player : MonoBehaviour
         float y = Random.Range(-1, 2);
 
         Vector3 endPosition = goal.position;
-        endPosition.x += x * Field.GoalWidth * 0.85f / 2f;
-        endPosition.y += y * Field.GoalHeight * 0.85f / 2f;
+        endPosition += goal.right * x * Field.GoalWidth * 0.85f / 2f;
+        endPosition += goal.up * y * Field.GoalHeight * 0.85f / 2f;
 
-        Vector3 interpolator = (transform.position + endPosition) / 2f;
-        interpolator.x = endPosition.x;
+        Vector3 interpolator = (_rgdb.position + endPosition) / 2f;
+        interpolator -= Vector3.Project(endPosition - _rgdb.position, goal.right);
 
         Field.Ball.Shoot(endPosition, interpolator, 33f);
 
         // Debug
-        float distance = Mathf.Abs(goal.position.z - transform.position.z);
-        //Debug.Log($"Distance < 45m ({distance}) - Tir cadr� ({x} ; {y}).");
+        float distance = Vector3.Distance(goal.position, _rgdb.position);
+        Debug.Log($"Distance < 45m ({distance}) - Tir cadr� ({x} ; {y}).");
     }
 
     #endregion
@@ -263,8 +263,9 @@ public class Player : MonoBehaviour
     {
         Ball ball = collision.transform.GetComponent<Ball>();
 
-        if (Field.Ball == ball)
+        if (Field.Ball == ball && !HasBall)
         {
+            Debug.Log("Take fdp");
             ball.Take(transform);
         }
     }
