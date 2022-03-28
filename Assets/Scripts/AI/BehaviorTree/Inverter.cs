@@ -7,11 +7,11 @@ namespace BehaviorTree
         public Inverter() : base() { }
         public Inverter(Node child) : base(child) { }
 
-        public override NodeState Evaluate()
+        public override (NodeState, Action) Evaluate()
         {
-            Node node = this.children[0];
+            (NodeState, Action) evaluation = this.Children[0].Evaluate();
 
-                switch (node.Evaluate())
+                switch (evaluation.Item1)
                 {
                     case NodeState.FAILURE:
                         state = NodeState.SUCCESS;
@@ -25,7 +25,7 @@ namespace BehaviorTree
                     default:
                         break;
                 }
-            return state;
+            return (state, evaluation.Item2);
         }
     }
 }

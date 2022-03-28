@@ -81,12 +81,15 @@ public class Player : MonoBehaviour
     {
         if (_debugOnly)
             return;
+
         Action action = IsPiloted ? Team.Brain.GetAction() : IABrain.GetAction();
+
+        Vector3 deltaMove = Field.Transform.TransformDirection(action.DeltaMove);
 
         switch (action.ActionType)
         {
             case Action.Type.Move:
-                _rgbd.position += transform.TransformDirection(Quaternion.AngleAxis(-90f, Vector3.up) * action.DeltaMove) * 10f * _specs.Speed * Time.deltaTime;
+                _rgbd.position += deltaMove * 10f * _specs.Speed * Time.deltaTime;
 
                 break;
 

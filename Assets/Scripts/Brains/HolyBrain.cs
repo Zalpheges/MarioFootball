@@ -1,25 +1,18 @@
+using System.Linq;
 using UnityEngine;
 
 public class HolyBrain : PlayerBrain
 {
-    private BasicTree _basicTree;
+    private TreeV2 behaviorTree = new TreeV2();
 
-    public Action actionToPerform;
+    public float shootThreshold = Field.Width / 4;
 
     private void Start()
     {
-        _basicTree = this.gameObject.AddComponent<BasicTree>();
+        behaviorTree.Setup(Allies, Enemies, this.Player, shootThreshold);
     }
-
-    private void Update()
-    {
-        _basicTree.UpdateVars(Field.Ball.transform, transform, Player.HasBall);
-    }
-
     public override Action GetAction()
     {
-        if (actionToPerform == null && !Player.HasBall)
-            return Action.Move(Vector3.zero);
-        return actionToPerform;
+        return behaviorTree.root.Evaluate().Item2;
     }
 }

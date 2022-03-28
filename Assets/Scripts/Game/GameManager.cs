@@ -91,7 +91,8 @@ public class GameManager : MonoBehaviour
         teammates = new Player[4];
 
         teammates[0] = Player.CreatePlayer(match.Captain2.Prefab, team2);
-        teammates[0].gameObject.SetActive(false);
+        if (_instance._debugOnlyPlayer)
+            teammates[0].gameObject.SetActive(false);
 
         for (int i = 1; i < 4; ++i)
         {

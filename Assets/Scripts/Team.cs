@@ -32,6 +32,9 @@ public class Team : MonoBehaviour
 
     private void Update()
     {
+        if (Field.Team2 == this)
+            return;
+
         Player piloted = null;
         Player hasBall = null;
 

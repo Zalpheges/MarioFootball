@@ -80,6 +80,8 @@ public class Field : MonoBehaviour
     private Ball _ball;
     public static Ball Ball => _instance._ball;
 
+    public static Transform Transform => _instance.transform;
+
     private void Awake()
     {
         _instance = this;

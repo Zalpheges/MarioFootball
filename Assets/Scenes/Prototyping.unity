@@ -1257,7 +1257,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _debugMatch: {fileID: 1642756264}
   _debugMatchDuration: 60
-  _debugOnlyPlayer: 1
+  _debugOnlyPlayer: 0
 --- !u!4 &1642756263
 Transform:
   m_ObjectHideFlags: 0
