@@ -14,6 +14,10 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private bool _debugOnlyPlayer = false;
 
+    [SerializeField]
+    private bool _enemiesAreRetard = false;
+    public static bool EnemiesAreRetard => _instance._enemiesAreRetard;
+
     private static GameManager _instance;
 
     private Queue<Match> _matches;

@@ -26,6 +26,7 @@ public class Player : MonoBehaviour
     }
 
     public bool _debugOnly = false;
+    private float _timeFromStart = 0f;
 
     #endregion
 
@@ -80,6 +81,9 @@ public class Player : MonoBehaviour
     private void Update()
     {
         if (_debugOnly)
+            return;
+
+        if (GameManager.EnemiesAreRetard && Team == Field.Team2 && Time.timeSinceLevelLoad < 2f)
             return;
 
         Action action = IsPiloted ? Team.Brain.GetAction() : IABrain.GetAction();
