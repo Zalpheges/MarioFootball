@@ -73,36 +73,47 @@ public class Player : MonoBehaviour
         {
             case Action.Type.Move:
                 transform.position += action.DeltaMove * 10f * _specs.Speed * Time.deltaTime;
+                _animator.SetBool("Run", true);
+
 
                 break;
             case Action.Type.Shoot:
                 if (HasBall)
+                {
                     Shoot();
-
+                    _animator.SetBool("Strike", true);
+                }
                 break;
-            case Action.Type.Throw:
 
+            case Action.Type.Throw:
+                _animator.SetBool("Pass", true);
                 break;
             case Action.Type.Headbutt:
+                _animator.SetBool("Header", true);
 
                 break;
             case Action.Type.Tackle:
-
+                _animator.SetBool("Tackled", true);
+                _rgbd.AddForce(transform.forward*500, ForceMode.Impulse);
                 break;
             case Action.Type.ChangePlayer:
 
                 break;
             case Action.Type.Dribble:
+                _animator.SetBool("Spin", true);
 
                 break;
             case Action.Type.LobPass:
-
+                _animator.SetBool("Pass", true);
                 break;
             case Action.Type.Pass:
-
+                _animator.SetBool("Pass", true);
                 break;
 
             default:
+                _animator.SetBool("Run", false);
+                Debug.Log("run false");
+
                 break;
         }
     }

@@ -1,11 +1,11 @@
 fileFormatVersion: 2
-guid: e1e72d33d1870b843b102b2853891621
+guid: 80e192a98bfb88b4bab0e8d8548f6ba7
 ModelImporter:
   serializedVersion: 20200
   internalIDToNameTable:
   - first:
       74: -203655887218126122
-    second: Tackle
+    second: stand up
   externalObjects: {}
   materials:
     materialImportMode: 2
@@ -35,11 +35,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Tackle
+      name: stand up
       takeName: mixamo.com
       internalID: 0
       firstFrame: 0
-      lastFrame: 138
+      lastFrame: 683
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
