@@ -90,15 +90,19 @@ public class Player : MonoBehaviour
         {
             case Action.Type.Move:
                 _rgdb.MovePosition(_rgdb.position + deltaMove * 20f * _specs.Speed * Time.deltaTime);
+                _animator.SetBool("Run", true);
+
 
                 break;
 
             case Action.Type.Shoot:
                 if (HasBall)
+                {
                     Shoot();
-
+                    _animator.SetBool("Strike", true);
+                }
+                
                 break;
-
             case Action.Type.Throw:
                 Debug.Log("Throw");
 
@@ -106,12 +110,14 @@ public class Player : MonoBehaviour
 
             case Action.Type.Headbutt:
                 Debug.Log("HeadButt");
+                _animator.SetBool("Header", true);
 
                 break;
 
             case Action.Type.Tackle:
                 Debug.Log("Tackle");
-
+                _animator.SetBool("Tackled", true);
+                
                 break;
 
             case Action.Type.ChangePlayer:
@@ -121,22 +127,28 @@ public class Player : MonoBehaviour
 
             case Action.Type.Dribble:
                 Debug.Log("Drible");
+                _animator.SetBool("Spin", true);
 
                 break;
 
             case Action.Type.LobPass:
                 if (HasBall)
                     LobPass(action.ShootDirection);
-
+                _animator.SetBool("Pass", true);
+                
                 break;
 
             case Action.Type.Pass:
                 if (HasBall)
                     DirectPass(action.ShootDirection);
-
+                _animator.SetBool("Pass", true);
+                
                 break;
 
             default:
+                _animator.SetBool("Run", false);
+                Debug.Log("run false");
+
                 break;
         }
     }
