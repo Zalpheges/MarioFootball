@@ -25,14 +25,14 @@ public class GoToPosition : Node
                 case BallHolderType.none:
                     displacement = Field.Ball.transform.position - _root.parentTree.player.transform.position;
                     displacement.y = 0;
-                    Debug.Log(displacement.normalized);
+                    //Debug.Log(displacement.normalized);
                     return (NodeState.SUCCESS, Action.Move(displacement.normalized));
                 case BallHolderType.ally:
                     return base.Evaluate();
                 case BallHolderType.allyWithBall:
                     displacement = _root.parentTree.enemyGoalTransform.position - _root.parentTree.player.transform.position;
                     displacement.y = 0;
-                    Debug.Log(displacement.normalized);
+                    //Debug.Log(displacement.normalized);
                     return (NodeState.SUCCESS, Action.Move(displacement.normalized));
             }
         }

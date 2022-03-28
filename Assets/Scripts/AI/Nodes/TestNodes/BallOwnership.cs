@@ -40,10 +40,10 @@ public class BallOwnership : Node
                     return (NodeState.SUCCESS, Action.None);
                 break;
             case SearchType.PlayerSpecific:
-                Debug.Log(_root.parentTree.player.transform.GetSiblingIndex());
+                //Debug.Log(_root.parentTree.player.transform.GetSiblingIndex());
                 if (_root.parentTree.player.HasBall)
                 {
-                    Debug.Log("test reussi");
+                    //Debug.Log("test reussi");
                     _root.currentBallHolderType = BallHolderType.allyWithBall;
                     return (NodeState.SUCCESS, Action.None);
                 }

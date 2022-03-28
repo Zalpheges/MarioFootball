@@ -18,7 +18,7 @@ public class PlayerHeadControl : MonoBehaviour
     {
         //Debug.Log(_headposition.transform.position - _target.transform.position);
         float xposition = _headposition.transform.position.x - _target.transform.position.x;
-        Debug.Log(xposition);
+        //Debug.Log(xposition);
         if (xposition>0.6f  || xposition<-0.6f)
         {
             //_headRig.weight = 1;

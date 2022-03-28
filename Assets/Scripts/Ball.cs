@@ -59,7 +59,7 @@ public class Ball : MonoBehaviour
             }
         }
         else if (!_isFree)
-            transform.localPosition = new Vector3(0, -0.9f + 0.5f, 1.5f);
+            transform.localPosition = new Vector3(0, 0.2f, 1.5f);
 
         //transform.localPosition = (Mathf.Sin(Time.time * 10f) + 2f) * Vector3.forward;
     }

@@ -102,7 +102,6 @@ public class Team : MonoBehaviour
             ++ConcededGoals;
 
             ball.Free();
-            Debug.Log("But fdp");
 
             //Field.Ball.transform.position = Field.Team1.Players[0].transform.position;
         }

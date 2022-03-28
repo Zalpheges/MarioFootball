@@ -129,6 +129,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _specs: {fileID: 11400000, guid: e32174f7889a0ab429aeae9b2b0b2040, type: 2}
   _debugOnly: 0
+  player:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!95 &-1486733865409550626
 Animator:
   serializedVersion: 3

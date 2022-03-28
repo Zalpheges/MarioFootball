@@ -11,7 +11,7 @@ public class CoucouNode : Node
     {
         _root = GetRootNode();
 
-        Debug.Log(_root.parentTree.player.transform.GetSiblingIndex());
+        //Debug.Log(_root.parentTree.player.transform.GetSiblingIndex());
         //Debug.Log(_root.parentTree.Allies.Count);
         return base.Evaluate();
     }

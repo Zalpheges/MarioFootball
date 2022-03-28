@@ -56,7 +56,7 @@ public class Player : MonoBehaviour
 
         player.Team = team;
 
-        player.GetComponent<Rigidbody>().isKinematic = true;
+        //player.GetComponent<Rigidbody>().isKinematic = true;
 
         return player;
     }
@@ -73,9 +73,9 @@ public class Player : MonoBehaviour
         gameObject.name = _specs.name;
 
         if (Team == Field.Team1)
-            gameObject.name += " team1";
+            gameObject.name += " team1 " + transform.GetSiblingIndex();
         else
-            gameObject.name += " team2";
+            gameObject.name += " team2 " + transform.GetSiblingIndex();
     }
 
     private void Update()
@@ -89,13 +89,16 @@ public class Player : MonoBehaviour
         Action action = IsPiloted ? Team.Brain.GetAction() : IABrain.GetAction();
 
         Vector3 deltaMove = Field.Transform.TransformDirection(action.DeltaMove);
+        Vector3 shootDirection = Field.Transform.TransformDirection(action.ShootDirection);
+
+        if (shootDirection == Vector3.zero)
+            shootDirection = Field.Transform.TransformDirection(transform.forward);
 
         switch (action.ActionType)
         {
             case Action.Type.Move:
-                _rgdb.MovePosition(_rgdb.position + deltaMove * 20f * _specs.Speed * Time.deltaTime);
+                _rgdb.MovePosition(_rgdb.position + deltaMove * 2f * _specs.Speed * Time.deltaTime);
                 _animator.SetBool("Run", true);
-
 
                 break;
 
@@ -137,21 +140,21 @@ public class Player : MonoBehaviour
 
             case Action.Type.LobPass:
                 if (HasBall)
-                    LobPass(action.ShootDirection);
+                    LobPass(shootDirection);
                 _animator.SetBool("Pass", true);
                 
                 break;
 
             case Action.Type.Pass:
                 if (HasBall)
-                    DirectPass(action.ShootDirection);
+                    DirectPass(shootDirection);
                 _animator.SetBool("Pass", true);
+                Debug.Log(shootDirection);
                 
                 break;
 
             default:
                 _animator.SetBool("Run", false);
-                Debug.Log("run false");
 
                 break;
         }
@@ -166,7 +169,7 @@ public class Player : MonoBehaviour
         //float angle = Vector3.SignedAngle(transform.forward, goal.forward, Vector3.up);
         //angle = -(Mathf.Abs(angle) - 180f);
 
-        float distance = Mathf.Abs(goal.position.z - transform.position.z);
+        float distance = Vector3.Distance(transform.position, goal.position);
 
         if (distance > Field.Width / 2f)
             MissedShoot(goal);
@@ -227,12 +230,13 @@ public class Player : MonoBehaviour
 
     #region Pass
 
-    private void DirectPass(Vector2 direction)
+    private void DirectPass(Vector3 direction)
     {
-        Player mate = FindMateInDirection(new Vector3(direction.x, 0f, direction.y));
+        Player mate = FindMateInDirection(direction);
 
         if (mate)
         {
+            transform.LookAt(direction, Vector3.up);
             Field.Ball.Pass(mate, 16f);
 
             //Debug.Log("Passe directe vers " + direction.ToString());
@@ -241,29 +245,32 @@ public class Player : MonoBehaviour
             LobPass(direction);
     }
 
-    private void LobPass(Vector2 direction)
+    private void LobPass(Vector3 direction)
     {
-        Vector3 dir = transform.TransformDirection(new Vector3(direction.x, 0f, direction.y));
-
-        Field.Ball.LobPass(dir);
+        transform.LookAt(direction, Vector3.up);
+        Field.Ball.LobPass(direction);
 
         //Debug.Log("Passe lobée vers " + direction.ToString());
     }
 
     #endregion
 
-    private Player FindMateInDirection(Vector3 direction, float angle = 45f, int iterations = 50)
+    public LayerMask player;
+
+    private Player FindMateInDirection(Vector3 direction, float angle = 45f, int iterations = 100)
     {
         float current = -angle / 2f;
         float step = angle / iterations;
 
         for (int i = 0; i < iterations; ++i)
         {
-            Vector3 dir = transform.TransformDirection(Quaternion.AngleAxis(current, Vector3.up) * direction);
+            Vector3 dir = Quaternion.AngleAxis(current, Vector3.up) * direction;
 
-            if (Physics.Raycast(transform.position, dir, out RaycastHit hit, Mathf.Infinity, gameObject.layer))
+            if (Physics.Raycast(transform.position + Vector3.up, dir, out RaycastHit hit, Mathf.Infinity, 1 << gameObject.layer))
             {
-                Player player = hit.transform.GetComponent<Player>();
+                Player player = hit.transform.GetComponentInParent<Player>();
+
+                Debug.Log("Found " + hit.transform.name);
 
                 if (player && player.Team == Team)
                     return player;
@@ -280,9 +287,6 @@ public class Player : MonoBehaviour
         Ball ball = collision.transform.GetComponent<Ball>();
 
         if (Field.Ball == ball && !HasBall)
-        {
-            Debug.Log("Take fdp");
             ball.Take(transform);
-        }
     }
 }
