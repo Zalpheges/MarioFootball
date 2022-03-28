@@ -87,17 +87,18 @@ public class Field : MonoBehaviour
 
     private void Start()
     {
-        _bottomLeftCorner = new Vector3(_height / 2, 0, -_width / 2) + transform.position;
-        _bottomRightCorner = new Vector3(_height / 2, 0, _width / 2) + transform.position;
-        _topLeftCorner = new Vector3(-_height / 2, 0, -_width / 2) + transform.position;
-        _topRightCorner = new Vector3(-_height / 2, 0, _width / 2) + transform.position;
 
-        _heightOneThird = _topLeftCorner.x + _height / 3f;
-        _heightTwoThirds = _topLeftCorner.x + _height * 2f / 3f;
+        _bottomLeftCorner = transform.TransformPoint(new Vector3(-_width / 2f, 0f, -_height / 2f));
+        _bottomRightCorner = transform.TransformPoint(new Vector3(_width / 2f, 0f, -_height / 2f));
+        _topLeftCorner = transform.TransformPoint(new Vector3(-_width / 2f, 0f, _height / 2f));
+        _topRightCorner = transform.TransformPoint(new Vector3(_width / 2f, 0f, _height / 2f));
 
-        _heightOneSixths = _topLeftCorner.x + _height / 6f;
-        _heightThreeSixths = _topLeftCorner.x + _height * 3f / 6f;
-        _heightFiveSixths = _topLeftCorner.x + _height * 5f / 6f;
+        _heightOneThird = _bottomLeftCorner.z + _height / 3f;
+        _heightTwoThirds = _bottomLeftCorner.z + _height * 2f / 3f;
+
+        _heightOneSixths = _bottomLeftCorner.z + _height / 6f;
+        _heightThreeSixths = _bottomLeftCorner.z + _height * 3f / 6f;
+        _heightFiveSixths = _bottomLeftCorner.z + _height * 5f / 6f;
 
         GameManager.BreedMePlease(_team1, _team2);
     }
@@ -130,6 +131,6 @@ public class Field : MonoBehaviour
 
     private Vector3 VectorToPosition(Vector2 vector)
     {
-        return transform.position + new Vector3(vector.x * _height / 2f, 1f, vector.y * _width / 2f);
+        return transform.TransformPoint(new Vector3(vector.x * _width / 2f, 1f, vector.y * _height / 2f));
     }
 }

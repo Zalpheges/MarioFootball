@@ -22,6 +22,7 @@ public class CameraManager : MonoBehaviour
             CinemachineVirtualCamera virtualCam =
                 Instantiate(PrefabManager.VirtualCamera, _instance.transform).GetComponent<CinemachineVirtualCamera>();
             virtualCam.Follow = t;
+            virtualCam.LookAt = t;
             _instance._virtualCameras[t] = virtualCam;
         }
     }

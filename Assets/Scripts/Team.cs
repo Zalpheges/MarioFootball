@@ -30,6 +30,34 @@ public class Team : MonoBehaviour
         Brain = GetComponentInChildren<PlayerBrain>();
     }
 
+    private void Update()
+    {
+        Player piloted = null;
+        Player hasBall = null;
+
+        for (int i = 0; i < Players.Length; ++i)
+        {
+            if (Players[i].IsPiloted)
+                piloted = Players[i];
+
+            if (Players[i].HasBall)
+                hasBall = Players[i];
+        }
+
+        if (Brain.Player != piloted)
+            Brain.Player = piloted;
+
+        if (hasBall && hasBall != piloted)
+        {
+            if (Brain.Player)
+                Brain.Player.IsPiloted = false;
+
+            Brain.Player = hasBall;
+
+            Brain.Player.IsPiloted = true;
+        }
+    }
+
     /// <summary>
     /// Ajoute un item à la file d'items de l'équipe, dans le cas où celle-ci n'est pas pleine
     /// </summary>

@@ -6,6 +6,7 @@ public class Action
 {
     public enum Type
     {
+        None,
         Shoot,
         Pass,
         LobPass,
@@ -27,11 +28,17 @@ public class Action
     public float Duration { get; private set; }
     public bool IsSprinting { get; private set; }
 
+    public static Action None => new Action(Type.None);
+
+    private Action(Type type)
+    {
+        ActionType = type;
+    }
+
     public static Action Shoot(float shootForce, Vector3 direction, Vector3 startPosition, int duration)
     {
-        return new Action
+        return new Action(Type.Shoot)
         {
-            ActionType = Type.Shoot,
             ShootForce = shootForce,
             ShootDirection = direction,
             StartPosition = startPosition,
@@ -41,9 +48,8 @@ public class Action
 
     public static Action Pass(Vector3 direction, Vector3 startPosition, Vector3 endPosition, int duration)
     {
-        return new Action
+        return new Action(Type.Pass)
         {
-            ActionType = Type.Pass,
             ShootDirection = direction,
             StartPosition = startPosition,
             EndPosition = endPosition,
@@ -53,9 +59,8 @@ public class Action
 
     public static Action Pass(Vector3 direction, Vector3 startPosition, Vector3 endPosition, Vector3 bezierPoint, int duration)
     {
-        return new Action
+        return new Action(Type.LobPass)
         {
-            ActionType = Type.Pass,
             ShootDirection = direction,
             StartPosition = startPosition,
             EndPosition = endPosition,
@@ -66,54 +71,43 @@ public class Action
 
     public static Action Move(Vector3 direction)
     {
-        return new Action
+        return new Action(Type.Move)
         {
-            ActionType = Type.Move,
             DeltaMove = direction
         };
     }
 
     public static Action Tackle(Vector3 direction)
     {
-        return new Action
+        return new Action(Type.Tackle)
         {
-            ActionType = Type.Tackle,
             DeltaMove = direction
         };
     }
 
     public static Action Headbutt(Vector3 direction)
     {
-        return new Action
+        return new Action(Type.Headbutt)
         {
-            ActionType = Type.Headbutt,
             ShootDirection = direction
         };
     }
 
     public static Action Dribble()
     {
-        return new Action
-        {
-            ActionType = Type.Dribble
-        };
+        return new Action(Type.Dribble);
     }
 
     public static Action Throw(Vector3 direction)
     {
-        return new Action
+        return new Action(Type.Throw)
         {
-            ActionType = Type.Throw,
             ShootDirection = direction
         };
     }
 
     public static Action ChangePlayer()
     {
-        return new Action
-        {
-            ActionType = Type.ChangePlayer
-
-        };
+        return new Action(Type.ChangePlayer);
     }
 }

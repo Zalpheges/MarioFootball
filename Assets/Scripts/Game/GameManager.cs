@@ -11,6 +11,9 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private float _debugMatchDuration = 60f;
 
+    [SerializeField]
+    private bool _debugOnlyPlayer = false;
+
     private static GameManager _instance;
 
     private Queue<Match> _matches;
@@ -69,14 +72,15 @@ public class GameManager : MonoBehaviour
 
         Player[] teammates = new Player[4];
 
-
         teammates[0] = Player.CreatePlayer(match.Captain1.Prefab, team1);
         teammates[0].IsPiloted = true;
 
         for (int i = 1; i < 4; ++i)
         {
             teammates[i] = Player.CreatePlayer(match.Mate1.Prefab, team1);
-            teammates[i].gameObject.SetActive(i == 0);
+
+            if (_instance._debugOnlyPlayer)
+                teammates[i].SetActive(i == 0);
         }
 
         Player goal1 = Player.CreatePlayer(match.GoalKeeper.Prefab, team1, true);
@@ -87,12 +91,14 @@ public class GameManager : MonoBehaviour
         teammates = new Player[4];
 
         teammates[0] = Player.CreatePlayer(match.Captain2.Prefab, team2);
-        //teammates[0].IsPiloted = true;
+        teammates[0].gameObject.SetActive(false);
 
         for (int i = 1; i < 4; ++i)
         {
             teammates[i] = Player.CreatePlayer(match.Mate2.Prefab, team2);
-            teammates[i].gameObject.SetActive(i == 0);
+
+            if (_instance._debugOnlyPlayer)
+                teammates[i].SetActive(false);
         }
 
         Player goal2 = Player.CreatePlayer(match.GoalKeeper.Prefab, team2, true);
@@ -106,13 +112,7 @@ public class GameManager : MonoBehaviour
         team1.Players.CopyTo(allPlayers, 0);
         team2.Players.CopyTo(allPlayers, team1.Players.Length);
         CameraManager.Init(allPlayers.Select(player => player.transform).ToArray(), Field.Ball.transform);
-        _instance.StartCoroutine("Wait", allPlayers[0].transform);
-    }
-
-    private IEnumerator Wait(Transform t)
-    {
-        yield return new WaitForSeconds(5);
-        CameraManager.Follow(t);
+        CameraManager.Follow(allPlayers[0].transform);
     }
 
     private IEnumerator Match()

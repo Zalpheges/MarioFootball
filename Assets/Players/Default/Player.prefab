@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 768283636445659020}
   - component: {fileID: 768283636445659014}
   - component: {fileID: -1486733865409550626}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -128,6 +128,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _specs: {fileID: 11400000, guid: e32174f7889a0ab429aeae9b2b0b2040, type: 2}
+  _debugOnly: 0
 --- !u!95 &-1486733865409550626
 Animator:
   serializedVersion: 3

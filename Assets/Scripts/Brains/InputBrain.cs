@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class InputBrain : PlayerBrain
 {
-    private Vector2 _movementInput;
-    private Vector2 _rightStickInput;
+    private Vector3 _movementInput;
+    private Vector3 _rightStickInput;
 
     private float shootForce;
 
@@ -23,7 +23,7 @@ public class InputBrain : PlayerBrain
     /// 
     private void Update()
     {
-        if(westButtonHeld)
+        if (westButtonHeld)
         {
             shootForce += Time.deltaTime; // Force en fonction du ntemp appuyé A REVOIR
         }
@@ -47,23 +47,22 @@ public class InputBrain : PlayerBrain
             eastButton = !eastButton;
             return Action.Throw(_rightStickInput);
         }
-        else if(southButton) // ChangePlayer/Pass
+        else if (southButton) // ChangePlayer/Pass
         {
             southButton = !southButton;
 
             if (Player.HasBall)
             {
-                if (leftTrigger)  
-                {
+                if (leftTrigger)
                     return Action.Pass(_rightStickInput, Vector3.zero, Vector3.zero, Vector3.zero, 2); // With bezier point
-                }
-                else return Action.Pass(_rightStickInput, Vector3.zero, Vector3.zero, 2); // Without bezier point
+                else
+                    return Action.Pass(_rightStickInput, Vector3.zero, Vector3.zero, 2); // Without bezier point
             }
             else
                 return Action.ChangePlayer();
-            
+
         }
-        else if(northButton) // Drible/HeadBut
+        else if (northButton) // Drible/HeadBut
         {
             northButton = !northButton;
 
@@ -72,20 +71,20 @@ public class InputBrain : PlayerBrain
             else
                 return Action.Headbutt(_rightStickInput);
         }
-        else 
-        {
-            return Action.Move(new Vector3(-_movementInput.y, 0, _movementInput.x).normalized);
-        }
+        else
+            return Action.Move(_movementInput);
     }
 
     public void OnMove(InputAction.CallbackContext input)
     {
         _movementInput = input.ReadValue<Vector2>();
+        _movementInput = new Vector3(_movementInput.x, 0f, _movementInput.y);
     }
 
     public void OnRightStick(InputAction.CallbackContext input)
     {
         _rightStickInput = input.ReadValue<Vector2>();
+        _rightStickInput = new Vector3(_rightStickInput.x, 0f, _rightStickInput.y);
     }
 
     public void WestButton(InputAction.CallbackContext context)
@@ -107,19 +106,19 @@ public class InputBrain : PlayerBrain
     public void EastButton(InputAction.CallbackContext context)
     {
 
-        if(context.phase== InputActionPhase.Performed )
+        if (context.phase == InputActionPhase.Performed)
             eastButton = !eastButton;
     }
 
     public void NorthButton(InputAction.CallbackContext context)
     {
-        if (context.phase == InputActionPhase.Performed )
+        if (context.phase == InputActionPhase.Performed)
             northButton = !northButton;
     }
 
     public void SouthButton(InputAction.CallbackContext context)
     {
-        if (context.phase == InputActionPhase.Performed )
+        if (context.phase == InputActionPhase.Performed)
             southButton = !southButton;
     }
 

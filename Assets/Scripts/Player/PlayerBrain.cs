@@ -2,7 +2,7 @@ using UnityEngine;
 
 public abstract class PlayerBrain : MonoBehaviour
 {
-    protected Player Player { get; private set; }
+    public Player Player { get; set; }
 
     protected Team Allies => Player.Team;
     protected Team Enemies => Allies == Field.Team1 ? Field.Team2 : Field.Team1;

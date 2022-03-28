@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[RequireComponent(typeof(SphereCollider), typeof(Rigidbody))]
+[RequireComponent(typeof(Rigidbody))]
 public class Ball : MonoBehaviour
 {
     private Vector3 _startPoint;
@@ -12,37 +12,20 @@ public class Ball : MonoBehaviour
     private bool _isFree = true;
     private bool _isMoving = false;
 
-    private Vector3 _lastPosition;
+    private Vector3 _lastVelocity;
     private float _bezierTime;
 
-    private bool _trail;
-    private Color _startTrailColor;
-    private Color _endTrailColor;
+    public Player Target { get; private set; }
 
-
-    private SphereCollider _collider;
     private Rigidbody _rgdb;
 
     private void Awake()
     {
-        _collider = GetComponent<SphereCollider>();
         _rgdb = GetComponent<Rigidbody>();
-    }
-
-    private void Start()
-    {
-
-    }
-
-    private void Move()
-    {
-
     }
 
     private void Update()
     {
-        _lastPosition = _rgdb.position;
-
         if (_isMoving)
         {
             float length = Vector3.Distance(_startPoint, _interpolator) + Vector3.Distance(_interpolator, _endPoint);
@@ -51,16 +34,18 @@ public class Ball : MonoBehaviour
 
             if (_bezierTime >= 1f)
             {
-                Free();
-
                 _rgdb.position = _endPoint;
 
-                _rgdb.velocity = (_rgdb.position - _lastPosition).normalized * _speed;
+                StopMoving();
             }
             else
             {
                 float coeff = 1 - _bezierTime;
-                _rgdb.position = Mathf.Pow(coeff, 2f) * _startPoint + 2f * _bezierTime * coeff * _interpolator + Mathf.Pow(_bezierTime, 2f) * _endPoint;
+                Vector3 newPosition = Mathf.Pow(coeff, 2f) * _startPoint + 2f * _bezierTime * coeff * _interpolator + Mathf.Pow(_bezierTime, 2f) * _endPoint;
+
+                _lastVelocity = newPosition - _rgdb.position;
+
+                _rgdb.position = newPosition;
             }
 
         }
@@ -70,24 +55,27 @@ public class Ball : MonoBehaviour
         //transform.localPosition = (Mathf.Sin(Time.time * 10f) + 2f) * Vector3.forward;
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        //if (!_isFree) Free();
+    }
+
+    #region Shoot
+
     public void Shoot(Vector3 to, float force)
     {
-        transform.parent = null;
-        _rgdb.isKinematic = false;
+        Free();
 
-        _isFree = true;
+        ResetMovements();
 
         _rgdb.AddForce((to - transform.position).normalized * force, ForceMode.Impulse);
     }
 
     public void Shoot(Vector3 to, Vector3 interpolator, float force)
     {
-        transform.parent = null;
-        _rgdb.isKinematic = true;
+        Free();
 
-        _isFree = true;
-
-        _isMoving = true;
+        StartMoving();
 
         _bezierTime = 0f;
 
@@ -98,41 +86,102 @@ public class Ball : MonoBehaviour
         _speed = force;
     }
 
+    #endregion
+
+    #region Pass
+
+    public void Pass(Player target, float force)
+    {
+        Free();
+
+        ResetMovements();
+
+        Target = target;
+
+        Vector3 direction = (target.transform.position - transform.position);
+        direction.y = 0f;
+
+        _rgdb.AddForce(direction.normalized * force, ForceMode.Impulse);
+    }
+
+    public void LobPass(Vector3 direction)
+    {
+        Free();
+
+        ResetMovements();
+
+        direction = direction * 20f;
+
+        float h = direction.y;
+        direction.y = 0;
+
+        float distance = direction.magnitude;
+        float a = 45f * Mathf.Deg2Rad;
+
+        direction.y = distance * Mathf.Tan(a);
+        distance += h / Mathf.Tan(a);
+
+        float velocity = Mathf.Sqrt(distance * Physics.gravity.magnitude / Mathf.Sin(2f * a));
+        _rgdb.AddForce(velocity * direction.normalized, ForceMode.Impulse);
+    }
+
+    #endregion
+
+    #region Tools
+
     public void Free()
     {
+        _isFree = true;
+
+        Target = null;
         transform.parent = null;
 
-        _rgdb.isKinematic = false;
-
-        _isFree = true;
-        _isMoving = false;
+        StopMoving();
     }
 
     public void Take(Transform parent)
     {
-        transform.parent = parent;
-
-        _rgdb.isKinematic = true;
-
-        _isFree = false;
-    }
-
-    /// <summary>
-    /// Dessine une traînée derrière la balle
-    /// </summary>
-    private void DrawTrail()
-    {
-
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-
-        if (!_isFree)
+        if (_isFree)
         {
-            Free();
+            _isFree = false;
 
-            _rgdb.velocity = (_rgdb.position - _lastPosition) / Time.deltaTime;
+            transform.parent = parent;
+            Target = null;
+
+            StopMoving();
         }
     }
+
+    private void StartMoving()
+    {
+        _isMoving = true;
+
+        SetKinematic();
+    }
+
+    private void StopMoving()
+    {
+        _isMoving = false;
+
+        _rgdb.useGravity = true;
+
+        ResetMovements();
+
+        _rgdb.velocity = _lastVelocity;
+    }
+
+    private void SetKinematic()
+    {
+        _rgdb.useGravity = false;
+
+        ResetMovements();
+    }
+
+    private void ResetMovements()
+    {
+        _rgdb.velocity = Vector3.zero;
+        _rgdb.angularVelocity = Vector3.zero;
+    }
+
+    #endregion
 }
