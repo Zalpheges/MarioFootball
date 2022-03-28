@@ -1461,10 +1461,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: ybot
       objectReference: {fileID: 0}
-    - target: {fileID: 6172146800527969744, guid: 6baf0259e1bc5ab4cb382b98d27d06a2, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6839857863326226282, guid: 6baf0259e1bc5ab4cb382b98d27d06a2, type: 3}
       propertyPath: m_RootOrder
       value: 6
