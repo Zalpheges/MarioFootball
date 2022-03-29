@@ -29,7 +29,26 @@ public class GoToPosition : Node
                     displacement.y = 0;
                     return (NodeState.SUCCESS, Action.Move(displacement.normalized));
                 case TargetType.ally:
-                    return base.Evaluate();
+                    float desiredX = (_root.parentTree.enemyGoalTransform.position + _root.parentTree.playerWithBall.transform.position).x / 2;
+                    switch (_root.currentWing)
+                    {
+                        case Wing.right:
+                            desiredPosition = new Vector3(desiredX, 0, Field.HeightOneSixths);
+                            displacement = desiredPosition - _root.parentTree.player.transform.position;
+                            break;
+                        case Wing.left:
+                            desiredPosition = new Vector3(desiredX, 0, Field.HeightFiveSixths);
+                            displacement = desiredPosition - _root.parentTree.player.transform.position;
+                            break;
+                        case Wing.center:
+                            desiredPosition = new Vector3(desiredX, 0, Field.HeightThreeSixths);
+                            displacement = desiredPosition - _root.parentTree.player.transform.position;
+                            break;
+                        default:
+                            displacement = Vector3.zero;
+                            break;
+                    }
+                    return (NodeState.SUCCESS, displacement.magnitude > _root.parentTree.attackThreshold/3 ? Action.Move(displacement.normalized) : Action.None);
                 case TargetType.allyWithBall:
                     displacement = _root.parentTree.enemyGoalTransform.position - _root.parentTree.player.transform.position;
                     displacement.y = 0;

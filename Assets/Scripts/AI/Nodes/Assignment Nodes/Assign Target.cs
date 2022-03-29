@@ -8,8 +8,8 @@ public class AssignTarget : Node
     private RootNode _root;
     private bool rootInitialized = false;
 
-    private List<Player> Allies = new List<Player>();
-    private List<Player> Enemies = new List<Player>();
+    private List<Player> _Allies = new List<Player>();
+    private List<Player> _Enemies = new List<Player>();
 
     public override (NodeState, Action) Evaluate()
     {
@@ -17,6 +17,7 @@ public class AssignTarget : Node
             _root = GetRootNode();
 
         InitializeTeams();
+        _Allies.Remove(_root.parentTree.player);
 
         bool assignmentComplete = false;
         Player closestEnemy;
@@ -30,7 +31,7 @@ public class AssignTarget : Node
             float distance = 0f;
 
 
-            foreach (Player player in Enemies)
+            foreach (Player player in _Enemies)
             {
                 distance = (player.transform.position - _root.parentTree.player.transform.position).magnitude;
 
@@ -49,25 +50,27 @@ public class AssignTarget : Node
                     }
                 }
             }
-            foreach (Player player in Allies)
+            foreach (Player player in _Allies)
             {
-                if (!(player == _root.parentTree.player))
-                {
-                    distance = (closestEnemy.transform.position - player.transform.position).magnitude;
+                distance = (closestEnemy.transform.position - player.transform.position).magnitude;
 
-                    if (distance < shortestDistance)
-                    {
-                        shortestDistance = distance;
+                if (distance < shortestDistance)
+                {
+                    shortestDistance = distance;
+                    closestAlly = player;
+                }
+                else if(distance == shortestDistance)
+                {
+                    if (player.transform.GetSiblingIndex() < _root.parentTree.player.transform.GetSiblingIndex())
                         closestAlly = player;
-                    }
                 }
             }
             if (closestAlly == _root.parentTree.player)
                 assignmentComplete = true;
             else
             {
-                Enemies.Remove(closestEnemy);
-                Allies.Remove(closestAlly);
+                _Enemies.Remove(closestEnemy);
+                _Allies.Remove(closestAlly);
             }
 
 
@@ -82,11 +85,11 @@ public class AssignTarget : Node
 
     private void InitializeTeams()
     {
-        Allies.Clear();
-        Enemies.Clear();
+        _Allies.Clear();
+        _Enemies.Clear();
 
-        Allies.AddRange(_root.parentTree.Allies);
-        Enemies.AddRange(_root.parentTree.Enemies);
+        _Allies.AddRange(_root.parentTree.Allies);
+        _Enemies.AddRange(_root.parentTree.Enemies);
     }
 
     private RootNode GetRootNode()

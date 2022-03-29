@@ -7,10 +7,11 @@ public class HolyBrain : PlayerBrain
 
     public float shootThreshold = Field.Width / 4;
     public float defendThreshold = Field.Width / 15;
+    public float attackThreshold = Field.Width / 20;
 
     private void Start()
     {
-        behaviorTree.Setup(Allies, Enemies, this.Player, shootThreshold, defendThreshold);
+        behaviorTree.Setup(Allies, Enemies, this.Player, shootThreshold, defendThreshold, attackThreshold);
     }
     public override Action GetAction()
     {

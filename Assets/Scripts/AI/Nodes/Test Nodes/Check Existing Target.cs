@@ -10,13 +10,13 @@ public class CheckExistingTarget : Node
 
     public override (NodeState, Action) Evaluate()
     {
-        if(!rootInitialized)
+        if (!rootInitialized)
             _root = GetRootNode();
 
         if(_root.target != null)
             return (NodeState.SUCCESS, Action.None);
         
-        return (NodeState.FAILURE, Action.None);
+        return base.Evaluate();
     }
 
     private RootNode GetRootNode()

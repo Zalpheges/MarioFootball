@@ -18,6 +18,14 @@ public enum TargetType
     allyWithBall
 }
 
+public enum Wing
+{
+    unassigned,
+    left,
+    right,
+    center
+}
+
 public class RootNode : Node
 {
     public TreeV2 parentTree;
@@ -27,9 +35,10 @@ public class RootNode : Node
 
     public GameState currentGameState = GameState.unassigned;
 
+    public Wing currentWing = Wing.unassigned;
+
     public RootNode(TreeV2 iparentTree, List<Node> ichildren)
     {
-        parent = null;
         parentTree = iparentTree;
 
         foreach (Node child in ichildren)

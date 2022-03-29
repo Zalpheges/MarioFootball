@@ -36,7 +36,7 @@ public class BallOwnership : Node
                     return (NodeState.SUCCESS, Action.None);
                 break;
             case SearchType.Enemies:
-                if (SearchBallInTeam(false))
+                if (SearchBallInTeam(false)) 
                     return (NodeState.SUCCESS, Action.None);
                 break;
             case SearchType.PlayerSpecific:
@@ -59,7 +59,15 @@ public class BallOwnership : Node
             if (player.HasBall)
             {
                 _root.parentTree.playerWithBall = player;
+                if (!ally)
+                {
+                    if (_root.currentGameState == GameState.attack)
+                        _root.target = null;
+                }
+
+                _root.currentTargetType = ally ? TargetType.ally : TargetType.unassigned;
                 _root.currentGameState = ally ? GameState.attack : GameState.defend;
+
                 return true;
             }
         }
