@@ -44,7 +44,7 @@ public class Proximity : Node
 
         if (closestPlayer == _root.parentTree.player)
         {
-            _root.currentBallHolderType = BallHolderType.none;
+            _root.currentTargetType = TargetType.none;
             return (NodeState.SUCCESS, Action.None);
         }
         return (NodeState.FAILURE, Action.None);

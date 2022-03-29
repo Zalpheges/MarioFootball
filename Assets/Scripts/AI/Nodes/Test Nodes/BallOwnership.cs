@@ -36,15 +36,13 @@ public class BallOwnership : Node
                     return (NodeState.SUCCESS, Action.None);
                 break;
             case SearchType.Enemies:
-                if (SearchBallInTeam(false))
+                if (SearchBallInTeam(false)) 
                     return (NodeState.SUCCESS, Action.None);
                 break;
             case SearchType.PlayerSpecific:
-                //Debug.Log(_root.parentTree.player.transform.GetSiblingIndex());
                 if (_root.parentTree.player.HasBall)
                 {
-                    //Debug.Log("test reussi");
-                    _root.currentBallHolderType = BallHolderType.allyWithBall;
+                    _root.currentTargetType = TargetType.allyWithBall;
                     return (NodeState.SUCCESS, Action.None);
                 }
                 break;
@@ -60,8 +58,16 @@ public class BallOwnership : Node
         {
             if (player.HasBall)
             {
+                _root.parentTree.playerWithBall = player;
+                if (!ally)
+                {
+                    if (_root.currentGameState == GameState.attack)
+                        _root.target = null;
+                }
+
+                _root.currentTargetType = ally ? TargetType.ally : TargetType.unassigned;
                 _root.currentGameState = ally ? GameState.attack : GameState.defend;
-                _root.currentBallHolderType = ally ? BallHolderType.ally : BallHolderType.enemy;
+
                 return true;
             }
         }

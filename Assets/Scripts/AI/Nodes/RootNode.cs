@@ -8,7 +8,7 @@ public enum GameState
     defend
 }
 
-public enum BallHolderType
+public enum TargetType
 {
     unassigned,
     none,
@@ -18,18 +18,27 @@ public enum BallHolderType
     allyWithBall
 }
 
+public enum Wing
+{
+    unassigned,
+    left,
+    right,
+    center
+}
+
 public class RootNode : Node
 {
     public TreeV2 parentTree;
 
     public Player target = null;
-    public BallHolderType currentBallHolderType = BallHolderType.unassigned;
+    public TargetType currentTargetType = TargetType.unassigned;
 
     public GameState currentGameState = GameState.unassigned;
 
+    public Wing currentWing = Wing.unassigned;
+
     public RootNode(TreeV2 iparentTree, List<Node> ichildren)
     {
-        parent = null;
         parentTree = iparentTree;
 
         foreach (Node child in ichildren)
