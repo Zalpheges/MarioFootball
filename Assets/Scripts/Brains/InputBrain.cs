@@ -54,7 +54,7 @@ public class InputBrain : PlayerBrain
             if (Player.HasBall)
             {
                 if (leftTrigger)
-                    return Action.Pass(_rightStickInput); // With bezier point
+                    return Action.LobPass(_rightStickInput); // With bezier point
                 else
                     return Action.Pass(_rightStickInput); // Without bezier point
             }

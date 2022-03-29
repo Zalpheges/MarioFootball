@@ -119,8 +119,6 @@ public class Player : MonoBehaviour
 
     private void MakeAction(Action action)
     {
-        if (Team.Players[0] == this && Team == Field.Team1)
-            Debug.Log(action.ActionType);
         Vector3 direction = Field.Transform.TransformDirection(action.Direction);
 
         _animator.SetBool("Run", false);

@@ -53,6 +53,11 @@ public class Action
         return new Action(Type.Pass, direction);
     }
 
+    public static Action LobPass(Vector3 direction)
+    {
+        return new Action(Type.LobPass, direction);
+    }
+
     public static Action Move(Vector3 direction)
     {
         return new Action(Type.Move, direction);
