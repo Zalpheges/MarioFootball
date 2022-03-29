@@ -8,7 +8,7 @@ public enum GameState
     defend
 }
 
-public enum BallHolderType
+public enum TargetType
 {
     unassigned,
     none,
@@ -23,7 +23,7 @@ public class RootNode : Node
     public TreeV2 parentTree;
 
     public Player target = null;
-    public BallHolderType currentBallHolderType = BallHolderType.unassigned;
+    public TargetType currentTargetType = TargetType.unassigned;
 
     public GameState currentGameState = GameState.unassigned;
 

@@ -11,6 +11,8 @@ public class GoToPosition : Node
     public override (NodeState, Action) Evaluate()
     {
         Vector3 displacement;
+        Vector3 playerDirection;
+        Vector3 desiredPosition;
 
         if (!rootInitialized)
         {
@@ -20,30 +22,42 @@ public class GoToPosition : Node
 
         if (_root.currentGameState == GameState.attack)
         {
-            switch (_root.currentBallHolderType)
+            switch (_root.currentTargetType)
             {
-                case BallHolderType.none:
+                case TargetType.none:
                     displacement = Field.Ball.transform.position - _root.parentTree.player.transform.position;
                     displacement.y = 0;
-                    //Debug.Log(displacement.normalized);
                     return (NodeState.SUCCESS, Action.Move(displacement.normalized));
-                case BallHolderType.ally:
+                case TargetType.ally:
                     return base.Evaluate();
-                case BallHolderType.allyWithBall:
+                case TargetType.allyWithBall:
                     displacement = _root.parentTree.enemyGoalTransform.position - _root.parentTree.player.transform.position;
                     displacement.y = 0;
-                    //Debug.Log(displacement.normalized);
                     return (NodeState.SUCCESS, Action.Move(displacement.normalized));
             }
         }
         else
         { 
-            switch (_root.currentBallHolderType)
+            switch (_root.currentTargetType)
             {
-                case BallHolderType.enemy:
-                    return base.Evaluate();
-                case BallHolderType.enemyWithBall:
-                    return base.Evaluate();
+                case TargetType.enemy:
+                    playerDirection = _root.target.transform.position - _root.parentTree.playerWithBall.transform.position;
+                    playerDirection.Normalize();
+                    playerDirection *= _root.parentTree.defenseThreshold;
+                    desiredPosition = _root.target.transform.position - playerDirection;
+                    displacement = desiredPosition - _root.parentTree.player.transform.position;
+                    displacement.y = 0;
+                    return (NodeState.SUCCESS, displacement.magnitude > _root.parentTree.defenseThreshold/3 
+                        ? Action.Move(displacement.normalized) : Action.None);
+                case TargetType.enemyWithBall:
+                    playerDirection = _root.parentTree.allyGoalTransform.position - _root.parentTree.playerWithBall.transform.position;
+                    playerDirection.Normalize();
+                    playerDirection *= _root.parentTree.defenseThreshold;
+                    desiredPosition = _root.parentTree.playerWithBall.transform.position + playerDirection;
+                    displacement = desiredPosition - _root.parentTree.player.transform.position;
+                    displacement.y = 0;
+                    return (NodeState.SUCCESS, displacement.magnitude > _root.parentTree.defenseThreshold/3  
+                        ? Action.Move(displacement.normalized) : Action.None);
             }
         }
         return base.Evaluate();
