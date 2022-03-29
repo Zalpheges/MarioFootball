@@ -33,18 +33,18 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "WestButton(Hold)",
-                    "type": "Button",
-                    "id": "6c2ab1b8-8984-453a-af3d-a3c78ae1679a",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "Hold(duration=0.5)",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "NorthButton",
                     "type": "Button",
                     "id": "eddf8ffa-fd34-4317-861d-b607290ee185",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SouthButton",
+                    "type": "Button",
+                    "id": "4509e834-dc62-411f-ab27-e983060d1be3",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -60,12 +60,12 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "SouthButton",
+                    "name": "WestButton(Hold)",
                     "type": "Button",
-                    "id": "4509e834-dc62-411f-ab27-e983060d1be3",
+                    "id": "6c2ab1b8-8984-453a-af3d-a3c78ae1679a",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "",
+                    "interactions": "Hold(duration=0.5)",
                     "initialStateCheck": false
                 }
             ],
@@ -160,6 +160,17 @@
                 },
                 {
                     "name": "",
+                    "id": "4b67f400-92d8-4155-b19e-e27ebc7b2cdb",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LeftTrigger",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "d26771d2-1957-46bb-8262-e698471487ea",
                     "path": "<Gamepad>/buttonNorth",
                     "interactions": "",
@@ -172,7 +183,7 @@
                 {
                     "name": "",
                     "id": "b3b47c76-23e8-4564-8781-e212511e76f8",
-                    "path": "<Keyboard>/upArrow",
+                    "path": "<Keyboard>/t",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -194,11 +205,99 @@
                 {
                     "name": "",
                     "id": "d3f50cf6-ce90-42d8-b8b7-07df72aa5fd1",
-                    "path": "<Keyboard>/rightArrow",
+                    "path": "<Keyboard>/h",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "EastButton",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "77bb17b0-1d8d-4060-8bdd-f26406e8a052",
+                    "path": "<Gamepad>/rightStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "RightStick",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "Directional Arrows",
+                    "id": "0802dfbe-0b3b-40f0-b0b6-25e2edaf9aa5",
+                    "path": "2DVector",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RightStick",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "2f870de1-b572-4b89-89c7-d18ff4b001b0",
+                    "path": "<Keyboard>/upArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RightStick",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "e0b12bee-7e5e-4346-84e2-5caecacceaed",
+                    "path": "<Keyboard>/downArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RightStick",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "6ef9793f-368f-43f8-8c0e-bdd3b94dba59",
+                    "path": "<Keyboard>/leftArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RightStick",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "0b7a417e-d38e-4071-a45f-c3a26e83a3aa",
+                    "path": "<Keyboard>/rightArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RightStick",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "143bb1cd-cc10-4eca-a2f0-a3664166fe91",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "WestButton(Hold)",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "80f310f5-19d9-427b-bc11-2f4d086ab27e",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "WestButton(Hold)",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -216,44 +315,11 @@
                 {
                     "name": "",
                     "id": "bc3cfd69-20dc-486d-b9ce-cdcb113bbe8f",
-                    "path": "<Keyboard>/downArrow",
+                    "path": "<Keyboard>/g",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "SouthButton",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "77bb17b0-1d8d-4060-8bdd-f26406e8a052",
-                    "path": "<Gamepad>/rightStick",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "RightStick",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "143bb1cd-cc10-4eca-a2f0-a3664166fe91",
-                    "path": "<Gamepad>/buttonWest",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "WestButton(Hold)",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "80f310f5-19d9-427b-bc11-2f4d086ab27e",
-                    "path": "<Keyboard>/leftArrow",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "WestButton(Hold)",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
