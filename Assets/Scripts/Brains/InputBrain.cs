@@ -37,7 +37,7 @@ public class InputBrain : PlayerBrain
 
             if (Player.HasBall)
             {
-                return Action.Shoot(shootForce, _rightStickInput, Vector3.zero, 5);
+                return Action.Shoot(_rightStickInput, shootForce);
             }
             else
                 return Action.Tackle(_rightStickInput);
@@ -54,9 +54,9 @@ public class InputBrain : PlayerBrain
             if (Player.HasBall)
             {
                 if (leftTrigger)
-                    return Action.Pass(_rightStickInput, Vector3.zero, Vector3.zero, Vector3.zero, 2); // With bezier point
+                    return Action.Pass(_rightStickInput); // With bezier point
                 else
-                    return Action.Pass(_rightStickInput, Vector3.zero, Vector3.zero, 2); // Without bezier point
+                    return Action.Pass(_rightStickInput); // Without bezier point
             }
             else
                 return Action.ChangePlayer();
@@ -71,8 +71,10 @@ public class InputBrain : PlayerBrain
             else
                 return Action.Headbutt(_rightStickInput);
         }
-        else
+        else if (_movementInput != Vector3.zero)
             return Action.Move(_movementInput);
+        else
+            return Action.None;
     }
 
     public void OnMove(InputAction.CallbackContext input)

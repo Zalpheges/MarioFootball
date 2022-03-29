@@ -18,19 +18,6 @@ public class Player : MonoBehaviour
     private Animator _animator;
     private Rigidbody _rgdb;
 
-    #region Debug
-
-    public void SetActive(bool value)
-    {
-        _debugOnly = !value;
-    }
-
-    public bool _debugOnly = false;
-    private float _timeFromStart = 0f;
-
-    #endregion
-
-    [SerializeField]
     public PlayerBrain IABrain { get; private set; }
 
     public PlayerState State { get; private set; }
@@ -45,10 +32,25 @@ public class Player : MonoBehaviour
 
     public bool IsPiloted { get; set; } = false;
 
-    public static Player CreatePlayer(GameObject prefab, Team team, bool isGoalKeeper = false)
+    private Action _waitingAction = null;
+
+    #region Debug
+
+    public void SetActive(bool value)
     {
-        Player player = Instantiate(prefab).GetComponent<Player>();
-        player.transform.rotation = team.transform.localRotation;
+        _debugOnly = !value;
+    }
+
+    public bool _debugOnly = false;
+    private bool _isRetard => GameManager.EnemiesAreRetard && Team == Field.Team2 && Time.timeSinceLevelLoad < 2f;
+
+    #endregion
+
+    #region Constructor
+
+    public static Player CreatePlayer(Player prefab, Team team, bool isGoalKeeper = false)
+    {
+        Player player = Instantiate(prefab);
 
         Component brain = player.gameObject.AddComponent(isGoalKeeper ? team.GoalBrainType : team.TeamBrainType);
 
@@ -56,10 +58,9 @@ public class Player : MonoBehaviour
 
         player.Team = team;
 
-        //player.GetComponent<Rigidbody>().isKinematic = true;
-
         return player;
     }
+    #endregion
 
     private void Awake()
     {
@@ -70,34 +71,64 @@ public class Player : MonoBehaviour
     private void Start()
     {
         _rgdb.mass = _specs.Weight;
-        gameObject.name = _specs.name;
-
-        if (Team == Field.Team1)
-            gameObject.name += " team1 " + transform.GetSiblingIndex();
-        else
-            gameObject.name += " team2 " + transform.GetSiblingIndex();
+        gameObject.name += " " + _specs.Name;
     }
 
     private void Update()
     {
-        if (_debugOnly)
+        if (_debugOnly || _isRetard)
             return;
 
-        if (GameManager.EnemiesAreRetard && Team == Field.Team2 && Time.timeSinceLevelLoad < 2f)
+        if (_waitingAction)
+        {
+            Vector3 direction = _waitingAction.Direction != Vector3.zero ? _waitingAction.Direction : transform.forward;
+            direction = Field.Transform.TransformDirection(direction);
+            Quaternion rotation = Quaternion.LookRotation(direction, Vector3.up);
+
+            _rgdb.MoveRotation(Quaternion.Slerp(_rgdb.rotation, rotation, 25f * Time.deltaTime));
+
+            if (Quaternion.Angle(_rgdb.rotation, rotation) < 5f)
+            {
+                MakeAction(_waitingAction);
+
+                _waitingAction = null;
+            }
+
             return;
+        }
 
         Action action = IsPiloted ? Team.Brain.GetAction() : IABrain.GetAction();
 
-        Vector3 deltaMove = Field.Transform.TransformDirection(action.DeltaMove);
-        Vector3 shootDirection = Field.Transform.TransformDirection(action.ShootDirection);
+        if (action.DirectionnalAction)
+        {
+            Vector3 direction = action.Direction != Vector3.zero ? action.Direction : transform.forward;
+            direction = Field.Transform.TransformDirection(direction);
+            Quaternion rotation = Quaternion.LookRotation(direction, Vector3.up);
 
-        if (shootDirection == Vector3.zero)
-            shootDirection = Field.Transform.TransformDirection(transform.forward);
+            if (Quaternion.Angle(_rgdb.rotation, rotation) >= 5f)
+            {
+                Rotate(action);
+
+                return;
+            }
+
+        }
+
+        MakeAction(action);
+    }
+
+    private void MakeAction(Action action)
+    {
+        if (Team.Players[0] == this && Team == Field.Team1)
+            Debug.Log(action.ActionType);
+        Vector3 direction = Field.Transform.TransformDirection(action.Direction);
+
+        _animator.SetBool("Run", false);
 
         switch (action.ActionType)
         {
             case Action.Type.Move:
-                _rgdb.MovePosition(_rgdb.position + deltaMove * 2f * _specs.Speed * Time.deltaTime);
+                _rgdb.MovePosition(_rgdb.position + direction * 2f * _specs.Speed * Time.deltaTime);
                 _animator.SetBool("Run", true);
 
                 break;
@@ -108,8 +139,9 @@ public class Player : MonoBehaviour
                     Shoot();
                     _animator.SetBool("Strike", true);
                 }
-                
+
                 break;
+
             case Action.Type.Throw:
                 Debug.Log("Throw");
 
@@ -124,7 +156,7 @@ public class Player : MonoBehaviour
             case Action.Type.Tackle:
                 Debug.Log("Tackle");
                 _animator.SetBool("Tackled", true);
-                
+
                 break;
 
             case Action.Type.ChangePlayer:
@@ -140,24 +172,35 @@ public class Player : MonoBehaviour
 
             case Action.Type.LobPass:
                 if (HasBall)
-                    LobPass(shootDirection);
-                _animator.SetBool("Pass", true);
-                
+                {
+                    LobPass(direction);
+                    _animator.SetBool("Pass", true);
+                }
+
                 break;
 
             case Action.Type.Pass:
                 if (HasBall)
-                    DirectPass(shootDirection);
-                _animator.SetBool("Pass", true);
-                Debug.Log(shootDirection);
-                
-                break;
-
-            default:
-                _animator.SetBool("Run", false);
+                {
+                    DirectPass(direction);
+                    _animator.SetBool("Pass", true);
+                }
 
                 break;
         }
+    }
+
+    private void Rotate(Action action)
+    {
+        _waitingAction = action;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        Ball ball = collision.transform.GetComponent<Ball>();
+
+        if (Field.Ball == ball && !HasBall)
+            ball.Take(transform);
     }
 
     #region Shoot
@@ -192,7 +235,7 @@ public class Player : MonoBehaviour
         // Debug
         float distance = Vector3.Distance(goal.position, _rgdb.position);
         string direction = sign < 0 ? "gauche" : "droite";
-        Debug.Log($"Distance > 45m ({distance}) - Tir non cadr� � {direction} ({range}m).");
+        //Debug.Log($"Distance > 45m ({distance}) - Tir non cadr� � {direction} ({range}m).");
     }
 
     private void GoalPostShoot(Transform goal)
@@ -204,7 +247,7 @@ public class Player : MonoBehaviour
         // Debug
         float distance = Vector3.Distance(goal.position, _rgdb.position);
         string direction = sign < 0 ? "gauche" : "droit";
-        Debug.Log($"Distance < 45m ({distance}) - Tir sur poteau {direction}.");
+        //Debug.Log($"Distance < 45m ({distance}) - Tir sur poteau {direction}.");
     }
 
     private void ShootOnTarget(Transform goal)
@@ -223,7 +266,7 @@ public class Player : MonoBehaviour
 
         // Debug
         float distance = Vector3.Distance(goal.position, _rgdb.position);
-        Debug.Log($"Distance < 45m ({distance}) - Tir cadr� ({x} ; {y}).");
+        //Debug.Log($"Distance < 45m ({distance}) - Tir cadr� ({x} ; {y}).");
     }
 
     #endregion
@@ -232,11 +275,10 @@ public class Player : MonoBehaviour
 
     private void DirectPass(Vector3 direction)
     {
-        Player mate = FindMateInDirection(direction);
+        Player mate = FindMateInRange(direction);
 
         if (mate)
         {
-            transform.LookAt(direction, Vector3.up);
             Field.Ball.Pass(mate, 16f);
 
             //Debug.Log("Passe directe vers " + direction.ToString());
@@ -247,7 +289,6 @@ public class Player : MonoBehaviour
 
     private void LobPass(Vector3 direction)
     {
-        transform.LookAt(direction, Vector3.up);
         Field.Ball.LobPass(direction);
 
         //Debug.Log("Passe lobée vers " + direction.ToString());
@@ -255,26 +296,21 @@ public class Player : MonoBehaviour
 
     #endregion
 
-    public LayerMask player;
+    #region FindMate
 
-    private Player FindMateInDirection(Vector3 direction, float angle = 45f, int iterations = 100)
+    private Player FindMateInRange(Vector3 direction, float angle = 180f, int iterations = 100)
     {
-        float current = -angle / 2f;
-        float step = angle / iterations;
+        float current = 0;
+        float step = angle / iterations / 2f;
 
         for (int i = 0; i < iterations; ++i)
         {
-            Vector3 dir = Quaternion.AngleAxis(current, Vector3.up) * direction;
+            Player mate = FindMateInDirection(Quaternion.AngleAxis(current, Vector3.up) * direction);
 
-            if (Physics.Raycast(transform.position + Vector3.up, dir, out RaycastHit hit, Mathf.Infinity, 1 << gameObject.layer))
-            {
-                Player player = hit.transform.GetComponentInParent<Player>();
+            mate ??= FindMateInDirection(Quaternion.AngleAxis(-current, Vector3.up) * direction);
 
-                Debug.Log("Found " + hit.transform.name);
-
-                if (player && player.Team == Team)
-                    return player;
-            }
+            if (mate)
+                return mate;
 
             current += step;
         }
@@ -282,11 +318,18 @@ public class Player : MonoBehaviour
         return null;
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private Player FindMateInDirection(Vector3 direction)
     {
-        Ball ball = collision.transform.GetComponent<Ball>();
+        if (Physics.Raycast(transform.position + Vector3.up, direction, out RaycastHit hit, Mathf.Infinity, 1 << gameObject.layer))
+        {
+            Player player = hit.transform.GetComponentInParent<Player>();
 
-        if (Field.Ball == ball && !HasBall)
-            ball.Take(transform);
+            if (player && player.Team == Team)
+                return player;
+        }
+
+        return null;
     }
+
+    #endregion
 }

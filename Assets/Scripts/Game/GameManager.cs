@@ -77,17 +77,20 @@ public class GameManager : MonoBehaviour
         Player[] teammates = new Player[4];
 
         teammates[0] = Player.CreatePlayer(match.Captain1.Prefab, team1);
+        teammates[0].name = "Captain Team 1";
         teammates[0].IsPiloted = true;
 
         for (int i = 1; i < 4; ++i)
         {
             teammates[i] = Player.CreatePlayer(match.Mate1.Prefab, team1);
+            teammates[i].name = $"Mate {i} Team 1";
 
             if (_instance._debugOnlyPlayer)
                 teammates[i].SetActive(i == 0);
         }
 
         Player goal1 = Player.CreatePlayer(match.GoalKeeper.Prefab, team1, true);
+        goal1.name = "Goal Team 1";
         goal1.gameObject.SetActive(false);
 
         team1.Init(teammates, goal1);
@@ -95,9 +98,7 @@ public class GameManager : MonoBehaviour
         teammates = new Player[4];
 
         teammates[0] = Player.CreatePlayer(match.Captain2.Prefab, team2);
-        
-        if (_instance._debugOnlyPlayer)
-            teammates[0].gameObject.SetActive(false);
+        teammates[0].name = "Captain Team 2";
 
         if (_instance._debugOnlyPlayer)
             teammates[0].gameObject.SetActive(false);
@@ -105,12 +106,14 @@ public class GameManager : MonoBehaviour
         for (int i = 1; i < 4; ++i)
         {
             teammates[i] = Player.CreatePlayer(match.Mate2.Prefab, team2);
+            teammates[i].name = $"Mate {i} Team 2";
 
             if (_instance._debugOnlyPlayer)
                 teammates[i].SetActive(false);
         }
 
         Player goal2 = Player.CreatePlayer(match.GoalKeeper.Prefab, team2, true);
+        goal1.name = "Goal Team 2";
         goal2.gameObject.SetActive(false);
 
         team2.Init(teammates, goal2);

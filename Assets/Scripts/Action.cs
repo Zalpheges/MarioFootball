@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Action
@@ -18,79 +16,56 @@ public class Action
         ChangePlayer
     }
 
-    public Type ActionType { get; private set; }
-    public Vector3 DeltaMove { get; private set; }
-    public float ShootForce { get; private set; }
-    public Vector3 ShootDirection { get; private set; }
-    public Vector3 StartPosition { get; private set; }
-    public Vector3 EndPosition { get; private set; }
-    public Vector3 BezierPoint { get; private set; }
-    public float Duration { get; private set; }
-    public bool IsSprinting { get; private set; }
+    public readonly Type ActionType;
+    public readonly Vector3 Direction;
+    public readonly float Duration;
+    public readonly float Force;
+
+    public readonly bool DirectionnalAction;
 
     public static Action None => new Action(Type.None);
+
+    public static implicit operator bool(Action action) => action != null && action.ActionType != Type.None;
 
     private Action(Type type)
     {
         ActionType = type;
+
+        DirectionnalAction = false;
     }
 
-    public static Action Shoot(float shootForce, Vector3 direction, Vector3 startPosition, int duration)
+    private Action(Type type, Vector3 direction, float force = 0f)
     {
-        return new Action(Type.Shoot)
-        {
-            ShootForce = shootForce,
-            ShootDirection = direction,
-            StartPosition = startPosition,
-            Duration = duration
-        };
+        ActionType = type;
+        Direction = direction;
+        Force = force;
+
+        DirectionnalAction = true;
     }
 
-    public static Action Pass(Vector3 direction, Vector3 startPosition, Vector3 endPosition, int duration)
+    public static Action Shoot(Vector3 direction, float force)
     {
-        return new Action(Type.Pass)
-        {
-            ShootDirection = direction,
-            StartPosition = startPosition,
-            EndPosition = endPosition,
-            Duration = duration
-        };
+        return new Action(Type.Shoot, direction, force);
     }
 
-    public static Action Pass(Vector3 direction, Vector3 startPosition, Vector3 endPosition, Vector3 bezierPoint, int duration)
+    public static Action Pass(Vector3 direction)
     {
-        return new Action(Type.LobPass)
-        {
-            ShootDirection = direction,
-            StartPosition = startPosition,
-            EndPosition = endPosition,
-            BezierPoint = bezierPoint,
-            Duration = duration
-        };
+        return new Action(Type.Pass, direction);
     }
 
     public static Action Move(Vector3 direction)
     {
-        return new Action(Type.Move)
-        {
-            DeltaMove = direction
-        };
+        return new Action(Type.Move, direction);
     }
 
     public static Action Tackle(Vector3 direction)
     {
-        return new Action(Type.Tackle)
-        {
-            DeltaMove = direction
-        };
+        return new Action(Type.Tackle, direction);
     }
 
     public static Action Headbutt(Vector3 direction)
     {
-        return new Action(Type.Headbutt)
-        {
-            ShootDirection = direction
-        };
+        return new Action(Type.Headbutt, direction);
     }
 
     public static Action Dribble()
@@ -100,10 +75,7 @@ public class Action
 
     public static Action Throw(Vector3 direction)
     {
-        return new Action(Type.Throw)
-        {
-            ShootDirection = direction
-        };
+        return new Action(Type.Throw, direction);
     }
 
     public static Action ChangePlayer()
