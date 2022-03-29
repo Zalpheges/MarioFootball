@@ -7,6 +7,11 @@ public class CameraManager : MonoBehaviour
 {
     private static CameraManager _instance;
     private Dictionary<Transform, CinemachineVirtualCamera> _virtualCameras;
+    [SerializeField] private Transform _lockerLeft;
+    [SerializeField] private Transform _lockerRight;
+
+    public static Transform LockerLeft => _instance._lockerLeft;
+    public static Transform LockerRight => _instance._lockerRight;
 
     private void Awake()
     {
@@ -25,6 +30,14 @@ public class CameraManager : MonoBehaviour
             _instance._virtualCameras[t] = virtualCam;
         }
     }
+
+    //private void Update()
+    //{
+    //    foreach(var vcam in  _virtualCameras)
+    //    {
+    //        Debug.Log(vcam.Value.GetComponent<CinemachineConfiner>());
+    //    }
+    //}
 
     public static void Follow(Transform toFollow)
     {

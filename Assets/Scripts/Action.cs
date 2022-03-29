@@ -6,6 +6,7 @@ public class Action
 {
     public enum Type
     {
+        NavMove,
         Shoot,
         Pass,
         LobPass,
@@ -27,6 +28,13 @@ public class Action
     public float Duration { get; private set; }
     public bool IsSprinting { get; private set; }
 
+    public static Action NavMove()
+    {
+        return new Action
+        {
+            ActionType = Type.NavMove
+        };
+    }
     public static Action Shoot(float shootForce, Vector3 direction, Vector3 startPosition, int duration)
     {
         return new Action

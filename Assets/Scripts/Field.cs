@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Field : MonoBehaviour
@@ -77,6 +78,12 @@ public class Field : MonoBehaviour
     private float _heightFiveSixths;
     public static float HeightFiveSixths => _instance._heightFiveSixths;
 
+    private float _widthOneThird;
+    public static float WidthOneThird => _instance._widthOneThird;
+
+    private float _widthTwoThirds;
+    public static float WidthTwoThirds => _instance._widthTwoThirds;
+
     private Ball _ball;
     public static Ball Ball => _instance._ball;
 
@@ -98,6 +105,9 @@ public class Field : MonoBehaviour
         _heightOneSixths = _topLeftCorner.x + _height / 6f;
         _heightThreeSixths = _topLeftCorner.x + _height * 3f / 6f;
         _heightFiveSixths = _topLeftCorner.x + _height * 5f / 6f;
+
+        _widthOneThird = _topLeftCorner.z + _width / 3f;
+        _widthTwoThirds = _topLeftCorner.z + _width * 2 / 3f;
 
         GameManager.BreedMePlease(_team1, _team2);
     }
@@ -126,6 +136,23 @@ public class Field : MonoBehaviour
         Team2.Players[1].transform.position = VectorToPosition(-_defPosMate1);
         Team2.Players[2].transform.position = VectorToPosition(-_defPosMate2);
         Team2.Players[3].transform.position = VectorToPosition(-_defPosMate3);
+    }
+
+    public static List<Vector3> GetStartPositions()
+    {
+        List<Vector3> positions = new List<Vector3>();
+
+        positions.Add(_instance.VectorToPosition(_instance._attackPosCaptain));
+        positions.Add(_instance.VectorToPosition(_instance._attackPosMate1));
+        positions.Add(_instance.VectorToPosition(_instance._attackPosMate2));
+        positions.Add(_instance.VectorToPosition(_instance._attackPosMate3));
+
+        positions.Add(_instance.VectorToPosition(-_instance._defPosCaptain));
+        positions.Add(_instance.VectorToPosition(-_instance._defPosMate1));
+        positions.Add(_instance.VectorToPosition(-_instance._defPosMate2));
+        positions.Add(_instance.VectorToPosition(-_instance._defPosMate3));
+
+        return positions;
     }
 
     private Vector3 VectorToPosition(Vector2 vector)

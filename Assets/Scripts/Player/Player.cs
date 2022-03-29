@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Player : MonoBehaviour
 {
@@ -17,6 +18,7 @@ public class Player : MonoBehaviour
 
     private Animator _animator;
     private Rigidbody _rgbd;
+    private NavMeshAgent _agent;
 
     [SerializeField]
     public PlayerBrain IABrain { get; private set; }
@@ -32,6 +34,7 @@ public class Player : MonoBehaviour
     public bool CanMove => State == PlayerState.Moving;
 
     public bool IsPiloted { get; set; } = false;
+    public bool IsNavDriven { get; set; } = false;
 
     public static Player CreatePlayer(GameObject prefab, Team team, bool isGoalKeeper = false)
     {
@@ -52,6 +55,7 @@ public class Player : MonoBehaviour
     {
         _animator = GetComponent<Animator>();
         _rgbd = GetComponent<Rigidbody>();
+        _agent = GetComponent<NavMeshAgent>();
     }
 
     private void Start()
@@ -67,10 +71,17 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
+        if(_agent.hasPath && _agent.pathStatus == NavMeshPathStatus.PathComplete)
+            Debug.Log("destination reached");
+
         Action action = IsPiloted ? Team.Brain.GetAction() : IABrain.GetAction();
+        if (IsNavDriven)
+            action = Action.NavMove();
 
         switch (action.ActionType)
         {
+            case Action.Type.NavMove:
+                break;
             case Action.Type.Move:
                 transform.position += action.DeltaMove * 10f * _specs.Speed * Time.deltaTime;
 

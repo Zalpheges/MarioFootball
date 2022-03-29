@@ -19,7 +19,6 @@ public class Team : MonoBehaviour
     public PlayerBrain[] Brains { get; private set; }
     public Player GoalKeeper { get; private set; }
 
-    public int ConcededGoals { get; private set; }
     public PlayerBrain Brain { get; private set; }
 
     private Queue<Item> _items;
@@ -64,15 +63,7 @@ public class Team : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Ball ball = other.GetComponent<Ball>();
-
-        if (ball)
-        {
-            ++ConcededGoals;
-
-            ball.Free();
-
-            Field.Ball.transform.position = Field.Team1.Players[0].transform.position;
-        }
+        if (other.GetComponent<Ball>())
+            GameManager.GoalScored(this);
     }
 }
