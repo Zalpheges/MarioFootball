@@ -9,13 +9,24 @@ public class CameraManager : MonoBehaviour
     private Dictionary<Transform, CinemachineVirtualCamera> _virtualCameras;
     [SerializeField] private Transform _lockerLeft;
     [SerializeField] private Transform _lockerRight;
+    [SerializeField] private Transform _lockerDynamic;
 
     public static Transform LockerLeft => _instance._lockerLeft;
     public static Transform LockerRight => _instance._lockerRight;
+    public static Transform LockerDynamic => _instance._lockerDynamic;
+    public static GameObject ActiveCam => CinemachineCore.Instance.GetActiveBrain(0).ActiveVirtualCamera.VirtualCameraGameObject;
 
     private void Awake()
     {
         _instance = this;
+    }
+
+    private void Update()
+    {
+        Vector3 activeFollowPosition = ActiveCam.GetComponent<CameraController>().ToFollow.position;
+        float z = Mathf.Max(_lockerLeft.position.z, Mathf.Min(activeFollowPosition.z, _lockerRight.position.z));
+
+        _lockerDynamic.position = new Vector3(activeFollowPosition.x, activeFollowPosition.y, z);
     }
 
     public static void Init(Transform[] players, Transform ball)
@@ -30,14 +41,6 @@ public class CameraManager : MonoBehaviour
             _instance._virtualCameras[t] = virtualCam;
         }
     }
-
-    //private void Update()
-    //{
-    //    foreach(var vcam in  _virtualCameras)
-    //    {
-    //        Debug.Log(vcam.Value.GetComponent<CinemachineConfiner>());
-    //    }
-    //}
 
     public static void Follow(Transform toFollow)
     {
