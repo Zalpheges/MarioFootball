@@ -38,6 +38,7 @@ public class Ball : MonoBehaviour
 
     private void Update()
     {
+     
         if (_isMoving)
         {
             float length = Vector3.Distance(_startPoint, _interpolator) + Vector3.Distance(_interpolator, _endPoint);
@@ -57,9 +58,21 @@ public class Ball : MonoBehaviour
 
                 _rgdb.velocity = (newPosition - lastPosition) / (Time.deltaTime / (length / _speed));
             }
+            
         }
         else if (!_isFree)
-            transform.localPosition = new Vector3(0, 0.2f, 1.5f);
+        {
+            
+            
+            GameObject parent = gameObject.transform.parent.gameObject;
+            Animator _animatorparent = parent.GetComponent<Animator>();
+            //Debug.Log("Test" + _animatorparent.GetFloat("BallRun"));
+            transform.localPosition = new Vector3(0, 0, _animatorparent.GetFloat("BallRun") *20 ) + new Vector3(0.113f, 0.2f, 0.979f);
+
+            //transform.localPosition = new Vector3(0, 0.2f, 1.5f);
+
+        }
+
 
         //transform.localPosition = (Mathf.Sin(Time.time * 10f) + 2f) * Vector3.forward;
     }
