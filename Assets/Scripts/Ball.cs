@@ -64,12 +64,12 @@ public class Ball : MonoBehaviour
         {
             
             
-            GameObject parent = gameObject.transform.parent.gameObject;
+            /*GameObject parent = gameObject.transform.parent.gameObject;
             Animator _animatorparent = parent.GetComponent<Animator>();
             //Debug.Log("Test" + _animatorparent.GetFloat("BallRun"));
-            transform.localPosition = new Vector3(0, 0, _animatorparent.GetFloat("BallRun") *20 ) + new Vector3(0.113f, 0.2f, 0.979f);
+            transform.localPosition = new Vector3(0, 0, _animatorparent.GetFloat("BallRun") *20 ) + new Vector3(0.113f, 0.2f, 0.979f);*/
 
-            //transform.localPosition = new Vector3(0, 0.2f, 1.5f);
+            transform.localPosition = new Vector3(0, 0.2f, 1.5f);
 
         }
 

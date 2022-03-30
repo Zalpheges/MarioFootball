@@ -87,7 +87,7 @@ public class GameManager : MonoBehaviour
             teammates[i].name = $"Mate {i} Team 1";
 
             if (_instance._debugOnlyPlayer)
-                teammates[i].SetActive(i == 0);
+                teammates[i].SetActive(false);
         }
 
         Player goal1 = Player.CreatePlayer(match.GoalKeeper.Prefab, team1, true);
@@ -161,10 +161,11 @@ public class GameManager : MonoBehaviour
         {
             Player player = i < n ? attackingPlayers[i] : defendingPlayers[i - n];
             player.IsNavDriven = true;
-            NavMeshAgent agent = player.GetComponent<NavMeshAgent>();
+            NavMeshAgent agent = player.GetComponent<NavMeshAgent>();
+
             agent.enabled = true;
             agent.destination = positions[i];
-            agent.speed = 10f;*/
+            agent.speed = 10f;
         }
     }
     private IEnumerator Match()

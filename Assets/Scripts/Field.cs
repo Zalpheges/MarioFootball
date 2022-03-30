@@ -160,6 +160,6 @@ public class Field : MonoBehaviour
 
     private Vector3 VectorToPosition(Vector2 vector)
     {
-        return transform.TransformPoint(new Vector3(vector.x * _width / 2f, 1f, vector.y * _height / 2f));
+        return transform.TransformPoint(new Vector3(vector.x * _width / 2f, 0f, vector.y * _height / 2f));
     }
 }

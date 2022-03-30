@@ -28,6 +28,7 @@ public class InputBrain : PlayerBrain
             shootForce += Time.deltaTime; // Force en fonction du ntemp appuyé A REVOIR
         }
     }
+
     //-------------------------------------------------------Revoir tout les return de GetAction() !!!!
     public override Action GetAction()
     {
@@ -36,13 +37,11 @@ public class InputBrain : PlayerBrain
             westButtonPressed = !westButtonPressed;
 
             if (Player.HasBall)
-            {
-                return Action.Shoot(_rightStickInput, shootForce);
-            }
+                return Action.Shoot(_movementInput, shootForce);
             else
-                return Action.Tackle(_rightStickInput);
+                return Action.Tackle(_movementInput);
         }
-        else if (eastButton) //Throw
+        else if (eastButton) // Throw
         {
             eastButton = !eastButton;
             return Action.Throw(_rightStickInput);
@@ -54,9 +53,9 @@ public class InputBrain : PlayerBrain
             if (Player.HasBall)
             {
                 if (leftTrigger)
-                    return Action.LobPass(_rightStickInput); // With bezier point
+                    return Action.LobPass(_movementInput); // With bezier point
                 else
-                    return Action.Pass(_rightStickInput); // Without bezier point
+                    return Action.Pass(_movementInput); // Without bezier point
             }
             else
                 return Action.ChangePlayer();
@@ -69,7 +68,7 @@ public class InputBrain : PlayerBrain
             if (Player.HasBall)
                 return Action.Dribble();
             else
-                return Action.Headbutt(_rightStickInput);
+                return Action.Headbutt(_movementInput);
         }
         else if (_movementInput != Vector3.zero)
             return Action.Move(_movementInput);

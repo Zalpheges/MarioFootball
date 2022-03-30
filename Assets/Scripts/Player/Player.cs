@@ -76,43 +76,33 @@ public class Player : MonoBehaviour
     {
         _rgdb.mass = _specs.Weight;
         gameObject.name += " " + _specs.Name;
+        _agent.enabled = false;
     }
 
     private void Update()
     {
+        //bool debug = Field.Team1.Players[0] == this;
+
         _rgdb.angularVelocity = Vector3.zero;
         _rgdb.velocity = Vector3.zero;
 
         if (_debugOnly || _isRetard)
             return;
 
-        if (_waitingAction) //n'est pas dans une animation bloquante
-        {
-            Vector3 direction = _waitingAction.Direction != Vector3.zero ? _waitingAction.Direction : transform.forward;
-            direction = Field.Transform.TransformDirection(direction);
-            Quaternion rotation = Quaternion.LookRotation(direction, Vector3.up);
+        if (IsPiloted)
+            Debug.Log(name);
 
-            _rgdb.MoveRotation(Quaternion.Slerp(_rgdb.rotation, rotation, 25f * Time.deltaTime));
-
-            if (Quaternion.Angle(_rgdb.rotation, rotation) < 5f)
-            {
-                MakeAction(_waitingAction);
-
-                _waitingAction = null;
-            }
-
-            return;
-        }
-
-        if(IsNavDriven && _agent.remainingDistance < 0.1f && _agent.velocity.sqrMagnitude < 0.1f)
-        {
+        if (IsNavDriven && Vector3.Distance(transform.position, _agent.destination) <= 0.1f)
+        { 
             IsNavDriven = false;
             _agent.enabled = false;
         }
 
         Action action;
 
-        if (IsNavDriven)
+        if (_waitingAction)
+            action = _waitingAction;
+        else if (IsNavDriven)
             action = Action.NavMove();
         else if (IsPiloted)
             action = Team.Brain.GetAction();
@@ -121,20 +111,30 @@ public class Player : MonoBehaviour
 
         if (action.DirectionnalAction)
         {
-            Vector3 direction = action.Direction != Vector3.zero ? action.Direction : transform.forward;
-            direction = Field.Transform.TransformDirection(direction);
-            Quaternion rotation = Quaternion.LookRotation(direction, Vector3.up);
+            Vector3 direction = action.Direction.magnitude > 0.1f ? action.Direction : transform.forward;
 
-            if (action.WaitForRotation && Quaternion.Angle(_rgdb.rotation, rotation) >= 5f)
+            direction = Field.Transform.TransformDirection(direction);
+
+            if (action.ActionType == Action.Type.Shoot)
             {
-                Rotate(action);
+                direction = (Team == Field.Team1 ? Field.Team2 : Field.Team1).transform.position - transform.position;
+                direction.y = 0f;
+            }
+
+            Quaternion rotation = Quaternion.LookRotation(direction, Vector3.up);
+            _rgdb.MoveRotation(Quaternion.Slerp(_rgdb.rotation, rotation, 100f * Time.deltaTime));
+
+            //if (debug)  Debug.Log(Quaternion.Angle(_rgdb.rotation, rotation) + " " + action.ActionType);
+
+            if (action.WaitForRotation && Quaternion.Angle(_rgdb.rotation, rotation) > 5f)
+            {
+                _waitingAction = action;
 
                 return;
             }
-            else
-                _rgdb.MoveRotation(Quaternion.Slerp(_rgdb.rotation, rotation, 25f * Time.deltaTime));
         }
-        
+
+        _waitingAction = null;
         MakeAction(action);
     }
 
@@ -163,7 +163,7 @@ public class Player : MonoBehaviour
                 break;
 
             case Action.Type.Move:
-                _rgdb.MovePosition(_rgdb.position + direction * 2f * _specs.Speed * Time.deltaTime);
+                _rgdb.MovePosition(_rgdb.position + direction * 8f * _specs.Speed * Time.deltaTime);
                 _animator.SetBool("Run 0",true);
 
                 break;
@@ -224,11 +224,6 @@ public class Player : MonoBehaviour
                 break;
                 
         }
-    }
-
-    private void Rotate(Action action)
-    {
-        _waitingAction = action;
     }
 
     private void OnCollisionEnter(Collision collision)
