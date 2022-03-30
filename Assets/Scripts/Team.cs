@@ -57,6 +57,7 @@ public class Team : MonoBehaviour
             Brain.Player = hasBall;
 
             Brain.Player.IsPiloted = true;
+            CameraManager.Follow(Brain.Player.transform);
         }
     }
 

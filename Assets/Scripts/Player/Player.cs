@@ -101,8 +101,8 @@ public class Player : MonoBehaviour
             return;
         }
 
-        if(IsNavDriven && Vector3.Distance(transform.position, _agent.destination) <= 0.1f)
-        { 
+        if(IsNavDriven && _agent.remainingDistance < 0.1f && _agent.velocity.sqrMagnitude < 0.1f)
+        {
             IsNavDriven = false;
             _agent.enabled = false;
         }
@@ -125,7 +125,6 @@ public class Player : MonoBehaviour
             }
 
         }
-
         MakeAction(action);
     }
 
@@ -138,8 +137,6 @@ public class Player : MonoBehaviour
         switch (action.ActionType)
         {
             case Action.Type.NavMove:
-                _agent.enabled = true;
-
                 break;
 
             case Action.Type.Move:
@@ -180,7 +177,7 @@ public class Player : MonoBehaviour
                 break;
 
             case Action.Type.Dribble:
-                Debug.Log("Drible");
+                Debug.Log("Dribble");
                 _animator.SetBool("Spin", true);
 
                 break;

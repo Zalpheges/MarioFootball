@@ -162,6 +162,7 @@ public class GameManager : MonoBehaviour
             Player player = i < n ? attackingPlayers[i] : defendingPlayers[i - n];
             player.IsNavDriven = true;
             NavMeshAgent agent = player.GetComponent<NavMeshAgent>();
+            agent.enabled = true;
             agent.destination = positions[i];
             agent.speed = 10f;
         }
