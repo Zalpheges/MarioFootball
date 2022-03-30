@@ -160,10 +160,10 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < positions.Count; i++)
         {
             Player player = i < n ? attackingPlayers[i] : defendingPlayers[i - n];
-            player.IsNavDriven = true;
+            /*player.IsNavDriven = true;
             NavMeshAgent agent = player.GetComponent<NavMeshAgent>();
             agent.destination = positions[i];
-            agent.speed = 10f;
+            agent.speed = 10f;*/
         }
     }
     private IEnumerator Match()
