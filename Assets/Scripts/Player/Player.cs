@@ -34,6 +34,7 @@ public class Player : MonoBehaviour
 
     private Action _waitingAction = null;
 
+    public GameObject Ball; //A supprimer
     #region Debug
 
     public void SetActive(bool value)
@@ -66,6 +67,8 @@ public class Player : MonoBehaviour
     {
         _animator = GetComponent<Animator>();
         _rgdb = GetComponent<Rigidbody>();
+       
+
     }
 
     private void Start()
@@ -76,10 +79,21 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
+        if (Ball==null)
+        {
+            Ball = GameObject.Find("Ball(Clone)");  // Asuprrimer
+
+        }
+        //Debug.Log(_animator.GetCurrentAnimatorStateInfo(0).IsTag("1"));
+        //Debug.Log(_animator.GetFloat("BallRun"));
+        float BallRun = _animator.GetFloat("BallRun");
+        //Ball.transform.position = Ball.transform.position + new Vector3(0, 0, 0.01f);
+
+
         if (_debugOnly || _isRetard)
             return;
 
-        if (_waitingAction)
+        if (_waitingAction && !this._animator.GetCurrentAnimatorStateInfo(0).IsTag("1")) //n'est pas dans une animation bloquante
         {
             Vector3 direction = _waitingAction.Direction != Vector3.zero ? _waitingAction.Direction : transform.forward;
             direction = Field.Transform.TransformDirection(direction);
@@ -113,79 +127,99 @@ public class Player : MonoBehaviour
             }
 
         }
-
+        
         MakeAction(action);
     }
 
     private void MakeAction(Action action)
     {
+        bool isPlayingAnimation = this._animator.GetCurrentAnimatorStateInfo(0).IsTag("1");
+       // Debug.Log(isPlayingAnimation);
         Vector3 direction = Field.Transform.TransformDirection(action.Direction);
 
-        _animator.SetBool("Run", false);
-
-        switch (action.ActionType)
+        //_animator.SetBool("Run", false);
+        if (!isPlayingAnimation)
         {
-            case Action.Type.Move:
-                _rgdb.MovePosition(_rgdb.position + direction * 2f * _specs.Speed * Time.deltaTime);
-                _animator.SetBool("Run", true);
+            //Debug.Log("idl" + gameObject.name +" " + _rgdb.velocity.magnitude);
 
-                break;
+            if (_rgdb.velocity.magnitude< 2.117964E-08f)
+            {
+                _animator.SetBool("Idl 0", true);
+                _animator.SetBool("Run 0", false);
+            }
+            else
+            {
+                _animator.SetBool("Idl 0", false);
+            }
 
-            case Action.Type.Shoot:
-                if (HasBall)
-                {
-                    Shoot();
-                    _animator.SetBool("Strike", true);
-                }
+            switch (action.ActionType)
+            {
+                case Action.Type.Move:
 
-                break;
+                    _rgdb.MovePosition(_rgdb.position + direction * 2f * _specs.Speed * Time.deltaTime);
+                    _animator.SetBool("Run 0",true);
+                    //Debug.Log("Run");
+                    break;
 
-            case Action.Type.Throw:
-                Debug.Log("Throw");
+                case Action.Type.Shoot:
+                    if (HasBall)
+                    {
+                        Debug.Log("shout");
+                        Shoot();
+                        _animator.SetTrigger("Strike");
+                    }
 
-                break;
+                    break;
 
-            case Action.Type.Headbutt:
-                Debug.Log("HeadButt");
-                _animator.SetBool("Header", true);
+                case Action.Type.Throw:
+                    Debug.Log("Throw");
 
-                break;
+                    break;
 
-            case Action.Type.Tackle:
-                Debug.Log("Tackle");
-                _animator.SetBool("Tackled", true);
+                case Action.Type.Headbutt:
+                    Debug.Log("HeadButt");
+                    _animator.SetTrigger("Header");
 
-                break;
+                    break;
 
-            case Action.Type.ChangePlayer:
-                Debug.Log("ChangePlayer");
+                case Action.Type.Tackle:
+                    Debug.Log("Tackle");
+                    _animator.SetTrigger("Tackled");
 
-                break;
+                    break;
 
-            case Action.Type.Dribble:
-                Debug.Log("Drible");
-                _animator.SetBool("Spin", true);
+                case Action.Type.ChangePlayer:
+                    Debug.Log("ChangePlayer");
 
-                break;
+                    break;
 
-            case Action.Type.LobPass:
-                if (HasBall)
-                {
-                    LobPass(direction);
-                    _animator.SetBool("Pass", true);
-                }
+                case Action.Type.Dribble:
+                    Debug.Log("Drible");
+                    _animator.SetTrigger("Spin");
 
-                break;
+                    break;
 
-            case Action.Type.Pass:
-                if (HasBall)
-                {
-                    DirectPass(direction);
-                    _animator.SetBool("Pass", true);
-                }
+                case Action.Type.LobPass:
+                    if (HasBall)
+                    {
+                        LobPass(direction);
+                        _animator.SetTrigger("Pass");
+                    }
 
-                break;
+                    break;
+
+                case Action.Type.Pass:
+                    if (HasBall)
+                    {
+                        DirectPass(direction);
+                        _animator.SetTrigger("Pass");
+                    }
+
+                    break;
+                
+            }
         }
+        
     }
 
     private void Rotate(Action action)
