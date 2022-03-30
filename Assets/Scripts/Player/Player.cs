@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Player : MonoBehaviour
 {
@@ -17,6 +18,7 @@ public class Player : MonoBehaviour
 
     private Animator _animator;
     private Rigidbody _rgdb;
+    private NavMeshAgent _agent;
 
     public PlayerBrain IABrain { get; private set; }
 
@@ -31,6 +33,7 @@ public class Player : MonoBehaviour
     public bool CanMove => State == PlayerState.Moving;
 
     public bool IsPiloted { get; set; } = false;
+    public bool IsNavDriven { get; set; } = false;
 
     private Action _waitingAction = null;
 
@@ -66,6 +69,7 @@ public class Player : MonoBehaviour
     {
         _animator = GetComponent<Animator>();
         _rgdb = GetComponent<Rigidbody>();
+        _agent = GetComponent<NavMeshAgent>();
     }
 
     private void Start()
@@ -97,7 +101,15 @@ public class Player : MonoBehaviour
             return;
         }
 
+        if(IsNavDriven && Vector3.Distance(transform.position, _agent.destination) <= 0.1f)
+        { 
+            IsNavDriven = false;
+            _agent.enabled = false;
+        }
+        
         Action action = IsPiloted ? Team.Brain.GetAction() : IABrain.GetAction();
+        if (IsNavDriven)
+            action = Action.NavMove();
 
         if (action.DirectionnalAction)
         {
@@ -125,6 +137,11 @@ public class Player : MonoBehaviour
 
         switch (action.ActionType)
         {
+            case Action.Type.NavMove:
+                _agent.enabled = true;
+
+                break;
+
             case Action.Type.Move:
                 _rgdb.MovePosition(_rgdb.position + direction * 2f * _specs.Speed * Time.deltaTime);
                 _animator.SetBool("Run", true);

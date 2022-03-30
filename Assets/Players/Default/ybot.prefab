@@ -1457,6 +1457,7 @@ GameObject:
   - component: {fileID: 4023742555457410973}
   - component: {fileID: 1430022499}
   - component: {fileID: 1430022500}
+  - component: {fileID: -1290268755594871489}
   m_Layer: 3
   m_Name: ybot
   m_TagString: Untagged
@@ -1526,9 +1527,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _specs: {fileID: 11400000, guid: e32174f7889a0ab429aeae9b2b0b2040, type: 2}
   _debugOnly: 0
-  player:
-    serializedVersion: 2
-    m_Bits: 8
 --- !u!95 &4023742555457410973
 Animator:
   serializedVersion: 3
@@ -1579,6 +1577,28 @@ MonoBehaviour:
   _headposition: {fileID: 4477121864963650533}
   _target: {fileID: 379599807}
   _headRig: {fileID: 1902321335}
+--- !u!195 &-1290268755594871489
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6172146800527969744}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &6225020995286691467
 GameObject:
   m_ObjectHideFlags: 0

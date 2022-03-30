@@ -5,6 +5,7 @@ public class Action
     public enum Type
     {
         None,
+        NavMove,
         Shoot,
         Pass,
         LobPass,
@@ -41,6 +42,11 @@ public class Action
         Force = force;
 
         DirectionnalAction = true;
+    }
+
+    public static Action NavMove()
+    {
+        return new Action(Type.NavMove);
     }
 
     public static Action Shoot(Vector3 direction, float force)
