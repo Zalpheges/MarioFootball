@@ -64,12 +64,16 @@ public class Ball : MonoBehaviour
         {
             
             
-            /*GameObject parent = gameObject.transform.parent.gameObject;
+            GameObject parent = gameObject.transform.parent.gameObject;
             Animator _animatorparent = parent.GetComponent<Animator>();
-            //Debug.Log("Test" + _animatorparent.GetFloat("BallRun"));
-            transform.localPosition = new Vector3(0, 0, _animatorparent.GetFloat("BallRun") *20 ) + new Vector3(0.113f, 0.2f, 0.979f);*/
+            Debug.Log("Test" + _animatorparent.GetFloat("BallRun"));
 
-            transform.localPosition = new Vector3(0, 0.2f, 1.5f);
+            Vector3 BallRun = new Vector3(0, 0, _animatorparent.GetFloat("BallRun") * 20);
+            Vector3 BallSpinV = new Vector3(0, 0, _animatorparent.GetFloat("BallSpinV") * 30);
+
+            transform.localPosition = BallRun + BallSpinV + new Vector3(0.113f, 0.2f, 0.979f);
+
+            //transform.localPosition = new Vector3(0, 0.2f, 1.5f);
 
         }
 

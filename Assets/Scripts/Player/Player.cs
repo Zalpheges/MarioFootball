@@ -84,7 +84,7 @@ public class Player : MonoBehaviour
         //bool debug = Field.Team1.Players[0] == this;
 
         _rgdb.angularVelocity = Vector3.zero;
-        _rgdb.velocity = Vector3.zero;
+        //_rgdb.velocity = Vector3.zero;
 
         if (_debugOnly || _isRetard)
             return;
@@ -133,20 +133,31 @@ public class Player : MonoBehaviour
                 return;
             }
         }
-
         _waitingAction = null;
         MakeAction(action);
     }
 
     private void MakeAction(Action action)
     {
+        
+        if (_rgdb.velocity.magnitude<0.2f)
+        {
+            _animator.SetBool("Run 0", false);
+            _animator.SetBool("Idl 0", true);
+        }
+        else
+        {
+            _animator.SetBool("Run 0", true);
+            _animator.SetBool("Idl 0", false);
+
+        }
         bool isPlayingAnimation = _animator.GetCurrentAnimatorStateInfo(0).IsTag("1");
 
         if (isPlayingAnimation)
             return;
 
         Vector3 direction = Field.Transform.TransformDirection(action.Direction);
-
+        /*
         if (action == Action.None)
         {
             _animator.SetBool("Idl 0", true);
@@ -155,7 +166,7 @@ public class Player : MonoBehaviour
         else
         {
             _animator.SetBool("Idl 0", false);
-        }
+        }*/
 
         switch (action.ActionType)
         {
