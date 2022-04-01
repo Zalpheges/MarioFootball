@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Mario 2.0
   Weight: 70
-  Accuracy: 0.7
+  Accuracy: 1
   Speed: 5
   StunTime: 1
   Prefab: {fileID: 5277888898915916075, guid: 6baf0259e1bc5ab4cb382b98d27d06a2, type: 3}
