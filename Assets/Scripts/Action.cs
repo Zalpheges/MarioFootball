@@ -5,6 +5,7 @@ public class Action
     public enum Type
     {
         None,
+        NavMove,
         Shoot,
         Pass,
         LobPass,
@@ -22,6 +23,7 @@ public class Action
     public readonly float Force;
 
     public readonly bool DirectionnalAction;
+    public readonly bool WaitForRotation;
 
     public static Action None => new Action(Type.None);
 
@@ -32,15 +34,22 @@ public class Action
         ActionType = type;
 
         DirectionnalAction = false;
+        WaitForRotation = false;
     }
 
-    private Action(Type type, Vector3 direction, float force = 0f)
+    private Action(Type type, Vector3 direction, float force = 0f, bool waitForRotation = true)
     {
         ActionType = type;
         Direction = direction;
         Force = force;
 
         DirectionnalAction = true;
+        WaitForRotation = waitForRotation;
+    }
+
+    public static Action NavMove()
+    {
+        return new Action(Type.NavMove);
     }
 
     public static Action Shoot(Vector3 direction, float force)
@@ -60,7 +69,7 @@ public class Action
 
     public static Action Move(Vector3 direction)
     {
-        return new Action(Type.Move, direction);
+        return new Action(Type.Move, direction, 0f, false);
     }
 
     public static Action Tackle(Vector3 direction)

@@ -19,7 +19,6 @@ public class Team : MonoBehaviour
     public PlayerBrain[] Brains { get; private set; }
     public Player GoalKeeper { get; private set; }
 
-    public int ConcededGoals { get; private set; }
     public PlayerBrain Brain { get; private set; }
 
     private Queue<Item> _items;
@@ -58,11 +57,12 @@ public class Team : MonoBehaviour
             Brain.Player = hasBall;
 
             Brain.Player.IsPiloted = true;
+            CameraManager.Follow(Brain.Player.transform);
         }
     }
 
     /// <summary>
-    /// Ajoute un item à la file d'items de l'équipe, dans le cas où celle-ci n'est pas pleine
+    /// Ajoute un item ï¿½ la file d'items de l'ï¿½quipe, dans le cas oï¿½ celle-ci n'est pas pleine
     /// </summary>
     public void GainItem()
     {
@@ -70,16 +70,16 @@ public class Team : MonoBehaviour
     }
 
     /// <summary>
-    /// Supprime l'item le plus ancien de la file d'items de l'équipe
+    /// Supprime l'item le plus ancien de la file d'items de l'ï¿½quipe
     /// </summary>
-    /// <returns>L'item supprimé</returns>
+    /// <returns>L'item supprimï¿½</returns>
     public Item GetItem()
     {
         return _items.Dequeue();
     }
 
     /// <summary>
-    /// Initialise les joueurs et la file d'items de l'équipe
+    /// Initialise les joueurs et la file d'items de l'ï¿½quipe
     /// </summary>
     /// <param name="players">Les joueurs sans le gardien</param>
     /// <param name="goal">Le gardien</param>
@@ -93,17 +93,12 @@ public class Team : MonoBehaviour
         Brains = Players.Select(player => player.IABrain).ToArray();
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision collision)
     {
-        Ball ball = other.GetComponent<Ball>();
-
-        if (ball)
+        if (collision.gameObject.GetComponent<Ball>())
         {
-            ++ConcededGoals;
-
-            ball.Free();
-
-            //Field.Ball.transform.position = Field.Team1.Players[0].transform.position;
+            Debug.Log("but");
+            GameManager.GoalScored(this);
         }
     }
 }

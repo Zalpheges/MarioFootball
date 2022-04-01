@@ -8,8 +8,8 @@ public class UIManager : MonoBehaviour
 {
     private static UIManager _instance;
 
-    [SerializeField] private TextMeshProUGUI _scoreEquipe1;
-    [SerializeField] private TextMeshProUGUI _scoreEquipe2;
+    [SerializeField] private TextMeshProUGUI _scoreTeam1;
+    [SerializeField] private TextMeshProUGUI _scoreTeam2;
     [SerializeField] private TextMeshProUGUI _chrono;
 
     private void Awake()
@@ -22,10 +22,13 @@ public class UIManager : MonoBehaviour
         _instance._chrono.text = $"{_instance.FormatInt(chrono.Minutes)}:{_instance.FormatInt(chrono.Seconds)}";
     }
 
-    public static void SetScore(int scoreEquipe1, int scoreEquipe2)
+    public static void SetScore(int scoreTeam1 = -1, int scoreTeam2 = -1)
     {
-        _instance._scoreEquipe1.text = $"{_instance.FormatInt(scoreEquipe1)}";
-        _instance._scoreEquipe2.text = $"{_instance.FormatInt(scoreEquipe2)}";
+        if(scoreTeam1 != -1)
+            _instance._scoreTeam1.text = $"{_instance.FormatInt(scoreTeam1)}";
+
+        if (scoreTeam2 != -1)
+            _instance._scoreTeam2.text = $"{_instance.FormatInt(scoreTeam2)}";
     }
 
     private string FormatInt(int number)

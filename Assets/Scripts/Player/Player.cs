@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Player : MonoBehaviour
 {
@@ -17,6 +18,7 @@ public class Player : MonoBehaviour
 
     private Animator _animator;
     private Rigidbody _rgdb;
+    private NavMeshAgent _agent;
 
     public PlayerBrain IABrain { get; private set; }
 
@@ -31,6 +33,7 @@ public class Player : MonoBehaviour
     public bool CanMove => State == PlayerState.Moving;
 
     public bool IsPiloted { get; set; } = false;
+    public bool IsNavDriven { get; set; } = false;
 
     private Action _waitingAction = null;
 
@@ -66,68 +69,102 @@ public class Player : MonoBehaviour
     {
         _animator = GetComponent<Animator>();
         _rgdb = GetComponent<Rigidbody>();
+        _agent = GetComponent<NavMeshAgent>();
     }
 
     private void Start()
     {
         _rgdb.mass = _specs.Weight;
         gameObject.name += " " + _specs.Name;
+        _agent.enabled = false;
     }
 
     private void Update()
     {
+        //bool debug = Field.Team1.Players[0] == this;
+
+        _rgdb.angularVelocity = Vector3.zero;
+        _rgdb.velocity = Vector3.zero;
+
         if (_debugOnly || _isRetard)
             return;
 
-        if (_waitingAction)
-        {
-            Vector3 direction = _waitingAction.Direction != Vector3.zero ? _waitingAction.Direction : transform.forward;
-            direction = Field.Transform.TransformDirection(direction);
-            Quaternion rotation = Quaternion.LookRotation(direction, Vector3.up);
+        if (IsPiloted)
+            Debug.Log(name);
 
-            _rgdb.MoveRotation(Quaternion.Slerp(_rgdb.rotation, rotation, 25f * Time.deltaTime));
-
-            if (Quaternion.Angle(_rgdb.rotation, rotation) < 5f)
-            {
-                MakeAction(_waitingAction);
-
-                _waitingAction = null;
-            }
-
-            return;
+        if (IsNavDriven && Vector3.Distance(transform.position, _agent.destination) <= 0.1f)
+        { 
+            IsNavDriven = false;
+            _agent.enabled = false;
         }
 
-        Action action = IsPiloted ? Team.Brain.GetAction() : IABrain.GetAction();
+        Action action;
+
+        if (_waitingAction)
+            action = _waitingAction;
+        else if (IsNavDriven)
+            action = Action.NavMove();
+        else if (IsPiloted)
+            action = Team.Brain.GetAction();
+        else
+            action = IABrain.GetAction();
 
         if (action.DirectionnalAction)
         {
-            Vector3 direction = action.Direction != Vector3.zero ? action.Direction : transform.forward;
-            direction = Field.Transform.TransformDirection(direction);
-            Quaternion rotation = Quaternion.LookRotation(direction, Vector3.up);
+            Vector3 direction = action.Direction.magnitude > 0.1f ? action.Direction : transform.forward;
 
-            if (Quaternion.Angle(_rgdb.rotation, rotation) >= 5f)
+            direction = Field.Transform.TransformDirection(direction);
+
+            if (action.ActionType == Action.Type.Shoot)
             {
-                Rotate(action);
+                direction = (Team == Field.Team1 ? Field.Team2 : Field.Team1).transform.position - transform.position;
+                direction.y = 0f;
+            }
+
+            Quaternion rotation = Quaternion.LookRotation(direction, Vector3.up);
+            _rgdb.MoveRotation(Quaternion.Slerp(_rgdb.rotation, rotation, 100f * Time.deltaTime));
+
+            //if (debug)  Debug.Log(Quaternion.Angle(_rgdb.rotation, rotation) + " " + action.ActionType);
+
+            if (action.WaitForRotation && Quaternion.Angle(_rgdb.rotation, rotation) > 5f)
+            {
+                _waitingAction = action;
 
                 return;
             }
-
         }
 
+        _waitingAction = null;
         MakeAction(action);
     }
 
     private void MakeAction(Action action)
     {
+        bool isPlayingAnimation = _animator.GetCurrentAnimatorStateInfo(0).IsTag("1");
+
+        if (isPlayingAnimation)
+            return;
+
         Vector3 direction = Field.Transform.TransformDirection(action.Direction);
 
-        _animator.SetBool("Run", false);
+        if (action == Action.None)
+        {
+            _animator.SetBool("Idl 0", true);
+            _animator.SetBool("Run 0", false);
+        }
+        else
+        {
+            _animator.SetBool("Idl 0", false);
+        }
 
         switch (action.ActionType)
         {
+            case Action.Type.NavMove:
+                break;
+
             case Action.Type.Move:
-                _rgdb.MovePosition(_rgdb.position + direction * 2f * _specs.Speed * Time.deltaTime);
-                _animator.SetBool("Run", true);
+                _rgdb.MovePosition(_rgdb.position + direction * 8f * _specs.Speed * Time.deltaTime);
+                _animator.SetBool("Run 0",true);
 
                 break;
 
@@ -135,7 +172,7 @@ public class Player : MonoBehaviour
                 if (HasBall)
                 {
                     Shoot();
-                    _animator.SetBool("Strike", true);
+                    _animator.SetTrigger("Strike");
                 }
 
                 break;
@@ -147,13 +184,13 @@ public class Player : MonoBehaviour
 
             case Action.Type.Headbutt:
                 Debug.Log("HeadButt");
-                _animator.SetBool("Header", true);
+                _animator.SetTrigger("Header");
 
                 break;
 
             case Action.Type.Tackle:
                 Debug.Log("Tackle");
-                _animator.SetBool("Tackled", true);
+                _animator.SetTrigger("Tackled");
 
                 break;
 
@@ -163,8 +200,8 @@ public class Player : MonoBehaviour
                 break;
 
             case Action.Type.Dribble:
-                Debug.Log("Drible");
-                _animator.SetBool("Spin", true);
+                Debug.Log("Dribble");
+                _animator.SetTrigger("Spin");
 
                 break;
 
@@ -172,7 +209,7 @@ public class Player : MonoBehaviour
                 if (HasBall)
                 {
                     LobPass(direction);
-                    _animator.SetBool("Pass", true);
+                    _animator.SetTrigger("Pass");
                 }
 
                 break;
@@ -181,16 +218,12 @@ public class Player : MonoBehaviour
                 if (HasBall)
                 {
                     DirectPass(direction);
-                    _animator.SetBool("Pass", true);
+                    _animator.SetTrigger("Pass");
                 }
 
                 break;
+                
         }
-    }
-
-    private void Rotate(Action action)
-    {
-        _waitingAction = action;
     }
 
     private void OnCollisionEnter(Collision collision)

@@ -7,10 +7,27 @@ public class CameraManager : MonoBehaviour
 {
     private static CameraManager _instance;
     private Dictionary<Transform, CinemachineVirtualCamera> _virtualCameras;
+    [SerializeField] private Transform _lockerLeft;
+    [SerializeField] private Transform _lockerRight;
+    [SerializeField] private Transform _lockerDynamic;
+
+    public static Transform LockerLeft => _instance._lockerLeft;
+    public static Transform LockerRight => _instance._lockerRight;
+    public static Transform LockerDynamic => _instance._lockerDynamic;
+    public static GameObject ActiveCam => CinemachineCore.Instance?.GetActiveBrain(0)?.ActiveVirtualCamera?.VirtualCameraGameObject;
 
     private void Awake()
     {
         _instance = this;
+    }
+
+    private void Update()
+    {
+        Vector3 activeFollowPosition = ActiveCam?.GetComponent<CameraController>().ToFollow.position ?? Vector3.zero;
+
+        float x = Mathf.Max(_lockerLeft.position.x, Mathf.Min(activeFollowPosition.x, _lockerRight.position.x));
+
+        _lockerDynamic.position = new Vector3(x, activeFollowPosition.y, activeFollowPosition.z);
     }
 
     public static void Init(Transform[] players, Transform ball)
@@ -22,7 +39,7 @@ public class CameraManager : MonoBehaviour
             CinemachineVirtualCamera virtualCam =
                 Instantiate(PrefabManager.VirtualCamera, _instance.transform).GetComponent<CinemachineVirtualCamera>();
             virtualCam.Follow = t;
-            virtualCam.LookAt = t;
+            //virtualCam.LookAt = t;
             _instance._virtualCameras[t] = virtualCam;
         }
     }
