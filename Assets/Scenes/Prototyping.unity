@@ -420,6 +420,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: escena_Clash Royale_Final
       objectReference: {fileID: 0}
+    - target: {fileID: 1561888757471263248, guid: 4e346aabb1e405949b24c2189234533c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2226784962843009194, guid: 4e346aabb1e405949b24c2189234533c, type: 3}
       propertyPath: m_RootOrder
       value: 5
