@@ -19,6 +19,8 @@ public class GameManager : MonoBehaviour
     private bool _enemiesAreRetard = false;
     public static bool EnemiesAreRetard => _instance._enemiesAreRetard;
 
+    public static Team LosingTeam => _instance._currentResult.LosingTeam;
+
     private static GameManager _instance;
 
     private Queue<Match> _matches;

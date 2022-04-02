@@ -8,4 +8,13 @@ public class MatchResult
     public int ScoreTeam2;
 
     public float Duration;
+
+    public Team LosingTeam { get {
+            if (ScoreTeam1 == ScoreTeam2)
+                return null;
+            else if (ScoreTeam1 > ScoreTeam2)
+                return Field.Team2;
+            else
+                return Field.Team1;
+        } }
 }
