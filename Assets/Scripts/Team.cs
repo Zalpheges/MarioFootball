@@ -21,7 +21,7 @@ public class Team : MonoBehaviour
 
     public PlayerBrain Brain { get; private set; }
 
-    private Queue<Item> _items;
+    private Queue<Sprite> _items;
     private int _itemCapacity = 3;
 
     private void Awake()
@@ -62,7 +62,7 @@ public class Team : MonoBehaviour
     }
 
     /// <summary>
-    /// Ajoute un item � la file d'items de l'�quipe, dans le cas o� celle-ci n'est pas pleine
+    /// Add an item to the team's item queue, only if it's not full already
     /// </summary>
     public void GainItem()
     {
@@ -72,16 +72,23 @@ public class Team : MonoBehaviour
         //var itemProperties = PrefabManager.Items.GetType().GetProperties();
         //int i = UnityEngine.Random.Range(0, itemProperties.Length - 1);
         //_items.Enqueue((itemProperties[i].GetValue(PrefabManager.Items) as GameObject).GetComponent<Item>());
-        _items.Enqueue(PrefabManager.Items[(PrefabManager.Item)UnityEngine.Random.Range(0, PrefabManager.Items.Count)].GetComponent<Item>());
+        PrefabManager.Item itemType = (PrefabManager.Item)UnityEngine.Random.Range(0, PrefabManager.ItemSprites.Count);
+        Sprite itemSprite = PrefabManager.ItemSprites[itemType];
+        _items.Enqueue(itemSprite);
+        UIManager.UpdateItems(_items, this);
     }
 
     /// <summary>
-    /// Supprime l'item le plus ancien de la file d'items de l'�quipe
+    /// Delete the oldest item from the team item queue
     /// </summary>
-    /// <returns>L'item supprim�</returns>
-    public Item GetItem()
+    /// <returns>The gameObject corresponding to the deleted item</returns>
+    public GameObject GetItem()
     {
-        return _items.Dequeue();
+        if(_items.Count == 0) 
+            return null;
+        GameObject itemGo = PrefabManager.ItemPrefabs[_items.Dequeue()];
+        UIManager.UpdateItems(_items, this);
+        return itemGo;
     }
 
     /// <summary>
@@ -94,7 +101,7 @@ public class Team : MonoBehaviour
         Players = players;
         GoalKeeper = goalKeeper;
 
-        _items = new Queue<Item>(_itemCapacity);
+        _items = new Queue<Sprite>(_itemCapacity);
 
         Brains = Players.Select(player => player.IABrain).ToArray();
     }

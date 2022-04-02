@@ -179,6 +179,7 @@ public class Player : MonoBehaviour
 
             case Action.Type.Throw:
                 Debug.Log("Throw");
+                ThrowItem(action.Direction * action.Force);
 
                 break;
 
@@ -360,6 +361,19 @@ public class Player : MonoBehaviour
         }
 
         return null;
+    }
+
+    #endregion
+
+    #region ThrowItem
+
+    private void ThrowItem(Vector3 force)
+    {
+        GameObject itemPrefab = Team.GetItem();
+        if (!itemPrefab)
+            return;
+        GameObject itemGo = Instantiate(itemPrefab, transform.position, Quaternion.identity, Team.transform);
+        itemGo.GetComponent<Rigidbody>().AddForce(force);
     }
 
     #endregion
