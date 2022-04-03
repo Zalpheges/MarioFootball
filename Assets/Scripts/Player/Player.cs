@@ -34,6 +34,7 @@ public class Player : MonoBehaviour
 
     public bool IsPiloted { get; set; } = false;
     public bool IsNavDriven { get; set; } = false;
+    public bool IsWaiting { get; set; } = false;
 
     private Action _waitingAction = null;
 
@@ -96,12 +97,20 @@ public class Player : MonoBehaviour
         { 
             IsNavDriven = false;
             _agent.enabled = false;
+            IsWaiting = true;
+            transform.rotation = Quaternion.LookRotation(Vector3.Project(transform.position - Team.transform.position, Field.Transform.forward));
         }
 
         Action action;
 
         if (_waitingAction)
             action = _waitingAction;
+        else if (IsWaiting)
+        {
+            action = Team.Brain.GetAction();
+            if(action.ActionType != Action.Type.Pass || !Field.ArePlayersAllWaiting())
+                action = Action.Move(Vector3.zero);
+        }
         else if (IsNavDriven)
             action = Action.NavMove();
         else if (IsPiloted)
@@ -163,7 +172,7 @@ public class Player : MonoBehaviour
                 break;
 
             case Action.Type.Move:
-                _rgdb.MovePosition(_rgdb.position + direction * 8f * _specs.Speed * Time.deltaTime);
+                _rgdb.MovePosition(_rgdb.position + direction * 3f * _specs.Speed * Time.deltaTime);
                 _animator.SetBool("Run 0",true);
 
                 break;
@@ -220,10 +229,11 @@ public class Player : MonoBehaviour
                 {
                     DirectPass(direction);
                     _animator.SetTrigger("Pass");
+                    if (IsWaiting)
+                        GameManager.FreePlayers();
                 }
 
                 break;
-                
         }
     }
 

@@ -149,6 +149,15 @@ public class GameManager : MonoBehaviour
         Field.Ball.transform.position = Field.Team1.Players[0].transform.position;
     }
 
+    public static void FreePlayers()
+    {
+        foreach (Player player in Field.Team1.Players)
+            player.IsWaiting = false;
+        foreach (Player player in Field.Team2.Players)
+            player.IsWaiting = false;
+    }
+
+
     /// <summary>
     /// Ordonne aux joueurs de se diriger vers leur position de départ, ou vers des positions customs si l'argument positions est renseigné
     /// </summary>
@@ -166,7 +175,7 @@ public class GameManager : MonoBehaviour
             NavMeshAgent agent = player.GetComponent<NavMeshAgent>();
 
             agent.enabled = true;
-            agent.destination = positions[i];
+            agent.destination = player.Team == Field.Team1 ? positions[i]:new Vector3(-positions[i].x, positions[i].y, -positions[i].z);
             agent.speed = 10f;
         }
     }

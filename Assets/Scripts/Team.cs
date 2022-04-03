@@ -62,6 +62,14 @@ public class Team : MonoBehaviour
         }
     }
 
+    public bool ArePlayersAllWaiting()
+    {
+        foreach(Player player in Players)
+            if(!player.IsWaiting)
+                return false;
+        return true;
+    }
+
     /// <summary>
     /// Add an item to the team's item queue, only if it's not full already
     /// </summary>
