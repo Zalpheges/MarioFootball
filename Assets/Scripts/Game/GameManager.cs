@@ -49,7 +49,7 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        UIManager.SetChrono(_chrono);
+        //UIManager.SetChrono(_chrono);
         _timer += Time.deltaTime;
         if (_timer >= 1f)
         {
