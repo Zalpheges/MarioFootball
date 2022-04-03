@@ -18,85 +18,110 @@ public class TreeV2
     public float shootThreshold;
     public float defenseThreshold;
     public float attackThreshold;
+    public float headButtThreshold;
+    public float markThreshold;
+
+    public int playerIndex;
 
     public RootNode root;
 
-    public void Setup(Team iAllies, Team iEnemies, Player iplayer, float ishootThreshold, float idefenseThreshold, float iattackThreshold)
+    public void Setup(Team iAllies, Team iEnemies, Player iplayer, float[] Thresholds)
     {
         Allies = iAllies.Players.ToList();
         Enemies = iEnemies.Players.ToList();
         allyGoalTransform = iAllies.transform;
         enemyGoalTransform = iEnemies.transform;
         player = iplayer;
-        shootThreshold = ishootThreshold;
-        defenseThreshold = idefenseThreshold;
-        attackThreshold = iattackThreshold;
+        playerIndex = player.transform.GetSiblingIndex();
+        shootThreshold = Thresholds[0];
+        defenseThreshold = Thresholds[1];
+        attackThreshold = Thresholds[2];
+        headButtThreshold = Thresholds[3];
+        markThreshold = Thresholds[4];
 
         root = new RootNode(this, new List<Node>()
         {
-            new Selector(new List<Node>{
-                new Sequence(new List<Node>
+            new Sequence(new List<Node>()
+            {
+                new UpdateBallHolder(),
+                new Selector(new List<Node>
                 {
-                    new BallOwnership(SearchType.Enemies),
-                    new Selector(new List<Node>
+                    new Sequence(new List<Node>
                     {
-                        new Sequence(new List<Node>
+                        new T_BallHolderIsEnemy(),
+                        new Selector(new List<Node>
                         {
-                            new CheckExistingTarget(),
-                            new GoToPosition()
+                            new T_BallState_Enemy(),
+                            new Sequence(new List<Node>
+                            {
+                                new S_GameState_Defend(),
+                                new S_BallState_Enemy(),
+                                new S_ResetTarget()
+                            })
                         }),
-                        new Sequence(new List<Node>
+                        new Selector(new List<Node>
                         {
-                            new AssignTarget(),
-                            new GoToPosition()
-                        })
-                    })
-                }),
-                new Sequence(new List<Node>
-                {
-                    new BallOwnership(SearchType.Allies),
-                    new Selector(new List<Node>
-                    {
-                        new Sequence(new List<Node>
-                        {
-                            new BallOwnership(SearchType.PlayerSpecific),
+                            new T_TargetInitialized(),
                             new Selector(new List<Node>
                             {
                                 new Sequence(new List<Node>
                                 {
-                                    new PositionToShoot(),
-                                    new Shoot()
+                                    new T_AITeam(),
+                                    new S_SetContender(),
+                                    new T_ContenderIsMe(),
+                                    new S_TargetContenderAssignment(),
+                                    new S_TargetType_EnemyWithBall(),
+                                    new S_PlayerType_Contender()
                                 }),
-                                new GoToPosition()
+                                new Sequence(new List<Node>
+                                {
+                                    new S_TargetAssignment(),
+                                    new S_TargetType_Enemy(),
+                                    new S_PlayerType_Defender()
+                                })
                             })
                         }),
                         new Selector(new List<Node>
                         {
                             new Sequence(new List<Node>
                             {
-                                new CheckWingAssigned(),
-                                new GoToPosition()
+                                new T_PlayerType_Defender(),
+                                new S_Marking(),
+                                new CoucouNode(),
                             }),
                             new Sequence(new List<Node>
                             {
-                                new AssignWing(),
-                                new GoToPosition()
-                            })
-                        }),
-
+                                new T_InRangeHeadButt(),
+                                new S_HeadButt()
+                            }),
+                            new S_ContestBall()
+                        })
                     })
                 }),
-                new Sequence(new List<Node>
+                new Selector(new List<Node>
                 {
-                    new Proximity(),
-                    new GoToPosition()
+                    new Sequence(new List<Node>
+                    {
+                        new T_ActionType_Move(),
+                        new A_Move()
+                    }),
+                    new Sequence(new List<Node>
+                    {
+                        new T_ActionType_HeadButt(),
+                        new A_HeadButt()
+                    }),
+                    new Sequence(new List<Node>
+                    {
+                        new T_ActionType_Shoot(),
+                        new A_Shoot()
+                    }),
+                    new Sequence(new List<Node>
+                    {
+                        new T_ActionType_Pass(),
+                        new A_Pass()
+                    })
                 })
             })
         });
-    }
-
-    public void UpdateVariables()
-    {
-
     }
 }
