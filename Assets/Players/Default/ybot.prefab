@@ -1527,6 +1527,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _specs: {fileID: 11400000, guid: e32174f7889a0ab429aeae9b2b0b2040, type: 2}
+  isElectrocutionShader: 0
+  MaterialElectricity: {fileID: 2100000, guid: 98fd08f6dd93b0d4688d40de5ac8a1cd, type: 2}
   _debugOnly: 0
 --- !u!95 &4023742555457410973
 Animator:

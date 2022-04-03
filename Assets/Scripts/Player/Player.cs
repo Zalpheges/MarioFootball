@@ -37,6 +37,10 @@ public class Player : MonoBehaviour
 
     private Action _waitingAction = null;
 
+    public bool isElectrocutionShader;
+
+    public Material MaterialElectricity;
+
     #region Debug
 
     public void SetActive(bool value)
@@ -81,6 +85,9 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
+        ChangeMaterialOnElectrocution();
+
+
         //bool debug = Field.Team1.Players[0] == this;
 
         _rgdb.angularVelocity = Vector3.zero;
@@ -135,6 +142,22 @@ public class Player : MonoBehaviour
         }
         _waitingAction = null;
         MakeAction(action);
+    }
+
+    public void ChangeMaterialOnElectrocution()
+    {
+        if (isElectrocutionShader)
+        {
+            Material[] Mats = new Material[] { gameObject.transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>().materials[0], MaterialElectricity };
+            //Debug.Log(gameObject.transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>().materials[1].name);
+            gameObject.transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>().materials = Mats;
+        }
+        else
+        {
+            Material[] Mats = new Material[] { gameObject.transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>().materials[0] };
+            //Debug.Log(gameObject.transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>().materials[1].name);
+            gameObject.transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>().materials = Mats;
+        }
     }
 
     private void MakeAction(Action action)
