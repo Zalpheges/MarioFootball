@@ -36,6 +36,7 @@ public class Player : MonoBehaviour
 
     public bool IsPiloted { get; set; } = false;
     public bool IsNavDriven { get; set; } = false;
+    public bool IsWaiting { get; set; } = false;
 
     private float _dashSpeed;
     private Vector3 _dashEndPoint;
@@ -110,7 +111,13 @@ public class Player : MonoBehaviour
         if (IsNavDriven)
             return;
 
-        //if (IsNavDriven && Vector3.Distance(transform.position, _agent.destination) <= 0.1f)
+        if (IsNavDriven && Vector3.Distance(transform.position, _agent.destination) <= 0.1f)
+        { 
+            IsNavDriven = false;
+            _agent.enabled = false;
+            IsWaiting = true;
+            transform.rotation = Quaternion.LookRotation(Vector3.Project(transform.position - Team.transform.position, Field.Transform.forward));
+        }
 
         Action action;
 
@@ -181,6 +188,7 @@ public class Player : MonoBehaviour
 
             case Action.Type.Throw:
                 Debug.Log("Throw");
+                ThrowItem(action.Direction * action.Force);
 
                 break;
 
@@ -219,6 +227,8 @@ public class Player : MonoBehaviour
                 {
                     DirectPass(direction);
                     _animator.SetTrigger("Pass");
+                    if (IsWaiting)
+                        GameManager.FreePlayers();
                 }
 
                 break;
@@ -410,6 +420,19 @@ public class Player : MonoBehaviour
         return false;
     }
 
+    #endregion
+
+    #region ThrowItem
+
+    private void ThrowItem(Vector3 force)
+    {
+        GameObject itemPrefab = Team.GetItem();
+        if (!itemPrefab)
+            return;
+        GameObject itemGo = Instantiate(itemPrefab, transform.position, Quaternion.identity, Team.transform);
+        itemGo.GetComponent<Rigidbody>().AddForce(force);
+    }
+
     #endregion
 
     #region Events

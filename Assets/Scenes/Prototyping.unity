@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028334, g: 0.22571328, b: 0.3069217, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1373,6 +1373,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _ball: {fileID: 266137186057966708, guid: 5f9a23016bc8ab94fb2a55df45b2bfa2, type: 3}
   _virtualCamera: {fileID: 3719828912903332698, guid: aca5d63aa096fab459fea5a960a53911, type: 3}
+  _banana: {fileID: 6486403398316945681, guid: b38d456e7359a824eba183d37a45e41c, type: 3}
+  _bobBomb: {fileID: 6486403398316945681, guid: dfa07e22f9bc6f748b5c0b33b12b60f1, type: 3}
+  _mushroom: {fileID: 6486403398316945681, guid: d7f75d19e4df14d42bb72169ca2a03e0, type: 3}
+  _redTurtleShell: {fileID: 6486403398316945681, guid: c7983abfb67bd054bb0adcfae46c6fca, type: 3}
+  _greenTurtleShell: {fileID: 6486403398316945681, guid: 14867dccf77215b4b81726a46085e81b, type: 3}
+  _blueTurtleShell: {fileID: 6486403398316945681, guid: 19afd85247e405a4fa3d04c79e0aabf6, type: 3}
+  _spinyTurtleShell: {fileID: 6486403398316945681, guid: 3a5548e013eefed40b84cbfd7aeaf1df, type: 3}
+  _chomp: {fileID: 6486403398316945681, guid: 340e4b5823621fb4caaf1ec989fa588c, type: 3}
+  _superStar: {fileID: 6486403398316945681, guid: 14a727b731fee1d4cafc042ecf61d620, type: 3}
+  _bananaSprite: {fileID: 21300000, guid: 2de785ac387dd4d479761f274a82a56a, type: 3}
+  _bobBombSprite: {fileID: 21300000, guid: c80eaf8f71a7f474694a27f54380a4d2, type: 3}
+  _mushroomSprite: {fileID: 21300000, guid: af82914634bf0c04893151081df7503f, type: 3}
+  _redTurtleShellSprite: {fileID: 21300000, guid: 6fbb470c562976843bbcef2b0b668b03, type: 3}
+  _greenTurtleShellSprite: {fileID: 21300000, guid: a1447d4c2faa2a243a3cc91f17f22586, type: 3}
+  _blueTurtleShellSprite: {fileID: 21300000, guid: 016cff72fea1eff449705f2c035bdd2b, type: 3}
+  _spinyTurtleShellSprite: {fileID: 21300000, guid: 0246a88f98ebbc046a6b804723a6673c, type: 3}
+  _chompSprite: {fileID: 21300000, guid: 75372b2e8d6365b448c3ddc09c33af58, type: 3}
+  _superStarSprite: {fileID: 21300000, guid: 8adffa684b54fe64ab8c8f256f308411, type: 3}
 --- !u!114 &1642756266
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1388,6 +1406,10 @@ MonoBehaviour:
   _scoreTeam1: {fileID: 1640355877}
   _scoreTeam2: {fileID: 1519783972}
   _chrono: {fileID: 1275379538}
+  _item1Team1: {fileID: 0}
+  _item2Team1: {fileID: 0}
+  _item1Team2: {fileID: 0}
+  _item2Team2: {fileID: 0}
 --- !u!114 &1642756267
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2593,10 +2615,10 @@ MonoBehaviour:
   _attackPosMate1: {x: -0.1, y: -0.5}
   _attackPosMate2: {x: -0.1, y: 0.5}
   _attackPosMate3: {x: -0.3, y: 0.1}
-  _defPosCaptain: {x: -0.1, y: -0.3}
-  _defPosMate1: {x: -0.15, y: 0.05}
-  _defPosMate2: {x: -0.3, y: 0.5}
-  _defPosMate3: {x: -0.3, y: -0.5}
+  _defPosCaptain: {x: 0.1, y: 0.3}
+  _defPosMate1: {x: 0.15, y: -0.05}
+  _defPosMate2: {x: 0.3, y: -0.5}
+  _defPosMate3: {x: 0.3, y: 0.5}
 --- !u!23 &8875840104054592024
 MeshRenderer:
   m_ObjectHideFlags: 0
