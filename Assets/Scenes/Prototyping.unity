@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028334, g: 0.22571328, b: 0.3069217, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -881,6 +881,30 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4100087933520432709, guid: 89ccd1022b32fa64fbf0593703f5435b, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4100087933883653174, guid: 89ccd1022b32fa64fbf0593703f5435b, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4100087934017266369, guid: 89ccd1022b32fa64fbf0593703f5435b, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4100087934172013413, guid: 89ccd1022b32fa64fbf0593703f5435b, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4100087934192547997, guid: 89ccd1022b32fa64fbf0593703f5435b, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4100087934587844612, guid: 89ccd1022b32fa64fbf0593703f5435b, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4885035383850046861, guid: 89ccd1022b32fa64fbf0593703f5435b, type: 3}
       propertyPath: _defPosMate1.x
       value: 0.15
@@ -1087,7 +1111,7 @@ MonoBehaviour:
   _debugMatch: {fileID: 1642756264}
   _debugMatchDuration: 60
   _debugOnlyPlayer: 0
-  _enemiesAreRetard: 1
+  _enemiesAreRetard: 0
 --- !u!4 &1642756263
 Transform:
   m_ObjectHideFlags: 0

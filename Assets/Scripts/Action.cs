@@ -85,7 +85,7 @@ public class Action
 
     public static Action MoveTo(Vector3 position)
     {
-        return new Action(Type.Move, position);
+        return new Action(Type.MoveTo, position);
     }
 
     public static Action Tackle(Vector3 direction)
