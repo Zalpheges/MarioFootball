@@ -88,8 +88,7 @@ public class Team : MonoBehaviour
             PrefabManager.Item itemType = (PrefabManager.Item)UnityEngine.Random.Range(0, PrefabManager.ItemSprites.Count);
             itemSprite = PrefabManager.ItemSprites[itemType];
             item = PrefabManager.ItemPrefabs[itemSprite].GetComponent<Item>();
-            Debug.Log(item);
-        } while (item.teamHasToLoose && GameManager.LosingTeam != this);
+        } while (!item || (item.teamHasToLoose && GameManager.LosingTeam != this));
         _items.Enqueue(itemSprite);
         UIManager.UpdateItems(_items, this);
     }

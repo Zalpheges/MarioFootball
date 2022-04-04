@@ -43,6 +43,10 @@ public class Player : MonoBehaviour
 
     private Action _waitingAction = null;
 
+    public bool isElectrocutionShader;
+
+    public Material MaterialElectricity;
+
     #region Debug
 
     public void SetActive(bool value)
@@ -56,6 +60,8 @@ public class Player : MonoBehaviour
     public bool isPiloted;
     public bool hasBall;
     public Vector3 input;
+    public bool isWaiting;
+    public bool isNavDriven;
 
     #endregion
 
@@ -91,10 +97,15 @@ public class Player : MonoBehaviour
     private void Update()
     {
         Team.GainItem();
+        ChangeMaterialOnElectrocution();
+
+        //bool debug = Field.Team1.Players[0] == this;
 
         state = State;
         isPiloted = IsPiloted;
         hasBall = HasBall;
+        isWaiting = IsWaiting;
+        isNavDriven = IsNavDriven;
 
         if (_debugOnly || _isRetard)
             return;
@@ -102,22 +113,24 @@ public class Player : MonoBehaviour
         _rgdb.angularVelocity = Vector3.zero;
         _rgdb.velocity = Vector3.zero;
 
-        if (State != PlayerState.Moving)
-        {
-            _rgdb.position = Vector3.MoveTowards(_rgdb.position, _dashEndPoint, _dashSpeed * Time.deltaTime);
-            input = Vector3.up;
-
-            return;
-        }
+        _agent.isStopped = !IsNavDriven;
 
         if (IsNavDriven)
-        { 
+        {
             if (Vector3.Distance(transform.position, _agent.destination) <= 0.1f)
             {
                 IsNavDriven = false;
                 IsWaiting = true;
                 transform.rotation = Quaternion.LookRotation(Vector3.Project(transform.position - Team.transform.position, Field.Transform.forward));
             }
+
+            return;
+        }
+
+        if (State != PlayerState.Moving)
+        {
+            _rgdb.position = Vector3.MoveTowards(_rgdb.position, _dashEndPoint, _dashSpeed * Time.deltaTime);
+            input = Vector3.up;
 
             return;
         }
@@ -132,8 +145,6 @@ public class Player : MonoBehaviour
             action = IABrain.GetAction();
 
         input = action.Direction;
-
-        _agent.isStopped = !IsNavDriven && IsPiloted;
 
         if (action.DirectionalAction)
         {
@@ -151,7 +162,32 @@ public class Player : MonoBehaviour
         }
 
         _waitingAction = null;
+
+        if (IsWaiting)
+        {
+            if (action.ActionType == Action.Type.Pass)
+                GameManager.FreePlayers();
+            else
+                return;
+        }
+
         MakeAction(action);
+    }
+
+    public void ChangeMaterialOnElectrocution()
+    {
+        if (isElectrocutionShader)
+        {
+            Material[] Mats = new Material[] { gameObject.transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>().materials[0], MaterialElectricity };
+            //Debug.Log(gameObject.transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>().materials[1].name);
+            gameObject.transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>().materials = Mats;
+        }
+        else
+        {
+            Material[] Mats = new Material[] { gameObject.transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>().materials[0] };
+            //Debug.Log(gameObject.transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>().materials[1].name);
+            gameObject.transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>().materials = Mats;
+        }
     }
 
     private void MakeAction(Action action)
@@ -230,8 +266,6 @@ public class Player : MonoBehaviour
                 {
                     DirectPass(direction);
                     _animator.SetTrigger("Pass");
-                    if (IsWaiting)
-                        GameManager.FreePlayers();
                 }
 
                 break;
