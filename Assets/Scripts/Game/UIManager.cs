@@ -23,12 +23,18 @@ public class UIManager : MonoBehaviour
 
     public static void SetChrono(Chrono chrono)
     {
+        if (!_instance)
+            return;
+
         _instance._chrono.text = $"{chrono.Minutes}:{chrono.Seconds}";
     }
 
     public static void SetScore(int scoreTeam1 = -1, int scoreTeam2 = -1)
     {
-        if(scoreTeam1 != -1)
+        if (!_instance)
+            return;
+
+        if (scoreTeam1 != -1)
             _instance._scoreTeam1.text = $"{scoreTeam1}";
 
         if (scoreTeam2 != -1)
@@ -37,6 +43,9 @@ public class UIManager : MonoBehaviour
 
     public static void UpdateItems(Queue<Sprite> items, Team team)
     {
+        if (!_instance)
+            return;
+
         Sprite[] itemsArray = items.ToArray();
         bool isTeam1 = team == Field.Team1;
         (isTeam1 ? _instance._item1Team1 : _instance._item1Team2).sprite = itemsArray[0];

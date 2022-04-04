@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
 
 public class Menu_UI_Manager : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public class Menu_UI_Manager : MonoBehaviour
     private GameObject Success;
     private void Update()
     {
-        if (UnityEngine.InputSystem.Keyboard.current.escapeKey.wasPressedThisFrame)
+        if (Keyboard.current.escapeKey.wasPressedThisFrame || Gamepad.current.buttonEast.wasPressedThisFrame)
         {
             if(Success != null && SceneManager.GetActiveScene().buildIndex == 0)
             {
