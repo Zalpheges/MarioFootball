@@ -7,7 +7,6 @@ using UnityEngine.SceneManagement;
 
 public class Options_UI_Manager : MonoBehaviour
 {
-    [SerializeField]
     private AudioSource Music;
     [SerializeField]
     private AudioMixer Mixer;
