@@ -7,6 +7,6 @@ public class Shoot : Node
 {
     public override (NodeState, Action) Evaluate()
     {
-        return (NodeState.SUCCESS, Action.Shoot(Vector3.zero, 0f));
+        return (NodeState.SUCCESS, Action.Shoot(0f));
     }
 }

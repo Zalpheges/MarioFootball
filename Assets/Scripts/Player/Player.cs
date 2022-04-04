@@ -90,6 +90,8 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
+        Team.GainItem();
+
         state = State;
         isPiloted = IsPiloted;
         hasBall = HasBall;
@@ -109,14 +111,15 @@ public class Player : MonoBehaviour
         }
 
         if (IsNavDriven)
-            return;
-
-        if (IsNavDriven && Vector3.Distance(transform.position, _agent.destination) <= 0.1f)
         { 
-            IsNavDriven = false;
-            _agent.enabled = false;
-            IsWaiting = true;
-            transform.rotation = Quaternion.LookRotation(Vector3.Project(transform.position - Team.transform.position, Field.Transform.forward));
+            if (Vector3.Distance(transform.position, _agent.destination) <= 0.1f)
+            {
+                IsNavDriven = false;
+                IsWaiting = true;
+                transform.rotation = Quaternion.LookRotation(Vector3.Project(transform.position - Team.transform.position, Field.Transform.forward));
+            }
+
+            return;
         }
 
         Action action;
@@ -418,33 +421,50 @@ public class Player : MonoBehaviour
         }
 
         return false;
-    }
-
+    }
+
+
+
     #endregion
-
+
+
     #region ThrowItem
 
-    private void ThrowItem(Vector3 force)
-    {
-        GameObject itemPrefab = Team.GetItem();
-        if (!itemPrefab)
-            return;
-        GameObject itemGo = Instantiate(itemPrefab, transform.position, Quaternion.identity, Team.transform);
-        itemGo.GetComponent<Rigidbody>().AddForce(force);
+    private void ThrowItem(Vector3 force)
+
+    {
+
+        GameObject itemPrefab = Team.GetItem();
+
+        if (!itemPrefab)
+
+            return;
+
+        GameObject itemGo = Instantiate(itemPrefab, transform.position, Quaternion.identity, Team.transform);
+
+        itemGo.GetComponent<Rigidbody>().AddForce(force);
+
     }
 
     #endregion
-
+
+
     #region Events
     
-    public void OnMissedShoot()
-    {
-        Team.GainItem();
+    public void OnMissedShoot()
+
+    {
+
+        Team.GainItem();
+
     }
 
-    public void OnHitWithNoBall()
-    {
-        Team.GainItem();
+    public void OnHitWithNoBall()
+
+    {
+
+        Team.GainItem();
+
     }
     
     #endregion
