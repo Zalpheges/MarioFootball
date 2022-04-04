@@ -101,8 +101,8 @@ public class TreeV2
                             }),
                             new S_ContestBall()
                         })
-                    })
-            /*        new Sequence(new List<Node>
+                    }),
+                    new Sequence(new List<Node>
                     {
                         new T_BallHolderIsAlly(),
                         new Sequence(new List<Node>
@@ -214,13 +214,14 @@ public class TreeV2
                                                             new Sequence(new List<Node>
                                                             {
                                                                 new T_BallHolder_MiddleThird(),
-
+                                                                new S_AttackerLeft_ShootRange_Center_West()
                                                             }),
                                                             new Sequence(new List<Node>
                                                             {
                                                                 new T_BallHolder_BottomThird(),
-
-                                                            })
+                                                                new S_AttackerLeft_ShootRange_Bottom_West()
+                                                            }),
+                                                            new S_AttackerLeft_ShootRange_Top_West()
                                                         })
                                                     }),
                                                     new Selector(new List<Node>
@@ -228,13 +229,14 @@ public class TreeV2
                                                         new Sequence(new List<Node>
                                                         {
                                                             new T_BallHolder_MiddleThird(),
-
+                                                            new S_AttackerLeft_Center_West()
                                                         }),
                                                         new Sequence(new List<Node>
                                                         {
                                                             new T_BallHolder_BottomThird(),
-
-                                                        })
+                                                            new S_AttackerLeft_Bottom_West()
+                                                        }),
+                                                        new S_AttackerLeft_Top_West()
                                                     })
                                                 })
                                             }),
@@ -248,13 +250,14 @@ public class TreeV2
                                                             new Sequence(new List<Node>
                                                             {
                                                                 new T_BallHolder_MiddleThird(),
-
+                                                                new S_AttackerRight_ShootRange_Center_West()
                                                             }),
                                                             new Sequence(new List<Node>
                                                             {
                                                                 new T_BallHolder_BottomThird(),
-
-                                                            })
+                                                                new S_AttackerRight_ShootRange_Bottom_West()
+                                                            }),
+                                                            new S_AttackerRight_ShootRange_Top_West()
                                                         })
                                                     }),
                                                     new Selector(new List<Node>
@@ -262,13 +265,14 @@ public class TreeV2
                                                         new Sequence(new List<Node>
                                                         {
                                                             new T_BallHolder_MiddleThird(),
-
+                                                            new S_AttackerRight_Center_West()
                                                         }),
                                                         new Sequence(new List<Node>
                                                         {
                                                             new T_BallHolder_BottomThird(),
-
-                                                        })
+                                                            new S_AttackerRight_Bottom_West()
+                                                        }),
+                                                        new S_AttackerRight_Top_West()
                                                     })
                                                 })
                                         })
@@ -349,7 +353,7 @@ public class TreeV2
                                 })
                             })
                         })
-                    })*/
+                    })
                 }),
                 new Selector(new List<Node>
                 {

@@ -13,7 +13,7 @@ public class T_BallHolder_SecondQuarter : Node
         if (!_rootInitialized)
             _root = GetRootNode();
 
-        if (_root.ballHolder.transform.position.x < Field.Width / 2 && _root.ballHolder.transform.position.x > Field.Width / 4)
+        if (_root.ballHolder.transform.position.x < 0 && _root.ballHolder.transform.position.x > -(Field.Width / 4))
             return (NodeState.SUCCESS, Action.None);
 
         return (NodeState.FAILURE, Action.None);

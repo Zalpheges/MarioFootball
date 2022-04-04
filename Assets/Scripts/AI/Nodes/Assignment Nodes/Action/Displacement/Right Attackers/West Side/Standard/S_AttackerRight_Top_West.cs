@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using BehaviorTree;
 
-public class S_AttackerLeft_ShootRange_Center_West : Node
+public class S_AttackerRight_Top_West : Node
 {
     private RootNode _root;
     private bool _rootInitialized = false;
@@ -13,6 +13,10 @@ public class S_AttackerLeft_ShootRange_Center_West : Node
         if (!_rootInitialized)
             _root = GetRootNode();
 
+        float positionX = _root.ballHolder.transform.position.x;
+        float positionZ = _root.ballHolder.transform.position.z - Field.Height / 3;
+
+        _root.Position = new Vector3(positionX, 0, positionZ);
         _root.actionToPerform = ActionToPerform.Move;
         return (NodeState.SUCCESS, Action.None);
     }
@@ -29,3 +33,4 @@ public class S_AttackerLeft_ShootRange_Center_West : Node
         return (RootNode)currentNode;
     }
 }
+
