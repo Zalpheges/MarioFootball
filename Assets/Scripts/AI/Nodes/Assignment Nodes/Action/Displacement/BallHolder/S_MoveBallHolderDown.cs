@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using BehaviorTree;
 
-public class A_Shoot : Node
+public class S_MoveBallHolderDown : Node
 {
     private RootNode _root;
     private bool _rootInitialized = false;
@@ -13,7 +13,10 @@ public class A_Shoot : Node
         if (!_rootInitialized)
             _root = GetRootNode();
 
-        _root.actionToPerform = ActionToPerform.Shoot;
+        Vector3 DownWardPosition = _root.player.transform.position + new Vector3(0, 0, -1f);
+        _root.actionToPerform = ActionToPerform.Move;
+        _root.Position = DownWardPosition;
+
         return (NodeState.SUCCESS, Action.None);
     }
 

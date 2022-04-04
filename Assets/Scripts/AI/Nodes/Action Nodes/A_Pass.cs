@@ -13,6 +13,7 @@ public class A_Pass : Node
         if (!_rootInitialized)
             _root = GetRootNode();
 
+        _root.actionToPerform = ActionToPerform.Pass;
         return (NodeState.SUCCESS, Action.None);
     }
 

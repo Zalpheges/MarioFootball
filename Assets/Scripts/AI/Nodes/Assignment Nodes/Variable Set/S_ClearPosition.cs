@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using BehaviorTree;
 
-public class A_Shoot : Node
+public class S_ClearPosition : Node
 {
     private RootNode _root;
     private bool _rootInitialized = false;
@@ -13,7 +13,7 @@ public class A_Shoot : Node
         if (!_rootInitialized)
             _root = GetRootNode();
 
-        _root.actionToPerform = ActionToPerform.Shoot;
+        _root.Position = Vector3.zero;
         return (NodeState.SUCCESS, Action.None);
     }
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using BehaviorTree;
 
-public class A_Shoot : Node
+public class T_BallHolderIsMe : Node
 {
     private RootNode _root;
     private bool _rootInitialized = false;
@@ -13,8 +13,9 @@ public class A_Shoot : Node
         if (!_rootInitialized)
             _root = GetRootNode();
 
-        _root.actionToPerform = ActionToPerform.Shoot;
-        return (NodeState.SUCCESS, Action.None);
+        if (_root.ballHolder == _root.player)
+            return (NodeState.SUCCESS, Action.None);
+        return (NodeState.FAILURE, Action.None);
     }
 
     private RootNode GetRootNode()
@@ -29,3 +30,4 @@ public class A_Shoot : Node
         return (RootNode)currentNode;
     }
 }
+

@@ -20,12 +20,15 @@ public class TreeV2
     public float attackThreshold;
     public float headButtThreshold;
     public float markThreshold;
+    public float passAlignmentThreshold;
+    public float shootAlignmentThreshold;
+    public float dangerRangeThreshold;
 
     public int playerIndex;
 
     public RootNode root;
 
-    public void Setup(Team iAllies, Team iEnemies, Player iplayer, float[] Thresholds)
+    public void Setup(Team iAllies, Team iEnemies, Player iplayer, List<float> Thresholds)
     {
         Allies = iAllies.Players.ToList();
         Enemies = iEnemies.Players.ToList();
@@ -38,6 +41,9 @@ public class TreeV2
         attackThreshold = Thresholds[2];
         headButtThreshold = Thresholds[3];
         markThreshold = Thresholds[4];
+        passAlignmentThreshold = Thresholds[5];
+        shootAlignmentThreshold = Thresholds[6];
+        dangerRangeThreshold = Thresholds[7];
 
         root = new RootNode(this, new List<Node>()
         {
@@ -86,8 +92,7 @@ public class TreeV2
                             new Sequence(new List<Node>
                             {
                                 new T_PlayerType_Defender(),
-                                new S_Marking(),
-                                new CoucouNode(),
+                                new S_Marking()
                             }),
                             new Sequence(new List<Node>
                             {
@@ -97,6 +102,254 @@ public class TreeV2
                             new S_ContestBall()
                         })
                     })
+            /*        new Sequence(new List<Node>
+                    {
+                        new T_BallHolderIsAlly(),
+                        new Sequence(new List<Node>
+                        {
+                            new S_GameState_Attack(),
+                            new S_BallState_Ally(),
+                            new Selector(new List<Node>
+                            {
+                                new Sequence(new List<Node>
+                                {
+                                    new T_BallHolderIsMe(),
+                                    new S_PlayerType_BallHolder()
+                                }),
+                                new Sequence(new List<Node>
+                                {
+                                    new S_PlayerType_Unassigned(),
+                                    new S_ClearPosition()
+                                })
+                            })
+                        }),
+                        new Selector(new List<Node>
+                        {
+                            new Sequence(new List<Node>
+                            {
+                                new T_PlayerType_BallHolder(),
+                                new Selector(new List<Node>
+                                {
+                                    new Sequence(new List<Node>
+                                    {
+                                        new T_BallHolder_ShootRange(),
+                                        new Selector(new List<Node>
+                                        {
+                                            new Sequence(new List<Node>
+                                            {
+                                                new T_GoalUncovered(),
+                                                new A_Shoot()
+                                            }),
+                                            new Sequence(new List<Node>
+                                            {
+                                                new T_NearbyAllyUnmarked(),
+                                                new A_Pass()
+                                            }),
+                                            new Sequence(new List<Node>
+                                            {
+                                                new Selector(new List<Node>
+                                                {
+                                                    new T_BallHolder_TopThird(),
+                                                    new T_BallHolder_MiddleThird()
+                                                }),
+                                                new S_MoveBallHolderDown()
+                                            }),
+                                            new S_MoveBallHolderUp()
+                                        })
+                                    }),
+                                    new Selector(new List<Node>
+                                    {
+                                        new Sequence(new List<Node>
+                                        {
+                                            new T_BallHolder_enemyInRange(),
+                                            new T_NearbyAllyUnmarked(),
+                                            new A_Pass(),
+                                        }),
+                                        new S_MoveBallHolderToGoal()
+                                    })
+                                })
+                            }),
+                            new Sequence(new List<Node>
+                            {
+                                new Selector(new List<Node>
+                                {
+                                    new Inverter(new T_PlayerType_Unassigned()),
+                                    new Selector(new List<Node>
+                                    {
+                                        new Sequence(new List<Node>
+                                        {
+                                            new T_LowestOrder(),
+                                            new S_PlayerType_Defender()
+                                        }),
+                                        new Sequence(new List<Node>
+                                        {
+                                            new T_HighestOrder(),
+                                            new S_PlayerType_AttackerRight()
+                                        }),
+                                        new S_PlayerType_AttackerLeft()
+                                    })
+                                }),
+                                new Selector(new List<Node>
+                                {
+                                    new T_PlayerType_Attacker_Left(),
+                                    new T_PlayerType_Attacker_Right()
+                                }),
+                                new Selector(new List<Node>
+                                {
+                                    new Sequence(new List<Node>
+                                    {
+                                        new T_TeamSide_West(),
+                                        new Selector(new List<Node>
+                                        {
+                                            new Sequence(new List<Node>
+                                            {
+                                                new T_PlayerType_Attacker_Left(),
+                                                new Selector(new List<Node>
+                                                {
+                                                    new Sequence(new List<Node>
+                                                    {
+                                                        new T_BallHolder_FourthQuarter(),
+                                                        new Selector(new List<Node>
+                                                        {
+                                                            new Sequence(new List<Node>
+                                                            {
+                                                                new T_BallHolder_MiddleThird(),
+
+                                                            }),
+                                                            new Sequence(new List<Node>
+                                                            {
+                                                                new T_BallHolder_BottomThird(),
+
+                                                            })
+                                                        })
+                                                    }),
+                                                    new Selector(new List<Node>
+                                                    {
+                                                        new Sequence(new List<Node>
+                                                        {
+                                                            new T_BallHolder_MiddleThird(),
+
+                                                        }),
+                                                        new Sequence(new List<Node>
+                                                        {
+                                                            new T_BallHolder_BottomThird(),
+
+                                                        })
+                                                    })
+                                                })
+                                            }),
+                                            new Selector(new List<Node>
+                                                {
+                                                    new Sequence(new List<Node>
+                                                    {
+                                                        new T_BallHolder_FourthQuarter(),
+                                                        new Selector(new List<Node>
+                                                        {
+                                                            new Sequence(new List<Node>
+                                                            {
+                                                                new T_BallHolder_MiddleThird(),
+
+                                                            }),
+                                                            new Sequence(new List<Node>
+                                                            {
+                                                                new T_BallHolder_BottomThird(),
+
+                                                            })
+                                                        })
+                                                    }),
+                                                    new Selector(new List<Node>
+                                                    {
+                                                        new Sequence(new List<Node>
+                                                        {
+                                                            new T_BallHolder_MiddleThird(),
+
+                                                        }),
+                                                        new Sequence(new List<Node>
+                                                        {
+                                                            new T_BallHolder_BottomThird(),
+
+                                                        })
+                                                    })
+                                                })
+                                        })
+                                    }),
+                                    new Selector(new List<Node>
+                                    {
+                                        new Sequence(new List<Node>
+                                        {
+                                            new T_PlayerType_Attacker_Left(),
+                                            new Selector(new List<Node>
+                                            {
+                                                new Sequence(new List<Node>
+                                                {
+                                                    new T_BallHolder_FirstQuarter(),
+                                                    new Selector(new List<Node>
+                                                    {
+                                                        new Sequence(new List<Node>
+                                                        {
+                                                            new T_BallHolder_MiddleThird(),
+
+                                                        }),
+                                                        new Sequence(new List<Node>
+                                                        {
+                                                            new T_BallHolder_BottomThird(),
+
+                                                        })
+                                                    })
+                                                }),
+                                                new Selector(new List<Node>
+                                                {
+                                                    new Sequence(new List<Node>
+                                                    {
+                                                        new T_BallHolder_MiddleThird(),
+
+                                                    }),
+                                                    new Sequence(new List<Node>
+                                                    {
+                                                        new T_BallHolder_BottomThird(),
+
+                                                    })
+                                                })
+                                            })
+                                        }),
+                                        new Selector(new List<Node>
+                                        {
+                                            new Sequence(new List<Node>
+                                            {
+                                                new T_BallHolder_FirstQuarter(),
+                                                new Selector(new List<Node>
+                                                {
+                                                    new Sequence(new List<Node>
+                                                    {
+                                                        new T_BallHolder_MiddleThird(),
+
+                                                    }),
+                                                    new Sequence(new List<Node>
+                                                    {
+                                                        new T_BallHolder_BottomThird(),
+
+                                                    })
+                                                })
+                                            }),
+                                            new Selector(new List<Node>
+                                            {
+                                                new Sequence(new List<Node>
+                                                {
+                                                    new T_BallHolder_MiddleThird(),
+
+                                                }),
+                                                new Sequence(new List<Node>
+                                                {
+                                                    new T_BallHolder_BottomThird(),
+
+                                                })
+                                            })
+                                        })
+                                    })
+                                })
+                            })
+                        })
+                    })*/
                 }),
                 new Selector(new List<Node>
                 {

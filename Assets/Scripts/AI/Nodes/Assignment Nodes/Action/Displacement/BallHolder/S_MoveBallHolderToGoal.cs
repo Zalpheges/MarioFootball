@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using BehaviorTree;
 
-public class A_Shoot : Node
+public class S_MoveBallHolderToGoal : Node
 {
     private RootNode _root;
     private bool _rootInitialized = false;
@@ -13,7 +13,12 @@ public class A_Shoot : Node
         if (!_rootInitialized)
             _root = GetRootNode();
 
-        _root.actionToPerform = ActionToPerform.Shoot;
+        Vector3 DisplacementToGoal = (_root.parentTree.enemyGoalTransform.position - _root.player.transform.position).normalized;
+
+        Vector3 ForwardPosition = _root.player.transform.position + DisplacementToGoal;
+        _root.actionToPerform = ActionToPerform.Move;
+        _root.Position = ForwardPosition;
+
         return (NodeState.SUCCESS, Action.None);
     }
 

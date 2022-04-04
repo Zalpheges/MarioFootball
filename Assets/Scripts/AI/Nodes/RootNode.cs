@@ -74,6 +74,7 @@ public class RootNode : Node
     public Player player = null;
 
     public Player target = null;
+    public Player passTarget = null;
     public Player ballContender = null;
     public Player ballHolder = null;
     public Player ballSeeker = null;
@@ -116,7 +117,6 @@ public class RootNode : Node
         foreach (Player player in parentTree.Allies)
             if (player.IsPiloted)
                 AITeam = false;
-
     }
 
     private void AllyPlayersOrderSetup()

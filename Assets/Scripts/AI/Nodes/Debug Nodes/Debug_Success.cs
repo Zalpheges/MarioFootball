@@ -3,20 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using BehaviorTree;
 
-public class A_Shoot : Node
+public class Debug_Success : Node
 {
     private RootNode _root;
-    private bool _rootInitialized = false;
-
     public override (NodeState, Action) Evaluate()
     {
-        if (!_rootInitialized)
-            _root = GetRootNode();
+        _root = GetRootNode();
 
-        _root.actionToPerform = ActionToPerform.Shoot;
+        _root.actionToPerform = ActionToPerform.Move;
+        _root.Position = _root.player.transform.position;
         return (NodeState.SUCCESS, Action.None);
     }
-
     private RootNode GetRootNode()
     {
         Node currentNode = this;
@@ -24,8 +21,7 @@ public class A_Shoot : Node
         while (currentNode.parent != null)
             currentNode = currentNode.parent;
 
-        _rootInitialized = true;
-
         return (RootNode)currentNode;
     }
 }
+

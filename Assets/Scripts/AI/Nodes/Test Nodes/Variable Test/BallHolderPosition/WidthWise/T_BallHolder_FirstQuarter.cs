@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using BehaviorTree;
 
-public class S_Marking : Node
+public class T_BallHolder_FirstQuarter : Node
 {
     private RootNode _root;
     private bool _rootInitialized = false;
@@ -13,18 +13,10 @@ public class S_Marking : Node
         if (!_rootInitialized)
             _root = GetRootNode();
 
-        Vector3 positionToMark = _root.target.transform.position +
-            (_root.ballHolder.transform.position - _root.target.transform.position).normalized * _root.parentTree.markThreshold;
-
-        if ((positionToMark - _root.player.transform.position).magnitude < _root.parentTree.defenseThreshold)
-        {
-            _root.actionToPerform = ActionToPerform.None;
+        if (_root.ballHolder.transform.position.x < Field.Width / 4)
             return (NodeState.SUCCESS, Action.None);
-        }
 
-        _root.actionToPerform = ActionToPerform.Move;
-        _root.Position = positionToMark;
-        return (NodeState.SUCCESS, Action.None);
+        return (NodeState.FAILURE, Action.None);
     }
 
     private RootNode GetRootNode()
