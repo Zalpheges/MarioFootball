@@ -351,6 +351,36 @@ public class TreeV2
                                         })
                                     })
                                 })
+                            }),
+                            new Selector(new List<Node>
+                            {
+                                new Sequence(new List<Node>
+                                {
+                                    new T_TeamSide_West(),
+                                    new Selector(new List<Node>
+                                    {
+                                        new Sequence(new List<Node>
+                                        {
+                                            new T_BallHolder_FirstQuarter(),
+                                            new Selector(new List<Node>
+                                            {
+                                                new Sequence(new List<Node>
+                                                {
+                                                    new T_BallHolder_BottomThird(),
+                                                    new S_Defender_GoalRange_Bottom_West()
+                                                }),
+                                                new S_Defender_GoalRange_TopCenter_West()
+                                            })
+                                        }),
+                                        new Sequence(new List<Node>
+                                        {
+                                            new T_BallHolder_SecondQuarter(),
+                                            new CoucouNode(),
+                                            new S_Defender_SecondQuarter_West()
+                                        }),
+                                        new S_Defender_EnemyHalf_West()
+                                    }),
+                                }),
                             })
                         })
                     })
