@@ -35,7 +35,7 @@ public class GameManager : MonoBehaviour
             DontDestroyOnLoad(this);
         }
         else
-            Destroy(this);
+            Destroy(this.gameObject);
 
         _matches = new Queue<Match>();
         _matches.Enqueue(_debugMatch);

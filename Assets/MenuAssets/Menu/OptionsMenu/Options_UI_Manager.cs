@@ -26,6 +26,11 @@ public class Options_UI_Manager : MonoBehaviour
     [SerializeField]
     private EventSystem ES;
 
+    private void Awake()
+    {
+        Music = MusicManager._instance.gameObject.GetComponent<AudioSource>();
+    }
+
     private void Update()
     {
         if (UnityEngine.InputSystem.Keyboard.current.escapeKey.wasPressedThisFrame)
