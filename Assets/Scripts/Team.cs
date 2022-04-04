@@ -66,7 +66,13 @@ public class Team : MonoBehaviour
     /// </summary>
     public void GainItem()
     {
-
+        if (_items.Count < _itemCapacity)
+            return;
+        //Keep this
+        //var itemProperties = PrefabManager.Items.GetType().GetProperties();
+        //int i = UnityEngine.Random.Range(0, itemProperties.Length - 1);
+        //_items.Enqueue((itemProperties[i].GetValue(PrefabManager.Items) as GameObject).GetComponent<Item>());
+        _items.Enqueue(PrefabManager.Items[(PrefabManager.Item)UnityEngine.Random.Range(0, PrefabManager.Items.Count)].GetComponent<Item>());
     }
 
     /// <summary>

@@ -408,8 +408,22 @@ public class Player : MonoBehaviour
         }
 
         return false;
+    }
+
+    #endregion
+
+    #region Events
+    
+    public void OnMissedShoot()
+    {
+        Team.GainItem();
     }
 
+    public void OnHitWithNoBall()
+    {
+        Team.GainItem();
+    }
+    
     #endregion
 
     #region Special
