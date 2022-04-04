@@ -79,7 +79,13 @@ public class Ball : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        //if (!_isFree) Free();
+
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.GetComponent<Player>() == Shooter)
+            Shooter = null;
     }
 
     #region Shoot

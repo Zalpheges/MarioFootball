@@ -10,6 +10,7 @@ public class Action
         Pass,
         LobPass,
         Move,
+        MoveTo,
         Tackle,
         Headbutt,
         Dribble,
@@ -19,31 +20,41 @@ public class Action
 
     public readonly Type ActionType;
     public readonly Vector3 Direction;
+    public readonly Vector3 Position;
     public readonly float Duration;
     public readonly float Force;
 
-    public readonly bool DirectionnalAction;
+    public readonly bool DirectionalAction;
     public readonly bool WaitForRotation;
 
     public static Action None => new Action(Type.None);
 
     public static implicit operator bool(Action action) => action != null && action.ActionType != Type.None;
 
-    private Action(Type type)
+    private Action(Type type, float force = 0f)
     {
         ActionType = type;
+        Force = force;
 
-        DirectionnalAction = false;
+        DirectionalAction = false;
         WaitForRotation = false;
     }
 
-    private Action(Type type, Vector3 direction, float force = 0f, bool waitForRotation = true)
+    private Action(Type type, Vector3 position)
+    {
+        ActionType = type;
+        Position = position;
+
+        DirectionalAction = false;
+        WaitForRotation = false;
+    }
+
+    private Action(Type type, Vector3 direction, bool waitForRotation)
     {
         ActionType = type;
         Direction = direction;
-        Force = force;
 
-        DirectionnalAction = true;
+        DirectionalAction = true;
         WaitForRotation = waitForRotation;
     }
 
@@ -52,34 +63,39 @@ public class Action
         return new Action(Type.NavMove);
     }
 
-    public static Action Shoot(Vector3 direction, float force)
+    public static Action Shoot(float force)
     {
-        return new Action(Type.Shoot, direction, force);
+        return new Action(Type.Shoot, Vector3.zero, true);
     }
 
     public static Action Pass(Vector3 direction)
     {
-        return new Action(Type.Pass, direction);
+        return new Action(Type.Pass, direction, true);
     }
 
     public static Action LobPass(Vector3 direction)
     {
-        return new Action(Type.LobPass, direction);
+        return new Action(Type.LobPass, direction, true);
     }
 
     public static Action Move(Vector3 direction)
     {
-        return new Action(Type.Move, direction, 0f, false);
+        return new Action(Type.Move, direction, false);
+    }
+
+    public static Action MoveTo(Vector3 position)
+    {
+        return new Action(Type.Move, position);
     }
 
     public static Action Tackle(Vector3 direction)
     {
-        return new Action(Type.Tackle, direction);
+        return new Action(Type.Tackle, direction, true);
     }
 
     public static Action Headbutt(Vector3 direction)
     {
-        return new Action(Type.Headbutt, direction);
+        return new Action(Type.Headbutt, direction, true);
     }
 
     public static Action Dribble()
@@ -89,7 +105,7 @@ public class Action
 
     public static Action Throw(Vector3 direction)
     {
-        return new Action(Type.Throw, direction);
+        return new Action(Type.Throw, direction, true);
     }
 
     public static Action ChangePlayer()

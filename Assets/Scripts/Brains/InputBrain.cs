@@ -37,7 +37,7 @@ public class InputBrain : PlayerBrain
             westButtonPressed = !westButtonPressed;
 
             if (Player.HasBall)
-                return Action.Shoot(_movementInput, shootForce);
+                return Action.Shoot(shootForce);
             else
                 return Action.Tackle(_movementInput);
         }

@@ -26,7 +26,7 @@ public class GoToPosition : Node
             {
                 case TargetType.none:
                     displacement = Field.Ball.transform.position - _root.parentTree.player.transform.position;
-                    displacement.y = 0;
+                    displacement.y = 0f;
                     return (NodeState.SUCCESS, Action.Move(displacement.normalized));
                 case TargetType.ally:
                     float desiredX = (_root.parentTree.enemyGoalTransform.position + _root.parentTree.playerWithBall.transform.position).x / 2;
@@ -48,10 +48,11 @@ public class GoToPosition : Node
                             displacement = Vector3.zero;
                             break;
                     }
+                    displacement.y = 0f;
                     return (NodeState.SUCCESS, displacement.magnitude > _root.parentTree.attackThreshold/3 ? Action.Move(displacement.normalized) : Action.None);
                 case TargetType.allyWithBall:
                     displacement = _root.parentTree.enemyGoalTransform.position - _root.parentTree.player.transform.position;
-                    displacement.y = 0;
+                    displacement.y = 0f;
                     return (NodeState.SUCCESS, Action.Move(displacement.normalized));
             }
         }
@@ -65,7 +66,7 @@ public class GoToPosition : Node
                     playerDirection *= _root.parentTree.defenseThreshold;
                     desiredPosition = _root.target.transform.position - playerDirection;
                     displacement = desiredPosition - _root.parentTree.player.transform.position;
-                    displacement.y = 0;
+                    displacement.y = 0f;
                     return (NodeState.SUCCESS, displacement.magnitude > _root.parentTree.defenseThreshold/3 
                         ? Action.Move(displacement.normalized) : Action.None);
                 case TargetType.enemyWithBall:
@@ -74,7 +75,7 @@ public class GoToPosition : Node
                     playerDirection *= _root.parentTree.defenseThreshold;
                     desiredPosition = _root.parentTree.playerWithBall.transform.position + playerDirection;
                     displacement = desiredPosition - _root.parentTree.player.transform.position;
-                    displacement.y = 0;
+                    displacement.y = 0f;
                     return (NodeState.SUCCESS, displacement.magnitude > _root.parentTree.defenseThreshold/3  
                         ? Action.Move(displacement.normalized) : Action.None);
             }
