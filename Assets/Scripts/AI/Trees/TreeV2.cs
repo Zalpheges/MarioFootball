@@ -105,11 +105,14 @@ public class TreeV2
                     new Sequence(new List<Node>
                     {
                         new T_BallHolderIsAlly(),
-                        new Sequence(new List<Node>
+                        new Selector(new List<Node>
                         {
-                            new S_GameState_Attack(),
-                            new S_BallState_Ally(),
-                            new Selector(new List<Node>
+                            new T_BallState_Ally(),
+                            new Sequence(new List<Node>
+                            {
+                                new S_GameState_Attack(),
+                                new S_BallState_Ally(),
+                                new Selector(new List<Node>
                             {
                                 new Sequence(new List<Node>
                                 {
@@ -122,6 +125,7 @@ public class TreeV2
                                     new S_ClearPosition()
                                 })
                             })
+                            }),
                         }),
                         new Selector(new List<Node>
                         {
@@ -381,6 +385,28 @@ public class TreeV2
                                         new S_Defender_EnemyHalf_West()
                                     }),
                                 }),
+                                new Selector(new List<Node>
+                                {
+                                    new Sequence(new List<Node>
+                                    {
+                                        new T_BallHolder_FourthQuarter(),
+                                        new Selector(new List<Node>
+                                        {
+                                            new Sequence(new List<Node>
+                                            {
+                                                new T_BallHolder_BottomThird(),
+                                                new S_Defender_GoalRange_Bottom_East()
+                                            }),
+                                            new S_Defender_GoalRange_TopCenter_East()
+                                        })
+                                    }),
+                                    new Sequence(new List<Node>
+                                    {
+                                        new T_BallHolder_ThirdQuarter(),
+                                        new S_Defender_ThirdQuarter_East(),
+                                    }),
+                                    new S_Defender_EnemyHalf_East()
+                                })
                             })
                         })
                     })
