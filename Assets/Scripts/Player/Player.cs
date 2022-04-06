@@ -113,7 +113,7 @@ public class Player : MonoBehaviour
         _rgdb.angularVelocity = Vector3.zero;
         _rgdb.velocity = Vector3.zero;
 
-        _agent.isStopped = !IsNavDriven;
+        _agent.isStopped = !IsNavDriven && isPiloted;
 
         if (IsNavDriven)
         {
@@ -144,7 +144,7 @@ public class Player : MonoBehaviour
         else
             action = IABrain.GetAction();
 
-        input = action.Direction;
+        input = action.Position;
 
         if (action.DirectionalAction)
         {
@@ -298,12 +298,23 @@ public class Player : MonoBehaviour
 
         Player player = other.GetComponent<Player>();
 
-        if (player && player.State == PlayerState.Tackling)
+        if (player)
         {
-            Fall((_rgdb.position - player.transform.position).normalized);
+            if (player.State == PlayerState.Tackling)
+            {
+                Fall((_rgdb.position - player.transform.position).normalized);
 
-            //if (!HasBall) OnHitWithNoBall();
+                //if (!HasBall) OnHitWithNoBall();
+            }
+            else if (player.State == PlayerState.Headbutting)
+            {
+                Fall((_rgdb.position - player.transform.position).normalized);
+
+                //if (!HasBall) OnHitWithNoBall();
+            }
         }
+
+        
     }
 
     private void OnTriggerExit(Collider other)
