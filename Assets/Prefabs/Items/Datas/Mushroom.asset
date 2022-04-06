@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71edc1453502b094e97f022dad81864a, type: 3}
+  m_Name: Mushroom
+  m_EditorClassIdentifier: 
+  Sprite: {fileID: 21300000, guid: af82914634bf0c04893151081df7503f, type: 3}
+  Prefab: {fileID: 6486403398316945681, guid: d7f75d19e4df14d42bb72169ca2a03e0, type: 3}
+  Speed: 5
+  Angles: []
+  TeamHasToLose: 0

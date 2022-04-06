@@ -1,0 +1,9 @@
+using UnityEngine;
+
+public class SpinyTurtleShell : StraightTurtleShell
+{
+    protected override void ApplyEffect(Player player)
+    {
+        Debug.Log("Bully " + player.name);
+    }
+}

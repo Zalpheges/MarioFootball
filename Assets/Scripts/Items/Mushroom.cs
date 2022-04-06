@@ -2,13 +2,12 @@ using UnityEngine;
 
 public class Mushroom : Item
 {
-    protected override void Move()
+    private void Start()
     {
-    
+        ApplyEffect(_player);
     }
-
-    protected override void OnTriggerEnter(Collider other)
+    protected override void ApplyEffect(Player player)
     {
-        
+        Debug.Log("Boosting " + player.name);
     }
 }

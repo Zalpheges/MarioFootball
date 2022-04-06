@@ -227,7 +227,7 @@ public class Player : MonoBehaviour
 
             case Action.Type.Throw:
                 Debug.Log("Throw");
-                ThrowItem(action.Direction * action.Force);
+                ThrowItem(direction);
 
                 break;
 
@@ -464,20 +464,15 @@ public class Player : MonoBehaviour
 
     #region ThrowItem
 
-    private void ThrowItem(Vector3 force)
-
+    private void ThrowItem(Vector3 direction)
     {
+        ItemData data = Team.GetItem();
 
-        GameObject itemPrefab = Team.GetItem();
-
-        if (!itemPrefab)
-
+        if (!data)
             return;
 
-        GameObject itemGo = Instantiate(itemPrefab, transform.position, Quaternion.identity, Team.transform);
-
-        itemGo.GetComponent<Rigidbody>().AddForce(force);
-
+        GameObject itemGo = Instantiate(data.Prefab, transform.position, Quaternion.identity);
+        itemGo.GetComponent<Item>().Init(data, this, direction);
     }
 
     #endregion
