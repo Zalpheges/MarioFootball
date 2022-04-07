@@ -3,27 +3,29 @@ using System.Collections.Generic;
 using UnityEngine;
 using BehaviorTree;
 
-public class CoucouNode : Node
+public class T_PlayerType_Attacker_Top : Node
 {
-
     private RootNode _root;
+    private bool _rootInitialized = false;
+
     public override (NodeState, Action) Evaluate()
     {
-        _root = GetRootNode();
+        if (!_rootInitialized)
+            _root = GetRootNode();
 
-        Debug.Log(_root.player.transform.GetSiblingIndex());
-        Debug.Log(_root.currentPlayerType);
-        Debug.Log(_root.ballHolder);
-        Debug.Log(_root.ballHolder.transform.position.x);
-        Debug.Log(_root.ballHolder.transform.position.z);
+        if (_root.currentPlayerType == PlayerType.Attacker_Bot)
+            return (NodeState.SUCCESS, Action.None);
         return (NodeState.FAILURE, Action.None);
     }
+
     private RootNode GetRootNode()
     {
         Node currentNode = this;
 
         while (currentNode.parent != null)
             currentNode = currentNode.parent;
+
+        _rootInitialized = true;
 
         return (RootNode)currentNode;
     }

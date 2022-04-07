@@ -8,29 +8,26 @@ public enum GameState
     Attack,
     Defend,
 }
-
 public enum BallPosition
 {
     unassigned,
     AllyHalf,
     EnemyHalf
 }
-
 public enum TargetType
 {
     unassigned,
     Enemy,
     EnemyWithBall,
 }
-
 public enum PlayerType
 {
     unassigned,
     Seeker,
     Contender,
     Supporter,
-    Attacker_left,
-    Attacker_right,
+    Attacker_Top,
+    Attacker_Bot,
     Defender,
     BallHolder
 }
@@ -41,7 +38,6 @@ public enum BallState
     Enemy,
     None
 }
-
 public enum Positionning
 {
     unassigned,
@@ -49,14 +45,12 @@ public enum Positionning
     right,
     center
 }
-
 public enum TeamSide
 {
     unassigned,
     West,
     East
 }
-
 public enum ActionToPerform
 {
     unassigned,
@@ -80,6 +74,13 @@ public class RootNode : Node
     public Player ballSeeker = null;
 
     public Vector3 Position = Vector3.zero;
+
+    public Vector2 Attacker_Offset_Standard_Mid = new Vector2(Field.Width / 8, Field.Height / 6);
+    public Vector2 Attacker_Offset_Standard_Side_Forward = new Vector2(Field.Width / 6, Field.Height / 8);
+    public Vector2 Attacker_Offset_Standard_Side_Sideward = new Vector2(0f, Field.Height / 3);
+
+    public Vector2 Attacker_Offset_ShootQuarter_Side_Forward = new Vector2(Field.Width / 6, 0f); 
+    public Vector2 Attacker_Offset_ShootQuarter_Side_Sideward = new Vector2(Field.Width / 10, Field.Height / 6); 
 
     public bool AITeam = true;
 

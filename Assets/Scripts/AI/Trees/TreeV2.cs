@@ -52,6 +52,7 @@ public class TreeV2
                 new UpdateBallHolder(),
                 new Selector(new List<Node>
                 {
+                    #region Enemy Team Has Ball
                     new Sequence(new List<Node>
                     {
                         new T_BallHolderIsEnemy(),
@@ -102,30 +103,34 @@ public class TreeV2
                             new S_ContestBall()
                         })
                     }),
+                    #endregion
+                    #region Ally Team Has Ball
                     new Sequence(new List<Node>
                     {
                         new T_BallHolderIsAlly(),
                         new Selector(new List<Node>
                         {
                             new T_BallState_Ally(),
+                            #region Variables Reset Upon GameState Switch
                             new Sequence(new List<Node>
                             {
                                 new S_GameState_Attack(),
                                 new S_BallState_Ally(),
                                 new Selector(new List<Node>
-                            {
-                                new Sequence(new List<Node>
                                 {
-                                    new T_BallHolderIsMe(),
-                                    new S_PlayerType_BallHolder()
-                                }),
-                                new Sequence(new List<Node>
-                                {
-                                    new S_PlayerType_Unassigned(),
-                                    new S_ClearPosition()
-                                })
-                            })
+                                    new Sequence(new List<Node>
+                                    {
+                                        new T_BallHolderIsMe(),
+                                        new S_PlayerType_BallHolder()
+                                    }),
+                                    new Sequence(new List<Node>
+                                    {
+                                        new S_PlayerType_Unassigned(),
+                                        new S_ClearPosition()
+                                    })
+                                })                       
                             }),
+                            #endregion
                         }),
                         new Selector(new List<Node>
                         {
@@ -188,15 +193,15 @@ public class TreeV2
                                         new Sequence(new List<Node>
                                         {
                                             new T_HighestOrder(),
-                                            new S_PlayerType_AttackerRight()
+                                            new S_PlayerType_Attacker_Bot()
                                         }),
-                                        new S_PlayerType_AttackerLeft()
+                                        new S_PlayerType_Attacker_Top()
                                     })
                                 }),
                                 new Selector(new List<Node>
                                 {
-                                    new T_PlayerType_Attacker_Left(),
-                                    new T_PlayerType_Attacker_Right()
+                                    new T_PlayerType_Attacker_Top(),
+                                    new T_PlayerType_Attacker_Bot()
                                 }),
                                 new Selector(new List<Node>
                                 {
@@ -207,155 +212,71 @@ public class TreeV2
                                         {
                                             new Sequence(new List<Node>
                                             {
-                                                new T_PlayerType_Attacker_Left(),
+                                                new T_BallHolder_FourthQuarter(),
                                                 new Selector(new List<Node>
                                                 {
                                                     new Sequence(new List<Node>
                                                     {
-                                                        new T_BallHolder_FourthQuarter(),
-                                                        new Selector(new List<Node>
-                                                        {
-                                                            new Sequence(new List<Node>
-                                                            {
-                                                                new T_BallHolder_MiddleThird(),
-                                                                new S_AttackerLeft_ShootRange_Center_West()
-                                                            }),
-                                                            new Sequence(new List<Node>
-                                                            {
-                                                                new T_BallHolder_BottomThird(),
-                                                                new S_AttackerLeft_ShootRange_Bottom_West()
-                                                            }),
-                                                            new S_AttackerLeft_ShootRange_Top_West()
-                                                        })
+                                                        new T_BallHolder_BottomThird(),
+                                                        new S_MoveAttacker_4_Bot_West()
                                                     }),
-                                                    new Selector(new List<Node>
+                                                    new Sequence(new List<Node>
                                                     {
-                                                        new Sequence(new List<Node>
-                                                        {
-                                                            new T_BallHolder_MiddleThird(),
-                                                            new S_AttackerLeft_Center_West()
-                                                        }),
-                                                        new Sequence(new List<Node>
-                                                        {
-                                                            new T_BallHolder_BottomThird(),
-                                                            new S_AttackerLeft_Bottom_West()
-                                                        }),
-                                                        new S_AttackerLeft_Top_West()
-                                                    })
+                                                        new T_BallHolder_MiddleThird(),
+                                                        new S_MoveAttacker_4_Mid_West()
+                                                    }),
+                                                    new S_MoveAttacker_4_Top_West()
                                                 })
                                             }),
                                             new Selector(new List<Node>
+                                            {
+                                                new Sequence(new List<Node>
                                                 {
-                                                    new Sequence(new List<Node>
-                                                    {
-                                                        new T_BallHolder_FourthQuarter(),
-                                                        new Selector(new List<Node>
-                                                        {
-                                                            new Sequence(new List<Node>
-                                                            {
-                                                                new T_BallHolder_MiddleThird(),
-                                                                new S_AttackerRight_ShootRange_Center_West()
-                                                            }),
-                                                            new Sequence(new List<Node>
-                                                            {
-                                                                new T_BallHolder_BottomThird(),
-                                                                new S_AttackerRight_ShootRange_Bottom_West()
-                                                            }),
-                                                            new S_AttackerRight_ShootRange_Top_West()
-                                                        })
-                                                    }),
-                                                    new Selector(new List<Node>
-                                                    {
-                                                        new Sequence(new List<Node>
-                                                        {
-                                                            new T_BallHolder_MiddleThird(),
-                                                            new S_AttackerRight_Center_West()
-                                                        }),
-                                                        new Sequence(new List<Node>
-                                                        {
-                                                            new T_BallHolder_BottomThird(),
-                                                            new S_AttackerRight_Bottom_West()
-                                                        }),
-                                                        new S_AttackerRight_Top_West()
-                                                    })
-                                                })
+                                                    new T_BallHolder_BottomThird(),
+                                                    new S_MoveAttacker_Bot_West()
+                                                }),
+                                                new Sequence(new List<Node>
+                                                {
+                                                    new T_BallHolder_MiddleThird(),
+                                                    new S_MoveAttacker_Mid_West()
+                                                }),
+                                                new S_MoveAttacker_Top_West()
+                                            })
                                         })
                                     }),
                                     new Selector(new List<Node>
                                     {
                                         new Sequence(new List<Node>
                                         {
-                                            new T_PlayerType_Attacker_Left(),
+                                            new T_BallHolder_FirstQuarter(),
                                             new Selector(new List<Node>
                                             {
                                                 new Sequence(new List<Node>
                                                 {
-                                                    new T_BallHolder_FirstQuarter(),
-                                                    new Selector(new List<Node>
-                                                    {
-                                                        new Sequence(new List<Node>
-                                                        {
-                                                            new T_BallHolder_MiddleThird(),
-                                                            new S_AttackerLeft_ShootRange_Center_East()
-                                                        }),
-                                                        new Sequence(new List<Node>
-                                                        {
-                                                            new T_BallHolder_BottomThird(),
-                                                            new S_AttackerLeft_ShootRange_Bottom_East()
-                                                        }),
-                                                        new S_AttackerLeft_ShootRange_Top_East()
-                                                    })
+                                                    new T_BallHolder_BottomThird(),
+                                                    new S_MoveAttacker_1_Bot_East()
                                                 }),
-                                                new Selector(new List<Node>
+                                                new Sequence(new List<Node>
                                                 {
-                                                    new Sequence(new List<Node>
-                                                    {
-                                                        new T_BallHolder_MiddleThird(),
-                                                        new S_AttackerLeft_Center_East()
-                                                    }),
-                                                    new Sequence(new List<Node>
-                                                    {
-                                                        new T_BallHolder_BottomThird(),
-                                                        new S_AttackerLeft_Bottom_East()
-                                                    }),
-                                                    new S_AttackerLeft_Top_East()
-                                                })
+                                                    new T_BallHolder_MiddleThird(),
+                                                    new S_MoveAttacker_1_Mid_East()
+                                                }),
+                                                new S_MoveAttacker_1_Top_East()
                                             })
                                         }),
                                         new Selector(new List<Node>
                                         {
                                             new Sequence(new List<Node>
                                             {
-                                                new T_BallHolder_FirstQuarter(),
-                                                new Selector(new List<Node>
-                                                {
-                                                    new Sequence(new List<Node>
-                                                    {
-                                                        new T_BallHolder_MiddleThird(),
-                                                        new S_AttackerRight_ShootRange_Center_East()
-                                                    }),
-                                                    new Sequence(new List<Node>
-                                                    {
-                                                        new T_BallHolder_BottomThird(),
-                                                        new S_AttackerRight_ShootRange_Bottom_East()
-                                                    }),
-                                                    new S_AttackerRight_ShootRange_Top_East()
-                                                })
+                                                new T_BallHolder_BottomThird(),
+                                                new S_MoveAttacker_Bot_East()
                                             }),
-                                            new Selector(new List<Node>
+                                            new Sequence(new List<Node>
                                             {
-                                                new Sequence(new List<Node>
-                                                {
-                                                    new T_BallHolder_MiddleThird(),
-                                                    new S_AttackerRight_Center_East()
-                                                }),
-                                                new Sequence(new List<Node>
-                                                {
-                                                    new T_BallHolder_BottomThird(),
-                                                    new S_AttackerRight_Bottom_East()
-                                                }),
-                                                new S_AttackerLeft_Top_East()
-                                            })
+                                                new T_BallHolder_MiddleThird(),
+                                                new S_MoveAttacker_Mid_East()
+                                            }),
+                                            new S_MoveAttacker_Top_East()
                                         })
                                     })
                                 })
@@ -412,8 +333,20 @@ public class TreeV2
                                 })
                             })
                         })
+                    }),
+                    #endregion
+                    #region No Team Has Ball
+                    new Sequence(new List<Node> 
+                    {
+                        new T_BallState_None(),
+                        new Sequence(new List<Node>
+                        {
+                            
+                        })
                     })
+                    #endregion
                 }),
+                #region Perform Action
                 new Selector(new List<Node>
                 {
                     new Sequence(new List<Node>
@@ -437,6 +370,7 @@ public class TreeV2
                         new A_Pass()
                     })
                 })
+                #endregion
             })
         });
     }
