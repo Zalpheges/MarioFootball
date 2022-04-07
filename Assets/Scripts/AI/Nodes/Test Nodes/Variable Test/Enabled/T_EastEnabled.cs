@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using BehaviorTree;
 
-public class T_PlayerType_Seeker : Node
+public class T_EastEnabled : Node
 {
     private RootNode _root;
     private bool _rootInitialized = false;
@@ -13,9 +13,10 @@ public class T_PlayerType_Seeker : Node
         if (!_rootInitialized)
             _root = GetRootNode();
 
-        if (_root.currentPlayerType == PlayerType.BallSeeker)
+        if(_root.parentTree.EastTeamEnabled)
             return (NodeState.SUCCESS, Action.None);
-        return (NodeState.FAILURE, Action.None);
+
+        return base.Evaluate();
     }
 
     private RootNode GetRootNode()
@@ -30,3 +31,4 @@ public class T_PlayerType_Seeker : Node
         return (RootNode)currentNode;
     }
 }
+

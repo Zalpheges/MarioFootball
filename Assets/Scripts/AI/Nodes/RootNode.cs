@@ -23,7 +23,7 @@ public enum TargetType
 public enum PlayerType
 {
     unassigned,
-    Seeker,
+    BallSeeker,
     Contender,
     Supporter,
     Attacker_Top,

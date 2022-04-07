@@ -24,6 +24,9 @@ public class TreeV2
     public float shootAlignmentThreshold;
     public float dangerRangeThreshold;
 
+    public bool EastTeamEnabled;
+    public bool WestTeamEnabled;
+
     public int playerIndex;
 
     public RootNode root;
@@ -32,10 +35,13 @@ public class TreeV2
     {
         Allies = iAllies.Players.ToList();
         Enemies = iEnemies.Players.ToList();
+
         allyGoalTransform = iAllies.transform;
         enemyGoalTransform = iEnemies.transform;
+
         player = iplayer;
         playerIndex = player.transform.GetSiblingIndex();
+
         shootThreshold = Thresholds[0];
         defenseThreshold = Thresholds[1];
         attackThreshold = Thresholds[2];
@@ -45,10 +51,26 @@ public class TreeV2
         shootAlignmentThreshold = Thresholds[6];
         dangerRangeThreshold = Thresholds[7];
 
+        EastTeamEnabled = false;
+        WestTeamEnabled = true;
+
         root = new RootNode(this, new List<Node>()
         {
             new Sequence(new List<Node>()
             {
+                new Selector(new List<Node>
+                {
+                    new Sequence(new List<Node>
+                    {
+                        new T_TeamSide_East(),
+                        new T_EastEnabled(),
+                    }),
+                    new Sequence(new List<Node>
+                    {
+                        new T_TeamSide_West(),
+                        new T_WestEnabled()
+                    })                   
+                }),
                 new UpdateBallHolder(),
                 new Selector(new List<Node>
                 {
@@ -338,11 +360,29 @@ public class TreeV2
                     #region No Team Has Ball
                     new Sequence(new List<Node> 
                     {
-                        new T_BallState_None(),
-                        new Sequence(new List<Node>
+                        new Selector(new List<Node>
                         {
-                            
+                            new T_BallState_None(),
+                            new Sequence(new List<Node>
+                            {
+                                new S_BallState_None(),
+                                new S_ResetBallSeeker(),
+                                new Selector(new List<Node>
+                                {
+                                    new Sequence(new List<Node>
+                                    {
+                                        new T_BallSeekerIsMe(),
+                                        new S_PlayerType_BallSeeker()
+                                    }),
+                                    new S_PlayerType_Supporter()
+                                }),
+                                new Sequence(new List<Node>
+                                {
+
+                                })
+                            })
                         })
+                        
                     })
                     #endregion
                 }),

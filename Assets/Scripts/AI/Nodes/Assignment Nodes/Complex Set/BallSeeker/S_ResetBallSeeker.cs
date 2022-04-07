@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using BehaviorTree;
 
-public class T_PlayerType_Seeker : Node
+public class S_ResetBallSeeker : Node
 {
     private RootNode _root;
     private bool _rootInitialized = false;
@@ -13,9 +13,8 @@ public class T_PlayerType_Seeker : Node
         if (!_rootInitialized)
             _root = GetRootNode();
 
-        if (_root.currentPlayerType == PlayerType.BallSeeker)
-            return (NodeState.SUCCESS, Action.None);
-        return (NodeState.FAILURE, Action.None);
+        _root.ballSeeker = null;
+        return (NodeState.SUCCESS, Action.None);
     }
 
     private RootNode GetRootNode()
