@@ -6,4 +6,8 @@ public class GreenTurtleShell : StraightTurtleShell
     {
         Debug.Log("Push " + player.name);
     }
+    public override void DestroyItem()
+    {
+        Destroy(gameObject);
+    }
 }

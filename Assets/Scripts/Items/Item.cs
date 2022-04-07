@@ -14,4 +14,5 @@ public abstract class Item : MonoBehaviour
         _direction = direction;
         _data = data;
     }
+    public abstract void DestroyItem();
 }

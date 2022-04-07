@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Sprite: {fileID: 21300000, guid: af82914634bf0c04893151081df7503f, type: 3}
   Prefab: {fileID: 6486403398316945681, guid: d7f75d19e4df14d42bb72169ca2a03e0, type: 3}
-  Speed: 5
+  Speed: 20
   Angles: []
   TeamHasToLose: 0

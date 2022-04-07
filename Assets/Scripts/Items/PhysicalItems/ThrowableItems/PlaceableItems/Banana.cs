@@ -6,4 +6,8 @@ public class Banana : PlaceableItem
     {
         Debug.Log("Hit " + player.name + " with banana");
     }
+    public override void DestroyItem()
+    {
+        Destroy(gameObject);
+    }
 }

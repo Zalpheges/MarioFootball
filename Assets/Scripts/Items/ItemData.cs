@@ -7,7 +7,7 @@ public class ItemData : ScriptableObject
 
     public GameObject Prefab;
 
-    [Range(1f, 10f)]
+    [Range(10f, 30f)]
     public float Speed;
 
     public float[] Angles;

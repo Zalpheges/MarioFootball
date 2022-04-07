@@ -6,4 +6,8 @@ public class SpinyTurtleShell : StraightTurtleShell
     {
         Debug.Log("Bully " + player.name);
     }
+    public override void DestroyItem()
+    {
+        Destroy(gameObject);
+    }
 }

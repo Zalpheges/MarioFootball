@@ -18,4 +18,9 @@ public class RedTurtleShell : ThrowableItem
         base.Update();
         //_direction = followedPlayer.position - transform.position;
     }
+
+    public override void DestroyItem()
+    {
+        Destroy(gameObject);
+    }
 }

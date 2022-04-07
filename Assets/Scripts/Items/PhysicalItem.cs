@@ -20,8 +20,8 @@ public abstract class PhysicalItem : Item
         }
         if (item)
         {
-            Destroy(other.gameObject);
-            Destroy(gameObject);
+            item.DestroyItem();
+            DestroyItem();
         }
     }
 }

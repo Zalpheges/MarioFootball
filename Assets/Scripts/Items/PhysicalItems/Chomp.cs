@@ -8,11 +8,16 @@ public class Chomp : PhysicalItem
     protected void Update()
     {
         if ((_timer += Time.deltaTime) > _duration)
-            return;
+            DestroyItem();
         Debug.Log("Chomp chomp");
     }
     protected override void ApplyEffect(Player player)
     {
         Debug.Log("Manged " + player.name);
+    }
+
+    public override void DestroyItem()
+    {
+        Destroy(gameObject);
     }
 }

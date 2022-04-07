@@ -12,7 +12,7 @@ public abstract class StraightTurtleShell : ThrowableItem
         if (other.CompareTag("Wall"))
         {
             if (++_nRebounds > _maxRebounds)
-                Destroy(gameObject);
+                DestroyItem();
             else
             {
                 Transform fieldT = Field.Transform;
