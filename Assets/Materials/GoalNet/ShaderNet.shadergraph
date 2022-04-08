@@ -2,7 +2,11 @@
     "m_SGVersion": 2,
     "m_Type": "UnityEditor.ShaderGraph.GraphData",
     "m_ObjectId": "0bf4b32578e840609b620bcc7080dec2",
-    "m_Properties": [],
+    "m_Properties": [
+        {
+            "m_Id": "d0fa7dd25fe846569e73b9959a28de31"
+        }
+    ],
     "m_Keywords": [],
     "m_Nodes": [
         {
@@ -31,6 +35,9 @@
         },
         {
             "m_Id": "463ec81510bb4cd68e3ec797de1a3380"
+        },
+        {
+            "m_Id": "59e9ff33f32546258354548ac9868ede"
         }
     ],
     "m_GroupDatas": [],
@@ -379,6 +386,41 @@
 
 {
     "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.PropertyNode",
+    "m_ObjectId": "59e9ff33f32546258354548ac9868ede",
+    "m_Group": {
+        "m_Id": ""
+    },
+    "m_Name": "Property",
+    "m_DrawState": {
+        "m_Expanded": true,
+        "m_Position": {
+            "serializedVersion": "2",
+            "x": -309.35003662109377,
+            "y": -13.800005912780762,
+            "width": 0.0,
+            "height": 0.0
+        }
+    },
+    "m_Slots": [
+        {
+            "m_Id": "cfef5959fed64e489c82ba8e7156ff4f"
+        }
+    ],
+    "synonyms": [],
+    "m_Precision": 0,
+    "m_PreviewExpanded": true,
+    "m_PreviewMode": 0,
+    "m_CustomColors": {
+        "m_SerializableColors": []
+    },
+    "m_Property": {
+        "m_Id": "d0fa7dd25fe846569e73b9959a28de31"
+    }
+}
+
+{
+    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.BlockNode",
     "m_ObjectId": "5a96fe000fea409ba1483e664b535dab",
     "m_Group": {
@@ -551,6 +593,42 @@
     "m_TwoSided": false,
     "m_AlphaClip": false,
     "m_CustomEditorGUI": ""
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Texture2DMaterialSlot",
+    "m_ObjectId": "cfef5959fed64e489c82ba8e7156ff4f",
+    "m_Id": 0,
+    "m_DisplayName": "Quadrillage",
+    "m_SlotType": 1,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "Out",
+    "m_StageCapability": 3,
+    "m_BareResource": false
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Internal.Texture2DShaderProperty",
+    "m_ObjectId": "d0fa7dd25fe846569e73b9959a28de31",
+    "m_Guid": {
+        "m_GuidSerialized": "120ca73d-3fb2-4d1a-9c3a-579e2a47944d"
+    },
+    "m_Name": "Quadrillage",
+    "m_DefaultReferenceName": "Texture2D_d0fa7dd25fe846569e73b9959a28de31",
+    "m_OverrideReferenceName": "",
+    "m_GeneratePropertyBlock": true,
+    "m_Precision": 0,
+    "overrideHLSLDeclaration": false,
+    "hlslDeclarationOverride": 0,
+    "m_Hidden": false,
+    "m_Value": {
+        "m_SerializedTexture": "{\"texture\":{\"fileID\":2800000,\"guid\":\"ca9320fc48f949747b3fe4f679806b1a\",\"type\":3}}",
+        "m_Guid": ""
+    },
+    "m_Modifiable": true,
+    "m_DefaultType": 0
 }
 
 {
