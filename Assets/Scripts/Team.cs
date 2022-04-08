@@ -17,12 +17,13 @@ public class Team : MonoBehaviour
 
     public Player[] Players { get; private set; }
     public PlayerBrain[] Brains { get; private set; }
-    public Player GoalKeeper { get; private set; }
+    public Player Goalkeeper { get; private set; }
 
     public PlayerBrain Brain { get; private set; }
 
-    private Queue<Item> _items;
-    private int _itemCapacity = 3;
+    private Queue<Sprite> _items;
+    private int _itemCapacity = 2;
+    
 
     private void Awake()
     {
@@ -61,34 +62,61 @@ public class Team : MonoBehaviour
         }
     }
 
+    public bool ArePlayersAllWaiting()
+    {
+        foreach(Player player in Players)
+            if(!player.IsWaiting)
+                return false;
+        return true;
+    }
+
     /// <summary>
-    /// Ajoute un item � la file d'items de l'�quipe, dans le cas o� celle-ci n'est pas pleine
+    /// Add an item to the team's item queue, only if it's not full already
     /// </summary>
     public void GainItem()
     {
-
+        if (_items.Count == _itemCapacity)
+            return;
+        //Keep this
+        //var itemProperties = PrefabManager.Items.GetType().GetProperties();
+        //int i = UnityEngine.Random.Range(0, itemProperties.Length - 1);
+        //_items.Enqueue((itemProperties[i].GetValue(PrefabManager.Items) as GameObject).GetComponent<Item>());
+        Sprite itemSprite;
+        Item item;
+        do
+        {
+            PrefabManager.Item itemType = (PrefabManager.Item)UnityEngine.Random.Range(0, PrefabManager.ItemSprites.Count);
+            itemSprite = PrefabManager.ItemSprites[itemType];
+            item = PrefabManager.ItemPrefabs[itemSprite].GetComponent<Item>();
+        } while (!item || (item.teamHasToLoose && GameManager.LosingTeam != this));
+        _items.Enqueue(itemSprite);
+        UIManager.UpdateItems(_items, this);
     }
 
     /// <summary>
-    /// Supprime l'item le plus ancien de la file d'items de l'�quipe
+    /// Delete the oldest item from the team item queue
     /// </summary>
-    /// <returns>L'item supprim�</returns>
-    public Item GetItem()
+    /// <returns>The gameObject corresponding to the deleted item</returns>
+    public GameObject GetItem()
     {
-        return _items.Dequeue();
+        if(_items.Count == 0) 
+            return null;
+        GameObject itemGo = PrefabManager.ItemPrefabs[_items.Dequeue()];
+        UIManager.UpdateItems(_items, this);
+        return itemGo;
     }
 
     /// <summary>
-    /// Initialise les joueurs et la file d'items de l'�quipe
+    /// Initialize the team's players and item queue
     /// </summary>
-    /// <param name="players">Les joueurs sans le gardien</param>
-    /// <param name="goal">Le gardien</param>
-    public void Init(Player[] players, Player goalKeeper)
+    /// <param name="players">The non-goalkeeper players</param>
+    /// <param name="goalkeeper">The goalkeeper</param>
+    public void Init(Player[] players, Player goalkeeper)
     {
         Players = players;
-        GoalKeeper = goalKeeper;
+        Goalkeeper = goalkeeper;
 
-        _items = new Queue<Item>(_itemCapacity);
+        _items = new Queue<Sprite>(_itemCapacity);
 
         Brains = Players.Select(player => player.IABrain).ToArray();
     }

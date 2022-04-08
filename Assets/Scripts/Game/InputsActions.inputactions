@@ -183,7 +183,7 @@
                 {
                     "name": "",
                     "id": "b3b47c76-23e8-4564-8781-e212511e76f8",
-                    "path": "<Keyboard>/q",
+                    "path": "<Keyboard>/upArrow",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -205,7 +205,7 @@
                 {
                     "name": "",
                     "id": "d3f50cf6-ce90-42d8-b8b7-07df72aa5fd1",
-                    "path": "<Keyboard>/f",
+                    "path": "<Keyboard>/rightArrow",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -293,7 +293,7 @@
                 {
                     "name": "",
                     "id": "80f310f5-19d9-427b-bc11-2f4d086ab27e",
-                    "path": "<Keyboard>/space",
+                    "path": "<Keyboard>/leftArrow",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -315,7 +315,7 @@
                 {
                     "name": "",
                     "id": "bc3cfd69-20dc-486d-b9ce-cdcb113bbe8f",
-                    "path": "<Keyboard>/e",
+                    "path": "<Keyboard>/downArrow",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -415,6 +415,15 @@
                     "type": "PassThrough",
                     "id": "9caa3d8a-6b2f-4e8e-8bad-6ede561bd9be",
                     "expectedControlType": "Quaternion",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "GoBack",
+                    "type": "Button",
+                    "id": "d73d6114-4410-4069-91d6-79ebb62d00b7",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -687,8 +696,30 @@
                 },
                 {
                     "name": "",
-                    "id": "9e92bb26-7e3b-4ec4-b06b-3c8f8e498ddc",
-                    "path": "*/{Submit}",
+                    "id": "2ae928c1-bc7c-4dd7-99b3-ba5b94db619b",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Submit",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "11b42f18-2c95-40f3-95d3-c52566cc8799",
+                    "path": "<Keyboard>/enter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Submit",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f8419b2e-7da6-4ec7-bc8a-9385521958d8",
+                    "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -700,6 +731,17 @@
                     "name": "",
                     "id": "82627dcc-3b13-4ba9-841d-e4b746d6553e",
                     "path": "*/{Cancel}",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Cancel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e5f86913-d7e3-4d0a-9377-0c5f62d50eaf",
+                    "path": "<Gamepad>/buttonEast",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -836,6 +878,17 @@
                     "processors": "",
                     "groups": "XR",
                     "action": "TrackedDeviceOrientation",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ecef4210-b673-4567-afe4-cbcd8a18e467",
+                    "path": "<Keyboard>/b",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "GoBack",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -1729,9 +1729,9 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6172146800527969744}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 0.35
+  m_Radius: 0.5
   m_Height: 1.8
   m_Direction: 1
   m_Center: {x: 0, y: 0.9, z: 0}
@@ -1751,6 +1751,12 @@ MonoBehaviour:
   isElectrocutionShader: 0
   MaterialElectricity: {fileID: 2100000, guid: 98fd08f6dd93b0d4688d40de5ac8a1cd, type: 2}
   _debugOnly: 0
+  state: 0
+  isPiloted: 0
+  hasBall: 0
+  input: {x: 0, y: 0, z: 0}
+  isWaiting: 0
+  isNavDriven: 0
 --- !u!95 &4023742555457410973
 Animator:
   serializedVersion: 3
@@ -1811,8 +1817,8 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 3.5
-  m_Acceleration: 8
+  m_Speed: 10
+  m_Acceleration: 50
   avoidancePriority: 50
   m_AngularSpeed: 120
   m_StoppingDistance: 0

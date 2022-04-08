@@ -19,6 +19,8 @@ public class GameManager : MonoBehaviour
     private bool _enemiesAreRetard = false;
     public static bool EnemiesAreRetard => _instance._enemiesAreRetard;
 
+    public static Team LosingTeam => _instance._currentResult.LosingTeam;
+
     private static GameManager _instance;
 
     private Queue<Match> _matches;
@@ -35,7 +37,7 @@ public class GameManager : MonoBehaviour
             DontDestroyOnLoad(this);
         }
         else
-            Destroy(this);
+            Destroy(this.gameObject);
 
         _matches = new Queue<Match>();
         _matches.Enqueue(_debugMatch);
@@ -147,6 +149,15 @@ public class GameManager : MonoBehaviour
         Field.Ball.transform.position = Field.Team1.Players[0].transform.position;
     }
 
+    public static void FreePlayers()
+    {
+        foreach (Player player in Field.Team1.Players)
+            player.IsWaiting = false;
+        foreach (Player player in Field.Team2.Players)
+            player.IsWaiting = false;
+    }
+
+
     /// <summary>
     /// Ordonne aux joueurs de se diriger vers leur position de départ, ou vers des positions customs si l'argument positions est renseigné
     /// </summary>
@@ -163,8 +174,7 @@ public class GameManager : MonoBehaviour
             player.IsNavDriven = true;
             NavMeshAgent agent = player.GetComponent<NavMeshAgent>();
 
-            agent.enabled = true;
-            agent.destination = positions[i];
+            agent.destination = player.Team == Field.Team1 ? positions[i]:new Vector3(-positions[i].x, positions[i].y, -positions[i].z);
             agent.speed = 10f;
         }
     }

@@ -96,7 +96,6 @@ public class Field : MonoBehaviour
 
     private void Start()
     {
-
         _bottomLeftCorner = transform.TransformPoint(new Vector3(-_width / 2f, 0f, -_height / 2f));
         _bottomRightCorner = transform.TransformPoint(new Vector3(_width / 2f, 0f, -_height / 2f));
         _topLeftCorner = transform.TransformPoint(new Vector3(-_width / 2f, 0f, _height / 2f));
@@ -135,10 +134,10 @@ public class Field : MonoBehaviour
         Team1.Players[2].transform.position = VectorToPosition(_attackPosMate2);
         Team1.Players[3].transform.position = VectorToPosition(_attackPosMate3);
 
-        Team2.Players[0].transform.position = VectorToPosition(-_defPosCaptain);
-        Team2.Players[1].transform.position = VectorToPosition(-_defPosMate1);
-        Team2.Players[2].transform.position = VectorToPosition(-_defPosMate2);
-        Team2.Players[3].transform.position = VectorToPosition(-_defPosMate3);
+        Team2.Players[0].transform.position = VectorToPosition(_defPosCaptain);
+        Team2.Players[1].transform.position = VectorToPosition(_defPosMate1);
+        Team2.Players[2].transform.position = VectorToPosition(_defPosMate2);
+        Team2.Players[3].transform.position = VectorToPosition(_defPosMate3);
     }
 
     public static List<Vector3> GetStartPositions()
@@ -156,6 +155,10 @@ public class Field : MonoBehaviour
         positions.Add(_instance.VectorToPosition(-_instance._defPosMate3));
 
         return positions;
+    }
+    public static bool ArePlayersAllWaiting()
+    {
+        return Team1.ArePlayersAllWaiting() && Team2.ArePlayersAllWaiting();
     }
 
     private Vector3 VectorToPosition(Vector2 vector)

@@ -1,5 +1,6 @@
-using UnityEngine;
+using System.Collections.Generic;
 using UnityEngine.AI;
+using UnityEngine;
 
 public class Player : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public class Player : MonoBehaviour
         Headbutting,
         Shooting,
         Falling,
-        Shocked
+        Stunned
     }
 
     [SerializeField]
@@ -24,9 +25,10 @@ public class Player : MonoBehaviour
 
     public PlayerState State { get; private set; }
     public Team Team { get; private set; }
+    public Team Enemies => Team == Field.Team1 ? Field.Team2 : Field.Team1;
 
     public bool CanGetBall => !IsStunned && State != PlayerState.Headbutting && !HasBall;
-    public bool IsStunned => State == PlayerState.Shocked || State == PlayerState.Falling;
+    public bool IsStunned => State == PlayerState.Stunned || State == PlayerState.Falling;
 
     public bool HasBall => Field.Ball.transform.parent == transform;
     public bool IsDoped { get; private set; }
@@ -34,6 +36,10 @@ public class Player : MonoBehaviour
 
     public bool IsPiloted { get; set; } = false;
     public bool IsNavDriven { get; set; } = false;
+    public bool IsWaiting { get; set; } = false;
+
+    private float _dashSpeed;
+    private Vector3 _dashEndPoint;
 
     private Action _waitingAction = null;
 
@@ -50,6 +56,12 @@ public class Player : MonoBehaviour
 
     public bool _debugOnly = false;
     private bool _isRetard => GameManager.EnemiesAreRetard && Team == Field.Team2 && Time.timeSinceLevelLoad < 2f;
+    public PlayerState state;
+    public bool isPiloted;
+    public bool hasBall;
+    public Vector3 input;
+    public bool isWaiting;
+    public bool isNavDriven;
 
     #endregion
 
@@ -80,58 +92,66 @@ public class Player : MonoBehaviour
     {
         _rgdb.mass = _specs.Weight;
         gameObject.name += " " + _specs.Name;
-        _agent.enabled = false;
     }
 
     private void Update()
     {
+        Team.GainItem();
         ChangeMaterialOnElectrocution();
-
 
         //bool debug = Field.Team1.Players[0] == this;
 
-        _rgdb.angularVelocity = Vector3.zero;
-        //_rgdb.velocity = Vector3.zero;
+        state = State;
+        isPiloted = IsPiloted;
+        hasBall = HasBall;
+        isWaiting = IsWaiting;
+        isNavDriven = IsNavDriven;
 
         if (_debugOnly || _isRetard)
             return;
 
-        if (IsPiloted)
-            Debug.Log(name);
+        _rgdb.angularVelocity = Vector3.zero;
+        _rgdb.velocity = Vector3.zero;
 
-        if (IsNavDriven && Vector3.Distance(transform.position, _agent.destination) <= 0.1f)
-        { 
-            IsNavDriven = false;
-            _agent.enabled = false;
+        _agent.isStopped = !IsNavDriven && isPiloted;
+
+        if (IsNavDriven)
+        {
+            if (Vector3.Distance(transform.position, _agent.destination) <= 0.1f)
+            {
+                IsNavDriven = false;
+                IsWaiting = true;
+                transform.rotation = Quaternion.LookRotation(Vector3.Project(transform.position - Team.transform.position, Field.Transform.forward));
+            }
+
+            return;
+        }
+
+        if (State != PlayerState.Moving)
+        {
+            _rgdb.position = Vector3.MoveTowards(_rgdb.position, _dashEndPoint, _dashSpeed * Time.deltaTime);
+            input = Vector3.up;
+
+            return;
         }
 
         Action action;
 
         if (_waitingAction)
             action = _waitingAction;
-        else if (IsNavDriven)
-            action = Action.NavMove();
         else if (IsPiloted)
             action = Team.Brain.GetAction();
         else
             action = IABrain.GetAction();
 
-        if (action.DirectionnalAction)
+        input = action.Position;
+
+        if (action.DirectionalAction)
         {
-            Vector3 direction = action.Direction.magnitude > 0.1f ? action.Direction : transform.forward;
+            Vector3 direction = ComputeDirection(action);
 
-            direction = Field.Transform.TransformDirection(direction);
-
-            if (action.ActionType == Action.Type.Shoot)
-            {
-                direction = (Team == Field.Team1 ? Field.Team2 : Field.Team1).transform.position - transform.position;
-                direction.y = 0f;
-            }
-
-            Quaternion rotation = Quaternion.LookRotation(direction, Vector3.up);
-            _rgdb.MoveRotation(Quaternion.Slerp(_rgdb.rotation, rotation, 100f * Time.deltaTime));
-
-            //if (debug)  Debug.Log(Quaternion.Angle(_rgdb.rotation, rotation) + " " + action.ActionType);
+            Quaternion rotation = Quaternion.LookRotation(direction.normalized, Vector3.up);
+            _rgdb.rotation = Quaternion.Slerp(_rgdb.rotation, rotation, 25f * Time.deltaTime);
 
             if (action.WaitForRotation && Quaternion.Angle(_rgdb.rotation, rotation) > 5f)
             {
@@ -140,7 +160,17 @@ public class Player : MonoBehaviour
                 return;
             }
         }
+
         _waitingAction = null;
+
+        if (IsWaiting)
+        {
+            if (action.ActionType == Action.Type.Pass)
+                GameManager.FreePlayers();
+            else
+                return;
+        }
+
         MakeAction(action);
     }
 
@@ -162,43 +192,27 @@ public class Player : MonoBehaviour
 
     private void MakeAction(Action action)
     {
-        
-        if (_rgdb.velocity.magnitude<0.2f)
-        {
-            _animator.SetBool("Run 0", false);
-            _animator.SetBool("Idl 0", true);
-        }
+        Vector3 direction = ComputeDirection(action);
+
+        if (action)
+            _animator.SetBool("Idle", false);
         else
         {
-            _animator.SetBool("Run 0", true);
-            _animator.SetBool("Idl 0", false);
-
+            _animator.SetBool("Idle", true);
+            _animator.SetBool("Run", false);
         }
-        bool isPlayingAnimation = _animator.GetCurrentAnimatorStateInfo(0).IsTag("1");
-
-        if (isPlayingAnimation)
-            return;
-
-        Vector3 direction = Field.Transform.TransformDirection(action.Direction);
-        /*
-        if (action == Action.None)
-        {
-            _animator.SetBool("Idl 0", true);
-            _animator.SetBool("Run 0", false);
-        }
-        else
-        {
-            _animator.SetBool("Idl 0", false);
-        }*/
 
         switch (action.ActionType)
         {
-            case Action.Type.NavMove:
+            case Action.Type.Move:
+                _rgdb.position += direction * 2f * _specs.Speed * Time.deltaTime;
+                _animator.SetBool("Run", true);
+
                 break;
 
-            case Action.Type.Move:
-                _rgdb.MovePosition(_rgdb.position + direction * 8f * _specs.Speed * Time.deltaTime);
-                _animator.SetBool("Run 0",true);
+            case Action.Type.MoveTo:
+                _agent.SetDestination(action.Position);
+                _animator.SetBool("Run", true);
 
                 break;
 
@@ -213,18 +227,17 @@ public class Player : MonoBehaviour
 
             case Action.Type.Throw:
                 Debug.Log("Throw");
+                ThrowItem(action.Direction * action.Force);
 
                 break;
 
             case Action.Type.Headbutt:
-                Debug.Log("HeadButt");
-                _animator.SetTrigger("Header");
+                Headbutt(direction);
 
                 break;
 
             case Action.Type.Tackle:
-                Debug.Log("Tackle");
-                _animator.SetTrigger("Tackled");
+                Tackle(direction);
 
                 break;
 
@@ -256,23 +269,70 @@ public class Player : MonoBehaviour
                 }
 
                 break;
-                
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private Vector3 ComputeDirection(Action action)
     {
-        Ball ball = collision.transform.GetComponent<Ball>();
+        Vector3 direction = action.Direction != Vector3.zero ? action.Direction : transform.forward;
+        direction = Field.Transform.TransformDirection(direction);
+
+        if (action.ActionType == Action.Type.Shoot)
+        {
+            direction = Enemies.transform.position - transform.position;
+            direction.y = 0f;
+        }
+
+        return direction.normalized;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Ball ball = other.GetComponent<Ball>();
 
         if (Field.Ball == ball && !HasBall)
             ball.Take(transform);
+
+        if (other.tag == "Wall")
+            Stun();
+
+        Player player = other.GetComponent<Player>();
+
+        if (player)
+        {
+            if (player.State == PlayerState.Tackling)
+            {
+                Fall((_rgdb.position - player.transform.position).normalized);
+
+                //if (!HasBall) OnHitWithNoBall();
+            }
+            else if (player.State == PlayerState.Headbutting)
+            {
+                Fall((_rgdb.position - player.transform.position).normalized);
+
+                //if (!HasBall) OnHitWithNoBall();
+            }
+        }
+
+        
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "Wall")
+            ResetState();
+
+        Player player = other.GetComponent<Player>();
+
+        if (player && player.State == PlayerState.Tackling)
+            Fall((_rgdb.position - player.transform.position).normalized);
     }
 
     #region Shoot
 
     private void Shoot()
     {
-        Transform goal = (Team == Field.Team1 ? Field.Team2 : Field.Team1).transform;
+        Transform goal = Enemies.transform;
 
         //float angle = Vector3.SignedAngle(transform.forward, goal.forward, Vector3.up);
         //angle = -(Mathf.Abs(angle) - 180f);
@@ -340,7 +400,7 @@ public class Player : MonoBehaviour
 
     private void DirectPass(Vector3 direction)
     {
-        Player mate = FindMateInRange(direction);
+        Player mate = FindMateInRange(direction, 90f);
 
         if (mate)
         {
@@ -363,37 +423,157 @@ public class Player : MonoBehaviour
 
     #region FindMate
 
-    private Player FindMateInRange(Vector3 direction, float angle = 180f, int iterations = 100)
+    private Player FindMateInRange(Vector3 direction, float range, bool standOut = false)
     {
-        float current = 0;
-        float step = angle / iterations / 2f;
-
-        for (int i = 0; i < iterations; ++i)
-        {
-            Player mate = FindMateInDirection(Quaternion.AngleAxis(current, Vector3.up) * direction);
-
-            mate ??= FindMateInDirection(Quaternion.AngleAxis(-current, Vector3.up) * direction);
-
-            if (mate)
-                return mate;
-
-            current += step;
-        }
-
-        return null;
+        return FindPlayerInRange(Team, direction, range, standOut);
     }
 
-    private Player FindMateInDirection(Vector3 direction)
+    private Player FindEnemyInRange(Vector3 direction, float range, bool standOut = false)
     {
-        if (Physics.Raycast(transform.position + Vector3.up, direction, out RaycastHit hit, Mathf.Infinity, 1 << gameObject.layer))
-        {
-            Player player = hit.transform.GetComponentInParent<Player>();
+        return FindPlayerInRange(Enemies, direction, range, standOut);
+    }
 
-            if (player && player.Team == Team)
-                return player;
+    private Player FindPlayerInRange(Team team, Vector3 direction, float range, bool standOut)
+    {
+        (Player player, float angle) best = (null, 0f);
+
+        foreach (Player player in team.Players)
+        {
+            if (player == this)
+                continue;
+
+            float angle = Vector3.Angle(direction, player.transform.position - transform.position);
+
+            if (angle <= range && (!standOut || IsPlayerStandOut(player)))
+                if (best.player == null || angle < best.angle)
+                    best = (player, angle);
         }
 
-        return null;
+        return best.player;
+    }
+
+    private bool IsPlayerStandOut(Player player)
+    {
+        Vector3 direction = player.transform.position - transform.position;
+
+        Debug.DrawRay(transform.position + Vector3.up, direction, Color.red, 10f);
+        if (Physics.Raycast(transform.position + Vector3.up, direction, out RaycastHit hit, Mathf.Infinity, 1 << gameObject.layer))
+        {
+            Player target = hit.transform.GetComponent<Player>();
+
+            if (target == player)
+                return true;
+        }
+
+        return false;
+    }
+
+
+
+    #endregion
+
+
+    #region ThrowItem
+
+    private void ThrowItem(Vector3 force)
+
+    {
+
+        GameObject itemPrefab = Team.GetItem();
+
+        if (!itemPrefab)
+
+            return;
+
+        GameObject itemGo = Instantiate(itemPrefab, transform.position, Quaternion.identity, Team.transform);
+
+        itemGo.GetComponent<Rigidbody>().AddForce(force);
+
+    }
+
+    #endregion
+
+
+    #region Events
+    
+    public void OnMissedShoot()
+
+    {
+
+        Team.GainItem();
+
+    }
+
+    public void OnHitWithNoBall()
+
+    {
+
+        Team.GainItem();
+
+    }
+    
+    #endregion
+
+    #region Special
+
+    private void Headbutt(Vector3 direction)
+    {
+        State = PlayerState.Headbutting;
+        _animator.SetTrigger("Electrocuted");
+
+        Dash(direction, 3f, 0.2f);
+    }
+
+    private void Tackle(Vector3 direction)
+    {
+        State = PlayerState.Tackling;
+        _animator.SetTrigger("Tackled");
+
+        Dash(direction, 8f, 1.2f, 0.5f);
+    }
+
+    private void Fall(Vector3 direction)
+    {
+        State = PlayerState.Falling;
+        _animator.SetTrigger("isTackled");
+
+        if (HasBall)
+            Field.Ball.Free();
+
+        Dash(direction, 4f, 1.5f, 2f);
+    }
+
+    private void Stun(float duration = 2f)
+    {
+        State = PlayerState.Stunned;
+        _animator.SetTrigger("Electrocuted");
+
+        Dash(Vector3.zero, 0f, duration);
+    }
+
+    private void Dash(Vector3 direction, float distance, float time, float standUpDelay = 0f)
+    {
+        _waitingAction = null;
+
+        _animator.SetBool("Idle", false);
+        _animator.SetBool("Run", false);
+
+        if (direction == Vector3.zero)
+            _dashSpeed = 0f;
+        else
+        {
+            _dashSpeed = distance / time;
+            _dashEndPoint = _rgdb.position + direction * distance;
+        }
+
+        Invoke(nameof(ResetState), time + standUpDelay);
+    }
+
+    private void ResetState()
+    {
+        State = PlayerState.Moving;
+
+        CancelInvoke();
     }
 
     #endregion
