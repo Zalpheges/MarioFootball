@@ -6,12 +6,17 @@ using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using UnityEditor;
+using System;
+using TMPro;
 
 public class Match_UI_Manager : MonoBehaviour
 {
     public GameObject charaButton;
-    public int NbrOfChara=4;
 
+    private bool allieSelected;
+    private int NbrOfChara;
+
+    //Chara buttons
     [SerializeField]
     private GameObject mainCharacterSelection;
     private GameObject FS_mainCharacter;
@@ -29,41 +34,79 @@ public class Match_UI_Manager : MonoBehaviour
     private EventSystem ES;
 
 
+    public List<GameObject> matchParams = new List<GameObject>();
+    public List<PlayerSpecs> charaSpecs = new List<PlayerSpecs>();
+
+    List<Button> charaButtons;
+    private GameObject actualSelectedGameObject;
+
+    //Stats
+    public TextMeshProUGUI accuracy;
+    public TextMeshProUGUI speed;
+    public TextMeshProUGUI stunTime;
     private void Start()
     {
+        NbrOfChara = charaSpecs.Count;
+
+        allieSelected = false;
         FS_mainCharacter=InitCharacters(mainCharacterSelection);
         ES.SetSelectedGameObject(FS_mainCharacter);
+
+        //UpdateStat
+        actualSelectedGameObject = FS_mainCharacter;
+        UpdateStat(actualSelectedGameObject);
+
+        foreach (var param in matchParams)
+        {
+            ISliderValue slider = param.GetComponent<ISliderValue>();
+
+            if (slider != null)
+                slider.OnValueChange(param.GetComponentInChildren<Slider>().value);
+        }
     }
     private void Update()
     {
+        //UpdateStat
+        if(ES.currentSelectedGameObject != actualSelectedGameObject && !matchSettings.activeSelf)
+        {
+            actualSelectedGameObject = ES.currentSelectedGameObject;
+            UpdateStat(actualSelectedGameObject);
+        }
+
         //GoBack
         if ((Keyboard.current?.escapeKey.wasPressedThisFrame ?? false) || (Gamepad.current?.buttonEast.wasPressedThisFrame ?? false))
         {
-            if (allieSelection.activeSelf)
+            if (matchSettings.activeSelf)
             {
-                FS_mainCharacter=InitCharacters(mainCharacterSelection);
-
-                allieSelection.SetActive(false);
-                ES.SetSelectedGameObject(FS_mainCharacter);
-            }
-            else if (matchSettings.activeSelf)
-            {
-                FS_allie=InitCharacters(allieSelection);
-
                 matchSettings.SetActive(false);
                 ES.SetSelectedGameObject(FS_allie);
+            }
+            else if (allieSelection.activeSelf)
+            {
+                allieSelection.SetActive(false);
+                mainCharacterSelection.SetActive(true);
+                ES.SetSelectedGameObject(FS_mainCharacter);
             }
             else
                 SceneManager.LoadScene(0, LoadSceneMode.Single);
         }
     }
-    
+
+    private void UpdateStat(GameObject button)
+    {
+        PlayerSpecs chara = charaSpecs[charaButtons.IndexOf(button.GetComponent<Button>())];
+
+        accuracy.text = "Accuracy: "+ chara.Accuracy;
+        speed.text = "Speed :" + chara.Speed;
+        stunTime.text = "StunTime: " + chara.StunTime;
+    }
+
     GameObject InitCharacters(GameObject Step)
     {
         GridLayoutGroup CharaSection = Step.GetComponentInChildren<GridLayoutGroup>();
         GameObject FS=null;
 
-        List<Button> charaButtons = new List<Button>();
+        charaButtons = new List<Button>();
 
         for(int i = 0; i<NbrOfChara; i++)
         {
@@ -121,10 +164,19 @@ public class Match_UI_Manager : MonoBehaviour
             matchSettings.SetActive(true);
             ES.SetSelectedGameObject(FS_matchSettings);
         }
-        else
+        else if(!allieSelected)
         {
+            allieSelected = true;
+
             FS_allie = InitCharacters(allieSelection);
 
+            mainCharacterSelection.SetActive(false);
+            allieSelection.SetActive(true);
+            ES.SetSelectedGameObject(FS_allie);
+        }
+        else
+        {
+            mainCharacterSelection.SetActive(false);
             allieSelection.SetActive(true);
             ES.SetSelectedGameObject(FS_allie);
         }
