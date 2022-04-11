@@ -23,7 +23,10 @@ public class Team : MonoBehaviour
 
     private Queue<Sprite> _items;
     private int _itemCapacity = 2;
-    
+
+    private int currentPlayer = 0;
+    private float _lastNextCall;
+    private Player[] _sortedPlayers;
 
     private void Awake()
     {
@@ -60,6 +63,40 @@ public class Team : MonoBehaviour
             Brain.Player.IsPiloted = true;
             CameraManager.Follow(Brain.Player.transform);
         }
+    }
+
+    public void ChangePlayer(Vector3 position)
+    {
+        if (_lastNextCall + 1.5f < Time.time || _sortedPlayers == null)
+        {
+            _sortedPlayers = Players.OrderBy(p => Vector3.Distance(p.transform.position, position)).ToArray();
+
+            currentPlayer = 0;
+        }
+
+        _lastNextCall = Time.time;
+
+        currentPlayer = (currentPlayer + 1) % _sortedPlayers.Length;
+
+        if (Brain.Player)
+            Brain.Player.IsPiloted = false;
+
+        Brain.Player = _sortedPlayers[currentPlayer];
+
+        Brain.Player.IsPiloted = true;
+        CameraManager.Follow(Brain.Player.transform);
+    }
+
+    public Player GetBallOwner()
+    {
+        foreach (Player player in Players)
+            if (player.HasBall)
+                return player;
+
+        if (Goalkeeper.HasBall)
+            return Goalkeeper;
+
+        return null;
     }
 
     public bool ArePlayersAllWaiting()

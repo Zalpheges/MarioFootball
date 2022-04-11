@@ -31,6 +31,12 @@ public class HolyBrain : PlayerBrain
 
         behaviorTree.Setup(Allies, Enemies, this.Player, Thresholds);
     }
+
+    private void Update()
+    {
+        //behaviorTree
+    }
+
     public override Action GetAction()
     {
         return behaviorTree.root.Evaluate().Item2;

@@ -31,13 +31,21 @@ public class Action
 
     public static implicit operator bool(Action action) => action != null && action.ActionType != Type.None;
 
-    private Action(Type type, float force = 0f)
+    private Action(Type type)
+    {
+        ActionType = type;
+
+        DirectionalAction = false;
+        WaitForRotation = false;
+    }
+
+    private Action(Type type, float force)
     {
         ActionType = type;
         Force = force;
 
-        DirectionalAction = false;
-        WaitForRotation = false;
+        DirectionalAction = true;
+        WaitForRotation = true;
     }
 
     private Action(Type type, Vector3 position)
@@ -65,7 +73,7 @@ public class Action
 
     public static Action Shoot(float force)
     {
-        return new Action(Type.Shoot, Vector3.zero, true);
+        return new Action(Type.Shoot, force);
     }
 
     public static Action Pass(Vector3 direction)

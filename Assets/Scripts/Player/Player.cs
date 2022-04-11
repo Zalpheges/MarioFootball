@@ -27,7 +27,7 @@ public class Player : MonoBehaviour
     public Team Team { get; private set; }
     public Team Enemies => Team == Field.Team1 ? Field.Team2 : Field.Team1;
 
-    public bool CanGetBall => !IsStunned && State != PlayerState.Headbutting && !HasBall;
+    public bool CanGetBall { get; private set; } = true;
     public bool IsStunned => State == PlayerState.Stunned || State == PlayerState.Falling;
 
     public bool HasBall => Field.Ball.transform.parent == transform;
@@ -35,7 +35,7 @@ public class Player : MonoBehaviour
     public bool CanMove => State == PlayerState.Moving;
 
     public bool IsPiloted { get; set; } = false;
-    public bool IsNavDriven { get; set; } = false;
+    public bool IsNavDriven { get; private set; } = false;
     public bool IsWaiting { get; set; } = false;
 
     private float _dashSpeed;
@@ -49,13 +49,7 @@ public class Player : MonoBehaviour
 
     #region Debug
 
-    public void SetActive(bool value)
-    {
-        _debugOnly = !value;
-    }
-
-    public bool _debugOnly = false;
-    private bool _isRetard => GameManager.EnemiesAreRetard && Team == Field.Team2 && Time.timeSinceLevelLoad < 2f;
+    private bool _isRetard => GameManager.EnemiesAreRetard && Team == Field.Team2 && Time.timeSinceLevelLoad < 20f;
     public PlayerState state;
     public bool isPiloted;
     public bool hasBall;
@@ -92,12 +86,14 @@ public class Player : MonoBehaviour
     {
         _rgdb.mass = _specs.Weight;
         gameObject.name += " " + _specs.Name;
+
+        ChangeMaterialOnElectrocution(false);
+        _agent.avoidancePriority = Mathf.RoundToInt(Random.value * 1000f);
     }
 
     private void Update()
     {
         Team.GainItem();
-        ChangeMaterialOnElectrocution();
 
         //bool debug = Field.Team1.Players[0] == this;
 
@@ -107,13 +103,16 @@ public class Player : MonoBehaviour
         isWaiting = IsWaiting;
         isNavDriven = IsNavDriven;
 
-        if (_debugOnly || _isRetard)
+        if ((GameManager.DebugOnlyPlayer && (!HasBall && !isPiloted)) || _isRetard)
             return;
 
         _rgdb.angularVelocity = Vector3.zero;
         _rgdb.velocity = Vector3.zero;
 
-        _agent.isStopped = !IsNavDriven && isPiloted;
+        _agent.enabled = IsNavDriven || !IsPiloted;
+
+        if (_agent.enabled)
+            _agent.isStopped = !IsNavDriven && IsPiloted;
 
         if (IsNavDriven)
         {
@@ -144,14 +143,14 @@ public class Player : MonoBehaviour
         else
             action = IABrain.GetAction();
 
-        input = action.Position;
+        input = action.Direction;
 
         if (action.DirectionalAction)
         {
             Vector3 direction = ComputeDirection(action);
 
             Quaternion rotation = Quaternion.LookRotation(direction.normalized, Vector3.up);
-            _rgdb.rotation = Quaternion.Slerp(_rgdb.rotation, rotation, 25f * Time.deltaTime);
+            _rgdb.rotation = Quaternion.Slerp(_rgdb.rotation, rotation, 50f * Time.deltaTime);
 
             if (action.WaitForRotation && Quaternion.Angle(_rgdb.rotation, rotation) > 5f)
             {
@@ -174,9 +173,9 @@ public class Player : MonoBehaviour
         MakeAction(action);
     }
 
-    public void ChangeMaterialOnElectrocution()
+    public void ChangeMaterialOnElectrocution(bool enabled)
     {
-        if (isElectrocutionShader)
+        if (enabled)
         {
             Material[] Mats = new Material[] { gameObject.transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>().materials[0], MaterialElectricity };
             //Debug.Log(gameObject.transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>().materials[1].name);
@@ -193,6 +192,9 @@ public class Player : MonoBehaviour
     private void MakeAction(Action action)
     {
         Vector3 direction = ComputeDirection(action);
+
+        if (action.DirectionalAction && action.WaitForRotation)
+            transform.LookAt(_rgdb.position + direction, Vector3.up);
 
         if (action)
             _animator.SetBool("Idle", false);
@@ -211,6 +213,7 @@ public class Player : MonoBehaviour
                 break;
 
             case Action.Type.MoveTo:
+                _agent.enabled = true;
                 _agent.SetDestination(action.Position);
                 _animator.SetBool("Run", true);
 
@@ -226,7 +229,6 @@ public class Player : MonoBehaviour
                 break;
 
             case Action.Type.Throw:
-                Debug.Log("Throw");
                 ThrowItem(action.Direction * action.Force);
 
                 break;
@@ -242,7 +244,7 @@ public class Player : MonoBehaviour
                 break;
 
             case Action.Type.ChangePlayer:
-                Debug.Log("ChangePlayer");
+                Team.ChangePlayer(transform.position);
 
                 break;
 
@@ -274,8 +276,7 @@ public class Player : MonoBehaviour
 
     private Vector3 ComputeDirection(Action action)
     {
-        Vector3 direction = action.Direction != Vector3.zero ? action.Direction : transform.forward;
-        direction = Field.Transform.TransformDirection(direction);
+        Vector3 direction = action.Direction != Vector3.zero ? Field.Transform.TransformDirection(action.Direction) : transform.forward;
 
         if (action.ActionType == Action.Type.Shoot)
         {
@@ -288,17 +289,27 @@ public class Player : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        OnTrigger(other);
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        OnTrigger(other);
+    }
+
+    private void OnTrigger(Collider other)
+    {
         Ball ball = other.GetComponent<Ball>();
 
-        if (Field.Ball == ball && !HasBall)
+        if (Field.Ball == ball && !HasBall && CanGetBall)
             ball.Take(transform);
 
-        if (other.tag == "Wall")
+        if (other.tag == "Wall" && State != PlayerState.Stunned)
             Stun();
 
         Player player = other.GetComponent<Player>();
 
-        if (player)
+        if (player && CanGetBall)
         {
             if (player.State == PlayerState.Tackling)
             {
@@ -313,8 +324,6 @@ public class Player : MonoBehaviour
                 //if (!HasBall) OnHitWithNoBall();
             }
         }
-
-        
     }
 
     private void OnTriggerExit(Collider other)
@@ -326,6 +335,13 @@ public class Player : MonoBehaviour
 
         if (player && player.State == PlayerState.Tackling)
             Fall((_rgdb.position - player.transform.position).normalized);
+    }
+
+    public void SetNavDriven()
+    {
+        IsNavDriven = true;
+
+        _agent.enabled = true;
     }
 
     #region Shoot
@@ -472,13 +488,10 @@ public class Player : MonoBehaviour
 
     #endregion
 
-
     #region ThrowItem
 
     private void ThrowItem(Vector3 force)
-
     {
-
         GameObject itemPrefab = Team.GetItem();
 
         if (!itemPrefab)
@@ -488,11 +501,9 @@ public class Player : MonoBehaviour
         GameObject itemGo = Instantiate(itemPrefab, transform.position, Quaternion.identity, Team.transform);
 
         itemGo.GetComponent<Rigidbody>().AddForce(force);
-
     }
 
     #endregion
-
 
     #region Events
     
@@ -547,16 +558,31 @@ public class Player : MonoBehaviour
     {
         State = PlayerState.Stunned;
         _animator.SetTrigger("Electrocuted");
+        ChangeMaterialOnElectrocution(true);
 
         Dash(Vector3.zero, 0f, duration);
+
+        if (HasBall)
+        {
+            Field.Ball.Free();
+
+            Vector3 direction = Field.Transform.position - transform.position;
+            direction = Vector3.Project(direction, Field.Transform.forward);
+
+            Field.Ball.transform.position = transform.position + direction.normalized;
+        }
     }
 
     private void Dash(Vector3 direction, float distance, float time, float standUpDelay = 0f)
     {
         _waitingAction = null;
 
+        CanGetBall = false;
+
         _animator.SetBool("Idle", false);
         _animator.SetBool("Run", false);
+
+        _agent.enabled = false;
 
         if (direction == Vector3.zero)
             _dashSpeed = 0f;
@@ -571,6 +597,12 @@ public class Player : MonoBehaviour
 
     private void ResetState()
     {
+        CanGetBall = true;
+
+        ChangeMaterialOnElectrocution(false);
+
+        _agent.enabled = true;
+
         State = PlayerState.Moving;
 
         CancelInvoke();

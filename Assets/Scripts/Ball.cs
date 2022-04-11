@@ -38,7 +38,6 @@ public class Ball : MonoBehaviour
 
     private void Update()
     {
-     
         if (_isMoving)
         {
             float length = Vector3.Distance(_startPoint, _interpolator) + Vector3.Distance(_interpolator, _endPoint);
@@ -58,45 +57,25 @@ public class Ball : MonoBehaviour
 
                 _rgdb.velocity = (newPosition - lastPosition) / (Time.deltaTime / (length / _speed));
             }
-            
         }
         else if (!_isFree)
         {
-            
-            
             GameObject parent = gameObject.transform.parent.gameObject;
             Animator _animatorparent = parent.GetComponent<Animator>();
 
             Vector3 BallRun = new Vector3(0, 0, _animatorparent.GetFloat("BallRun") * 20);
             Vector3 BallSpinV = new Vector3(0, 0, _animatorparent.GetFloat("BallSpinV") * 30);
 
-            //transform.localPosition = BallRun + BallSpinV + new Vector3(0.113f, 0.2f, 0.979f);
+            transform.localPosition = BallRun + BallSpinV + new Vector3(0.113f, 0.2f, 0.979f);
 
-            transform.localPosition = new Vector3(0, 0.2f, 1.5f);
-
+            //transform.localPosition = new Vector3(0, 0.2f, 1.5f);
         }
-
-
-        //transform.localPosition = (Mathf.Sin(Time.time * 10f) + 2f) * Vector3.forward;
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-
-    }
-
-    private void OnCollisionExit(Collision collision)
-    {
-        if (collision.gameObject.GetComponent<Player>() == Shooter)
-            Shooter = null;
     }
 
     #region Shoot
 
     public void Shoot(Vector3 to, float force)
     {
-        Shooter = Parent;
-
         Free();
 
         ResetMovements();
@@ -106,8 +85,6 @@ public class Ball : MonoBehaviour
 
     public void Shoot(Vector3 to, Vector3 interpolator, float force)
     {
-        Shooter = Parent;
-
         Free();
 
         StartMoving();
@@ -168,10 +145,18 @@ public class Ball : MonoBehaviour
     {
         _isFree = true;
 
+        Shooter = Parent;
+        Invoke(nameof(ResetShooter), 1f);
+
         Target = null;
         transform.parent = null;
 
         StopMoving();
+    }
+
+    public void ResetShooter()
+    {
+        Shooter = null;
     }
 
     public void Take(Transform parent)
@@ -200,8 +185,6 @@ public class Ball : MonoBehaviour
     private void StopMoving()
     {
         _isMoving = false;
-
-        Shooter = null;
 
         _rgdb.useGravity = true;
     }

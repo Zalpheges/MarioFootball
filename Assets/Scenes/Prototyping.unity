@@ -108,8 +108,8 @@ NavMeshSettings:
     agentTypeID: 0
     agentRadius: 0.35
     agentHeight: 1.8
-    agentSlope: 0
-    agentClimb: 0
+    agentSlope: 45
+    agentClimb: 1
     ledgeDropHeight: 0
     maxJumpAcrossDistance: 0
     minRegionArea: 2
@@ -1111,7 +1111,7 @@ MonoBehaviour:
   _debugMatch: {fileID: 1642756264}
   _debugMatchDuration: 60
   _debugOnlyPlayer: 0
-  _enemiesAreRetard: 0
+  _enemiesAreRetard: 1
 --- !u!4 &1642756263
 Transform:
   m_ObjectHideFlags: 0

@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     private bool _debugOnlyPlayer = false;
+    public static bool DebugOnlyPlayer => _instance._debugOnlyPlayer;
 
     [SerializeField]
     private bool _enemiesAreRetard = false;
@@ -31,6 +32,8 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
+        Random.InitState(System.DateTime.Now.Millisecond);
+
         if (_instance == null)
         {
             _instance = this;
@@ -87,9 +90,6 @@ public class GameManager : MonoBehaviour
         {
             teammates[i] = Player.CreatePlayer(match.Mate1.Prefab, team1);
             teammates[i].name = $"Mate {i} Team 1";
-
-            if (_instance._debugOnlyPlayer)
-                teammates[i].SetActive(false);
         }
 
         Player goal1 = Player.CreatePlayer(match.GoalKeeper.Prefab, team1, true);
@@ -103,16 +103,10 @@ public class GameManager : MonoBehaviour
         teammates[0] = Player.CreatePlayer(match.Captain2.Prefab, team2);
         teammates[0].name = "Captain Team 2";
 
-        if (_instance._debugOnlyPlayer)
-            teammates[0].gameObject.SetActive(false);
-
         for (int i = 1; i < 4; ++i)
         {
             teammates[i] = Player.CreatePlayer(match.Mate2.Prefab, team2);
             teammates[i].name = $"Mate {i} Team 2";
-
-            if (_instance._debugOnlyPlayer)
-                teammates[i].SetActive(false);
         }
 
         Player goal2 = Player.CreatePlayer(match.GoalKeeper.Prefab, team2, true);
@@ -171,9 +165,10 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < positions.Count; i++)
         {
             Player player = i < n ? attackingPlayers[i] : defendingPlayers[i - n];
-            player.IsNavDriven = true;
+            player.SetNavDriven();
             NavMeshAgent agent = player.GetComponent<NavMeshAgent>();
 
+            agent.enabled = true;
             agent.destination = player.Team == Field.Team1 ? positions[i]:new Vector3(-positions[i].x, positions[i].y, -positions[i].z);
             agent.speed = 10f;
         }
