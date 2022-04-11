@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using BehaviorTree;
 
-public class A_Shoot : Node
+public class S_UpdatePilotedPlayer : Node
 {
     private RootNode _root;
     private bool _rootInitialized = false;
@@ -13,7 +13,11 @@ public class A_Shoot : Node
         if (!_rootInitialized)
             _root = GetRootNode();
 
-        return (NodeState.SUCCESS, Action.Shoot(1f));
+        foreach (Player allyPlayer in _root.parentTree.Allies)
+            if (allyPlayer.isPiloted)
+                _root.pilotedPlayer = allyPlayer;
+
+        return (NodeState.SUCCESS, Action.None);
     }
 
     private RootNode GetRootNode()
@@ -28,3 +32,4 @@ public class A_Shoot : Node
         return (RootNode)currentNode;
     }
 }
+

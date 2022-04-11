@@ -18,12 +18,14 @@ public class T_GoalUncovered : Node
         foreach(Player enemyPlayer in _root.parentTree.Enemies)
         {
             Vector3 BallHolderToEnemy = enemyPlayer.transform.position - _root.player.transform.position;
+            float DotProduct = Vector3.Dot(BallHolderToEnemy.normalized, BallHolderToGoal.normalized);
+            Debug.Log(DotProduct);
 
-            if(Vector3.Dot(BallHolderToEnemy.normalized, BallHolderToGoal.normalized) > _root.parentTree.shootAlignmentThreshold)
-                return (NodeState.SUCCESS, Action.None);
+            if (DotProduct > _root.parentTree.shootAlignmentThreshold)
+                return (NodeState.FAILURE, Action.None);
         }
 
-        return (NodeState.FAILURE, Action.None);
+        return (NodeState.SUCCESS, Action.None);
     }
 
     private RootNode GetRootNode()

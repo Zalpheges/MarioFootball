@@ -11,8 +11,8 @@ public class CoucouNode : Node
     {
         _root = GetRootNode();
 
-        Debug.Log(_root.player.transform.GetSiblingIndex());
-        return (NodeState.SUCCESS, Action.None);
+        Debug.Log("HERE !");
+        return (NodeState.FAILURE, Action.None);
     }
     private RootNode GetRootNode()
     {

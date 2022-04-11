@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using BehaviorTree;
 
-public class A_Shoot : Node
+public class S_PlayerType_Attacker_Bot : Node
 {
     private RootNode _root;
     private bool _rootInitialized = false;
@@ -13,7 +13,8 @@ public class A_Shoot : Node
         if (!_rootInitialized)
             _root = GetRootNode();
 
-        return (NodeState.SUCCESS, Action.Shoot(1f));
+        _root.currentPlayerType = PlayerType.Attacker_Bot;
+        return (NodeState.SUCCESS, Action.None);
     }
 
     private RootNode GetRootNode()
