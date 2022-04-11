@@ -208,13 +208,13 @@ public class TreeV2
                                     }),
                                     new Selector(new List<Node>
                                     {
+                                        new CoucouNode(),
                                         new Sequence(new List<Node>
                                         {
                                             new T_BallHolder_enemyInRange(),
                                             new T_NearbyAllyUnmarked(),
                                             new S_Pass(),
                                         }),
-                                        new CoucouNode(),
                                         new S_MoveBallHolderToGoal()
                                     })
                                 })

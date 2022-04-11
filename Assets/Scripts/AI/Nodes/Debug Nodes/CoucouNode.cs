@@ -11,7 +11,8 @@ public class CoucouNode : Node
     {
         _root = GetRootNode();
 
-        Debug.Log("HERE !");
+        Debug.Log(_root.actionToPerform);
+        Debug.Log(_root.Position);
         return (NodeState.FAILURE, Action.None);
     }
     private RootNode GetRootNode()

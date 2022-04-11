@@ -13,6 +13,7 @@ public class S_Static : Node
         if (!_rootInitialized)
             _root = GetRootNode();
 
+        _root.actionToPerform = ActionToPerform.Move;
         _root.Position = _root.player.transform.position;
         return (NodeState.SUCCESS, Action.None);
     }
