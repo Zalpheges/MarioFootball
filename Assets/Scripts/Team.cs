@@ -21,7 +21,7 @@ public class Team : MonoBehaviour
 
     public PlayerBrain Brain { get; private set; }
 
-    private Queue<Sprite> _items;
+    private Queue<ItemData> _items;
     private int _itemCapacity = 2;
 
     private int currentPlayer = 0;
@@ -118,15 +118,15 @@ public class Team : MonoBehaviour
         //var itemProperties = PrefabManager.Items.GetType().GetProperties();
         //int i = UnityEngine.Random.Range(0, itemProperties.Length - 1);
         //_items.Enqueue((itemProperties[i].GetValue(PrefabManager.Items) as GameObject).GetComponent<Item>());
-        Sprite itemSprite;
         Item item;
+        ItemData data;
         do
         {
-            PrefabManager.Item itemType = (PrefabManager.Item)UnityEngine.Random.Range(0, PrefabManager.ItemSprites.Count);
-            itemSprite = PrefabManager.ItemSprites[itemType];
-            item = PrefabManager.ItemPrefabs[itemSprite].GetComponent<Item>();
-        } while (!item || (item.teamHasToLoose && GameManager.LosingTeam != this));
-        _items.Enqueue(itemSprite);
+            List<ItemData> itemDatas = PrefabManager.Items;
+            data = itemDatas[UnityEngine.Random.Range(0, itemDatas.Count)];
+            item = data.Prefab.GetComponent<Item>();
+        } while (!item || (data.TeamHasToLose && GameManager.LosingTeam != this));
+        _items.Enqueue(data);
         UIManager.UpdateItems(_items, this);
     }
 
@@ -134,13 +134,13 @@ public class Team : MonoBehaviour
     /// Delete the oldest item from the team item queue
     /// </summary>
     /// <returns>The gameObject corresponding to the deleted item</returns>
-    public GameObject GetItem()
+    public ItemData GetItem()
     {
         if(_items.Count == 0) 
             return null;
-        GameObject itemGo = PrefabManager.ItemPrefabs[_items.Dequeue()];
+        ItemData item = _items.Dequeue();
         UIManager.UpdateItems(_items, this);
-        return itemGo;
+        return item;
     }
 
     /// <summary>
@@ -153,7 +153,7 @@ public class Team : MonoBehaviour
         Players = players;
         Goalkeeper = goalkeeper;
 
-        _items = new Queue<Sprite>(_itemCapacity);
+        _items = new Queue<ItemData>(_itemCapacity);
 
         Brains = Players.Select(player => player.IABrain).ToArray();
     }

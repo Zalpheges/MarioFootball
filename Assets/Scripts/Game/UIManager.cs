@@ -23,10 +23,7 @@ public class UIManager : MonoBehaviour
 
     public static void SetChrono(Chrono chrono)
     {
-        if (!_instance)
-            return;
-
-        _instance._chrono.text = $"{chrono.Minutes}:{chrono.Seconds}";
+        _instance._chrono.text = $"{_instance.FormatInt(chrono.Minutes)}:{_instance.FormatInt(chrono.Seconds)}";
     }
 
     public static void SetScore(int scoreTeam1 = -1, int scoreTeam2 = -1)
@@ -41,14 +38,19 @@ public class UIManager : MonoBehaviour
             _instance._scoreTeam2.text = $"{scoreTeam2}";
     }
 
-    public static void UpdateItems(Queue<Sprite> items, Team team)
+    public static void UpdateItems(Queue<ItemData> items, Team team)
     {
         if (!_instance)
             return;
 
-        Sprite[] itemsArray = items.ToArray();
+        ItemData[] itemsArray = items.ToArray();
         bool isTeam1 = team == Field.Team1;
-        (isTeam1 ? _instance._item1Team1 : _instance._item1Team2).sprite = itemsArray[0];
-        (isTeam1 ? _instance._item2Team1 : _instance._item2Team2).sprite = items.Count > 1 ? itemsArray[1] : null;
+        (isTeam1 ? _instance._item1Team1 : _instance._item1Team2).sprite = items.Count > 0 ? itemsArray[0].Sprite : null;
+        (isTeam1 ? _instance._item2Team1 : _instance._item2Team2).sprite = items.Count > 1 ? itemsArray[1].Sprite : null;
+    }
+
+    private string FormatInt(int number)
+    {
+        return (number < 10 ? "0" : "") + number;
     }
 }
