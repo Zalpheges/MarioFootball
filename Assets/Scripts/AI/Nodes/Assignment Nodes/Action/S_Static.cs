@@ -3,31 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using BehaviorTree;
 
-public class UpdateBallHolder : Node
+public class S_Static : Node
 {
     private RootNode _root;
     private bool _rootInitialized = false;
 
     public override (NodeState, Action) Evaluate()
     {
-        if(!_rootInitialized)
+        if (!_rootInitialized)
             _root = GetRootNode();
 
-        foreach (Player player in _root.parentTree.Allies)
-            if (player.HasBall)
-            {
-                _root.ballHolder = player;
-                return (NodeState.SUCCESS, Action.None);
-            }
-
-        foreach (Player player in _root.parentTree.Enemies)
-            if (player.HasBall)
-            {
-                _root.ballHolder = player;
-                return (NodeState.SUCCESS, Action.None);
-            }
-
-        _root.ballHolder = null;
+        _root.Position = _root.player.transform.position;
         return (NodeState.SUCCESS, Action.None);
     }
 

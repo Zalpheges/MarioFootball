@@ -13,7 +13,7 @@ public class S_MoveAttacker_1_Mid_East : Node
         if (!_rootInitialized)
             _root = GetRootNode();
 
-        float positionX = (3 * Field.Width / 8) - (_root.ballHolder.transform.position.x - (Field.Width / 4));
+        float positionX = (-3 * Field.Width / 8) + (_root.ballHolder.transform.position.x - (Field.Width / 4));
         float positionZ = _root.ballHolder.transform.position.z;
 
         if (_root.currentPlayerType == PlayerType.Attacker_Top)

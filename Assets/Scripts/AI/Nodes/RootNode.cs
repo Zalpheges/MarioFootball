@@ -66,6 +66,7 @@ public class RootNode : Node
     public TreeV2 parentTree;
 
     public Player player = null;
+    public Player pilotedPlayer = null;
 
     public Player target = null;
     public Player passTarget = null;
