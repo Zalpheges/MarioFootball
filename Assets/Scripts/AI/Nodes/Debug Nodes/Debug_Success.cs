@@ -6,12 +6,12 @@ using BehaviorTree;
 public class Debug_Success : Node
 {
     private RootNode _root;
+    private bool _rootInitialized = false;
     public override (NodeState, Action) Evaluate()
     {
-        _root = GetRootNode();
+        if (!_rootInitialized)
+            _root = GetRootNode();
 
-        _root.actionToPerform = ActionToPerform.Move;
-        _root.Position = _root.player.transform.position;
         return (NodeState.SUCCESS, Action.None);
     }
     private RootNode GetRootNode()

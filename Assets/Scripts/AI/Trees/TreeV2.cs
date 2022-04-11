@@ -72,19 +72,22 @@ public class TreeV2
                     })
                 }),
                 new S_UpdateBallHolder(),
-                new Sequence(new List<Node>
-                {
-                    new Inverter(new T_AITeam()),
-                    new Selector(new List<Node>
+                new Selector(new List<Node>{
+                    new Sequence(new List<Node>
                     {
-                        new T_isPilotedUnchanged(),
-                        new Sequence(new List<Node>
+                        new Inverter(new T_AITeam()),
+                        new Selector(new List<Node>
                         {
-                            new S_UpdatePilotedPlayer(),
-                            new S_BallState_Unassigned(),
-                            new S_PlayerType_Unassigned()
+                            new T_isPilotedUnchanged(),
+                            new Sequence(new List<Node>
+                            {
+                                new S_UpdatePilotedPlayer(),
+                                new S_BallState_Unassigned(),
+                                new S_PlayerType_Unassigned()
+                            })
                         })
-                    })
+                    }),
+                    new Debug_Success()
                 }),
                 new Selector(new List<Node>
                 {
