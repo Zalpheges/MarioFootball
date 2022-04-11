@@ -21,6 +21,10 @@ public class InputBrain : PlayerBrain
     /// <param name="team">L'�quipe du joueur</param>
     /// <returns>Le vecteur de d�placement.</returns>
     /// 
+    private void Start()
+    {
+        shootForce = 0;
+    }
     private void Update()
     {
         if (westButtonHeld)
@@ -94,6 +98,7 @@ public class InputBrain : PlayerBrain
 
         if (context.phase == InputActionPhase.Performed)
         {
+            shootForce = 0;
             westButtonHeld = true;
         }
 
