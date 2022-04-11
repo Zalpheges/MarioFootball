@@ -51,7 +51,7 @@ public class TreeV2
         shootAlignmentThreshold = Thresholds[6];
         dangerRangeThreshold = Thresholds[7];
 
-        EastTeamEnabled = false;
+        EastTeamEnabled = true;
         WestTeamEnabled = true;
 
         root = new RootNode(this, new List<Node>()
@@ -69,7 +69,7 @@ public class TreeV2
                     {
                         new T_TeamSide_West(),
                         new T_WestEnabled()
-                    })                   
+                    })
                 }),
                 new UpdateBallHolder(),
                 new Selector(new List<Node>
@@ -150,7 +150,7 @@ public class TreeV2
                                         new S_PlayerType_Unassigned(),
                                         new S_ClearPosition()
                                     })
-                                })                       
+                                })
                             }),
                             #endregion
                         }),
@@ -159,6 +159,7 @@ public class TreeV2
                             new Sequence(new List<Node>
                             {
                                 new T_PlayerType_BallHolder(),
+                                #region AI Striker has Ball
                                 new Selector(new List<Node>
                                 {
                                     new Sequence(new List<Node>
@@ -169,12 +170,12 @@ public class TreeV2
                                             new Sequence(new List<Node>
                                             {
                                                 new T_GoalUncovered(),
-                                                new A_Shoot()
+                                                new S_Shoot()
                                             }),
                                             new Sequence(new List<Node>
                                             {
                                                 new T_NearbyAllyUnmarked(),
-                                                new A_Pass()
+                                                new S_Pass()
                                             }),
                                             new Sequence(new List<Node>
                                             {
@@ -194,17 +195,20 @@ public class TreeV2
                                         {
                                             new T_BallHolder_enemyInRange(),
                                             new T_NearbyAllyUnmarked(),
-                                            new A_Pass(),
+                                            new S_Pass(),
                                         }),
+                                        new CoucouNode(),
                                         new S_MoveBallHolderToGoal()
                                     })
                                 })
+                                #endregion
                             }),
                             new Sequence(new List<Node>
                             {
                                 new Selector(new List<Node>
                                 {
                                     new Inverter(new T_PlayerType_Unassigned()),
+                                    #region Assign Player types
                                     new Selector(new List<Node>
                                     {
                                         new Sequence(new List<Node>
@@ -219,6 +223,7 @@ public class TreeV2
                                         }),
                                         new S_PlayerType_Attacker_Top()
                                     })
+                                    #endregion
                                 }),
                                 new Selector(new List<Node>
                                 {
@@ -230,6 +235,7 @@ public class TreeV2
                                     new Sequence(new List<Node>
                                     {
                                         new T_TeamSide_West(),
+                                        #region West Team AI Attackers Placement
                                         new Selector(new List<Node>
                                         {
                                             new Sequence(new List<Node>
@@ -265,9 +271,11 @@ public class TreeV2
                                                 new S_MoveAttacker_Top_West()
                                             })
                                         })
+                                        #endregion
                                     }),
                                     new Selector(new List<Node>
                                     {
+                                        #region East Team AI Attackers Placement
                                         new Sequence(new List<Node>
                                         {
                                             new T_BallHolder_FirstQuarter(),
@@ -300,6 +308,7 @@ public class TreeV2
                                             }),
                                             new S_MoveAttacker_Top_East()
                                         })
+                                        #endregion
                                     })
                                 })
                             }),
@@ -358,7 +367,7 @@ public class TreeV2
                     }),
                     #endregion
                     #region No Team Has Ball
-                    new Sequence(new List<Node> 
+                    new Sequence(new List<Node>
                     {
                         new Selector(new List<Node>
                         {
@@ -378,11 +387,11 @@ public class TreeV2
                                 }),
                                 new Sequence(new List<Node>
                                 {
-
+                                    new T_PlayerType_Seeker(),
                                 })
                             })
                         })
-                        
+
                     })
                     #endregion
                 }),

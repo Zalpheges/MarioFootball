@@ -13,7 +13,7 @@ public class HolyBrain : PlayerBrain
     private float headButtThreshold = 1f;
     private float passAlignementThreshold = 0.8f;
     private float shootAlignementThreshold = 0.9f;
-    private float dangerRangeThreshold = 2f;
+    private float dangerRangeThreshold = 7f;
 
     private void Start()
     {

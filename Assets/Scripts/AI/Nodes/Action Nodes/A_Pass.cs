@@ -13,8 +13,8 @@ public class A_Pass : Node
         if (!_rootInitialized)
             _root = GetRootNode();
 
-        _root.actionToPerform = ActionToPerform.Pass;
-        return (NodeState.SUCCESS, Action.None);
+        Vector3 passDirection = _root.passTarget.transform.position - _root.player.transform.position;
+        return (NodeState.SUCCESS, Action.Pass(passDirection));
     }
 
     private RootNode GetRootNode()

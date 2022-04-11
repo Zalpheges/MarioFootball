@@ -13,32 +13,32 @@ public class T_NearbyAllyUnmarked : Node
         if (!_rootInitialized)
             _root = GetRootNode();
 
-        foreach (Player allyPlayer in _root.parentTree.Enemies)
+        foreach (Player allyPlayer in _root.parentTree.Allies)
         {
-            Vector3 BallHolderToAlly = allyPlayer.transform.position - _root.player.transform.position;
-            
-            foreach( Player enemyPlayer in _root.parentTree.Enemies )
+            if (allyPlayer != _root.player)
             {
-                bool allyMarked = false;
+                Vector3 BallHolderToAlly = allyPlayer.transform.position - _root.player.transform.position;
 
-                Vector3 BallHolderToEnemy = enemyPlayer.transform.position - _root.player.transform.position;
-
-                if(Vector3.Dot(BallHolderToAlly, BallHolderToEnemy) > _root.parentTree.passAlignmentThreshold)
+                foreach (Player enemyPlayer in _root.parentTree.Enemies)
                 {
-                    allyMarked = true;
-                    break;
-                }
+                    bool allyMarked = false;
 
-                if(!allyMarked)
-                {
-                    _root.passTarget = allyPlayer;
-                    return (NodeState.SUCCESS, Action.None);
-                }
+                    Vector3 BallHolderToEnemy = enemyPlayer.transform.position - _root.player.transform.position;
 
+                    if (Vector3.Dot(BallHolderToAlly, BallHolderToEnemy) > _root.parentTree.passAlignmentThreshold)
+                    {
+                        allyMarked = true;
+                        break;
+                    }
+
+                    if (!allyMarked)
+                    {
+                        _root.passTarget = allyPlayer;
+                        return (NodeState.SUCCESS, Action.None);
+                    }
+                }
             }
-
         }
-
         return (NodeState.FAILURE, Action.None);
     }
 
