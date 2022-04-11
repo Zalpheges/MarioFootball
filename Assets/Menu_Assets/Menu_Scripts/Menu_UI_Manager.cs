@@ -9,9 +9,10 @@ public class Menu_UI_Manager : MonoBehaviour
 {
     [SerializeField]
     private GameObject Success;
+
     private void Update()
     {
-        if (Keyboard.current.escapeKey.wasPressedThisFrame || Gamepad.current.buttonEast.wasPressedThisFrame)
+        if ((Keyboard.current?.escapeKey.wasPressedThisFrame ?? false) || (Gamepad.current?.buttonEast.wasPressedThisFrame ?? false))
         {
             if(Success != null && SceneManager.GetActiveScene().buildIndex == 0)
             {
@@ -23,6 +24,7 @@ public class Menu_UI_Manager : MonoBehaviour
             else
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex-1);
         }
+        
     }
     public void OnSuccess()
     {

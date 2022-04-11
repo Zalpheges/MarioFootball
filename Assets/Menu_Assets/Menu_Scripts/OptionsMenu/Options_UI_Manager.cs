@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
 
 public class Options_UI_Manager : MonoBehaviour
 {
@@ -32,7 +33,7 @@ public class Options_UI_Manager : MonoBehaviour
 
     private void Update()
     {
-        if (UnityEngine.InputSystem.Keyboard.current.escapeKey.wasPressedThisFrame)
+        if ((Keyboard.current?.escapeKey.wasPressedThisFrame ?? false) || (Gamepad.current?.buttonEast.wasPressedThisFrame ?? false))
         {
             if (Audio_Options.activeSelf)
             {
