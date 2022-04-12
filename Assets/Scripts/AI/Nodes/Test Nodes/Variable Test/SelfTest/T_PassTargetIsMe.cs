@@ -3,16 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using BehaviorTree;
 
-public class CoucouNode : Node
+public class T_PassTargetIsMe : Node
 {
-
     private RootNode _root;
+    private bool _rootInitialized = false;
+
     public override (NodeState, Action) Evaluate()
     {
-        _root = GetRootNode();
+        if (!_rootInitialized)
+            _root = GetRootNode();
 
-        return (NodeState.SUCCESS, Action.None);
+        if (Field.Ball.Target == _root.player)
+            return (NodeState.SUCCESS, Action.None);
+        return (NodeState.FAILURE, Action.None);
     }
+
     private RootNode GetRootNode()
     {
         Node currentNode = this;
@@ -20,6 +25,9 @@ public class CoucouNode : Node
         while (currentNode.parent != null)
             currentNode = currentNode.parent;
 
+        _rootInitialized = true;
+
         return (RootNode)currentNode;
     }
 }
+

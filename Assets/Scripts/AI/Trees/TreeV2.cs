@@ -208,7 +208,6 @@ public class TreeV2
                                     }),
                                     new Selector(new List<Node>
                                     {
-                                        new CoucouNode(),
                                         new Sequence(new List<Node>
                                         {
                                             new T_BallHolder_enemyInRange(),
@@ -384,30 +383,75 @@ public class TreeV2
                     }),
                     #endregion
                     #region No Team Has Ball
-                    new Sequence(new List<Node>
+                    new Selector(new List<Node>
                     {
-                        new Selector(new List<Node>
+                        new Sequence(new List<Node>
                         {
                             new T_BallState_None(),
-                            new Sequence(new List<Node>
+                            new Selector(new List<Node>
                             {
-                                new S_BallState_None(),
-                                new S_ResetBallSeeker(),
-                                new S_Static(),
-                                new Selector(new List<Node>
+                                new Sequence(new List<Node>
                                 {
-                                    new Sequence(new List<Node>
-                                    {
-                                        new T_BallSeekerIsMe(),
-                                        new S_PlayerType_BallSeeker()
-                                    }),
-                                    new S_PlayerType_Supporter()
+                                    new T_PlayerType_Receiver(),
+                                    new S_Static()
                                 }),
                                 new Sequence(new List<Node>
                                 {
-                                    new T_PlayerType_Seeker(),
-                                })
+                                    new T_PlayerType_Supporter(),
+                                    new S_MoveSupporter()
+                                }),
+                                new S_MoveSeeker()
                             })
+                        }),
+                        new Sequence(new List<Node>
+                        {
+                            new Selector(new List<Node>
+                            {
+                                new Sequence(new List<Node>
+                                {
+                                    new T_BallState_Ally(),
+                                    new Sequence(new List<Node>
+                                    {
+                                        new T_PassInProgress(),
+                                        new Selector(new List<Node>
+                                        {
+                                            new Sequence(new List<Node>
+                                            {
+                                                new T_PassTargetIsMe(),
+                                                new S_PlayerType_Receiver()
+                                            }),
+                                            new S_PlayerType_Supporter()
+                                        })
+                                    })
+                                }),
+                                new Sequence(new List<Node>
+                                {
+                                    new T_BallState_Enemy(),
+                                    new Sequence(new List<Node>
+                                    {
+                                        new T_PassInProgress(),
+                                        new Selector(new List<Node>
+                                        {
+                                            new Sequence(new List<Node>
+                                            {
+                                                new T_PassTargetIsMine(),
+                                                new S_PlayerType_BallSeeker()
+                                            }),
+                                            new S_PlayerType_Supporter()
+                                        })
+                                    })
+                                }),
+                                new Sequence(new List<Node>
+                                {
+                                    new S_AssignSeeker(),
+                                    new Selector(new List<Node>
+                                    {
+                                        new T_PlayerType_Seeker(),
+                                        new S_PlayerType_Supporter()
+                                    })
+                                })
+                            }),
+                            new S_BallState_None()
                         })
 
                     })
