@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
 using TMPro;
+using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
 
 public class UIManager : MonoBehaviour
 {
@@ -16,11 +19,36 @@ public class UIManager : MonoBehaviour
     [SerializeField] private SpriteRenderer _item1Team2;
     [SerializeField] private SpriteRenderer _item2Team2;
 
+    [SerializeField] private EventSystem ES;
+    [SerializeField] private GameObject PauseMenu;
+    private GameObject FS_PauseMenu;
+    [SerializeField] private GameObject SubPauseMenu;
+    [SerializeField] private GameObject FS_SubPauseMenu;
+
+   
     private void Awake()
     {
         _instance = this;
+        FS_PauseMenu = ES.firstSelectedGameObject;
     }
+    private void Update()
+    {
+        if ((Keyboard.current?.escapeKey.wasPressedThisFrame ?? false) || (Gamepad.current?.selectButton.wasPressedThisFrame ?? false))
+        {
+            if(PauseMenu.activeSelf)
+                OnGoBack();
+            else
+            {
+                TimeManager.Pause();
+                PauseMenu.SetActive(true);
+            } 
+        }
 
+        if (((Gamepad.current?.buttonEast.wasPressedThisFrame ?? false) || (Gamepad.current?.selectButton.wasPressedThisFrame ?? false)) && PauseMenu.activeSelf)
+        { 
+            OnGoBack();
+        }
+    }
     public static void SetChrono(Chrono chrono)
     {
         _instance._chrono.text = $"{_instance.FormatInt(chrono.Minutes)}:{_instance.FormatInt(chrono.Seconds)}";
@@ -52,5 +80,29 @@ public class UIManager : MonoBehaviour
     private string FormatInt(int number)
     {
         return (number < 10 ? "0" : "") + number;
+    }
+    public void OnQuit()
+    {
+        SubPauseMenu.SetActive(true);
+        ES.SetSelectedGameObject(FS_SubPauseMenu);
+    }
+
+    public void OnYes()
+    {
+        SceneManager.LoadScene(0, LoadSceneMode.Single);
+    }
+
+    public void OnGoBack()
+    {
+        if(SubPauseMenu.activeSelf)
+        {
+            SubPauseMenu.SetActive(false);
+            ES.SetSelectedGameObject(FS_PauseMenu);
+        }
+        else
+        {
+            PauseMenu.SetActive(false);
+            TimeManager.Play();
+        }
     }
 }
