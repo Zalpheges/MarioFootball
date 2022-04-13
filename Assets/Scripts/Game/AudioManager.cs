@@ -40,6 +40,9 @@ public class AudioManager : MonoBehaviour
         else
             Destroy(this);
 
+        MusicAudioSource = GetComponents<AudioSource>()[0];
+        SFXAudioSource = GetComponents<AudioSource>()[1];
+
         PlayMusic(MusicType.Menu);
     }
 

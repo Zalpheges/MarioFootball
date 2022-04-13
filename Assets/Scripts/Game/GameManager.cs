@@ -54,15 +54,18 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-            UIManager.SetChrono(_chrono);
-            _timer += Time.deltaTime;
-            if (_timer >= 1f)
-            {
-                --_chrono;
-                if (_chrono.Finished)
-                    Debug.Log("Match end");
-                --_timer;
-            }
+        if (!UIManager._instance)
+            return;
+
+        UIManager.SetChrono(_chrono);
+        _timer += Time.deltaTime;
+        if (_timer >= 1f)
+        {
+            --_chrono;
+            if (_chrono.Finished)
+                Debug.Log("Match end");
+            --_timer;
+        }
     }
 
     /// <summary>

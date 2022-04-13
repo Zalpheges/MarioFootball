@@ -6,7 +6,7 @@ using TMPro;
 
 public class UIManager : MonoBehaviour
 {
-    private static UIManager _instance;
+    public static UIManager _instance;
 
     [SerializeField] private TextMeshProUGUI _scoreTeam1;
     [SerializeField] private TextMeshProUGUI _scoreTeam2;
