@@ -133,22 +133,30 @@ public class Field : MonoBehaviour
     {
         _instance._ball = ball;
 
-        ball.transform.position = _instance.transform.position;
-
         _instance.SetTeamPosition();
+
+        ball.transform.position = _instance.VectorToPosition(_instance._attackPosCaptain);
     }
 
     private void SetTeamPosition()
     {
         Team1.Players[0].transform.position = VectorToPosition(_attackPosCaptain);
+        Team1.Players[0].SetNavDriven(VectorToPosition(_attackPosCaptain));
         Team1.Players[1].transform.position = VectorToPosition(_attackPosMate1);
+        Team1.Players[1].SetNavDriven(VectorToPosition(_attackPosMate1));
         Team1.Players[2].transform.position = VectorToPosition(_attackPosMate2);
+        Team1.Players[2].SetNavDriven(VectorToPosition(_attackPosMate2));
         Team1.Players[3].transform.position = VectorToPosition(_attackPosMate3);
+        Team1.Players[3].SetNavDriven(VectorToPosition(_attackPosMate3));
 
         Team2.Players[0].transform.position = VectorToPosition(_defPosCaptain);
+        Team2.Players[0].SetNavDriven(VectorToPosition(_defPosCaptain));
         Team2.Players[1].transform.position = VectorToPosition(_defPosMate1);
+        Team2.Players[1].SetNavDriven(VectorToPosition(_defPosMate1));
         Team2.Players[2].transform.position = VectorToPosition(_defPosMate2);
+        Team2.Players[2].SetNavDriven(VectorToPosition(_defPosMate2));
         Team2.Players[3].transform.position = VectorToPosition(_defPosMate3);
+        Team2.Players[3].SetNavDriven(VectorToPosition(_defPosMate3));
     }
 
     public static List<Vector3> GetStartPositions()
