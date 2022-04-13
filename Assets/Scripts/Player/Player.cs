@@ -11,7 +11,46 @@ public class Player : MonoBehaviour
         Headbutting,
         Shooting,
         Falling,
-        Stunned
+        Stunned,
+        Dribbling
+    }
+    public struct PlayerActionsQueue
+    {
+        private Queue<Vector3> _positions;
+        private Queue<System.Action> _animations;
+        private Queue<float> _preActionDelays;
+
+        private void Init()
+        {
+            _positions = new Queue<Vector3>();
+            _animations = new Queue<System.Action>();
+            _preActionDelays = new Queue<float>();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="position"></param>
+        /// <param name="anim">de la forme () => animator.SetBool("fdp")</param>
+        /// <param name="delay"></param>
+        public void AddAction(Vector3 position, System.Action anim, float delay)
+        {
+            if (_positions == null)
+                Init();
+            _positions.Enqueue(position);
+            _animations.Enqueue(anim);
+            _preActionDelays.Enqueue(delay);
+        }
+
+        public (System.Action, float) GetNext(NavMeshAgent agent)
+        {
+            if (_positions.Count < 1)
+                return (null, 0f);
+
+            agent.destination = _positions.Dequeue();
+            System.Action anim = _animations.Dequeue();
+            return (anim, _preActionDelays.Dequeue());
+        }
     }
 
     [SerializeField]
@@ -37,15 +76,22 @@ public class Player : MonoBehaviour
     public bool IsPiloted { get; set; } = false;
     public bool IsNavDriven { get; private set; } = false;
     public bool IsWaiting { get; set; } = false;
+    public bool ProcessQueue { get; private set; } = false;
+
+    public bool IsElectrocutionShader;
+
+    public Material MaterialElectricity;
 
     private float _dashSpeed;
     private Vector3 _dashEndPoint;
 
     private Action _waitingAction = null;
 
-    public bool isElectrocutionShader;
+    public PlayerActionsQueue ActionsQueue;
 
-    public Material MaterialElectricity;
+    private float _timer;
+    private float _currentTimeLimit;
+    private System.Action _nextAnimToPerform;
 
     #region Debug
 
@@ -109,6 +155,11 @@ public class Player : MonoBehaviour
         _rgdb.angularVelocity = Vector3.zero;
         _rgdb.velocity = Vector3.zero;
 
+
+
+        if (ProcessQueue)
+            UpdateNavQueue();
+
         _agent.enabled = IsNavDriven || !IsPiloted;
 
         if (_agent.enabled)
@@ -118,9 +169,26 @@ public class Player : MonoBehaviour
         {
             if (Vector3.Distance(transform.position, _agent.destination) <= 0.1f)
             {
-                IsNavDriven = false;
-                IsWaiting = true;
-                transform.rotation = Quaternion.LookRotation(Vector3.Project(transform.position - Team.transform.position, Field.Transform.forward));
+                if (!ProcessQueue)
+
+                {
+
+                    IsNavDriven = false;
+
+                    IsWaiting = true;
+
+                    transform.rotation = Quaternion.LookRotation(Vector3.Project(transform.position - Team.transform.position, Field.Transform.forward));
+
+                }
+                else
+
+                {
+
+                    if(_timer > 0.2f)
+
+                        _nextAnimToPerform();
+
+                }
             }
 
             return;
@@ -133,6 +201,9 @@ public class Player : MonoBehaviour
 
             return;
         }
+
+        if (IsWaiting && !Field.ArePlayersAllWaiting())
+            return;
 
         Action action;
 
@@ -171,6 +242,28 @@ public class Player : MonoBehaviour
         }
 
         MakeAction(action);
+    }
+
+
+
+    public void ReadQueue()
+
+    {
+
+        ProcessQueue = IsNavDriven = true;
+
+        (_nextAnimToPerform, _currentTimeLimit) = ActionsQueue.GetNext(_agent);
+
+    }
+    private void UpdateNavQueue()
+    {
+        if ((_timer += Time.deltaTime) > _currentTimeLimit)
+        {
+            _timer = 0f;
+            (_nextAnimToPerform, _currentTimeLimit) = ActionsQueue.GetNext(_agent);
+            if (_currentTimeLimit == 0f)
+                ProcessQueue = IsNavDriven = false;
+        }
     }
 
     public void ChangeMaterialOnElectrocution(bool enabled)
@@ -222,7 +315,7 @@ public class Player : MonoBehaviour
             case Action.Type.Shoot:
                 if (HasBall)
                 {
-                    Shoot();
+                    Shoot(action.Force);
                     _animator.SetTrigger("Strike");
                 }
 
@@ -249,7 +342,8 @@ public class Player : MonoBehaviour
                 break;
 
             case Action.Type.Dribble:
-                Debug.Log("Dribble");
+                State = PlayerState.Dribbling;
+                Dash(direction, 9f, 1.2f);
                 _animator.SetTrigger("Spin");
 
                 break;
@@ -302,7 +396,7 @@ public class Player : MonoBehaviour
         Ball ball = other.GetComponent<Ball>();
 
         if (Field.Ball == ball && !HasBall && CanGetBall)
-            ball.Take(transform);
+            ball.Take(this);
 
         if (other.tag == "Wall" && State != PlayerState.Stunned)
             Stun();
@@ -330,11 +424,6 @@ public class Player : MonoBehaviour
     {
         if (other.tag == "Wall")
             ResetState();
-
-        Player player = other.GetComponent<Player>();
-
-        if (player && player.State == PlayerState.Tackling)
-            Fall((_rgdb.position - player.transform.position).normalized);
     }
 
     public void SetNavDriven()
@@ -346,8 +435,11 @@ public class Player : MonoBehaviour
 
     #region Shoot
 
-    private void Shoot()
+    private void Shoot(float force)
     {
+        force = Mathf.Max(0.5f, force);
+
+        Debug.Log(_specs.Accuracy * force);
         Transform goal = Enemies.transform;
 
         //float angle = Vector3.SignedAngle(transform.forward, goal.forward, Vector3.up);
@@ -359,10 +451,13 @@ public class Player : MonoBehaviour
             MissedShoot(goal);
         else
         {
-            if (Random.value > _specs.Accuracy + 1000f)
+            if (Random.value > _specs.Accuracy * force)
+            {
+                Debug.Log("Poteau");
                 GoalPostShoot(goal);
+            }
             else
-                ShootOnTarget(goal);
+                ShootOnTarget(goal, force);
         }
     }
 
@@ -391,10 +486,10 @@ public class Player : MonoBehaviour
         //Debug.Log($"Distance < 45m ({distance}) - Tir sur poteau {direction}.");
     }
 
-    private void ShootOnTarget(Transform goal)
+    private void ShootOnTarget(Transform goal, float force)
     {
         float x = Random.Range(-1, 2);
-        float y = Random.Range(-1, 2);
+        float y = force < 1f / 3f ? -1f : (force < 2f / 3f ? 0f : 1f);
 
         Vector3 endPosition = goal.position;
         endPosition += goal.right * x * Field.GoalWidth * 0.85f / 2f;
@@ -420,7 +515,7 @@ public class Player : MonoBehaviour
 
         if (mate)
         {
-            Field.Ball.Pass(mate, 16f);
+            Field.Ball.Pass(mate, 33f);
 
             //Debug.Log("Passe directe vers " + direction.ToString());
         }

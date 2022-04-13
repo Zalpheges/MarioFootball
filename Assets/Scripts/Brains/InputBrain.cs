@@ -15,6 +15,8 @@ public class InputBrain : PlayerBrain
     private bool northButton = false;
     private bool southButton = false;
 
+    private const float loadTime = 1.5f;
+
     /// <summary>
     /// Calcule le d�placement que la manette applique au joueur 
     /// </summary>
@@ -26,6 +28,14 @@ public class InputBrain : PlayerBrain
         if (westButtonHeld)
         {
             shootForce += Time.deltaTime; // Force en fonction du ntemp appuyé A REVOIR
+
+            if (shootForce > loadTime)
+            {
+                shootForce = loadTime;
+
+                westButtonHeld = false;
+                westButtonPressed = true;
+            }
         }
     }
 
@@ -34,10 +44,12 @@ public class InputBrain : PlayerBrain
     {
         if (westButtonPressed) // Tire|Tacle
         {
-            westButtonPressed = !westButtonPressed;
+            westButtonPressed = false;
 
             if (Player.HasBall)
-                return Action.Shoot(shootForce);
+            {
+                return Action.Shoot(shootForce / loadTime);
+            }
             else
                 return Action.Tackle(_movementInput);
         }
@@ -70,7 +82,7 @@ public class InputBrain : PlayerBrain
             else
                 return Action.Headbutt(_movementInput);
         }
-        else if (_movementInput != Vector3.zero)
+        else if (_movementInput != Vector3.zero && !westButtonPressed)
             return Action.Move(_movementInput);
         else
             return Action.None;
@@ -90,10 +102,9 @@ public class InputBrain : PlayerBrain
 
     public void WestButton(InputAction.CallbackContext context)
     {
-        shootForce = 10;
-
         if (context.phase == InputActionPhase.Performed)
         {
+            shootForce = 0f;
             westButtonHeld = true;
         }
 

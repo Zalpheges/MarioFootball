@@ -159,13 +159,18 @@ public class Ball : MonoBehaviour
         Shooter = null;
     }
 
-    public void Take(Transform parent)
+    public void Take(Player parent)
     {
-        if (_isFree && parent != Shooter?.transform)
+        Player owner = transform.parent?.GetComponent<Player>();
+
+        if (!_isFree && owner.State == Player.PlayerState.Dribbling)
+            return;
+
+        if (parent.transform != Shooter?.transform && (!owner || owner.Team != parent?.Team))
         {
             _isFree = false;
 
-            transform.parent = parent;
+            transform.parent = parent.transform;
             Target = null;
 
             StopMoving();
