@@ -163,7 +163,7 @@ public class Team : MonoBehaviour
         if (other.GetComponent<Ball>())
         {
             Debug.Log("but");
-            //GameManager.GoalScored(this);
+            GameManager.GoalScored(this);
         }
     }
 }

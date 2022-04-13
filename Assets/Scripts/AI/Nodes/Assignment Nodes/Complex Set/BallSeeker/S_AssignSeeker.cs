@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using BehaviorTree;
 
-public class T_GoalUncovered : Node
+public class S_AssignSeeker : Node
 {
     private RootNode _root;
     private bool _rootInitialized = false;
@@ -13,16 +13,24 @@ public class T_GoalUncovered : Node
         if (!_rootInitialized)
             _root = GetRootNode();
 
-        Vector3 BallHolderToGoal = _root.parentTree.enemyGoalTransform.position - _root.player.transform.position;
+        Player closestPlayer = null;
+        float shortestDistance = 0f;
 
-        foreach(Player enemyPlayer in _root.parentTree.Enemies)
+        foreach(Player ally in _root.parentTree.Allies)
         {
-            Vector3 BallHolderToEnemy = enemyPlayer.transform.position - _root.player.transform.position;
-            float DotProduct = Vector3.Dot(BallHolderToEnemy.normalized, BallHolderToGoal.normalized);
+            float distance = (Field.Ball.transform.position - ally.transform.position).sqrMagnitude;
 
-            if (DotProduct > _root.parentTree.shootAlignmentThreshold)
-                return (NodeState.FAILURE, Action.None);
+            if (closestPlayer == null || distance < shortestDistance)
+            {
+                closestPlayer = ally;
+                shortestDistance = distance;
+            }
         }
+
+        _root.ballSeeker = closestPlayer;
+
+        if (_root.ballSeeker == _root.player)
+            _root.currentPlayerType = PlayerType.BallSeeker;
 
         return (NodeState.SUCCESS, Action.None);
     }
@@ -39,3 +47,4 @@ public class T_GoalUncovered : Node
         return (RootNode)currentNode;
     }
 }
+

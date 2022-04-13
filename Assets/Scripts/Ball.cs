@@ -47,6 +47,11 @@ public class Ball : MonoBehaviour
             if (_bezierTime >= 1f)
             {
                 StopMoving();
+
+                Vector3 newPosition = ComputeBezierPosition(_startPoint, _interpolator, _endPoint, 0.95f);
+                Vector3 lastPosition = ComputeBezierPosition(_startPoint, _interpolator, _endPoint, 0.1f);
+
+                _rgdb.velocity = (newPosition - lastPosition).normalized * _speed;
             }
             else
             {
@@ -54,8 +59,6 @@ public class Ball : MonoBehaviour
                 Vector3 newPosition = ComputeBezierPosition(_startPoint, _interpolator, _endPoint, _bezierTime);
 
                 _rgdb.MovePosition(newPosition);
-
-                _rgdb.velocity = (newPosition - lastPosition) / (Time.deltaTime / (length / _speed));
             }
         }
         else if (!_isFree)

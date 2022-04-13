@@ -426,11 +426,13 @@ public class Player : MonoBehaviour
             ResetState();
     }
 
-    public void SetNavDriven()
+    public void SetNavDriven(Vector3 destination)
     {
         IsNavDriven = true;
 
         _agent.enabled = true;
+        _agent.destination = destination;
+        _agent.speed = 10f;
     }
 
     #region Shoot

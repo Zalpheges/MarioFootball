@@ -167,12 +167,9 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < positions.Count; i++)
         {
             Player player = i < n ? attackingPlayers[i] : defendingPlayers[i - n];
-            player.SetNavDriven();
-            NavMeshAgent agent = player.GetComponent<NavMeshAgent>();
 
-            agent.enabled = true;
-            agent.destination = player.Team == Field.Team1 ? positions[i]:new Vector3(-positions[i].x, positions[i].y, -positions[i].z);
-            agent.speed = 10f;
+            Vector3 destination = player.Team == Field.Team1 ? positions[i] : new Vector3(-positions[i].x, positions[i].y, -positions[i].z);
+            player.SetNavDriven(destination);
         }
     }
     private IEnumerator Match()
