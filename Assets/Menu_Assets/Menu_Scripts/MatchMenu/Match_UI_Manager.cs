@@ -174,6 +174,7 @@ public class Match_UI_Manager : MonoBehaviour
         if(matchSettings.activeSelf)
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            
         }
         else if (allieSelection.activeSelf)
         {
