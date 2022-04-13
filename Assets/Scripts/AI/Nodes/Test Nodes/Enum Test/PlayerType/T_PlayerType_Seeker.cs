@@ -13,7 +13,7 @@ public class T_PlayerType_Seeker : Node
         if (!_rootInitialized)
             _root = GetRootNode();
 
-        if (_root.currentPlayerType == PlayerType.Seeker)
+        if (_root.currentPlayerType == PlayerType.BallSeeker)
             return (NodeState.SUCCESS, Action.None);
         return (NodeState.FAILURE, Action.None);
     }

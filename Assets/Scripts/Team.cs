@@ -21,9 +21,12 @@ public class Team : MonoBehaviour
 
     public PlayerBrain Brain { get; private set; }
 
-    private Queue<Sprite> _items;
+    private Queue<ItemData> _items;
     private int _itemCapacity = 2;
-    
+
+    private int currentPlayer = 0;
+    private float _lastNextCall;
+    private Player[] _sortedPlayers;
 
     private void Awake()
     {
@@ -62,6 +65,40 @@ public class Team : MonoBehaviour
         }
     }
 
+    public void ChangePlayer(Vector3 position)
+    {
+        if (_lastNextCall + 1.5f < Time.time || _sortedPlayers == null)
+        {
+            _sortedPlayers = Players.OrderBy(p => Vector3.Distance(p.transform.position, position)).ToArray();
+
+            currentPlayer = 0;
+        }
+
+        _lastNextCall = Time.time;
+
+        currentPlayer = (currentPlayer + 1) % _sortedPlayers.Length;
+
+        if (Brain.Player)
+            Brain.Player.IsPiloted = false;
+
+        Brain.Player = _sortedPlayers[currentPlayer];
+
+        Brain.Player.IsPiloted = true;
+        CameraManager.Follow(Brain.Player.transform);
+    }
+
+    public Player GetBallOwner()
+    {
+        foreach (Player player in Players)
+            if (player.HasBall)
+                return player;
+
+        if (Goalkeeper.HasBall)
+            return Goalkeeper;
+
+        return null;
+    }
+
     public bool ArePlayersAllWaiting()
     {
         foreach(Player player in Players)
@@ -81,15 +118,15 @@ public class Team : MonoBehaviour
         //var itemProperties = PrefabManager.Items.GetType().GetProperties();
         //int i = UnityEngine.Random.Range(0, itemProperties.Length - 1);
         //_items.Enqueue((itemProperties[i].GetValue(PrefabManager.Items) as GameObject).GetComponent<Item>());
-        Sprite itemSprite;
         Item item;
+        ItemData data;
         do
         {
-            PrefabManager.Item itemType = (PrefabManager.Item)UnityEngine.Random.Range(0, PrefabManager.ItemSprites.Count);
-            itemSprite = PrefabManager.ItemSprites[itemType];
-            item = PrefabManager.ItemPrefabs[itemSprite].GetComponent<Item>();
-        } while (!item || (item.teamHasToLoose && GameManager.LosingTeam != this));
-        _items.Enqueue(itemSprite);
+            List<ItemData> itemDatas = PrefabManager.Items;
+            data = itemDatas[UnityEngine.Random.Range(0, itemDatas.Count)];
+            item = data.Prefab.GetComponent<Item>();
+        } while (!item || (data.TeamHasToLose && GameManager.LosingTeam != this));
+        _items.Enqueue(data);
         UIManager.UpdateItems(_items, this);
     }
 
@@ -97,13 +134,13 @@ public class Team : MonoBehaviour
     /// Delete the oldest item from the team item queue
     /// </summary>
     /// <returns>The gameObject corresponding to the deleted item</returns>
-    public GameObject GetItem()
+    public ItemData GetItem()
     {
         if(_items.Count == 0) 
             return null;
-        GameObject itemGo = PrefabManager.ItemPrefabs[_items.Dequeue()];
+        ItemData item = _items.Dequeue();
         UIManager.UpdateItems(_items, this);
-        return itemGo;
+        return item;
     }
 
     /// <summary>
@@ -116,7 +153,7 @@ public class Team : MonoBehaviour
         Players = players;
         Goalkeeper = goalkeeper;
 
-        _items = new Queue<Sprite>(_itemCapacity);
+        _items = new Queue<ItemData>(_itemCapacity);
 
         Brains = Players.Select(player => player.IABrain).ToArray();
     }

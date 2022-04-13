@@ -44,7 +44,7 @@ public class InputBrain : PlayerBrain
         else if (eastButton) // Throw
         {
             eastButton = !eastButton;
-            return Action.Throw(_rightStickInput);
+            return Action.Throw(_movementInput);
         }
         else if (southButton) // ChangePlayer/Pass
         {
@@ -61,7 +61,7 @@ public class InputBrain : PlayerBrain
                 return Action.ChangePlayer();
 
         }
-        else if (northButton) // Drible/HeadBut
+        else if (northButton) // Drible/HeadButt
         {
             northButton = !northButton;
 

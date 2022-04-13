@@ -6,14 +6,14 @@ public class HolyBrain : PlayerBrain
 {
     private TreeV2 behaviorTree = new TreeV2();
 
-    public float shootThreshold = Field.Width / 4;
-    public float defendThreshold = Field.Width / 20;
-    public float attackThreshold = Field.Width / 10;
-    public float markThreshold = Field.Width / 25;
-    public float headButtThreshold = 1f;
-    public float passAlignementThreshold = 0.8f;
-    public float shootAlignementThreshold = 0.9f;
-    public float dangerRangeThreshold = 2f;
+    private float shootThreshold = Field.Width / 4;
+    private float defendThreshold = Field.Width / 20;
+    private float attackThreshold = Field.Width / 10;
+    private float markThreshold = Field.Width / 25;
+    private float headButtThreshold = 1f;
+    private float passAlignementThreshold = 0.6f;
+    private float shootAlignementThreshold = 0.9f;
+    private float dangerRangeThreshold = 3f;
 
     private void Start()
     {
@@ -31,6 +31,12 @@ public class HolyBrain : PlayerBrain
 
         behaviorTree.Setup(Allies, Enemies, this.Player, Thresholds);
     }
+
+    private void Update()
+    {
+        //behaviorTree
+    }
+
     public override Action GetAction()
     {
         return behaviorTree.root.Evaluate().Item2;

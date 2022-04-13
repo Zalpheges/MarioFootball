@@ -13,8 +13,7 @@ public class A_Shoot : Node
         if (!_rootInitialized)
             _root = GetRootNode();
 
-        _root.actionToPerform = ActionToPerform.Shoot;
-        return (NodeState.SUCCESS, Action.None);
+        return (NodeState.SUCCESS, Action.Shoot(1f));
     }
 
     private RootNode GetRootNode()
