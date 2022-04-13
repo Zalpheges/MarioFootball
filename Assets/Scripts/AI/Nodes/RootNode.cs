@@ -73,6 +73,7 @@ public class RootNode : Node
     public Player passTarget = null;
     public Player ballContender = null;
     public Player ballHolder = null;
+    public Player previousBallHolder = null;
     public Player ballSeeker = null;
 
     public Vector3 Position = Vector3.zero;

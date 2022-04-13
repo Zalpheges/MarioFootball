@@ -58,7 +58,7 @@ public class TreeV2
         {
             new Sequence(new List<Node>()
             {
-                //new CoucouNode(),
+                new CoucouNode(),
                 new Selector(new List<Node>
                 {
                     new Sequence(new List<Node>
@@ -96,6 +96,7 @@ public class TreeV2
                     new Sequence(new List<Node>
                     {
                         new T_BallHolderIsEnemy(),
+                        new T_BallHolderUnchanged(),
                         new Selector(new List<Node>
                         {
                             new T_BallState_Enemy(),
@@ -148,6 +149,7 @@ public class TreeV2
                     new Sequence(new List<Node>
                     {
                         new T_BallHolderIsAlly(),
+                        new T_BallHolderUnchanged(),
                         new Selector(new List<Node>
                         {
                             new T_BallState_Ally(),
@@ -394,7 +396,7 @@ public class TreeV2
                                 new Sequence(new List<Node>
                                 {
                                     new T_PlayerType_Receiver(),
-                                    new S_Static()
+                                    new S_MoveSeeker()
                                 }),
                                 new Sequence(new List<Node>
                                 {
