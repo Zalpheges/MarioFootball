@@ -1,10 +1,10 @@
 using UnityEngine;
 
-public class GreenTurtleShell : StraightTurtleShell
+public class SpinyTurtleShell : ThrowableItem
 {
     protected override void ApplyEffect(Player player)
     {
-        Debug.Log("Push " + player.name);
+        Debug.Log("Bully " + player.name);
     }
     public override void DestroyItem()
     {

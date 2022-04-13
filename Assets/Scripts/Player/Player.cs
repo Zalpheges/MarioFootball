@@ -14,6 +14,43 @@ public class Player : MonoBehaviour
         Stunned,
         Dribbling
     }
+    public struct PlayerActionsQueue
+    {
+        private Queue<Vector3> _positions;
+        private Queue<System.Action> _animations;
+        private Queue<float> _preActionDelays;
+
+        private void Init()
+        {
+            _positions = new Queue<Vector3>();
+            _animations = new Queue<System.Action>();
+            _preActionDelays = new Queue<float>();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="position"></param>
+        /// <param name="anim">de la forme () => animator.SetBool("fdp")</param>
+        /// <param name="delay"></param>
+        public void AddAction(Vector3 position, System.Action anim, float delay)
+        {
+            if (_positions == null)
+                Init();
+            _positions.Enqueue(position);
+            _animations.Enqueue(anim);
+            _preActionDelays.Enqueue(delay);
+        }
+
+        public (System.Action, float) GetNext(NavMeshAgent agent)
+        {
+            if (_positions.Count < 1)
+                return (null, 0f);
+            agent.destination = _positions.Dequeue();
+            System.Action anim = _animations.Dequeue();
+            return (anim, _preActionDelays.Dequeue());
+        }
+    }
 
     [SerializeField]
     private PlayerSpecs _specs;
@@ -38,15 +75,22 @@ public class Player : MonoBehaviour
     public bool IsPiloted { get; set; } = false;
     public bool IsNavDriven { get; private set; } = false;
     public bool IsWaiting { get; set; } = false;
+    public bool ProcessQueue { get; private set; } = false;
+
+    public bool IsElectrocutionShader;
+
+    public Material MaterialElectricity;
 
     private float _dashSpeed;
     private Vector3 _dashEndPoint;
 
     private Action _waitingAction = null;
 
-    public bool isElectrocutionShader;
+    public PlayerActionsQueue ActionsQueue;
 
-    public Material MaterialElectricity;
+    private float _timer;
+    private float _currentTimeLimit;
+    private System.Action _nextAnimToPerform;
 
     #region Debug
 
@@ -108,7 +152,10 @@ public class Player : MonoBehaviour
             return;
 
         _rgdb.angularVelocity = Vector3.zero;
-        _rgdb.velocity = Vector3.zero;
+        _rgdb.velocity = Vector3.zero;
+
+        if (ProcessQueue)
+            UpdateNavQueue();
 
         _agent.enabled = IsNavDriven || !IsPiloted;
 
@@ -119,9 +166,17 @@ public class Player : MonoBehaviour
         {
             if (Vector3.Distance(transform.position, _agent.destination) <= 0.1f)
             {
-                IsNavDriven = false;
-                IsWaiting = true;
-                transform.rotation = Quaternion.LookRotation(Vector3.Project(transform.position - Team.transform.position, Field.Transform.forward));
+                if (!ProcessQueue)
+                {
+                    IsNavDriven = false;
+                    IsWaiting = true;
+                    transform.rotation = Quaternion.LookRotation(Vector3.Project(transform.position - Team.transform.position, Field.Transform.forward));
+                }
+                else
+                {
+                    if(_timer > 0.2f)
+                        _nextAnimToPerform();
+                }
             }
 
             return;
@@ -134,6 +189,9 @@ public class Player : MonoBehaviour
 
             return;
         }
+
+        if (IsWaiting && !Field.ArePlayersAllWaiting())
+            return;
 
         Action action;
 
@@ -172,6 +230,22 @@ public class Player : MonoBehaviour
         }
 
         MakeAction(action);
+    }
+
+    public void ReadQueue()
+    {
+        ProcessQueue = IsNavDriven = true;
+        (_nextAnimToPerform, _currentTimeLimit) = ActionsQueue.GetNext(_agent);
+    }
+    private void UpdateNavQueue()
+    {
+        if ((_timer += Time.deltaTime) > _currentTimeLimit)
+        {
+            _timer = 0f;
+            (_nextAnimToPerform, _currentTimeLimit) = ActionsQueue.GetNext(_agent);
+            if (_currentTimeLimit == 0f)
+                ProcessQueue = IsNavDriven = false;
+        }
     }
 
     public void ChangeMaterialOnElectrocution(bool enabled)
