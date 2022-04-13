@@ -29,7 +29,8 @@ public enum PlayerType
     Attacker_Top,
     Attacker_Bot,
     Defender,
-    BallHolder
+    BallHolder,
+    Receiver
 }
 public enum BallState
 {
@@ -76,9 +77,9 @@ public class RootNode : Node
 
     public Vector3 Position = Vector3.zero;
 
-    public Vector2 Attacker_Offset_Standard_Mid = new Vector2(Field.Width / 8, Field.Height / 6);
-    public Vector2 Attacker_Offset_Standard_Side_Forward = new Vector2(Field.Width / 6, Field.Height / 8);
-    public Vector2 Attacker_Offset_Standard_Side_Sideward = new Vector2(0f, Field.Height / 3);
+    public Vector2 Attacker_Offset_Standard_Mid = new Vector2(Field.Width / 9, Field.Height / 4);
+    public Vector2 Attacker_Offset_Standard_Side_Forward = new Vector2(Field.Width / 9, Field.Height / 6);
+    public Vector2 Attacker_Offset_Standard_Side_Sideward = new Vector2(0f, Field.Height / 2);
 
     public Vector2 Attacker_Offset_ShootQuarter_Side_Forward = new Vector2(Field.Width / 6, 0f); 
     public Vector2 Attacker_Offset_ShootQuarter_Side_Sideward = new Vector2(Field.Width / 10, Field.Height / 6); 

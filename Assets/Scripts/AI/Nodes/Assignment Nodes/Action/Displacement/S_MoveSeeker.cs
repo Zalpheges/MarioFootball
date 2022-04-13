@@ -3,19 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using BehaviorTree;
 
-public class CoucouNode : Node
+public class S_MoveSeeker : Node
 {
-
     private RootNode _root;
+    private bool _rootInitialized = false;
+
     public override (NodeState, Action) Evaluate()
     {
-        _root = GetRootNode();
+        if (!_rootInitialized)
+            _root = GetRootNode();
 
-        Debug.Log(_root.player.transform.GetSiblingIndex());
-        Debug.Log(_root.currentPlayerType);
+        _root.Position = Field.Ball.transform.position;
+        _root.actionToPerform = ActionToPerform.Move;
 
         return (NodeState.SUCCESS, Action.None);
     }
+
     private RootNode GetRootNode()
     {
         Node currentNode = this;
@@ -23,6 +26,9 @@ public class CoucouNode : Node
         while (currentNode.parent != null)
             currentNode = currentNode.parent;
 
+        _rootInitialized = true;
+
         return (RootNode)currentNode;
     }
 }
+

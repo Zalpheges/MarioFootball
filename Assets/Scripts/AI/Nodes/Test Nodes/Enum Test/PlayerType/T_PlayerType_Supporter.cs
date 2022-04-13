@@ -3,25 +3,29 @@ using System.Collections.Generic;
 using UnityEngine;
 using BehaviorTree;
 
-public class CoucouNode : Node
+public class T_PlayerType_Supporter : Node
 {
-
     private RootNode _root;
+    private bool _rootInitialized = false;
+
     public override (NodeState, Action) Evaluate()
     {
-        _root = GetRootNode();
+        if (!_rootInitialized)
+            _root = GetRootNode();
 
-        Debug.Log(_root.player.transform.GetSiblingIndex());
-        Debug.Log(_root.currentPlayerType);
-
-        return (NodeState.SUCCESS, Action.None);
+        if (_root.currentPlayerType == PlayerType.Supporter)
+            return (NodeState.SUCCESS, Action.None);
+        return (NodeState.FAILURE, Action.None);
     }
+
     private RootNode GetRootNode()
     {
         Node currentNode = this;
 
         while (currentNode.parent != null)
             currentNode = currentNode.parent;
+
+        _rootInitialized = true;
 
         return (RootNode)currentNode;
     }
