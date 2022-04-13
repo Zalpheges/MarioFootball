@@ -26,6 +26,14 @@ public class InputBrain : PlayerBrain
         if (westButtonHeld)
         {
             shootForce += Time.deltaTime; // Force en fonction du ntemp appuyé A REVOIR
+
+            if (shootForce > 2.5f)
+            {
+                shootForce = 2.5f;
+
+                westButtonHeld = false;
+                westButtonPressed = true;
+            }
         }
     }
 
@@ -34,10 +42,12 @@ public class InputBrain : PlayerBrain
     {
         if (westButtonPressed) // Tire|Tacle
         {
-            westButtonPressed = !westButtonPressed;
+            westButtonPressed = false;
 
             if (Player.HasBall)
+            {
                 return Action.Shoot(shootForce);
+            }
             else
                 return Action.Tackle(_movementInput);
         }
@@ -90,10 +100,9 @@ public class InputBrain : PlayerBrain
 
     public void WestButton(InputAction.CallbackContext context)
     {
-        shootForce = 10;
-
         if (context.phase == InputActionPhase.Performed)
         {
+            shootForce = 0f;
             westButtonHeld = true;
         }
 

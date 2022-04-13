@@ -11,7 +11,8 @@ public class Player : MonoBehaviour
         Headbutting,
         Shooting,
         Falling,
-        Stunned
+        Stunned,
+        Dribbling
     }
 
     [SerializeField]
@@ -222,7 +223,7 @@ public class Player : MonoBehaviour
             case Action.Type.Shoot:
                 if (HasBall)
                 {
-                    Shoot();
+                    Shoot(action.Force / 2.5f);
                     _animator.SetTrigger("Strike");
                 }
 
@@ -249,7 +250,8 @@ public class Player : MonoBehaviour
                 break;
 
             case Action.Type.Dribble:
-                Debug.Log("Dribble");
+                State = PlayerState.Dribbling;
+                Dash(direction, 7.5f, 2f);
                 _animator.SetTrigger("Spin");
 
                 break;
@@ -346,8 +348,11 @@ public class Player : MonoBehaviour
 
     #region Shoot
 
-    private void Shoot()
+    private void Shoot(float force)
     {
+        force = Mathf.Max(0.5f, force);
+
+        Debug.Log(_specs.Accuracy * force);
         Transform goal = Enemies.transform;
 
         //float angle = Vector3.SignedAngle(transform.forward, goal.forward, Vector3.up);
@@ -359,10 +364,13 @@ public class Player : MonoBehaviour
             MissedShoot(goal);
         else
         {
-            if (Random.value > _specs.Accuracy + 1000f)
+            if (Random.value > _specs.Accuracy * force)
+            {
+                Debug.Log("Poteau");
                 GoalPostShoot(goal);
+            }
             else
-                ShootOnTarget(goal);
+                ShootOnTarget(goal, force);
         }
     }
 
@@ -391,10 +399,10 @@ public class Player : MonoBehaviour
         //Debug.Log($"Distance < 45m ({distance}) - Tir sur poteau {direction}.");
     }
 
-    private void ShootOnTarget(Transform goal)
+    private void ShootOnTarget(Transform goal, float force)
     {
         float x = Random.Range(-1, 2);
-        float y = Random.Range(-1, 2);
+        float y = force < 1f / 3f ? -1f : (force < 2f / 3f ? 0f : 1f);
 
         Vector3 endPosition = goal.position;
         endPosition += goal.right * x * Field.GoalWidth * 0.85f / 2f;

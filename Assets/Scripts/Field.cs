@@ -6,6 +6,9 @@ public class Field : MonoBehaviour
     private static Field _instance;
 
     [SerializeField]
+    private Transform _circleSpin;
+
+    [SerializeField]
     private float _width;
     public static float Width => _instance._width;
 
@@ -112,6 +115,14 @@ public class Field : MonoBehaviour
         _widthTwoThirds = _topLeftCorner.z + _width * 2 / 3f;
 
         GameManager.BreedMePlease(_team1, _team2);
+    }
+
+    private void Update()
+    {
+        _circleSpin.gameObject.SetActive(!Ball.transform.parent);
+
+        _circleSpin.position = Ball.transform.position;
+        _circleSpin.position -= _circleSpin.position.y * Vector3.up;
     }
 
     /// <summary>
