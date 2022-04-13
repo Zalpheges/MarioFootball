@@ -28,7 +28,7 @@ public class Options_UI_Manager : MonoBehaviour
 
     private void Awake()
     {
-        Music = MusicManager._instance.gameObject.GetComponent<AudioSource>();
+        Music = AudioManager._instance.gameObject.GetComponent<AudioSource>();
     }
 
     private void Update()
