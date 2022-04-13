@@ -223,7 +223,7 @@ public class Player : MonoBehaviour
             case Action.Type.Shoot:
                 if (HasBall)
                 {
-                    Shoot(action.Force / 2.5f);
+                    Shoot(action.Force);
                     _animator.SetTrigger("Strike");
                 }
 
@@ -251,7 +251,7 @@ public class Player : MonoBehaviour
 
             case Action.Type.Dribble:
                 State = PlayerState.Dribbling;
-                Dash(direction, 7.5f, 2f);
+                Dash(direction, 9f, 1.2f);
                 _animator.SetTrigger("Spin");
 
                 break;
@@ -304,7 +304,7 @@ public class Player : MonoBehaviour
         Ball ball = other.GetComponent<Ball>();
 
         if (Field.Ball == ball && !HasBall && CanGetBall)
-            ball.Take(transform);
+            ball.Take(this);
 
         if (other.tag == "Wall" && State != PlayerState.Stunned)
             Stun();
@@ -332,11 +332,6 @@ public class Player : MonoBehaviour
     {
         if (other.tag == "Wall")
             ResetState();
-
-        Player player = other.GetComponent<Player>();
-
-        if (player && player.State == PlayerState.Tackling)
-            Fall((_rgdb.position - player.transform.position).normalized);
     }
 
     public void SetNavDriven()
@@ -428,7 +423,7 @@ public class Player : MonoBehaviour
 
         if (mate)
         {
-            Field.Ball.Pass(mate, 16f);
+            Field.Ball.Pass(mate, 33f);
 
             //Debug.Log("Passe directe vers " + direction.ToString());
         }
