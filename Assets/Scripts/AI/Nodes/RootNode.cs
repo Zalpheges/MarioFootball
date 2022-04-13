@@ -82,8 +82,8 @@ public class RootNode : Node
     public Vector2 Attacker_Offset_Standard_Side_Forward = new Vector2(Field.Width / 9, Field.Height / 6);
     public Vector2 Attacker_Offset_Standard_Side_Sideward = new Vector2(0f, Field.Height / 2);
 
-    public Vector2 Attacker_Offset_ShootQuarter_Side_Forward = new Vector2(Field.Width / 6, 0f); 
-    public Vector2 Attacker_Offset_ShootQuarter_Side_Sideward = new Vector2(Field.Width / 10, Field.Height / 6); 
+    public Vector2 Attacker_Offset_ShootQuarter_Side_Forward = new Vector2(Field.Width / 6, 0f);
+    public Vector2 Attacker_Offset_ShootQuarter_Side_Sideward = new Vector2(Field.Width / 10, Field.Height / 6);
 
     public bool AITeam = true;
 
@@ -99,12 +99,20 @@ public class RootNode : Node
     public Dictionary<int, Player> allyPlayersOrder = new Dictionary<int, Player>();
     public Dictionary<int, Player> enemyPlayersOrder = new Dictionary<int, Player>();
 
+    public Vector2Int BallHolderCoordinates = new Vector2Int();
+
+    public List<Vector2Int> SideCoordinates = new List<Vector2Int>();
+    public List<Vector2Int> CornerCoordinates = new List<Vector2Int>();
+    public List<Vector2Int> CenterCoordinates = new List<Vector2Int>();
+    public List<Vector2Int> GoalRangeCoordinates = new List<Vector2Int>();
+
     public RootNode(TreeV2 iparentTree, List<Node> ichildren)
     {
         parentTree = iparentTree;
         player = parentTree.player;
         AllyPlayersOrderSetup();
         EnemyPlayersOrderSetup();
+        InitCoordinates();
         AIBoolSetup();
 
         if (parentTree.allyGoalTransform.position.x < parentTree.enemyGoalTransform.position.x)
@@ -114,6 +122,27 @@ public class RootNode : Node
 
         foreach (Node child in ichildren)
             _Attach(child);
+    }
+
+    private void InitCoordinates()
+    {
+        int SideModifier = allyTeamSide == TeamSide.West ? 1 : -1;
+
+        SideCoordinates.Add(new Vector2Int(BallHolderCoordinates.x, 0));
+        SideCoordinates.Add(new Vector2Int(BallHolderCoordinates.x + 1, BallHolderCoordinates.y));
+        SideCoordinates.Add(new Vector2Int(BallHolderCoordinates.x - 1, BallHolderCoordinates.y));
+
+        CornerCoordinates.Add(new Vector2Int(BallHolderCoordinates.x / 2, BallHolderCoordinates.y));
+        CornerCoordinates.Add(new Vector2Int(BallHolderCoordinates.x / 2, 0));
+        CornerCoordinates.Add(new Vector2Int(BallHolderCoordinates.x, BallHolderCoordinates.y));
+
+        CenterCoordinates.Add(new Vector2Int(BallHolderCoordinates.x - SideModifier, BallHolderCoordinates.y));
+        CenterCoordinates.Add(new Vector2Int(BallHolderCoordinates.x + SideModifier, BallHolderCoordinates.y + 1));
+        CenterCoordinates.Add(new Vector2Int(BallHolderCoordinates.x + SideModifier, BallHolderCoordinates.y - 1));
+
+        GoalRangeCoordinates.Add(new Vector2Int(BallHolderCoordinates.x, BallHolderCoordinates.y + 1));
+        GoalRangeCoordinates.Add(new Vector2Int(BallHolderCoordinates.x, BallHolderCoordinates.y - 1));
+        GoalRangeCoordinates.Add(new Vector2Int(0, 0));
     }
 
     private void AIBoolSetup()
@@ -144,7 +173,7 @@ public class RootNode : Node
 
         int lowestIndex = highestIndex - parentTree.Enemies.Count + 1;
         foreach (Player player in parentTree.Enemies)
-            enemyPlayersOrder.Add(player.transform.GetSiblingIndex() - lowestIndex,player);
+            enemyPlayersOrder.Add(player.transform.GetSiblingIndex() - lowestIndex, player);
     }
 
     public override (NodeState, Action) Evaluate()
