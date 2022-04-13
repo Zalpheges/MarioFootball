@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Shader Graphs_New Shader Graph 3
+  m_Name: Forcefield LongWall
   m_Shader: {fileID: -6465566751694194690, guid: 6f850785b822c7e43be9d2963c334be4, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -37,10 +37,11 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - Vector1_28e7f41c8a0c408a8669079ada3d8b54: 0.03
-    - Vector1_385363a3187b419c9c6674d3bde9b2f2: 0.1
+    - Vector1_385363a3187b419c9c6674d3bde9b2f2: 1.29
     - Vector1_5ea2762381f64d50a67b1e5cf4d0b73c: 0.05
     - Vector1_da7f549f5a4a46c0bdbee9468eeafec8: 4.22
     - Vector1_f9525c3dbb0f4d4db1ca9e9a641fa8f0: 44.44
     m_Colors:
     - Color_9d36c6e10eaf483c93d02c7ef1f7c2b1: {r: 0, g: 1.2392157, b: 1.4980392, a: 0}
+    - Vector2_67f7d3f7166641818669de751c9408c4: {r: 7.84, g: 1.09, b: 0, a: 0}
   m_BuildTextureStacks: []
