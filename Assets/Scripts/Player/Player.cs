@@ -439,7 +439,7 @@ public class Player : MonoBehaviour
 
     private void Shoot(float force)
     {
-        force = Mathf.Max(0.5f, force);
+        force = Mathf.Max(0.2f, force);
 
         Debug.Log(_specs.Accuracy * force);
         Transform goal = Enemies.transform;
