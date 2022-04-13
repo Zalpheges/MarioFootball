@@ -11,9 +11,9 @@ public class HolyBrain : PlayerBrain
     private float attackThreshold = Field.Width / 10;
     private float markThreshold = Field.Width / 25;
     private float headButtThreshold = 1f;
-    private float passAlignementThreshold = 0.8f;
+    private float passAlignementThreshold = 0.6f;
     private float shootAlignementThreshold = 0.9f;
-    private float dangerRangeThreshold = 7f;
+    private float dangerRangeThreshold = 3f;
 
     private void Start()
     {
