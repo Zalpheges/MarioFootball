@@ -54,15 +54,15 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        UIManager.SetChrono(_chrono);
-        _timer += Time.deltaTime;
-        if (_timer >= 1f)
-        {
-            --_chrono;
-            if(_chrono.Finished)
-                Debug.Log("Match end");
-            --_timer;
-        }
+            UIManager.SetChrono(_chrono);
+            _timer += Time.deltaTime;
+            if (_timer >= 1f)
+            {
+                --_chrono;
+                if (_chrono.Finished)
+                    Debug.Log("Match end");
+                --_timer;
+            }
     }
 
     /// <summary>
@@ -126,6 +126,8 @@ public class GameManager : MonoBehaviour
 
     public static void GoalScored(Team team)
     {
+        AudioManager._instance.PlaySFX(AudioManager.SFXType.Goal); //GoalScoredSound
+
         Field.Ball.Free();
         if (team == Field.Team1)
         {

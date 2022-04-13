@@ -96,6 +96,8 @@ public class Field : MonoBehaviour
 
     private void Start()
     {
+        AudioManager._instance.PlayMusic(AudioManager.MusicType.Match); //MatchMusicPlay
+
         _bottomLeftCorner = transform.TransformPoint(new Vector3(-_width / 2f, 0f, -_height / 2f));
         _bottomRightCorner = transform.TransformPoint(new Vector3(_width / 2f, 0f, -_height / 2f));
         _topLeftCorner = transform.TransformPoint(new Vector3(-_width / 2f, 0f, _height / 2f));
