@@ -45,7 +45,8 @@ public class Player : MonoBehaviour
         public (System.Action, float) GetNext(NavMeshAgent agent)
         {
             if (_positions.Count < 1)
-                return (null, 0f);
+                return (null, 0f);
+
             agent.destination = _positions.Dequeue();
             System.Action anim = _animations.Dequeue();
             return (anim, _preActionDelays.Dequeue());
@@ -152,8 +153,10 @@ public class Player : MonoBehaviour
             return;
 
         _rgdb.angularVelocity = Vector3.zero;
-        _rgdb.velocity = Vector3.zero;
-
+        _rgdb.velocity = Vector3.zero;
+
+
+
         if (ProcessQueue)
             UpdateNavQueue();
 
@@ -166,16 +169,25 @@ public class Player : MonoBehaviour
         {
             if (Vector3.Distance(transform.position, _agent.destination) <= 0.1f)
             {
-                if (!ProcessQueue)
-                {
-                    IsNavDriven = false;
-                    IsWaiting = true;
-                    transform.rotation = Quaternion.LookRotation(Vector3.Project(transform.position - Team.transform.position, Field.Transform.forward));
+                if (!ProcessQueue)
+
+                {
+
+                    IsNavDriven = false;
+
+                    IsWaiting = true;
+
+                    transform.rotation = Quaternion.LookRotation(Vector3.Project(transform.position - Team.transform.position, Field.Transform.forward));
+
                 }
-                else
-                {
-                    if(_timer > 0.2f)
-                        _nextAnimToPerform();
+                else
+
+                {
+
+                    if(_timer > 0.2f)
+
+                        _nextAnimToPerform();
+
                 }
             }
 
@@ -230,12 +242,18 @@ public class Player : MonoBehaviour
         }
 
         MakeAction(action);
-    }
-
-    public void ReadQueue()
-    {
-        ProcessQueue = IsNavDriven = true;
-        (_nextAnimToPerform, _currentTimeLimit) = ActionsQueue.GetNext(_agent);
+    }
+
+
+
+    public void ReadQueue()
+
+    {
+
+        ProcessQueue = IsNavDriven = true;
+
+        (_nextAnimToPerform, _currentTimeLimit) = ActionsQueue.GetNext(_agent);
+
     }
     private void UpdateNavQueue()
     {
