@@ -18,19 +18,19 @@ public class S_AssignSeeker : Node
 
         foreach(Player ally in _root.parentTree.Allies)
         {
-            float distance = (Field.Ball.transform.position - ally.transform.position).magnitude;
+            float distance = (Field.Ball.transform.position - ally.transform.position).sqrMagnitude;
 
             if (closestPlayer == null || distance < shortestDistance)
             {
-                Debug.Log(closestPlayer);
-                Debug.Log(distance);
-                Debug.Log(shortestDistance);
                 closestPlayer = ally;
                 shortestDistance = distance;
             }
         }
 
         _root.ballSeeker = closestPlayer;
+
+        if (_root.ballSeeker == _root.player)
+            _root.currentPlayerType = PlayerType.BallSeeker;
 
         return (NodeState.SUCCESS, Action.None);
     }

@@ -19,7 +19,6 @@ public class T_GoalUncovered : Node
         {
             Vector3 BallHolderToEnemy = enemyPlayer.transform.position - _root.player.transform.position;
             float DotProduct = Vector3.Dot(BallHolderToEnemy.normalized, BallHolderToGoal.normalized);
-            Debug.Log(DotProduct);
 
             if (DotProduct > _root.parentTree.shootAlignmentThreshold)
                 return (NodeState.FAILURE, Action.None);
