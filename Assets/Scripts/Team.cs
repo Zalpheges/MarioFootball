@@ -158,9 +158,9 @@ public class Team : MonoBehaviour
         Brains = Players.Select(player => player.IABrain).ToArray();
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.gameObject.GetComponent<Ball>())
+        if (other.GetComponent<Ball>())
         {
             Debug.Log("but");
             GameManager.GoalScored(this);

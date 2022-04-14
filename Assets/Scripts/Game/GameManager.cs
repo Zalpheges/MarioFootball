@@ -54,12 +54,15 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        if (!UIManager._instance)
+            return;
+
         UIManager.SetChrono(_chrono);
         _timer += Time.deltaTime;
         if (_timer >= 1f)
         {
             --_chrono;
-            if(_chrono.Finished)
+            if (_chrono.Finished)
                 Debug.Log("Match end");
             --_timer;
         }
@@ -126,6 +129,8 @@ public class GameManager : MonoBehaviour
 
     public static void GoalScored(Team team)
     {
+        AudioManager._instance.PlaySFX(AudioManager.SFXType.Goal); //GoalScoredSound
+
         Field.Ball.Free();
         if (team == Field.Team1)
         {
@@ -165,12 +170,9 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < positions.Count; i++)
         {
             Player player = i < n ? attackingPlayers[i] : defendingPlayers[i - n];
-            player.SetNavDriven();
-            NavMeshAgent agent = player.GetComponent<NavMeshAgent>();
 
-            agent.enabled = true;
-            agent.destination = player.Team == Field.Team1 ? positions[i]:new Vector3(-positions[i].x, positions[i].y, -positions[i].z);
-            agent.speed = 10f;
+            Vector3 destination = player.Team == Field.Team1 ? positions[i] : new Vector3(-positions[i].x, positions[i].y, -positions[i].z);
+            player.SetNavDriven(destination);
         }
     }
     private IEnumerator Match()

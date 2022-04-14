@@ -136,8 +136,9 @@ GameObject:
   - component: {fileID: 96002678}
   - component: {fileID: 96002677}
   - component: {fileID: 96002681}
-  - component: {fileID: 96002683}
+  - component: {fileID: 96002684}
   - component: {fileID: 96002682}
+  - component: {fileID: 96002683}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -175,25 +176,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _ball: {fileID: 266137186057966708, guid: 5f9a23016bc8ab94fb2a55df45b2bfa2, type: 3}
-  _virtualCamera: {fileID: 3719828912903332698, guid: aca5d63aa096fab459fea5a960a53911, type: 3}
-  _banana: {fileID: 6486403398316945681, guid: b38d456e7359a824eba183d37a45e41c, type: 3}
-  _bobBomb: {fileID: 6486403398316945681, guid: dfa07e22f9bc6f748b5c0b33b12b60f1, type: 3}
-  _mushroom: {fileID: 6486403398316945681, guid: d7f75d19e4df14d42bb72169ca2a03e0, type: 3}
-  _redTurtleShell: {fileID: 6486403398316945681, guid: c7983abfb67bd054bb0adcfae46c6fca, type: 3}
-  _greenTurtleShell: {fileID: 6486403398316945681, guid: 14867dccf77215b4b81726a46085e81b, type: 3}
-  _blueTurtleShell: {fileID: 6486403398316945681, guid: 19afd85247e405a4fa3d04c79e0aabf6, type: 3}
-  _spinyTurtleShell: {fileID: 6486403398316945681, guid: 3a5548e013eefed40b84cbfd7aeaf1df, type: 3}
-  _chomp: {fileID: 6486403398316945681, guid: 340e4b5823621fb4caaf1ec989fa588c, type: 3}
-  _superStar: {fileID: 6486403398316945681, guid: 14a727b731fee1d4cafc042ecf61d620, type: 3}
-  _bananaSprite: {fileID: 21300000, guid: 2de785ac387dd4d479761f274a82a56a, type: 3}
-  _bobBombSprite: {fileID: 21300000, guid: c80eaf8f71a7f474694a27f54380a4d2, type: 3}
-  _mushroomSprite: {fileID: 21300000, guid: af82914634bf0c04893151081df7503f, type: 3}
-  _redTurtleShellSprite: {fileID: 21300000, guid: 6fbb470c562976843bbcef2b0b668b03, type: 3}
-  _greenTurtleShellSprite: {fileID: 21300000, guid: a1447d4c2faa2a243a3cc91f17f22586, type: 3}
-  _blueTurtleShellSprite: {fileID: 21300000, guid: 016cff72fea1eff449705f2c035bdd2b, type: 3}
-  _spinyTurtleShellSprite: {fileID: 21300000, guid: 0246a88f98ebbc046a6b804723a6673c, type: 3}
-  _chompSprite: {fileID: 21300000, guid: 75372b2e8d6365b448c3ddc09c33af58, type: 3}
-  _superStarSprite: {fileID: 21300000, guid: 8adffa684b54fe64ab8c8f256f308411, type: 3}
+  _virtualCameraOrbital: {fileID: 0}
+  _virtualCameraTop: {fileID: 0}
+  _items: []
 --- !u!114 &96002679
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -278,7 +263,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 3381c508bade53a46bf4b85b5cf70985, type: 3}
+  m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -364,7 +349,103 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &96002683
+--- !u!82 &96002683
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 96002676}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: -7444480804589367763, guid: 05569034d6901cc408f8a3c12684bd66, type: 2}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &96002684
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -373,9 +454,26 @@ MonoBehaviour:
   m_GameObject: {fileID: 96002676}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79df1ce75f74c884cadcf0817c831e09, type: 3}
+  m_Script: {fileID: 11500000, guid: d5baf185070e56944882d1470c13c3d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MusicAudioSource: {fileID: 96002682}
+  SFXAudioSource: {fileID: 96002683}
+  MenuMusic: {fileID: 8300000, guid: 3381c508bade53a46bf4b85b5cf70985, type: 3}
+  MatchMusic:
+  - {fileID: 8300000, guid: d012e2524d5bc624e8fc944324eeb543, type: 3}
+  - {fileID: 8300000, guid: 6c5b39a0e22c5894d8350a4e963dfd70, type: 3}
+  - {fileID: 8300000, guid: 48c1db6296da7f744a26f1669b2b5990, type: 3}
+  Kickoff: {fileID: 8300000, guid: 13244609a97fa2045beef550f1f6b63d, type: 3}
+  Goal:
+  - {fileID: 8300000, guid: 053134ff0fa6ca442b7f24de49219a31, type: 3}
+  - {fileID: 8300000, guid: 66e96c19a2146e8468a90b044daab3c1, type: 3}
+  - {fileID: 8300000, guid: 72b880c65d5b89d4986b3cc55058b547, type: 3}
+  - {fileID: 8300000, guid: b463f7b6f519aae418fa6f92862c95e3, type: 3}
+  - {fileID: 8300000, guid: 27ff0fc2058411c4fb91cbfdb47d61f1, type: 3}
+  - {fileID: 8300000, guid: 50c682a4b734c6149b9d95643e950bd7, type: 3}
+  MatchOver:
+  - {fileID: 8300000, guid: 93b742ad671aacd4789771a2dcfcf03a, type: 3}
 --- !u!1 &97281666
 GameObject:
   m_ObjectHideFlags: 0

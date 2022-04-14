@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22b18ff61a2fb884a906898fb289f729, type: 3}
+  m_Name: LuigiSpecs
+  m_EditorClassIdentifier: 
+  Name: Luigi Offishialz
+  Weight: 70
+  Accuracy: 1
+  Speed: 5
+  StunTime: 1
+  Prefab: {fileID: 5820481229613935841, guid: b6fc94af124cce648b56b5367b960049, type: 3}

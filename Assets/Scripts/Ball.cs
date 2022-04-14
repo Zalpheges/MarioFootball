@@ -47,6 +47,11 @@ public class Ball : MonoBehaviour
             if (_bezierTime >= 1f)
             {
                 StopMoving();
+
+                Vector3 newPosition = ComputeBezierPosition(_startPoint, _interpolator, _endPoint, 0.95f);
+                Vector3 lastPosition = ComputeBezierPosition(_startPoint, _interpolator, _endPoint, 0.1f);
+
+                _rgdb.velocity = (newPosition - lastPosition).normalized * _speed;
             }
             else
             {
@@ -54,8 +59,6 @@ public class Ball : MonoBehaviour
                 Vector3 newPosition = ComputeBezierPosition(_startPoint, _interpolator, _endPoint, _bezierTime);
 
                 _rgdb.MovePosition(newPosition);
-
-                _rgdb.velocity = (newPosition - lastPosition) / (Time.deltaTime / (length / _speed));
             }
         }
         else if (!_isFree)
@@ -159,13 +162,18 @@ public class Ball : MonoBehaviour
         Shooter = null;
     }
 
-    public void Take(Transform parent)
+    public void Take(Player parent)
     {
-        if (_isFree && parent != Shooter?.transform)
+        Player owner = transform.parent?.GetComponent<Player>();
+
+        if (!_isFree && owner.State == Player.PlayerState.Dribbling)
+            return;
+
+        if (parent.transform != Shooter?.transform && (!owner || owner.Team != parent?.Team))
         {
             _isFree = false;
 
-            transform.parent = parent;
+            transform.parent = parent.transform;
             Target = null;
 
             StopMoving();

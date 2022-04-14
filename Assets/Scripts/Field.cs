@@ -6,6 +6,9 @@ public class Field : MonoBehaviour
     private static Field _instance;
 
     [SerializeField]
+    private Transform _circleSpin;
+
+    [SerializeField]
     private float _width;
     public static float Width => _instance._width;
 
@@ -96,6 +99,8 @@ public class Field : MonoBehaviour
 
     private void Start()
     {
+        AudioManager._instance.PlayMusic(AudioManager.MusicType.Match); //MatchMusicPlay
+
         _bottomLeftCorner = transform.TransformPoint(new Vector3(-_width / 2f, 0f, -_height / 2f));
         _bottomRightCorner = transform.TransformPoint(new Vector3(_width / 2f, 0f, -_height / 2f));
         _topLeftCorner = transform.TransformPoint(new Vector3(-_width / 2f, 0f, _height / 2f));
@@ -114,6 +119,14 @@ public class Field : MonoBehaviour
         GameManager.BreedMePlease(_team1, _team2);
     }
 
+    private void Update()
+    {
+        _circleSpin.gameObject.SetActive(!Ball.transform.parent);
+
+        _circleSpin.position = Ball.transform.position;
+        _circleSpin.position -= _circleSpin.position.y * Vector3.up;
+    }
+
     /// <summary>
     /// Assigne le ballon créé puis le positionne ainsi que les joueurs
     /// </summary>
@@ -122,22 +135,30 @@ public class Field : MonoBehaviour
     {
         _instance._ball = ball;
 
-        ball.transform.position = _instance.transform.position;
-
         _instance.SetTeamPosition();
+
+        ball.transform.position = _instance.VectorToPosition(_instance._attackPosCaptain);
     }
 
     private void SetTeamPosition()
     {
         Team1.Players[0].transform.position = VectorToPosition(_attackPosCaptain);
+        Team1.Players[0].SetNavDriven(VectorToPosition(_attackPosCaptain));
         Team1.Players[1].transform.position = VectorToPosition(_attackPosMate1);
+        Team1.Players[1].SetNavDriven(VectorToPosition(_attackPosMate1));
         Team1.Players[2].transform.position = VectorToPosition(_attackPosMate2);
+        Team1.Players[2].SetNavDriven(VectorToPosition(_attackPosMate2));
         Team1.Players[3].transform.position = VectorToPosition(_attackPosMate3);
+        Team1.Players[3].SetNavDriven(VectorToPosition(_attackPosMate3));
 
         Team2.Players[0].transform.position = VectorToPosition(_defPosCaptain);
+        Team2.Players[0].SetNavDriven(VectorToPosition(_defPosCaptain));
         Team2.Players[1].transform.position = VectorToPosition(_defPosMate1);
+        Team2.Players[1].SetNavDriven(VectorToPosition(_defPosMate1));
         Team2.Players[2].transform.position = VectorToPosition(_defPosMate2);
+        Team2.Players[2].SetNavDriven(VectorToPosition(_defPosMate2));
         Team2.Players[3].transform.position = VectorToPosition(_defPosMate3);
+        Team2.Players[3].SetNavDriven(VectorToPosition(_defPosMate3));
     }
 
     public static List<Vector3> GetStartPositions()
