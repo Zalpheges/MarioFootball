@@ -155,8 +155,6 @@ public class Player : MonoBehaviour
         _rgdb.angularVelocity = Vector3.zero;
         _rgdb.velocity = Vector3.zero;
 
-
-
         if (ProcessQueue)
             UpdateNavQueue();
 
@@ -170,24 +168,22 @@ public class Player : MonoBehaviour
             if (Vector3.Distance(transform.position, _agent.destination) <= 0.1f)
             {
                 if (!ProcessQueue)
-
                 {
-
                     IsNavDriven = false;
 
                     IsWaiting = true;
 
-                    transform.rotation = Quaternion.LookRotation(Vector3.Project(transform.position - Team.transform.position, Field.Transform.forward));
+                    ResetState();
 
+                    _animator.SetBool("Idle", true);
+                    _animator.SetBool("Run", false);
+
+                    transform.rotation = Quaternion.LookRotation(Enemies.transform.position - transform.position, Vector3.up);
                 }
                 else
-
                 {
-
                     if(_timer > 0.2f)
-
                         _nextAnimToPerform();
-
                 }
             }
 
@@ -381,6 +377,22 @@ public class Player : MonoBehaviour
         return direction.normalized;
     }
 
+    public void SetNavDriven(Vector3 destination)
+    {
+        IsNavDriven = true;
+
+        _agent.enabled = true;
+        _agent.destination = destination;
+        _agent.speed = 10f;
+
+        State = PlayerState.Dribbling;
+
+        _animator.SetBool("Idle", false);
+        _animator.SetBool("Run", true);
+    }
+
+    #region Collisions
+
     private void OnTriggerEnter(Collider other)
     {
         OnTrigger(other);
@@ -389,6 +401,12 @@ public class Player : MonoBehaviour
     private void OnTriggerStay(Collider other)
     {
         OnTrigger(other);
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "Wall")
+            ResetState();
     }
 
     private void OnTrigger(Collider other)
@@ -420,20 +438,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.tag == "Wall")
-            ResetState();
-    }
-
-    public void SetNavDriven(Vector3 destination)
-    {
-        IsNavDriven = true;
-
-        _agent.enabled = true;
-        _agent.destination = destination;
-        _agent.speed = 10f;
-    }
+    #endregion
 
     #region Shoot
 
@@ -441,7 +446,6 @@ public class Player : MonoBehaviour
     {
         force = Mathf.Max(0.2f, force);
 
-        Debug.Log(_specs.Accuracy * force);
         Transform goal = Enemies.transform;
 
         //float angle = Vector3.SignedAngle(transform.forward, goal.forward, Vector3.up);
@@ -455,7 +459,6 @@ public class Player : MonoBehaviour
         {
             if (Random.value > _specs.Accuracy * force)
             {
-                Debug.Log("Poteau");
                 GoalPostShoot(goal);
             }
             else
@@ -498,7 +501,7 @@ public class Player : MonoBehaviour
         endPosition += goal.up * y * Field.GoalHeight * 0.85f / 2f;
 
         Vector3 interpolator = (_rgdb.position + endPosition) / 2f;
-        interpolator -= Vector3.Project(endPosition - _rgdb.position, goal.right);
+        interpolator += Vector3.Project(endPosition - _rgdb.position, goal.right) / 2f;
 
         Field.Ball.Shoot(endPosition, interpolator, 33f);
 
