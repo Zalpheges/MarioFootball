@@ -240,12 +240,8 @@ public class Player : MonoBehaviour
         MakeAction(action);
     }
 
-
-
     public void ReadQueue()
-
     {
-
         ProcessQueue = IsNavDriven = true;
 
         (_nextAnimToPerform, _currentTimeLimit) = ActionsQueue.GetNext(_agent);
@@ -458,9 +454,7 @@ public class Player : MonoBehaviour
         else
         {
             if (Random.value > _specs.Accuracy * force)
-            {
                 GoalPostShoot(goal);
-            }
             else
                 ShootOnTarget(goal, force);
         }
@@ -501,7 +495,7 @@ public class Player : MonoBehaviour
         endPosition += goal.up * y * Field.GoalHeight * 0.85f / 2f;
 
         Vector3 interpolator = (_rgdb.position + endPosition) / 2f;
-        interpolator += Vector3.Project(endPosition - _rgdb.position, goal.right) / 2f;
+        interpolator += Vector3.Project(endPosition - _rgdb.position, goal.right);
 
         Field.Ball.Shoot(endPosition, interpolator, 33f);
 
