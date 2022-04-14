@@ -4,18 +4,29 @@ using UnityEngine;
 
 public abstract class PlaceableItem : ThrowableItem
 {
-    [SerializeField] private float _launchDistance;
-    private float _traveledDistance = 0f;
     private bool _stop = false;
+    private bool _init = false;
+    private const float g = 9.81f;
+
+    private void Init()
+    {
+        _direction = new Vector3(_direction.x * _data.Speed, _data.Speed, _direction.z * _data.Speed);
+    }
+
     protected override void Update()
     {
-        Vector3 previousPosition = transform.position;
         if (_stop)
             return;
-        else
-            Move();
-        _traveledDistance += (transform.position - previousPosition).magnitude;
-        if (_traveledDistance >= _launchDistance)
+        if (_data && !_init)
+        {
+            Init();
+            _init = true;
+        }
+        _direction -= g * Time.deltaTime * Vector3.up;
+
+        transform.position += _direction * Time.deltaTime;
+
+        if ((transform.position + _direction * Time.deltaTime).y < transform.localScale.y / 2f)
             _stop = true;
     }
 }

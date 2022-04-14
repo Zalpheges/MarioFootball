@@ -14,6 +14,7 @@ public class Player : MonoBehaviour
         Stunned,
         Dribbling
     }
+
     public struct PlayerActionsQueue
     {
         private Queue<Vector3> _positions;
@@ -149,8 +150,6 @@ public class Player : MonoBehaviour
         isWaiting = IsWaiting;
         isNavDriven = IsNavDriven;
 
-        if ((GameManager.DebugOnlyPlayer && (!HasBall && !isPiloted)) || _isRetard)
-            return;
 
         _rgdb.angularVelocity = Vector3.zero;
         _rgdb.velocity = Vector3.zero;
@@ -189,6 +188,8 @@ public class Player : MonoBehaviour
 
             return;
         }
+        if ((GameManager.DebugOnlyPlayer && (!HasBall && !isPiloted)) || _isRetard)
+            return;
 
         if (State != PlayerState.Moving)
         {
@@ -240,12 +241,8 @@ public class Player : MonoBehaviour
         MakeAction(action);
     }
 
-
-
     public void ReadQueue()
-
     {
-
         ProcessQueue = IsNavDriven = true;
 
         (_nextAnimToPerform, _currentTimeLimit) = ActionsQueue.GetNext(_agent);
@@ -458,9 +455,7 @@ public class Player : MonoBehaviour
         else
         {
             if (Random.value > _specs.Accuracy * force)
-            {
                 GoalPostShoot(goal);
-            }
             else
                 ShootOnTarget(goal, force);
         }
@@ -501,7 +496,7 @@ public class Player : MonoBehaviour
         endPosition += goal.up * y * Field.GoalHeight * 0.85f / 2f;
 
         Vector3 interpolator = (_rgdb.position + endPosition) / 2f;
-        interpolator += Vector3.Project(endPosition - _rgdb.position, goal.right) / 2f;
+        interpolator += Vector3.Project(endPosition - _rgdb.position, goal.right);
 
         Field.Ball.Shoot(endPosition, interpolator, 33f);
 
