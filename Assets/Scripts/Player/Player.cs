@@ -149,8 +149,6 @@ public class Player : MonoBehaviour
         isWaiting = IsWaiting;
         isNavDriven = IsNavDriven;
 
-        if ((GameManager.DebugOnlyPlayer && (!HasBall && !isPiloted)) || _isRetard)
-            return;
 
         _rgdb.angularVelocity = Vector3.zero;
         _rgdb.velocity = Vector3.zero;
@@ -189,6 +187,8 @@ public class Player : MonoBehaviour
 
             return;
         }
+        if ((GameManager.DebugOnlyPlayer && (!HasBall && !isPiloted)) || _isRetard)
+            return;
 
         if (State != PlayerState.Moving)
         {
