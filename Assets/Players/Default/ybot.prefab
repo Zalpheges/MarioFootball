@@ -1527,9 +1527,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _specs: {fileID: 11400000, guid: e32174f7889a0ab429aeae9b2b0b2040, type: 2}
-  isElectrocutionShader: 0
+  IsElectrocutionShader: 0
   MaterialElectricity: {fileID: 2100000, guid: 98fd08f6dd93b0d4688d40de5ac8a1cd, type: 2}
-  _debugOnly: 0
   state: 0
   isPiloted: 0
   hasBall: 0
@@ -1545,7 +1544,7 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6172146800527969744}
   m_Enabled: 1
-  m_Avatar: {fileID: 0}
+  m_Avatar: {fileID: 9000000, guid: 07c28789aa62b4c4997f058a56e32bcd, type: 3}
   m_Controller: {fileID: 9100000, guid: b15c84258bafce04eb288b3529ef2f18, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
