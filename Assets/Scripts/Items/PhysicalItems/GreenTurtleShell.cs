@@ -1,10 +1,10 @@
 using UnityEngine;
 
-public class BobBomb : PlaceableItem
+public class GreenTurtleShell : PhysicalItem
 {
     protected override void ApplyEffect(Player player)
     {
-        Debug.Log("Hit " + player.name + " with banana");
+        Debug.Log("Push " + player.name);
     }
     public override void DestroyItem()
     {

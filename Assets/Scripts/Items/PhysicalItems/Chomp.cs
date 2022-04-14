@@ -2,18 +2,35 @@ using UnityEngine;
 
 public class Chomp : PhysicalItem
 {
-    [SerializeField] private float _duration;
-    private float _timer;
+    [SerializeField] private int _nTargets;
+    private int _targetCounter = 0;
+    private Player _followedPlayer;
 
-    protected void Update()
+    private void Start()
     {
-        if ((_timer += Time.deltaTime) > _duration)
-            DestroyItem();
-        Debug.Log("Chomp chomp");
+        _followedPlayer = _player.FindEnemyInRange(_player.transform.forward, 60f, false);
+    }
+
+    private void SearchForPlayer(Player player)
+    {
+        _followedPlayer = player.FindMateInRange(_player.transform.forward, 180f, false);
+    }
+
+    protected override void Update()
+    {
+        _direction = (_followedPlayer.transform.position - transform.position).normalized;
+        base.Update();
     }
     protected override void ApplyEffect(Player player)
     {
         Debug.Log("Manged " + player.name);
+        if (player == _followedPlayer)
+        {
+            if (++_targetCounter < _nTargets)
+                SearchForPlayer(player);
+            else
+                DestroyItem();
+        }
     }
 
     public override void DestroyItem()

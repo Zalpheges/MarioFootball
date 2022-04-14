@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class BlueTurtleShell : ThrowableItem
+public class BlueTurtleShell : PhysicalItem
 {
     public override void DestroyItem()
     {

@@ -14,7 +14,6 @@ public class Player : MonoBehaviour
         Stunned,
         Dribbling
     }
-
     public struct PlayerActionsQueue
     {
         private Queue<Vector3> _positions;
@@ -96,7 +95,7 @@ public class Player : MonoBehaviour
 
     #region Debug
 
-    private bool _isRetard => GameManager.EnemiesAreRetard && Team == Field.Team2 && Time.timeSinceLevelLoad < 20f;
+    private bool _isRetard => GameManager.EnemiesAreRetard && Team == Field.Team2 && Time.timeSinceLevelLoad < 80f;
     public PlayerState state;
     public bool isPiloted;
     public bool hasBall;
@@ -154,6 +153,8 @@ public class Player : MonoBehaviour
         _rgdb.angularVelocity = Vector3.zero;
         _rgdb.velocity = Vector3.zero;
 
+
+
         if (ProcessQueue)
             UpdateNavQueue();
 
@@ -167,22 +168,24 @@ public class Player : MonoBehaviour
             if (Vector3.Distance(transform.position, _agent.destination) <= 0.1f)
             {
                 if (!ProcessQueue)
+
                 {
+
                     IsNavDriven = false;
 
                     IsWaiting = true;
 
-                    ResetState();
+                    transform.rotation = Quaternion.LookRotation(Vector3.Project(transform.position - Team.transform.position, Field.Transform.forward));
 
-                    _animator.SetBool("Idle", true);
-                    _animator.SetBool("Run", false);
-
-                    transform.rotation = Quaternion.LookRotation(Enemies.transform.position - transform.position, Vector3.up);
                 }
                 else
+
                 {
+
                     if(_timer > 0.2f)
+
                         _nextAnimToPerform();
+
                 }
             }
 
@@ -241,8 +244,12 @@ public class Player : MonoBehaviour
         MakeAction(action);
     }
 
+
+
     public void ReadQueue()
+
     {
+
         ProcessQueue = IsNavDriven = true;
 
         (_nextAnimToPerform, _currentTimeLimit) = ActionsQueue.GetNext(_agent);
@@ -374,22 +381,6 @@ public class Player : MonoBehaviour
         return direction.normalized;
     }
 
-    public void SetNavDriven(Vector3 destination)
-    {
-        IsNavDriven = true;
-
-        _agent.enabled = true;
-        _agent.destination = destination;
-        _agent.speed = 10f;
-
-        State = PlayerState.Dribbling;
-
-        _animator.SetBool("Idle", false);
-        _animator.SetBool("Run", true);
-    }
-
-    #region Collisions
-
     private void OnTriggerEnter(Collider other)
     {
         OnTrigger(other);
@@ -398,12 +389,6 @@ public class Player : MonoBehaviour
     private void OnTriggerStay(Collider other)
     {
         OnTrigger(other);
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.tag == "Wall")
-            ResetState();
     }
 
     private void OnTrigger(Collider other)
@@ -435,7 +420,20 @@ public class Player : MonoBehaviour
         }
     }
 
-    #endregion
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "Wall")
+            ResetState();
+    }
+
+    public void SetNavDriven(Vector3 destination)
+    {
+        IsNavDriven = true;
+
+        _agent.enabled = true;
+        _agent.destination = destination;
+        _agent.speed = 10f;
+    }
 
     #region Shoot
 
@@ -443,6 +441,7 @@ public class Player : MonoBehaviour
     {
         force = Mathf.Max(0.2f, force);
 
+        Debug.Log(_specs.Accuracy * force);
         Transform goal = Enemies.transform;
 
         //float angle = Vector3.SignedAngle(transform.forward, goal.forward, Vector3.up);
@@ -455,7 +454,10 @@ public class Player : MonoBehaviour
         else
         {
             if (Random.value > _specs.Accuracy * force)
+            {
+                Debug.Log("Poteau");
                 GoalPostShoot(goal);
+            }
             else
                 ShootOnTarget(goal, force);
         }
@@ -496,7 +498,7 @@ public class Player : MonoBehaviour
         endPosition += goal.up * y * Field.GoalHeight * 0.85f / 2f;
 
         Vector3 interpolator = (_rgdb.position + endPosition) / 2f;
-        interpolator += Vector3.Project(endPosition - _rgdb.position, goal.right);
+        interpolator -= Vector3.Project(endPosition - _rgdb.position, goal.right);
 
         Field.Ball.Shoot(endPosition, interpolator, 33f);
 
@@ -534,16 +536,15 @@ public class Player : MonoBehaviour
 
     #region FindMate
 
-    private Player FindMateInRange(Vector3 direction, float range, bool standOut = false)
+    public Player FindMateInRange(Vector3 direction, float range, bool standOut = false)
     {
         return FindPlayerInRange(Team, direction, range, standOut);
     }
 
-    private Player FindEnemyInRange(Vector3 direction, float range, bool standOut = false)
+    public Player FindEnemyInRange(Vector3 direction, float range, bool standOut = false)
     {
         return FindPlayerInRange(Enemies, direction, range, standOut);
     }
-
     private Player FindPlayerInRange(Team team, Vector3 direction, float range, bool standOut)
     {
         (Player player, float angle) best = (null, 0f);
@@ -579,8 +580,6 @@ public class Player : MonoBehaviour
         return false;
     }
 
-
-
     #endregion
 
     #region ThrowItem
@@ -592,14 +591,14 @@ public class Player : MonoBehaviour
         if (!data)
             return;
 
-        GameObject itemGo = Instantiate(data.Prefab, transform.position, Quaternion.identity);
+        GameObject itemGo = Instantiate(data.Prefab, transform.position + transform.forward * 2f, Quaternion.identity);
         itemGo.GetComponent<Item>().Init(data, this, direction);
     }
-
+    
     #endregion
 
     #region Events
-    
+
     public void OnMissedShoot()
 
     {

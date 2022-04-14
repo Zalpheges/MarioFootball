@@ -114,10 +114,6 @@ public class Team : MonoBehaviour
     {
         if (_items.Count == _itemCapacity)
             return;
-        //Keep this
-        //var itemProperties = PrefabManager.Items.GetType().GetProperties();
-        //int i = UnityEngine.Random.Range(0, itemProperties.Length - 1);
-        //_items.Enqueue((itemProperties[i].GetValue(PrefabManager.Items) as GameObject).GetComponent<Item>());
         Item item;
         ItemData data;
         do

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class PlaceableItem : ThrowableItem
+public abstract class PlaceableItem : PhysicalItem
 {
     private bool _stop = false;
     private bool _init = false;
