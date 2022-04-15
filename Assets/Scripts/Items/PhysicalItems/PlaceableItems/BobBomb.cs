@@ -3,7 +3,17 @@ using UnityEngine;
 public class BobBomb : PlaceableItem
 {
     [SerializeField] private float _explosionRadius;
+    [SerializeField] private float _explosionDelay;
+    private float _timer = 0f;
     private bool _exploded = false;
+
+    protected override void Update()
+    {
+        if ((_timer += Time.deltaTime) > _explosionDelay)
+            DestroyItem();
+        base.Update();
+    }
+
     protected override void ApplyEffect(Player player)
     {
         if(!_exploded)
