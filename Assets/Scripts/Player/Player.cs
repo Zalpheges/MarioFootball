@@ -69,6 +69,7 @@ public class Player : MonoBehaviour
 
     public bool CanGetBall { get; private set; } = true;
     public bool IsStunned => State == PlayerState.Stunned || State == PlayerState.Falling;
+    public bool InWall { get; private set; } = false;
 
     public bool HasBall => Field.Ball.transform.parent == transform;
     public bool IsDoped { get; private set; }
@@ -94,15 +95,11 @@ public class Player : MonoBehaviour
     private float _currentTimeLimit;
     private System.Action _nextAnimToPerform;
 
+    private Transform _lookAt;
+
     #region Debug
 
     private bool _isRetard => GameManager.EnemiesAreRetard && Team == Field.Team2 && Time.timeSinceLevelLoad < 20f;
-    public PlayerState state;
-    public bool isPiloted;
-    public bool hasBall;
-    public Vector3 input;
-    public bool isWaiting;
-    public bool isNavDriven;
 
     #endregion
 
@@ -136,20 +133,15 @@ public class Player : MonoBehaviour
 
         ChangeMaterialOnElectrocution(false);
         _agent.avoidancePriority = Mathf.RoundToInt(Random.value * 1000f);
+
+        _lookAt = GetComponent<PlayerHeadControl>()._target.transform;
     }
 
     private void Update()
     {
+        _lookAt.position = HasBall ? Enemies.transform.position : Field.Ball.transform.position;
+
         Team.GainItem();
-
-        //bool debug = Field.Team1.Players[0] == this;
-
-        state = State;
-        isPiloted = IsPiloted;
-        hasBall = HasBall;
-        isWaiting = IsWaiting;
-        isNavDriven = IsNavDriven;
-
 
         _rgdb.angularVelocity = Vector3.zero;
         _rgdb.velocity = Vector3.zero;
@@ -157,7 +149,7 @@ public class Player : MonoBehaviour
         if (ProcessQueue)
             UpdateNavQueue();
 
-        _agent.enabled = IsNavDriven || !IsPiloted;
+        _agent.enabled = IsNavDriven || !IsPiloted || InWall;
 
         if (_agent.enabled)
             _agent.isStopped = !IsNavDriven && IsPiloted;
@@ -188,13 +180,13 @@ public class Player : MonoBehaviour
 
             return;
         }
-        if ((GameManager.DebugOnlyPlayer && (!HasBall && !isPiloted)) || _isRetard)
+
+        if ((GameManager.DebugOnlyPlayer && (!HasBall && !IsPiloted)) || _isRetard)
             return;
 
         if (State != PlayerState.Moving)
         {
             _rgdb.position = Vector3.MoveTowards(_rgdb.position, _dashEndPoint, _dashSpeed * Time.deltaTime);
-            input = Vector3.up;
 
             return;
         }
@@ -210,8 +202,6 @@ public class Player : MonoBehaviour
             action = Team.Brain.GetAction();
         else
             action = IABrain.GetAction();
-
-        input = action.Direction;
 
         if (action.DirectionalAction)
         {
@@ -403,7 +393,10 @@ public class Player : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         if (other.tag == "Wall")
+        {
             ResetState();
+            InWall = false;
+        }
     }
 
     private void OnTrigger(Collider other)
@@ -413,8 +406,13 @@ public class Player : MonoBehaviour
         if (Field.Ball == ball && !HasBall && CanGetBall)
             ball.Take(this);
 
-        if (other.tag == "Wall" && State != PlayerState.Stunned)
-            Stun();
+        if (other.tag == "Wall")
+        {
+            if (State != PlayerState.Stunned && !InWall)
+                Stun();
+
+            InWall = true;
+        }
 
         Player player = other.GetComponent<Player>();
 
@@ -422,13 +420,13 @@ public class Player : MonoBehaviour
         {
             if (player.State == PlayerState.Tackling)
             {
-                Fall((_rgdb.position - player.transform.position).normalized);
+                Fall(Vector3.zero, 0f, 1.5f, 2f * player._specs.Weight / 70f);
 
                 //if (!HasBall) OnHitWithNoBall();
             }
             else if (player.State == PlayerState.Headbutting)
             {
-                Fall((_rgdb.position - player.transform.position).normalized);
+                Fall((_rgdb.position - player.transform.position).normalized, 6f * player._specs.Weight / 70f, 1.5f, 1f);
 
                 //if (!HasBall) OnHitWithNoBall();
             }
@@ -601,19 +599,13 @@ public class Player : MonoBehaviour
     #region Events
     
     public void OnMissedShoot()
-
     {
-
         Team.GainItem();
-
     }
 
     public void OnHitWithNoBall()
-
     {
-
         Team.GainItem();
-
     }
     
     #endregion
@@ -636,7 +628,7 @@ public class Player : MonoBehaviour
         Dash(direction, 8f, 1.2f, 0.5f);
     }
 
-    private void Fall(Vector3 direction)
+    private void Fall(Vector3 direction, float distance = 4f, float time = 1.5f, float standUpDelay = 2f)
     {
         State = PlayerState.Falling;
         _animator.SetTrigger("isTackled");
@@ -644,7 +636,7 @@ public class Player : MonoBehaviour
         if (HasBall)
             Field.Ball.Free();
 
-        Dash(direction, 4f, 1.5f, 2f);
+        Dash(direction, distance, time, standUpDelay);
     }
 
     private void Stun(float duration = 2f)

@@ -14,7 +14,7 @@ public class S_UpdatePilotedPlayer : Node
             _root = GetRootNode();
 
         foreach (Player allyPlayer in _root.parentTree.Allies)
-            if (allyPlayer.isPiloted)
+            if (allyPlayer.IsPiloted)
                 _root.pilotedPlayer = allyPlayer;
 
         return (NodeState.SUCCESS, Action.None);
