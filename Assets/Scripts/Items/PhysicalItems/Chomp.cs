@@ -23,7 +23,6 @@ public class Chomp : PhysicalItem
     }
     protected override void ApplyEffect(Player player)
     {
-        Debug.Log("Manged " + player.name);
         if (player == _followedPlayer)
         {
             if (++_targetCounter < _nTargets)
@@ -31,6 +30,8 @@ public class Chomp : PhysicalItem
             else
                 DestroyItem();
         }
+
+        player.Stun(Player.StunType.Chomped);
     }
 
     public override void DestroyItem()

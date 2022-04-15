@@ -4,7 +4,7 @@ public class SpinyTurtleShell : PhysicalItem
 {
     protected override void ApplyEffect(Player player)
     {
-        Debug.Log("Bully " + player.name);
+        player.Fall((player.transform.position - transform.position).normalized);
     }
     public override void DestroyItem()
     {

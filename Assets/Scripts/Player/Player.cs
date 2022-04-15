@@ -14,6 +14,14 @@ public class Player : MonoBehaviour
         Stunned,
         Dribbling
     }
+
+    public enum StunType
+    {
+        Electrocuted,
+        Chomped,
+        Frozen
+    }
+
     public struct PlayerActionsQueue
     {
         private Queue<Vector3> _positions;
@@ -400,7 +408,7 @@ public class Player : MonoBehaviour
         if (other.tag == "Wall")
         {
             if (State != PlayerState.Stunned && !InWall)
-                Stun();
+                Stun(StunType.Electrocuted);
 
             InWall = true;
         }
@@ -422,12 +430,6 @@ public class Player : MonoBehaviour
                 //if (!HasBall) OnHitWithNoBall();
             }
         }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.tag == "Wall")
-            ResetState();
     }
 
     public void SetNavDriven(Vector3 destination)
@@ -633,7 +635,7 @@ public class Player : MonoBehaviour
         Dash(direction, 8f, 1.2f, 0.5f);
     }
 
-    private void Fall(Vector3 direction, float distance = 4f, float time = 1.5f, float standUpDelay = 2f)
+    public void Fall(Vector3 direction, float distance = 4f, float time = 1.5f, float standUpDelay = 2f)
     {
         State = PlayerState.Falling;
         _animator.SetTrigger("isTackled");
@@ -644,11 +646,15 @@ public class Player : MonoBehaviour
         Dash(direction, distance, time, standUpDelay);
     }
 
-    private void Stun(float duration = 2f)
+    public void Stun(StunType stunType, float duration = 2f)
     {
         State = PlayerState.Stunned;
         _animator.SetTrigger("Electrocuted");
-        ChangeMaterialOnElectrocution(true);
+
+        if (stunType == StunType.Electrocuted)
+            ChangeMaterialOnElectrocution(true);
+        else if (stunType == StunType.Chomped) ;
+        else if (stunType == StunType.Frozen) ;
 
         Dash(Vector3.zero, 0f, duration);
 
@@ -663,7 +669,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void Dash(Vector3 direction, float distance, float time, float standUpDelay = 0f)
+    public void Dash(Vector3 direction, float distance, float time, float standUpDelay = 0f)
     {
         _waitingAction = null;
 

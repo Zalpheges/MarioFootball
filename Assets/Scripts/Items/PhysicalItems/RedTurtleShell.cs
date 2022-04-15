@@ -18,7 +18,7 @@ public class RedTurtleShell : PhysicalItem
 
     protected override void ApplyEffect(Player player)
     {
-        Debug.Log("Hit " + player.name + " with red turtle shell");
+        player.Fall((player.transform.position - transform.position).normalized);
         DestroyItem();
     }
     public override void DestroyItem()
