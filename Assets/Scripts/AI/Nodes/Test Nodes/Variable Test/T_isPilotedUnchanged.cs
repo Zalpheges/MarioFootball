@@ -13,7 +13,7 @@ public class T_isPilotedUnchanged : Node
         if (!_rootInitialized)
             _root = GetRootNode();
 
-        if (_root.pilotedPlayer == null || !_root.pilotedPlayer.isPiloted)
+        if (_root.pilotedPlayer == null || !_root.pilotedPlayer.IsPiloted)
             return (NodeState.FAILURE, Action.None);
         else
             return (NodeState.SUCCESS, Action.None);

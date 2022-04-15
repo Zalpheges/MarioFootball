@@ -26,7 +26,7 @@ public class S_TargetAssignment : Node
         {
             if (_root.enemyPlayersOrder[enemyIndex] == _root.ballHolder)
                 enemyIndex++;
-            if(_root.allyPlayersOrder[index] == _root.ballContender || _root.allyPlayersOrder[index].isPiloted)
+            if(_root.allyPlayersOrder[index] == _root.ballContender || _root.allyPlayersOrder[index].IsPiloted)
                 index++;
             if (_root.allyPlayersOrder[index] == _root.player)
                 return enemyIndex;
