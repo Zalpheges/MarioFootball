@@ -3,20 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using BehaviorTree;
 
-public class CoucouNode : Node
+public class S_MovePlayer : Node
 {
-
     private RootNode _root;
+    private bool _rootInitialized = false;
+
     public override (NodeState, Action) Evaluate()
     {
-        _root = GetRootNode();
+        if (!_rootInitialized)
+            _root = GetRootNode();
 
-        Debug.Log("BH C" + _root.BallHolderCoordinates);
-        foreach(Vector2Int V2 in _root.OptimalCoordinates)
-            Debug.Log(V2.ToString());
+        _root.actionToPerform = ActionToPerform.Move;
+        Vector2Int Coord = _root.OptimalPositionCoordinates;
+        _root.Position = new Vector3(Coord.x * _root.WidthDivision, 0, Coord.y * _root.HeightDivision);
 
         return (NodeState.SUCCESS, Action.None);
     }
+
     private RootNode GetRootNode()
     {
         Node currentNode = this;
@@ -24,6 +27,9 @@ public class CoucouNode : Node
         while (currentNode.parent != null)
             currentNode = currentNode.parent;
 
+        _rootInitialized = true;
+
         return (RootNode)currentNode;
     }
 }
+

@@ -99,12 +99,22 @@ public class RootNode : Node
     public Dictionary<int, Player> allyPlayersOrder = new Dictionary<int, Player>();
     public Dictionary<int, Player> enemyPlayersOrder = new Dictionary<int, Player>();
 
+    public Vector2Int PreviousBallHolderCoordinates = new Vector2Int();
     public Vector2Int BallHolderCoordinates = new Vector2Int();
+    public Vector2Int[] PlayerCoordinates = new Vector2Int[4];
+
+    public int playerIndex = new int();
+
+    public float WidthDivision = Field.Width / 5;
+    public float HeightDivision = Field.Height / 3;
 
     public List<Vector2Int> SideCoordinates = new List<Vector2Int>();
     public List<Vector2Int> CornerCoordinates = new List<Vector2Int>();
     public List<Vector2Int> CenterCoordinates = new List<Vector2Int>();
     public List<Vector2Int> GoalRangeCoordinates = new List<Vector2Int>();
+
+    public Vector2Int OptimalPositionCoordinates = new Vector2Int();
+    public List<Vector2Int> OptimalCoordinates = new List<Vector2Int>();
 
     public RootNode(TreeV2 iparentTree, List<Node> ichildren)
     {
@@ -112,7 +122,7 @@ public class RootNode : Node
         player = parentTree.player;
         AllyPlayersOrderSetup();
         EnemyPlayersOrderSetup();
-        InitCoordinates();
+        //InitCoordinates();
         AIBoolSetup();
 
         if (parentTree.allyGoalTransform.position.x < parentTree.enemyGoalTransform.position.x)
@@ -124,26 +134,26 @@ public class RootNode : Node
             _Attach(child);
     }
 
-    private void InitCoordinates()
-    {
-        int SideModifier = allyTeamSide == TeamSide.West ? 1 : -1;
+    //private void InitCoordinates()
+    //{
+    //    int SideModifier = allyTeamSide == TeamSide.West ? 1 : -1;
 
-        SideCoordinates.Add(new Vector2Int(BallHolderCoordinates.x, 0));
-        SideCoordinates.Add(new Vector2Int(BallHolderCoordinates.x + 1, BallHolderCoordinates.y));
-        SideCoordinates.Add(new Vector2Int(BallHolderCoordinates.x - 1, BallHolderCoordinates.y));
+    //    SideCoordinates.Add(new Vector2Int(BallHolderCoordinates.x, 0));
+    //    SideCoordinates.Add(new Vector2Int(BallHolderCoordinates.x + 1, BallHolderCoordinates.y));
+    //    SideCoordinates.Add(new Vector2Int(BallHolderCoordinates.x - 1, BallHolderCoordinates.y));
 
-        CornerCoordinates.Add(new Vector2Int(BallHolderCoordinates.x / 2, BallHolderCoordinates.y));
-        CornerCoordinates.Add(new Vector2Int(BallHolderCoordinates.x / 2, 0));
-        CornerCoordinates.Add(new Vector2Int(BallHolderCoordinates.x, BallHolderCoordinates.y));
+    //    CornerCoordinates.Add(new Vector2Int(BallHolderCoordinates.x / 2, BallHolderCoordinates.y));
+    //    CornerCoordinates.Add(new Vector2Int(BallHolderCoordinates.x / 2, 0));
+    //    CornerCoordinates.Add(new Vector2Int(BallHolderCoordinates.x, BallHolderCoordinates.y));
 
-        CenterCoordinates.Add(new Vector2Int(BallHolderCoordinates.x - SideModifier, BallHolderCoordinates.y));
-        CenterCoordinates.Add(new Vector2Int(BallHolderCoordinates.x + SideModifier, BallHolderCoordinates.y + 1));
-        CenterCoordinates.Add(new Vector2Int(BallHolderCoordinates.x + SideModifier, BallHolderCoordinates.y - 1));
+    //    CenterCoordinates.Add(new Vector2Int(BallHolderCoordinates.x + SideModifier, BallHolderCoordinates.y));
+    //    CenterCoordinates.Add(new Vector2Int(BallHolderCoordinates.x - SideModifier, BallHolderCoordinates.y + 1));
+    //    CenterCoordinates.Add(new Vector2Int(BallHolderCoordinates.x - SideModifier, BallHolderCoordinates.y - 1));
 
-        GoalRangeCoordinates.Add(new Vector2Int(BallHolderCoordinates.x, BallHolderCoordinates.y + 1));
-        GoalRangeCoordinates.Add(new Vector2Int(BallHolderCoordinates.x, BallHolderCoordinates.y - 1));
-        GoalRangeCoordinates.Add(new Vector2Int(0, 0));
-    }
+    //    GoalRangeCoordinates.Add(new Vector2Int(BallHolderCoordinates.x, BallHolderCoordinates.y + 1));
+    //    GoalRangeCoordinates.Add(new Vector2Int(BallHolderCoordinates.x, BallHolderCoordinates.y - 1));
+    //    GoalRangeCoordinates.Add(new Vector2Int(0, 0));
+    //}
 
     private void AIBoolSetup()
     {
