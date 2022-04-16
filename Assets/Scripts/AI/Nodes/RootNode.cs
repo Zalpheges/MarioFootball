@@ -64,7 +64,7 @@ public enum ActionToPerform
 
 public class RootNode : Node
 {
-    public TreeV2 parentTree;
+    public TreeV3 parentTree;
 
     public Player player = null;
     public Player pilotedPlayer = null;
@@ -73,16 +73,11 @@ public class RootNode : Node
     public Player passTarget = null;
     public Player ballContender = null;
     public Player ballHolder = null;
+    public Player previousBallHolder = null;
     public Player ballSeeker = null;
 
     public Vector3 Position = Vector3.zero;
-
-    public Vector2 Attacker_Offset_Standard_Mid = new Vector2(Field.Width / 9, Field.Height / 4);
-    public Vector2 Attacker_Offset_Standard_Side_Forward = new Vector2(Field.Width / 9, Field.Height / 6);
-    public Vector2 Attacker_Offset_Standard_Side_Sideward = new Vector2(0f, Field.Height / 2);
-
-    public Vector2 Attacker_Offset_ShootQuarter_Side_Forward = new Vector2(Field.Width / 6, 0f); 
-    public Vector2 Attacker_Offset_ShootQuarter_Side_Sideward = new Vector2(Field.Width / 10, Field.Height / 6); 
+    public Vector3 CoordinatePosition = Vector3.zero;
 
     public bool AITeam = true;
 
@@ -98,7 +93,19 @@ public class RootNode : Node
     public Dictionary<int, Player> allyPlayersOrder = new Dictionary<int, Player>();
     public Dictionary<int, Player> enemyPlayersOrder = new Dictionary<int, Player>();
 
-    public RootNode(TreeV2 iparentTree, List<Node> ichildren)
+    public Vector2Int PreviousBallHolderCoordinates = new Vector2Int();
+    public Vector2Int BallHolderCoordinates = new Vector2Int();
+    public Vector2Int PlayerCoordinates = new Vector2Int();
+    public Vector2Int[] PlayersCoordinates = new Vector2Int[4];
+
+    public int playerIndex = new int();
+
+    public float WidthDivision = Field.Width / 5;
+    public float HeightDivision = Field.Height / 3;
+
+    public List<Vector2Int> OptimalCoordinates = new List<Vector2Int>();
+
+    public RootNode(TreeV3 iparentTree, List<Node> ichildren)
     {
         parentTree = iparentTree;
         player = parentTree.player;
@@ -143,7 +150,7 @@ public class RootNode : Node
 
         int lowestIndex = highestIndex - parentTree.Enemies.Count + 1;
         foreach (Player player in parentTree.Enemies)
-            enemyPlayersOrder.Add(player.transform.GetSiblingIndex() - lowestIndex,player);
+            enemyPlayersOrder.Add(player.transform.GetSiblingIndex() - lowestIndex, player);
     }
 
     public override (NodeState, Action) Evaluate()
