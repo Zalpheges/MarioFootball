@@ -23,7 +23,7 @@ public class S_UpdateCoordinates : Node
                     _root.PreviousBallHolderCoordinates = _root.BallHolderCoordinates;
             }
 
-            _root.PlayerCoordinates[allyIndex] = GetCoordinates(ally);
+            _root.PlayersCoordinates[allyIndex] = GetCoordinates(ally);
             allyIndex++;
         }
 
@@ -73,6 +73,9 @@ public class S_UpdateCoordinates : Node
 
         if (player == _root.ballHolder)
             _root.BallHolderCoordinates = Coord;
+
+        if(player == _root.player)
+            _root.PlayerCoordinates = Coord;
 
         return Coord;
     }

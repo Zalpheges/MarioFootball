@@ -36,7 +36,8 @@ public class S_AssignTargetCoordinates : Node
     {
         for (int x = 0; x < BestArrangement.Count; x++)
             if (BestArrangement[x].player == _root.player)
-                _root.OptimalPositionCoordinates = _root.OptimalCoordinates[x]; 
+                _root.CoordinatePosition = 
+                    new Vector3(_root.OptimalCoordinates[x].x * _root.WidthDivision, 0, _root.OptimalCoordinates[x].y * _root.HeightDivision);
     }
 
     private List<Coordinate> FindBestArrangement(List<Coordinate> PlayerCoords)
@@ -106,7 +107,7 @@ public class S_AssignTargetCoordinates : Node
     private List<Vector2Int> RetrievePlayersCoordinates()
     {
         List<Vector2Int> CoordsToReturn = new List<Vector2Int>();
-        CoordsToReturn.AddRange(_root.PlayerCoordinates);
+        CoordsToReturn.AddRange(_root.PlayersCoordinates);
         CoordsToReturn.RemoveAt(ballHolderIndex);
         return CoordsToReturn;
     }

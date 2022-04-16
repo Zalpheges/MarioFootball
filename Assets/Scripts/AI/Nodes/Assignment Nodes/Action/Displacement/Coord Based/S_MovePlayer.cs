@@ -14,8 +14,7 @@ public class S_MovePlayer : Node
             _root = GetRootNode();
 
         _root.actionToPerform = ActionToPerform.Move;
-        Vector2Int Coord = _root.OptimalPositionCoordinates;
-        _root.Position = new Vector3(Coord.x * _root.WidthDivision, 0, Coord.y * _root.HeightDivision);
+        _root.Position = _root.CoordinatePosition;
 
         return (NodeState.SUCCESS, Action.None);
     }

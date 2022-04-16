@@ -40,9 +40,9 @@ public class S_DetermineOptimalCoords : Node
         }
         else //Side
         {
-            _root.OptimalCoordinates.Add(new Vector2Int(Coords.x, 0));
             _root.OptimalCoordinates.Add(new Vector2Int(Coords.x + 1, Coords.y));
             _root.OptimalCoordinates.Add(new Vector2Int(Coords.x - 1, Coords.y));
+            _root.OptimalCoordinates.Add(new Vector2Int(Coords.x, 0));
         }
 
         return (NodeState.SUCCESS, Action.None);

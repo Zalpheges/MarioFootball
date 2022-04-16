@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class HolyBrain : PlayerBrain
 {
-    private TreeV2 behaviorTree = new TreeV2();
+    private TreeV3 behaviorTree = new TreeV3();
 
     private float shootThreshold = Field.Width / 4;
     private float defendThreshold = Field.Width / 20;
-    private float attackThreshold = Field.Width / 10;
+    private float attackThreshold = 0.3f;
     private float markThreshold = Field.Width / 25;
     private float headButtThreshold = 1f;
     private float passAlignementThreshold = 0.6f;

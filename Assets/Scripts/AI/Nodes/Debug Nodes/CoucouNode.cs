@@ -11,10 +11,6 @@ public class CoucouNode : Node
     {
         _root = GetRootNode();
 
-        Debug.Log("BH C" + _root.BallHolderCoordinates);
-        foreach(Vector2Int V2 in _root.OptimalCoordinates)
-            Debug.Log(V2.ToString());
-
         return (NodeState.SUCCESS, Action.None);
     }
     private RootNode GetRootNode()

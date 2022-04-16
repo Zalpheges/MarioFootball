@@ -64,7 +64,7 @@ public enum ActionToPerform
 
 public class RootNode : Node
 {
-    public TreeV2 parentTree;
+    public TreeV3 parentTree;
 
     public Player player = null;
     public Player pilotedPlayer = null;
@@ -77,13 +77,7 @@ public class RootNode : Node
     public Player ballSeeker = null;
 
     public Vector3 Position = Vector3.zero;
-
-    public Vector2 Attacker_Offset_Standard_Mid = new Vector2(Field.Width / 9, Field.Height / 4);
-    public Vector2 Attacker_Offset_Standard_Side_Forward = new Vector2(Field.Width / 9, Field.Height / 6);
-    public Vector2 Attacker_Offset_Standard_Side_Sideward = new Vector2(0f, Field.Height / 2);
-
-    public Vector2 Attacker_Offset_ShootQuarter_Side_Forward = new Vector2(Field.Width / 6, 0f);
-    public Vector2 Attacker_Offset_ShootQuarter_Side_Sideward = new Vector2(Field.Width / 10, Field.Height / 6);
+    public Vector3 CoordinatePosition = Vector3.zero;
 
     public bool AITeam = true;
 
@@ -101,28 +95,22 @@ public class RootNode : Node
 
     public Vector2Int PreviousBallHolderCoordinates = new Vector2Int();
     public Vector2Int BallHolderCoordinates = new Vector2Int();
-    public Vector2Int[] PlayerCoordinates = new Vector2Int[4];
+    public Vector2Int PlayerCoordinates = new Vector2Int();
+    public Vector2Int[] PlayersCoordinates = new Vector2Int[4];
 
     public int playerIndex = new int();
 
     public float WidthDivision = Field.Width / 5;
     public float HeightDivision = Field.Height / 3;
 
-    public List<Vector2Int> SideCoordinates = new List<Vector2Int>();
-    public List<Vector2Int> CornerCoordinates = new List<Vector2Int>();
-    public List<Vector2Int> CenterCoordinates = new List<Vector2Int>();
-    public List<Vector2Int> GoalRangeCoordinates = new List<Vector2Int>();
-
-    public Vector2Int OptimalPositionCoordinates = new Vector2Int();
     public List<Vector2Int> OptimalCoordinates = new List<Vector2Int>();
 
-    public RootNode(TreeV2 iparentTree, List<Node> ichildren)
+    public RootNode(TreeV3 iparentTree, List<Node> ichildren)
     {
         parentTree = iparentTree;
         player = parentTree.player;
         AllyPlayersOrderSetup();
         EnemyPlayersOrderSetup();
-        //InitCoordinates();
         AIBoolSetup();
 
         if (parentTree.allyGoalTransform.position.x < parentTree.enemyGoalTransform.position.x)
@@ -133,27 +121,6 @@ public class RootNode : Node
         foreach (Node child in ichildren)
             _Attach(child);
     }
-
-    //private void InitCoordinates()
-    //{
-    //    int SideModifier = allyTeamSide == TeamSide.West ? 1 : -1;
-
-    //    SideCoordinates.Add(new Vector2Int(BallHolderCoordinates.x, 0));
-    //    SideCoordinates.Add(new Vector2Int(BallHolderCoordinates.x + 1, BallHolderCoordinates.y));
-    //    SideCoordinates.Add(new Vector2Int(BallHolderCoordinates.x - 1, BallHolderCoordinates.y));
-
-    //    CornerCoordinates.Add(new Vector2Int(BallHolderCoordinates.x / 2, BallHolderCoordinates.y));
-    //    CornerCoordinates.Add(new Vector2Int(BallHolderCoordinates.x / 2, 0));
-    //    CornerCoordinates.Add(new Vector2Int(BallHolderCoordinates.x, BallHolderCoordinates.y));
-
-    //    CenterCoordinates.Add(new Vector2Int(BallHolderCoordinates.x + SideModifier, BallHolderCoordinates.y));
-    //    CenterCoordinates.Add(new Vector2Int(BallHolderCoordinates.x - SideModifier, BallHolderCoordinates.y + 1));
-    //    CenterCoordinates.Add(new Vector2Int(BallHolderCoordinates.x - SideModifier, BallHolderCoordinates.y - 1));
-
-    //    GoalRangeCoordinates.Add(new Vector2Int(BallHolderCoordinates.x, BallHolderCoordinates.y + 1));
-    //    GoalRangeCoordinates.Add(new Vector2Int(BallHolderCoordinates.x, BallHolderCoordinates.y - 1));
-    //    GoalRangeCoordinates.Add(new Vector2Int(0, 0));
-    //}
 
     private void AIBoolSetup()
     {

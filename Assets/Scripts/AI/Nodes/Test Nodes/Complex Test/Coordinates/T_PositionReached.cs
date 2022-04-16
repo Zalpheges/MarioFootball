@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using BehaviorTree;
 
-public class S_Defender_SecondQuarter_West : Node
+public class T_PositionReached : Node
 {
     private RootNode _root;
     private bool _rootInitialized = false;
@@ -13,12 +13,13 @@ public class S_Defender_SecondQuarter_West : Node
         if (!_rootInitialized)
             _root = GetRootNode();
 
-        float positionX = _root.ballHolder.transform.position.x - (Field.Width / 12);
-        float positionZ = _root.ballHolder.transform.position.z;
+        float distance = (_root.player.transform.position - _root.CoordinatePosition).magnitude;
+        
+        if (distance < _root.parentTree.attackThreshold)
+            return (NodeState.SUCCESS, Action.None);
 
-        _root.Position = new Vector3(positionX, 0, positionZ);
-        _root.actionToPerform = ActionToPerform.Move;
-        return (NodeState.SUCCESS, Action.None);
+        return (NodeState.FAILURE, Action.None);
+            
     }
 
     private RootNode GetRootNode()

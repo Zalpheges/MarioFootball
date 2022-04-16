@@ -4,7 +4,7 @@ using UnityEngine;
 using BehaviorTree;
 using System.Linq;
 
-public class TreeV2
+public class TreeV3
 {
     public Transform allyGoalTransform;
     public Transform enemyGoalTransform;
@@ -173,10 +173,11 @@ public class TreeV2
                         }),
                         new Selector(new List<Node>
                         {
+                            #region AI Striker has Ball
                             new Sequence(new List<Node>
                             {
                                 new T_PlayerType_BallHolder(),
-                                #region AI Striker has Ball
+
                                 new Selector(new List<Node>
                                 {
                                     new Sequence(new List<Node>
@@ -217,8 +218,9 @@ public class TreeV2
                                         new S_MoveBallHolderToGoal()
                                     })
                                 })
-                                #endregion
                             }),
+                            #endregion
+                            #region AI Moves According to the BallHolder
                             new Sequence(new List<Node>
                             {
                                 new S_UpdateCoordinates(),
@@ -231,7 +233,16 @@ public class TreeV2
                                             new T_BallState_Ally(),
                                             new T_BallHolderCoordinatesUnchanged()
                                         }),
-                                        new S_MovePlayer()
+                                        new Selector(new List<Node>
+                                        {
+                                            new Sequence(new List<Node>
+                                            {
+                                                new T_PositionReached(),
+                                                new S_WanderAroundPosition()
+                                            }),
+                                            new S_MovePlayer()
+                                        })
+
                                     }),
                                     new Sequence(new List<Node>
                                     {
@@ -241,6 +252,7 @@ public class TreeV2
                                     })
                                 })
                             })
+                        #endregion
                         }),
                         new S_BallState_Ally()
                     }),
@@ -256,7 +268,7 @@ public class TreeV2
                                 new Sequence(new List<Node>
                                 {
                                     new T_PlayerType_Receiver(),
-                                    new S_MoveSeeker()
+                                    new S_Static()
                                 }),
                                 new Sequence(new List<Node>
                                 {
@@ -346,6 +358,6 @@ public class TreeV2
                 })
                 #endregion
             })
-        }); 
+        });
     }
 }
