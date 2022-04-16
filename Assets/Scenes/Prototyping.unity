@@ -20404,6 +20404,7 @@ MonoBehaviour:
   _attackPosMate1: {x: -0.1, y: -0.5}
   _attackPosMate2: {x: -0.1, y: 0.5}
   _attackPosMate3: {x: -0.3, y: 0.1}
+  _posGoalKeeper: {x: 0.95, y: 0}
   _defPosCaptain: {x: 0.1, y: 0.3}
   _defPosMate1: {x: 0.15, y: -0.05}
   _defPosMate2: {x: 0.3, y: -0.5}
@@ -20471,7 +20472,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _ateamBrainType: HolyBrain
-  _agoalBrainType: HolyBrain
+  _agoalBrainType: GoalBrain
 --- !u!1 &3369570364981812784
 GameObject:
   m_ObjectHideFlags: 0
@@ -20707,7 +20708,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _ateamBrainType: HolyBrain
-  _agoalBrainType: HolyBrain
+  _agoalBrainType: GoalBrain
 --- !u!54 &3369570364981812788
 Rigidbody:
   m_ObjectHideFlags: 0

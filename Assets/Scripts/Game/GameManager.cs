@@ -97,7 +97,6 @@ public class GameManager : MonoBehaviour
 
         Player goal1 = Player.CreatePlayer(match.GoalKeeper.Prefab, team1, true);
         goal1.name = "Goal Team 1";
-        goal1.gameObject.SetActive(false);
 
         team1.Init(teammates, goal1);
 
@@ -114,7 +113,6 @@ public class GameManager : MonoBehaviour
 
         Player goal2 = Player.CreatePlayer(match.GoalKeeper.Prefab, team2, true);
         goal1.name = "Goal Team 2";
-        goal2.gameObject.SetActive(false);
 
         team2.Init(teammates, goal2);
 
@@ -174,6 +172,9 @@ public class GameManager : MonoBehaviour
             Vector3 destination = player.Team == Field.Team1 ? positions[i] : new Vector3(-positions[i].x, positions[i].y, -positions[i].z);
             player.SetNavDriven(destination);
         }
+
+        Field.Team1.Goalkeeper.SetNavDriven(Field.GetGoalKeeperPosition(Field.Team1));
+        Field.Team2.Goalkeeper.SetNavDriven(Field.GetGoalKeeperPosition(Field.Team2));
     }
     private IEnumerator Match()
     {

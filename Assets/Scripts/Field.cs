@@ -40,6 +40,9 @@ public class Field : MonoBehaviour
     private Vector2 _attackPosMate3;
 
     [SerializeField]
+    private Vector2 _posGoalKeeper;
+
+    [SerializeField]
     private Vector2 _defPosCaptain;
 
     [SerializeField]
@@ -86,6 +89,10 @@ public class Field : MonoBehaviour
 
     private float _widthTwoThirds;
     public static float WidthTwoThirds => _instance._widthTwoThirds;
+
+    [SerializeField]
+    private Vector2 _goalArea;
+    public static Vector2 GoalArea => _instance._goalArea;
 
     private Ball _ball;
     public static Ball Ball => _instance._ball;
@@ -150,6 +157,8 @@ public class Field : MonoBehaviour
         Team1.Players[2].SetNavDriven(VectorToPosition(_attackPosMate2));
         Team1.Players[3].transform.position = VectorToPosition(_attackPosMate3);
         Team1.Players[3].SetNavDriven(VectorToPosition(_attackPosMate3));
+        Team1.Goalkeeper.transform.position = GetGoalKeeperPosition(Team1);
+        Team1.Goalkeeper.SetNavDriven(GetGoalKeeperPosition(Team1));
 
         Team2.Players[0].transform.position = VectorToPosition(_defPosCaptain);
         Team2.Players[0].SetNavDriven(VectorToPosition(_defPosCaptain));
@@ -159,6 +168,8 @@ public class Field : MonoBehaviour
         Team2.Players[2].SetNavDriven(VectorToPosition(_defPosMate2));
         Team2.Players[3].transform.position = VectorToPosition(_defPosMate3);
         Team2.Players[3].SetNavDriven(VectorToPosition(_defPosMate3));
+        Team2.Goalkeeper.transform.position = GetGoalKeeperPosition(Team2);
+        Team2.Goalkeeper.SetNavDriven(GetGoalKeeperPosition(Team2));
     }
 
     public static List<Vector3> GetStartPositions()
@@ -180,6 +191,12 @@ public class Field : MonoBehaviour
     public static bool ArePlayersAllWaiting()
     {
         return Team1.ArePlayersAllWaiting() && Team2.ArePlayersAllWaiting();
+    }
+
+    public static Vector3 GetGoalKeeperPosition(Team team)
+    {
+        float x = team == Field.Team1 ? -_instance._posGoalKeeper.x : _instance._posGoalKeeper.x;
+        return _instance.VectorToPosition(new Vector2(x, _instance._posGoalKeeper.y));
     }
 
     private Vector3 VectorToPosition(Vector2 vector)

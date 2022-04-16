@@ -24,9 +24,10 @@ public class Team : MonoBehaviour
     private Queue<ItemData> _items;
     private int _itemCapacity = 2;
 
-    private int currentPlayer = 0;
-    private float _lastNextCall;
+    private int _currentPlayer = 0;
+    private float _lastChange;
     private Player[] _sortedPlayers;
+    private bool _hadBallAtChange;
 
     private void Awake()
     {
@@ -67,21 +68,31 @@ public class Team : MonoBehaviour
 
     public void ChangePlayer(Vector3 position)
     {
-        if (_lastNextCall + 1.5f < Time.time || _sortedPlayers == null)
-        {
-            _sortedPlayers = Players.OrderBy(p => Vector3.Distance(p.transform.position, position)).ToArray();
+        bool hasBall = false;
+        foreach (Player player in Players)
+            if (player.HasBall)
+                hasBall = true;
 
-            currentPlayer = 0;
+        if (_lastChange + 1.5f < Time.time || _sortedPlayers == null || hasBall != _hadBallAtChange)
+        {
+            if (hasBall)
+                _sortedPlayers = Players.OrderBy(p => Vector3.Distance(p.transform.position, position)).ToArray();
+            else
+                _sortedPlayers = Players.OrderBy(p => Vector3.Distance(Field.Ball.transform.position, position)).ToArray();
+
+            _hadBallAtChange = hasBall;
+
+            _currentPlayer = 0;
         }
 
-        _lastNextCall = Time.time;
+        _lastChange = Time.time;
 
-        currentPlayer = (currentPlayer + 1) % _sortedPlayers.Length;
+        _currentPlayer = (_currentPlayer + 1) % _sortedPlayers.Length;
 
         if (Brain.Player)
             Brain.Player.IsPiloted = false;
 
-        Brain.Player = _sortedPlayers[currentPlayer];
+        Brain.Player = _sortedPlayers[_currentPlayer];
 
         Brain.Player.IsPiloted = true;
         CameraManager.Follow(Brain.Player.transform);

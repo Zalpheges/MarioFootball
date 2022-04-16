@@ -15,6 +15,76 @@ public class Player : MonoBehaviour
         Dribbling
     }
 
+    public enum StunType
+    {
+        Electrocuted,
+        Chomped,
+        Frozen
+    }
+
+    [SerializeField]
+    private PlayerSpecs _specs;
+
+    private Animator _animator;
+    private Rigidbody _rgdb;
+    private NavMeshAgent _agent;
+
+    public PlayerBrain IABrain { get; private set; }
+
+    public PlayerState State { get; private set; }
+    public Team Team { get; private set; }
+    public Team Enemies => Team == Field.Team1 ? Field.Team2 : Field.Team1;
+
+    public bool CanGetBall { get; private set; } = true;
+    public bool IsStunned => State == PlayerState.Stunned || State == PlayerState.Falling;
+    public bool InWall { get; private set; } = false;
+
+    public bool HasBall => Field.Ball.transform.parent == transform;
+    public bool IsDoped { get; private set; }
+    public bool CanMove => State == PlayerState.Moving;
+
+    public bool IsPiloted { get; set; } = false;
+    public bool IsNavDriven { get; private set; } = false;
+    public bool IsWaiting { get; set; } = false;
+    public bool ProcessQueue { get; private set; } = false;
+
+    public bool IsElectrocutionShader;
+
+    public Material MaterialElectricity;
+
+    private float _dashSpeed;
+    private Vector3 _dashEndPoint;
+
+    private Action _waitingAction = null;
+
+    private Transform _lookAt;
+
+    private float _speed;
+
+    #region Debug
+
+    private bool _isRetard => GameManager.EnemiesAreRetard && Team == Field.Team2 && Time.timeSinceLevelLoad < 20f;
+
+    #endregion
+
+    #region Constructor
+
+    public static Player CreatePlayer(Player prefab, Team team, bool isGoalKeeper = false)
+    {
+        Player player = Instantiate(prefab);
+
+        Component brain = player.gameObject.AddComponent(isGoalKeeper ? team.GoalBrainType : team.TeamBrainType);
+
+        player.IABrain = (PlayerBrain)player.GetComponent(brain.GetType());
+
+        player.Team = team;
+
+        return player;
+    }
+    #endregion
+
+    #region ActionQueue
+
     public struct PlayerActionsQueue
     {
         private Queue<Vector3> _positions;
@@ -54,69 +124,12 @@ public class Player : MonoBehaviour
         }
     }
 
-    [SerializeField]
-    private PlayerSpecs _specs;
-
-    private Animator _animator;
-    private Rigidbody _rgdb;
-    private NavMeshAgent _agent;
-
-    public PlayerBrain IABrain { get; private set; }
-
-    public PlayerState State { get; private set; }
-    public Team Team { get; private set; }
-    public Team Enemies => Team == Field.Team1 ? Field.Team2 : Field.Team1;
-
-    public bool CanGetBall { get; private set; } = true;
-    public bool IsStunned => State == PlayerState.Stunned || State == PlayerState.Falling;
-    public bool InWall { get; private set; } = false;
-
-    public bool HasBall => Field.Ball.transform.parent == transform;
-    public bool IsDoped { get; private set; }
-    public bool CanMove => State == PlayerState.Moving;
-
-    public bool IsPiloted { get; set; } = false;
-    public bool IsNavDriven { get; private set; } = false;
-    public bool IsWaiting { get; set; } = false;
-    public bool ProcessQueue { get; private set; } = false;
-
-    public bool IsElectrocutionShader;
-
-    public Material MaterialElectricity;
-
-    private float _dashSpeed;
-    private Vector3 _dashEndPoint;
-
-    private Action _waitingAction = null;
-
     public PlayerActionsQueue ActionsQueue;
 
     private float _timer;
     private float _currentTimeLimit;
     private System.Action _nextAnimToPerform;
 
-    private Transform _lookAt;
-
-    #region Debug
-
-    private bool _isRetard => GameManager.EnemiesAreRetard && Team == Field.Team2 && Time.timeSinceLevelLoad < 20f;
-
-    #endregion
-
-    #region Constructor
-
-    public static Player CreatePlayer(Player prefab, Team team, bool isGoalKeeper = false)
-    {
-        Player player = Instantiate(prefab);
-
-        Component brain = player.gameObject.AddComponent(isGoalKeeper ? team.GoalBrainType : team.TeamBrainType);
-
-        player.IABrain = (PlayerBrain)player.GetComponent(brain.GetType());
-
-        player.Team = team;
-
-        return player;
-    }
     #endregion
 
     private void Awake()
@@ -135,6 +148,8 @@ public class Player : MonoBehaviour
         _agent.avoidancePriority = Mathf.RoundToInt(Random.value * 1000f);
 
         _lookAt = GetComponent<PlayerHeadControl>()._target.transform;
+
+        ResetBoost();
     }
 
     private void Update()
@@ -164,12 +179,7 @@ public class Player : MonoBehaviour
 
                     IsWaiting = true;
 
-                    ResetState();
-
-                    _animator.SetBool("Idle", true);
-                    _animator.SetBool("Run", false);
-
-                    transform.rotation = Quaternion.LookRotation(Enemies.transform.position - transform.position, Vector3.up);
+                    transform.rotation = Quaternion.LookRotation(Vector3.Project(transform.position - Team.transform.position, Field.Transform.forward));
                 }
                 else
                 {
@@ -181,9 +191,6 @@ public class Player : MonoBehaviour
             return;
         }
 
-        if ((GameManager.DebugOnlyPlayer && (!HasBall && !IsPiloted)) || _isRetard)
-            return;
-
         if (State != PlayerState.Moving)
         {
             _rgdb.position = Vector3.MoveTowards(_rgdb.position, _dashEndPoint, _dashSpeed * Time.deltaTime);
@@ -191,7 +198,19 @@ public class Player : MonoBehaviour
             return;
         }
 
-        if (IsWaiting && !Field.ArePlayersAllWaiting())
+        if (IsWaiting)
+        {
+            if (!IsPiloted)
+            {
+                Quaternion rotation = Quaternion.LookRotation(Enemies.transform.position - transform.position, Vector3.up);
+                _rgdb.rotation = Quaternion.Slerp(_rgdb.rotation, rotation, 50f * Time.deltaTime);
+            }
+
+            if (!Field.ArePlayersAllWaiting())
+                return;
+        }
+
+        if ((GameManager.DebugOnlyPlayer && (!HasBall && !IsPiloted)) || _isRetard)
             return;
 
         Action action;
@@ -236,7 +255,6 @@ public class Player : MonoBehaviour
         ProcessQueue = IsNavDriven = true;
 
         (_nextAnimToPerform, _currentTimeLimit) = ActionsQueue.GetNext(_agent);
-
     }
     private void UpdateNavQueue()
     {
@@ -283,7 +301,7 @@ public class Player : MonoBehaviour
         switch (action.ActionType)
         {
             case Action.Type.Move:
-                _rgdb.position += direction * 2f * _specs.Speed * Time.deltaTime;
+                _rgdb.position += direction * 2f * _speed * Time.deltaTime;
                 _animator.SetBool("Run", true);
 
                 break;
@@ -416,19 +434,24 @@ public class Player : MonoBehaviour
 
         Player player = other.GetComponent<Player>();
 
-        if (player && CanGetBall)
+        if (player && player.IsDoped)
+        {
+            Fall((_rgdb.position - player.transform.position).normalized, 6f * player._specs.Weight / 70f, 1.5f, 1f);
+        }
+
+        if (player && CanGetBall && !IsDoped)
         {
             if (player.State == PlayerState.Tackling)
             {
-                Fall(Vector3.zero, 0f, 1.5f, 2f * player._specs.Weight / 70f);
+                if (!HasBall) OnHitWithNoBall();
 
-                //if (!HasBall) OnHitWithNoBall();
+                Fall(Vector3.zero, 0f, 1.5f, 2f * player._specs.Weight / 70f);
             }
             else if (player.State == PlayerState.Headbutting)
             {
-                Fall((_rgdb.position - player.transform.position).normalized, 6f * player._specs.Weight / 70f, 1.5f, 1f);
+                if (!HasBall) OnHitWithNoBall();
 
-                //if (!HasBall) OnHitWithNoBall();
+                Fall((_rgdb.position - player.transform.position).normalized, 6f * player._specs.Weight / 70f, 1.5f, 1f);
             }
         }
     }
@@ -494,12 +517,12 @@ public class Player : MonoBehaviour
         endPosition += goal.up * y * Field.GoalHeight * 0.85f / 2f;
 
         Vector3 interpolator = (_rgdb.position + endPosition) / 2f;
-        interpolator += Vector3.Project(endPosition - _rgdb.position, goal.right);
+        float distance = Vector3.Distance(goal.position, _rgdb.position);
+        interpolator -= Vector3.Project((endPosition - _rgdb.position) * distance / 45f, goal.right);
 
         Field.Ball.Shoot(endPosition, interpolator, 33f);
 
         // Debug
-        float distance = Vector3.Distance(goal.position, _rgdb.position);
         //Debug.Log($"Distance < 45m ({distance}) - Tir cadr� ({x} ; {y}).");
     }
 
@@ -691,6 +714,22 @@ public class Player : MonoBehaviour
         State = PlayerState.Moving;
 
         CancelInvoke();
+    }
+
+    #endregion
+
+    #region Boost
+
+    public void StartBoost(float speed = 1.2f, bool invicible = false)
+    {
+        _speed *= speed;
+        IsDoped = invicible;
+    }
+
+    public void ResetBoost()
+    {
+        _speed = _specs.Speed;
+        IsDoped = false;
     }
 
     #endregion
