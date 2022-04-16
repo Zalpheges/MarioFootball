@@ -39,7 +39,7 @@ public abstract class PhysicalItem : Item
         }
         if (item)
         {
-            if(GetType() != typeof(Chomp))
+            if (GetType() != typeof(Chomp))
                 DestroyItem();
         }
     }

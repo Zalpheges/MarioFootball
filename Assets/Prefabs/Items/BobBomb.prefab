@@ -81,6 +81,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _maxRebounds: 2
   _explosionRadius: 12
+  _explosionDelay: 5
 --- !u!1001 &4277170948921817545
 PrefabInstance:
   m_ObjectHideFlags: 0

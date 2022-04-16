@@ -31,8 +31,8 @@ public class BobBomb : PlaceableItem
             }
             DestroyItem();
         }
-
-        player.Fall((player.transform.position - transform.position).normalized, 6f, 1.5f, 2f);
+        else
+            player.Fall((player.transform.position - transform.position).normalized, 6f, 1.5f, 2f);
     }
     public override void DestroyItem()
     {

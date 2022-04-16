@@ -7,6 +7,7 @@ public abstract class PlaceableItem : PhysicalItem
     private bool _stop = false;
     private bool _init = false;
     private const float g = 9.81f;
+    private float _stopTimer = 0f;
 
     private void Init()
     {
@@ -17,6 +18,7 @@ public abstract class PlaceableItem : PhysicalItem
     {
         if (_stop)
             return;
+        _stopTimer += Time.deltaTime;
         if (_data && !_init)
         {
             Init();
@@ -27,6 +29,8 @@ public abstract class PlaceableItem : PhysicalItem
         transform.position += _direction * Time.deltaTime;
 
         if ((transform.position + _direction * Time.deltaTime).y < transform.localScale.y / 2f)
-            _stop = true;
+        {
+            _stop = _stopTimer >= 1f;
+        }
     }
 }
