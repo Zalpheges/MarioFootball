@@ -15,20 +15,22 @@ public class Options_UI_Manager : MonoBehaviour
     [SerializeField]
     private GameObject Audio_Options;
     [SerializeField]
+    private GameObject FS_Audio_Options;
+
+    [SerializeField]
     private GameObject Controls_Options;
+    [SerializeField]
+    private GameObject FS_Controls;
 
     [SerializeField]
     private GameObject FS_Options;
-    [SerializeField]
-    private GameObject FS_Audio_Options;
-
 
     [SerializeField]
     private EventSystem ES;
 
     private void Awake()
     {
-        Music = MusicManager._instance.gameObject.GetComponent<AudioSource>();
+        Music = AudioManager._instance.gameObject.GetComponent<AudioSource>();
     }
 
     private void Update()
@@ -68,5 +70,11 @@ public class Options_UI_Manager : MonoBehaviour
     {
         Audio_Options.SetActive(true);
         ES.SetSelectedGameObject(FS_Audio_Options);
+    }
+
+    public void OnControls()
+    {
+        Controls_Options.SetActive(true);
+        ES.SetSelectedGameObject(FS_Controls);
     }
 }

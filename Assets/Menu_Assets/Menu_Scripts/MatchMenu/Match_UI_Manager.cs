@@ -8,6 +8,8 @@ using UnityEngine.UI;
 using UnityEditor;
 using System;
 using TMPro;
+using UnityEngine.Animations.Rigging;
+using UnityEngine.AI;
 
 public class Match_UI_Manager : MonoBehaviour
 {
@@ -115,12 +117,18 @@ public class Match_UI_Manager : MonoBehaviour
 
         List<Button> Buttons = new List<Button>();
 
-        for(int i = 0; i<NbrOfChara; i++)
-        {
-            GameObject newChara = Instantiate(charaButton);
+        Quaternion rot = Quaternion.Euler(new Vector3(0, 180, 0));
+        Vector3 pos = new Vector3(0, -25, -15);
 
-            newChara.transform.SetParent(CharaSection.transform);
-            newChara.name = Step.name + "_Chara_"+i.ToString();
+        for (int i = 0; i<NbrOfChara; i++)
+        {
+            GameObject newChara = Instantiate(charaButton,CharaSection.transform);
+
+            newChara.name = charaSpecs[i].Name;
+
+            GameObject charaPrefab = Instantiate(charaSpecs[i].StaticPrefab,newChara.transform);
+            charaPrefab.transform.rotation = rot;
+            charaPrefab.transform.localPosition = pos;
 
             Button btn = newChara.GetComponent<Button>();
             btn.onClick.AddListener(OnContinue);
