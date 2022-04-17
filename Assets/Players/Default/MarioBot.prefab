@@ -189,15 +189,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1885335131331726593, guid: bf9f419ca202a1c44badfce89719b932, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -20.775059
+      value: 4.17451
       objectReference: {fileID: 0}
     - target: {fileID: 1885335131331726593, guid: bf9f419ca202a1c44badfce89719b932, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.00000047683716
       objectReference: {fileID: 0}
     - target: {fileID: 1885335131331726593, guid: bf9f419ca202a1c44badfce89719b932, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -5.300682
+      value: -7.115506
       objectReference: {fileID: 0}
     - target: {fileID: 1885335131331726593, guid: bf9f419ca202a1c44badfce89719b932, type: 3}
       propertyPath: m_LocalRotation.w
@@ -251,6 +251,51 @@ GameObject:
 --- !u!4 &7445913054317946773 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5251728999763482044, guid: bf9f419ca202a1c44badfce89719b932, type: 3}
+  m_PrefabInstance: {fileID: 3437603082321900073}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &3669682000726488184 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2114868407024731729, guid: bf9f419ca202a1c44badfce89719b932, type: 3}
+  m_PrefabInstance: {fileID: 3437603082321900073}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1006807948941096773 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2471411543921247596, guid: bf9f419ca202a1c44badfce89719b932, type: 3}
+  m_PrefabInstance: {fileID: 3437603082321900073}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6470330462075134712 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8538801307345293521, guid: bf9f419ca202a1c44badfce89719b932, type: 3}
+  m_PrefabInstance: {fileID: 3437603082321900073}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &7865486440419512025 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4797182378249223408, guid: bf9f419ca202a1c44badfce89719b932, type: 3}
+  m_PrefabInstance: {fileID: 3437603082321900073}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6269666196995743489 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8698287040923512104, guid: bf9f419ca202a1c44badfce89719b932, type: 3}
+  m_PrefabInstance: {fileID: 3437603082321900073}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8817858718781954321 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6191185063959456568, guid: bf9f419ca202a1c44badfce89719b932, type: 3}
+  m_PrefabInstance: {fileID: 3437603082321900073}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &4310283013055612306 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1469829729749120955, guid: bf9f419ca202a1c44badfce89719b932, type: 3}
+  m_PrefabInstance: {fileID: 3437603082321900073}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &3132319770902819474 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 345912912940744891, guid: bf9f419ca202a1c44badfce89719b932, type: 3}
+  m_PrefabInstance: {fileID: 3437603082321900073}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &3297320046826440567 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 177539064298796382, guid: bf9f419ca202a1c44badfce89719b932, type: 3}
   m_PrefabInstance: {fileID: 3437603082321900073}
   m_PrefabAsset: {fileID: 0}
 --- !u!54 &-5818814805590949702
@@ -315,8 +360,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _specs: {fileID: 11400000, guid: 26793e13432ba1346a58e9f5dc9a52c8, type: 2}
-  IsElectrocutionShader: 0
+  ElectrocutedBody:
+  - {fileID: 3669682000726488184}
+  - {fileID: 1006807948941096773}
+  - {fileID: 6470330462075134712}
+  - {fileID: 7865486440419512025}
+  - {fileID: 6269666196995743489}
+  - {fileID: 8817858718781954321}
+  - {fileID: 4310283013055612306}
+  - {fileID: 3132319770902819474}
+  - {fileID: 3297320046826440567}
   MaterialElectricity: {fileID: 2100000, guid: 98fd08f6dd93b0d4688d40de5ac8a1cd, type: 2}
+  MaterialFreeze: {fileID: 2100000, guid: 9e4953594a6ce23438614852f15a6f23, type: 2}
   state: 0
   isPiloted: 0
   hasBall: 0

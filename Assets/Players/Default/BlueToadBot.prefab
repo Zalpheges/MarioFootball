@@ -193,15 +193,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1753145528903208632, guid: dde6b6048164a7248ae98a1e7444b476, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 7.66434
       objectReference: {fileID: 0}
     - target: {fileID: 1753145528903208632, guid: dde6b6048164a7248ae98a1e7444b476, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.00000023841858
       objectReference: {fileID: 0}
     - target: {fileID: 1753145528903208632, guid: dde6b6048164a7248ae98a1e7444b476, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -10.20623
       objectReference: {fileID: 0}
     - target: {fileID: 1753145528903208632, guid: dde6b6048164a7248ae98a1e7444b476, type: 3}
       propertyPath: m_LocalRotation.w
@@ -242,6 +242,36 @@ GameObject:
 --- !u!4 &5328909088368726964 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1753145528903208632, guid: dde6b6048164a7248ae98a1e7444b476, type: 3}
+  m_PrefabInstance: {fileID: 5881835274925153548}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &5328909088369020444 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1753145528902783760, guid: dde6b6048164a7248ae98a1e7444b476, type: 3}
+  m_PrefabInstance: {fileID: 5881835274925153548}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &5328909088369020424 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1753145528902783748, guid: dde6b6048164a7248ae98a1e7444b476, type: 3}
+  m_PrefabInstance: {fileID: 5881835274925153548}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &5328909088369020542 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1753145528902783858, guid: dde6b6048164a7248ae98a1e7444b476, type: 3}
+  m_PrefabInstance: {fileID: 5881835274925153548}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &5328909088369020508 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1753145528902783824, guid: dde6b6048164a7248ae98a1e7444b476, type: 3}
+  m_PrefabInstance: {fileID: 5881835274925153548}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &5328909088369020862 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1753145528902783666, guid: dde6b6048164a7248ae98a1e7444b476, type: 3}
+  m_PrefabInstance: {fileID: 5881835274925153548}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &5328909088369020832 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1753145528902783660, guid: dde6b6048164a7248ae98a1e7444b476, type: 3}
   m_PrefabInstance: {fileID: 5881835274925153548}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &5328909088368726614 stripped
@@ -364,8 +394,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _specs: {fileID: 11400000, guid: aa8b16f128f1eb04a82f8fc6eedb172e, type: 2}
-  IsElectrocutionShader: 0
+  ElectrocutedBody:
+  - {fileID: 5328909088369020444}
+  - {fileID: 5328909088369020424}
+  - {fileID: 5328909088369020542}
+  - {fileID: 5328909088369020508}
+  - {fileID: 5328909088369020862}
+  - {fileID: 5328909088369020832}
   MaterialElectricity: {fileID: 2100000, guid: 98fd08f6dd93b0d4688d40de5ac8a1cd, type: 2}
+  MaterialFreeze: {fileID: 2100000, guid: 9e4953594a6ce23438614852f15a6f23, type: 2}
   state: 0
   isPiloted: 0
   hasBall: 0

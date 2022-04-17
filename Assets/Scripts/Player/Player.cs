@@ -79,9 +79,11 @@ public class Player : MonoBehaviour
     public bool IsWaiting { get; set; } = false;
     public bool ProcessQueue { get; private set; } = false;
 
-    public bool IsElectrocutionShader;
+    public GameObject[] ElectrocutedBody;
 
     public Material MaterialElectricity;
+
+    public Material MaterialFreeze;
 
     private float _dashSpeed;
     private Vector3 _dashEndPoint;
@@ -140,6 +142,7 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
+        ChangeMaterialOnFreeze(true);
         Team.GainItem();
 
         //bool debug = Field.Team1.Players[0] == this;
@@ -263,15 +266,46 @@ public class Player : MonoBehaviour
     {
         if (enabled)
         {
-            Material[] Mats = new Material[] { gameObject.transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>().materials[0], MaterialElectricity };
-            //Debug.Log(gameObject.transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>().materials[1].name);
-            gameObject.transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>().materials = Mats;
+            for (int i = 0; i < ElectrocutedBody.Length; i++)
+            {
+                Material[] Mats = new Material[] { ElectrocutedBody[i].GetComponent<SkinnedMeshRenderer>().materials[0], MaterialElectricity };
+                //Debug.Log(gameObject.transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>().materials[1].name);
+                ElectrocutedBody[i].GetComponent<SkinnedMeshRenderer>().materials = Mats;
+            }
+
         }
         else
         {
-            Material[] Mats = new Material[] { gameObject.transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>().materials[0] };
-            //Debug.Log(gameObject.transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>().materials[1].name);
-            gameObject.transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>().materials = Mats;
+            for (int i = 0; i < ElectrocutedBody.Length; i++)
+            {
+                Material[] Mats = new Material[] { ElectrocutedBody[i].GetComponent<SkinnedMeshRenderer>().materials[0] };
+                //Debug.Log(gameObject.transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>().materials[1].name);
+                ElectrocutedBody[i].GetComponent<SkinnedMeshRenderer>().materials = Mats;
+            }
+
+        }
+    }
+
+    public void ChangeMaterialOnFreeze(bool enabled)
+    {
+        if (enabled)
+        {
+            for (int i = 0; i < ElectrocutedBody.Length; i++)
+            {
+                Material[] Mats = new Material[] { ElectrocutedBody[i].GetComponent<SkinnedMeshRenderer>().materials[0], MaterialFreeze };
+                //Debug.Log(gameObject.transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>().materials[1].name);
+                ElectrocutedBody[i].GetComponent<SkinnedMeshRenderer>().materials = Mats;
+            }
+        }
+        else
+        {
+            for (int i = 0; i < ElectrocutedBody.Length; i++)
+            {
+                Material[] Mats = new Material[] { ElectrocutedBody[i].GetComponent<SkinnedMeshRenderer>().materials[0] };
+                //Debug.Log(gameObject.transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>().materials[1].name);
+                ElectrocutedBody[i].GetComponent<SkinnedMeshRenderer>().materials = Mats;
+            }
+
         }
     }
 
