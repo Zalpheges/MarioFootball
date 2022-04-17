@@ -10,13 +10,24 @@ using System;
 using TMPro;
 using UnityEngine.Animations.Rigging;
 using UnityEngine.AI;
+using Random = UnityEngine.Random;
 
 public class Match_UI_Manager : MonoBehaviour
 {
     public GameObject charaButton;
 
     private bool allieSelected;
-    private int NbrOfChara;
+
+    //Data
+    private PlayerSpecs _playerCaptain;
+    private PlayerSpecs _playerAlly;
+    private PlayerSpecs _AICaptain;
+    private PlayerSpecs _AIAlly;
+
+    public float gameTime;
+    public float goalToWin;
+    public int AIDifficulty;
+    //
 
     //Chara buttons
     [SerializeField]
@@ -36,7 +47,9 @@ public class Match_UI_Manager : MonoBehaviour
     private EventSystem ES;
 
     public List<GameObject> matchParams = new List<GameObject>();
-    public List<PlayerSpecs> charaSpecs = new List<PlayerSpecs>();
+
+    public List<PlayerSpecs> maincharaSpecs = new List<PlayerSpecs>();
+    public List<PlayerSpecs> alliecharaSpecs = new List<PlayerSpecs>();
 
     List<Button> charaButtons;
     List<Button> allieButtons;
@@ -47,9 +60,15 @@ public class Match_UI_Manager : MonoBehaviour
     public TextMeshProUGUI accuracy;
     public TextMeshProUGUI speed;
     public TextMeshProUGUI stunTime;
+    //
+
+    public static Match_UI_Manager _instance;
+    private void Awake()
+    {
+        _instance = this;
+    }
     private void Start()
     {
-        NbrOfChara = charaSpecs.Count;
 
         allieSelected = false;
         FS_mainCharacter=InitCharacters(mainCharacterSelection);
@@ -83,6 +102,7 @@ public class Match_UI_Manager : MonoBehaviour
             if (matchSettings.activeSelf)
             {
                 matchSettings.SetActive(false);
+                allieSelection.SetActive(true);
                 ES.SetSelectedGameObject(FS_allie);
             }
             else if (allieSelection.activeSelf)
@@ -101,9 +121,9 @@ public class Match_UI_Manager : MonoBehaviour
         PlayerSpecs chara;
 
         if (allieSelection.activeSelf)
-            chara = charaSpecs[allieButtons.IndexOf(button.GetComponent<Button>())];
+            chara = alliecharaSpecs[allieButtons.IndexOf(button.GetComponent<Button>())];
         else
-            chara = charaSpecs[charaButtons.IndexOf(button.GetComponent<Button>())];
+            chara = maincharaSpecs[charaButtons.IndexOf(button.GetComponent<Button>())];
 
         accuracy.text = "Accuracy: "+ chara.Accuracy;
         speed.text = "Speed :" + chara.Speed;
@@ -117,21 +137,36 @@ public class Match_UI_Manager : MonoBehaviour
 
         List<Button> Buttons = new List<Button>();
 
+
         Quaternion rot = Quaternion.Euler(new Vector3(0, 180, 0));
         Vector3 pos = new Vector3(0, -25, -15);
+        Vector3 scale = new Vector3(30, 30, 30);
 
-        for (int i = 0; i<NbrOfChara; i++)
+
+        List<PlayerSpecs> charaspecs;
+
+        if(allieSelection.activeSelf)
+        {
+            charaspecs = alliecharaSpecs;
+        }
+        else
+        {
+            charaspecs = maincharaSpecs;
+        }
+        for (int i = 0; i< charaspecs.Count; i++)
         {
             GameObject newChara = Instantiate(charaButton,CharaSection.transform);
+            newChara.name = charaspecs[i].Name;
 
-            newChara.name = charaSpecs[i].Name;
-
-            GameObject charaPrefab = Instantiate(charaSpecs[i].StaticPrefab,newChara.transform);
-            charaPrefab.transform.rotation = rot;
+            GameObject charaPrefab = Instantiate(charaspecs[i].StaticPrefab, newChara.transform);
             charaPrefab.transform.localPosition = pos;
+            charaPrefab.transform.localScale = scale;
+            charaPrefab.transform.localRotation = rot;
 
             Button btn = newChara.GetComponent<Button>();
-            btn.onClick.AddListener(OnContinue);
+
+            PlayerSpecs spectopass = charaspecs[i];
+            btn.onClick.AddListener(() => OnContinue(spectopass));
 
             Buttons.Add(btn);
 
@@ -139,7 +174,6 @@ public class Match_UI_Manager : MonoBehaviour
             {
                 FS = newChara;
             }
-
         }
 
         Navigation btnNav = new Navigation();
@@ -177,16 +211,16 @@ public class Match_UI_Manager : MonoBehaviour
 
         return FS;
     }
-    public void OnContinue()
+    public void OnContinue(PlayerSpecs CharaSpec)
     {
-        if(matchSettings.activeSelf)
-        {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-        }
-        else if (allieSelection.activeSelf)
+        if (allieSelection.activeSelf)
         {
             matchSettings.SetActive(true);
             ES.SetSelectedGameObject(FS_matchSettings);
+
+            allieSelection.SetActive(false);
+
+            _playerAlly = CharaSpec;
         }
         else if(!allieSelected)
         {
@@ -198,12 +232,45 @@ public class Match_UI_Manager : MonoBehaviour
 
             mainCharacterSelection.SetActive(false);
             ES.SetSelectedGameObject(FS_allie);
+
+            _playerCaptain = CharaSpec;
         }
         else
         {
             mainCharacterSelection.SetActive(false);
             allieSelection.SetActive(true);
             ES.SetSelectedGameObject(FS_allie);
+            _playerCaptain = CharaSpec;
         }
     }
+
+    public void OnPlay()
+    {
+        GetRandomEnnemies();
+
+        Debug.Log(_playerCaptain.Name);
+        Debug.Log(_playerAlly.Name);
+
+        Debug.Log(_AICaptain.Name);
+        Debug.Log(_AIAlly.Name);
+
+        Debug.Log(gameTime);
+        Debug.Log(goalToWin);
+        Debug.Log(AIDifficulty);
+
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+    }
+
+    private void GetRandomEnnemies()
+    {
+        maincharaSpecs.Remove(_playerCaptain);
+        alliecharaSpecs.Remove(_playerAlly);
+
+        _AICaptain = maincharaSpecs[Random.Range(0, maincharaSpecs.Count)];
+        _AIAlly = alliecharaSpecs[Random.Range(0, alliecharaSpecs.Count)];
+
+        maincharaSpecs.Add(_playerCaptain);
+        alliecharaSpecs.Add(_playerAlly);
+    }
+
 }

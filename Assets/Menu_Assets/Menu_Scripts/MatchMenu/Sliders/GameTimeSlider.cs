@@ -18,5 +18,7 @@ public class GameTimeSlider : MonoBehaviour, ISliderValue
         int seconds = (int)Mathf.Round(((Value * MaxTime) - minutes) * 60);
 
         text.text = minutes.ToString() + ":" + seconds.ToString("00");
+
+        Match_UI_Manager._instance.gameTime = minutes + seconds;
     }
 }
