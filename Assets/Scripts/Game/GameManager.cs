@@ -7,9 +7,6 @@ using UnityEngine.AI;
 public class GameManager : MonoBehaviour
 {
     [SerializeField]
-    private Match _debugMatch;
-
-    [SerializeField]
     private float _debugMatchDuration = 60f;
 
     [SerializeField]
@@ -30,6 +27,17 @@ public class GameManager : MonoBehaviour
     private Chrono _chrono;
     private float _timer = 0f;
 
+    #region Debug
+
+    public PlayerSpecs d_Captain1;
+    public PlayerSpecs d_Captain2;
+    public PlayerSpecs d_Mate1;
+    public PlayerSpecs d_Mate2;
+
+    public PlayerSpecs d_GoalKeeper;
+
+    #endregion
+
     private void Awake()
     {
         Random.InitState(System.DateTime.Now.Millisecond);
@@ -42,8 +50,20 @@ public class GameManager : MonoBehaviour
         else
             Destroy(this.gameObject);
 
+        if (d_Captain1 == null)
+            return;
+
+        Match debugMatch = new Match()
+        {
+            Captain1 = d_Captain1,
+            Captain2 = d_Captain2,
+            GoalKeeper = d_GoalKeeper,
+            Mate1 = d_Mate1,
+            Mate2 = d_Mate2
+        };
+
         _matches = new Queue<Match>();
-        _matches.Enqueue(_debugMatch);
+        _matches.Enqueue(debugMatch);
     }
 
     private void Start()

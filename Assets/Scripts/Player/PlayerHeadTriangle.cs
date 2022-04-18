@@ -15,7 +15,7 @@ public class PlayerHeadTriangle : MonoBehaviour
 
     void LateUpdate()
     {
-        if (_Player.isPiloted)
+        if (_Player.IsPiloted)
         {
             Triangle.SetActive(true);
             Triangle.transform.LookAt(Cam.transform.position);

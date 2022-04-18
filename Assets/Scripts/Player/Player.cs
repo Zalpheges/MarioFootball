@@ -715,7 +715,7 @@ public class Player : MonoBehaviour
     {
         State = PlayerState.Stunned;
         _animator.SetTrigger("Electrocuted");
-        ChangeMaterialOnElectrocution(true);
+        ChangeMaterialOnElectrocution(true); 
 
         Dash(Vector3.zero, 0f, duration);
 
