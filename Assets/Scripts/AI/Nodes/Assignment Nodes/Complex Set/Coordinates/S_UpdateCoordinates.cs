@@ -37,7 +37,7 @@ public class S_UpdateCoordinates : Node
 
         Vector2Int Coord = new Vector2Int();
 
-        for (int x = 0; x < 3; x++)
+        for (int x = 0; x < Mathf.Max(_root.WidthDivisionAmount, _root.HeightDivisionAmount); x++)
         {
             if (!xCoordDetermined)
             {

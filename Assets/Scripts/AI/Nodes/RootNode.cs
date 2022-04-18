@@ -100,8 +100,11 @@ public class RootNode : Node
 
     public int playerIndex = new int();
 
-    public float WidthDivision = Field.Width / 5;
-    public float HeightDivision = Field.Height / 3;
+    public float WidthDivision; 
+    public float HeightDivision;
+
+    public int WidthDivisionAmount = 9;
+    public int HeightDivisionAmount = 7;
 
     public List<Vector2Int> OptimalCoordinates = new List<Vector2Int>();
 
@@ -109,6 +112,8 @@ public class RootNode : Node
     {
         parentTree = iparentTree;
         player = parentTree.player;
+        WidthDivision = Field.Width / WidthDivisionAmount;
+        HeightDivision = Field.Height / HeightDivisionAmount;
         AllyPlayersOrderSetup();
         EnemyPlayersOrderSetup();
         AIBoolSetup();
