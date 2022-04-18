@@ -61,6 +61,8 @@ public class Player : MonoBehaviour
 
     private float _speed;
 
+    private bool _isGoalKeeper;
+
     #region Debug
 
     private bool _isRetard => GameManager.EnemiesAreRetard && Team == Field.Team2 && Time.timeSinceLevelLoad < 20f;
@@ -78,6 +80,8 @@ public class Player : MonoBehaviour
         player.IABrain = (PlayerBrain)player.GetComponent(brain.GetType());
 
         player.Team = team;
+
+        player._isGoalKeeper = isGoalKeeper;
 
         return player;
     }
@@ -179,6 +183,9 @@ public class Player : MonoBehaviour
 
                     IsWaiting = true;
 
+                    if (_isGoalKeeper)
+                        _agent.agentTypeID = GetAgenTypeIDByName("Goal Keeper");
+
                     transform.rotation = Quaternion.LookRotation(Vector3.Project(transform.position - Team.transform.position, Field.Transform.forward));
                 }
                 else
@@ -191,23 +198,28 @@ public class Player : MonoBehaviour
             return;
         }
 
-        if (State != PlayerState.Moving)
-        {
-            _rgdb.position = Vector3.MoveTowards(_rgdb.position, _dashEndPoint, _dashSpeed * Time.deltaTime);
-
-            return;
-        }
-
         if (IsWaiting)
         {
+            _animator.SetBool("Idle", true);
+            _animator.SetBool("Run", false);
+
             if (!IsPiloted)
             {
                 Quaternion rotation = Quaternion.LookRotation(Enemies.transform.position - transform.position, Vector3.up);
                 _rgdb.rotation = Quaternion.Slerp(_rgdb.rotation, rotation, 50f * Time.deltaTime);
             }
 
-            if (!Field.ArePlayersAllWaiting())
+            if (Field.ArePlayersAllWaiting())
+                ResetState();
+            else
                 return;
+        }
+
+        if (State != PlayerState.Moving)
+        {
+            _rgdb.position = Vector3.MoveTowards(_rgdb.position, _dashEndPoint, _dashSpeed * Time.deltaTime);
+
+            return;
         }
 
         if ((GameManager.DebugOnlyPlayer && (!HasBall && !IsPiloted)) || _isRetard)
@@ -385,6 +397,7 @@ public class Player : MonoBehaviour
     public void SetNavDriven(Vector3 destination)
     {
         IsNavDriven = true;
+        _agent.agentTypeID = GetAgenTypeIDByName("Default");
 
         _agent.enabled = true;
         _agent.destination = destination;
@@ -733,4 +746,19 @@ public class Player : MonoBehaviour
     }
 
     #endregion
+
+    public static int GetAgenTypeIDByName(string agentTypeName)
+    {
+        int count = NavMesh.GetSettingsCount();
+        for (var i = 0; i < count; i++)
+        {
+            int id = NavMesh.GetSettingsByIndex(i).agentTypeID;
+            string name = NavMesh.GetSettingsNameFromID(id);
+            if (name == agentTypeName)
+            {
+                return id;
+            }
+        }
+        return -1;
+    }
 }

@@ -51,7 +51,7 @@ public class TreeV3
         shootAlignmentThreshold = Thresholds[6];
         dangerRangeThreshold = Thresholds[7];
 
-        EastTeamEnabled = true;
+        EastTeamEnabled = false;
         WestTeamEnabled = true;
 
         root = new RootNode(this, new List<Node>()
