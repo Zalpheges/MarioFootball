@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class BlueTurtleShell : ThrowableItem
+public class BlueTurtleShell : PhysicalItem
 {
     public override void DestroyItem()
     {
@@ -9,6 +9,6 @@ public class BlueTurtleShell : ThrowableItem
 
     protected override void ApplyEffect(Player player)
     {
-        Debug.Log("Freeze " + player.name);
+        player.Stun(Player.StunType.Frozen);
     }
 }

@@ -44,10 +44,14 @@ public class GoalKeeperTree
                     new Sequence(new List<Node>
                     {
                         new T_BallHolderIsMe(),
-                        new Sequence(new List<Node>
+                        new Selector(new List<Node>
                         {
-                            new T_NearbyAllyUnmarked(),
-                            new S_Pass()
+                            new Sequence(new List<Node>
+                            {
+                                new T_NearbyAllyUnmarked(),
+                                new S_Pass()
+                            }),
+                            new S_MoveGoalKeeper_Default()
                         })
                     }),
                     new Sequence(new List<Node>
