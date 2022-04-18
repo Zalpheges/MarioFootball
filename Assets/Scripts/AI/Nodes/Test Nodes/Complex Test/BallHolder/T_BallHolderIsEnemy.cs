@@ -13,7 +13,7 @@ public class T_BallHolderIsEnemy : Node
         if (!_rootInitialized)
             _root = GetRootNode();
 
-        if (_root.parentTree.Enemies.Contains(_root.ballHolder))
+        if (_root.Enemies.Contains(_root.ballHolder))
             return (NodeState.SUCCESS, Action.None);
 
 

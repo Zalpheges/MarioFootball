@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using BehaviorTree;
 
-public class A_Move : Node
+public class T_BallInGoalRange : Node
 {
     private RootNode _root;
     private bool _rootInitialized = false;
@@ -13,10 +13,11 @@ public class A_Move : Node
         if (!_rootInitialized)
             _root = GetRootNode();
 
-        _root.Position.y = _root.player.transform.position.y;
-        if ((_root.Position - _root.player.transform.position).magnitude < .5f)
-            return (NodeState.SUCCESS, Action.None);
-        return (NodeState.SUCCESS, Action.MoveTo(_root.Position));
+        if (Mathf.Abs(Field.Ball.transform.position.x) > (Field.Width / 2) - Field.GoalArea.y)
+            if (Mathf.Abs(Field.Ball.transform.position.y) < Field.GoalArea.x / 2)
+                return (NodeState.SUCCESS, Action.None);
+
+        return (NodeState.FAILURE, Action.None);
     }
 
     private RootNode GetRootNode()
@@ -31,3 +32,4 @@ public class A_Move : Node
         return (RootNode)currentNode;
     }
 }
+

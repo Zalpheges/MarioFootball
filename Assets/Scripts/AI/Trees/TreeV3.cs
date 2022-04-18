@@ -15,14 +15,7 @@ public class TreeV3
     public Player player;
     public Player playerWithBall;
 
-    public float shootThreshold;
-    public float defenseThreshold;
-    public float attackThreshold;
-    public float headButtThreshold;
-    public float markThreshold;
-    public float passAlignmentThreshold;
-    public float shootAlignmentThreshold;
-    public float dangerRangeThreshold;
+    public List<float> Thresholds;
 
     public bool EastTeamEnabled;
     public bool WestTeamEnabled;
@@ -31,7 +24,7 @@ public class TreeV3
 
     public RootNode root;
 
-    public void Setup(Team iAllies, Team iEnemies, Player iplayer, List<float> Thresholds)
+    public void Setup(Team iAllies, Team iEnemies, Player iplayer, List<float> iThresholds)
     {
         Allies = iAllies.Players.ToList();
         Enemies = iEnemies.Players.ToList();
@@ -42,17 +35,10 @@ public class TreeV3
         player = iplayer;
         playerIndex = player.transform.GetSiblingIndex();
 
-        shootThreshold = Thresholds[0];
-        defenseThreshold = Thresholds[1];
-        attackThreshold = Thresholds[2];
-        headButtThreshold = Thresholds[3];
-        markThreshold = Thresholds[4];
-        passAlignmentThreshold = Thresholds[5];
-        shootAlignmentThreshold = Thresholds[6];
-        dangerRangeThreshold = Thresholds[7];
+        Thresholds = iThresholds;
 
         EastTeamEnabled = false;
-        WestTeamEnabled = true;
+        WestTeamEnabled = false;
 
         root = new RootNode(this, new List<Node>()
         {
@@ -72,22 +58,19 @@ public class TreeV3
                     })
                 }),
                 new S_UpdateBallHolder(),
-                new Selector(new List<Node>{
-                    new Sequence(new List<Node>
+                new Selector(new List<Node>
+                {
+                    new T_AITeam(),
+                    new Selector(new List<Node>
                     {
-                        new Inverter(new T_AITeam()),
-                        new Selector(new List<Node>
+                        new T_isPilotedUnchanged(),
+                        new Sequence(new List<Node>
                         {
-                            new T_isPilotedUnchanged(),
-                            new Sequence(new List<Node>
-                            {
-                                new S_UpdatePilotedPlayer(),
-                                new S_BallState_Unassigned(),
-                                new S_PlayerType_Unassigned()
-                            })
+                            new S_UpdatePilotedPlayer(),
+                            new S_BallState_Unassigned(),
+                            new S_PlayerType_Unassigned()
                         })
-                    }),
-                    new Debug_Success()
+                    })
                 }),
                 new Selector(new List<Node>
                 {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using BehaviorTree;
 
-public class A_Move : Node
+public class T_BallInAllyHalf : Node
 {
     private RootNode _root;
     private bool _rootInitialized = false;
@@ -13,10 +13,16 @@ public class A_Move : Node
         if (!_rootInitialized)
             _root = GetRootNode();
 
-        _root.Position.y = _root.player.transform.position.y;
-        if ((_root.Position - _root.player.transform.position).magnitude < .5f)
-            return (NodeState.SUCCESS, Action.None);
-        return (NodeState.SUCCESS, Action.MoveTo(_root.Position));
+        if (_root.allyTeamSide == TeamSide.West)
+            if (Field.Ball.transform.position.x < 0f)
+                return (NodeState.SUCCESS, Action.None);
+            else
+                return (NodeState.FAILURE, Action.None);
+
+        if (Field.Ball.transform.position.x > 0f)
+            return(NodeState.SUCCESS, Action.None);
+
+        return (NodeState.FAILURE, Action.None);
     }
 
     private RootNode GetRootNode()
