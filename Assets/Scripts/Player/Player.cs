@@ -168,7 +168,7 @@ public class Player : MonoBehaviour
         if (ProcessQueue)
             UpdateNavQueue();
 
-        _agent.enabled = IsNavDriven || !IsPiloted || InWall;
+        _agent.enabled = IsNavDriven || !IsPiloted || InWall || _isGoalKeeper;
 
         if (_agent.enabled)
             _agent.isStopped = !IsNavDriven && IsPiloted;
