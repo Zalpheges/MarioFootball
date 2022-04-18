@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 379599807}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -12.091285, y: 0.45114225, z: 10.801948}
+  m_LocalPosition: {x: -32.557877, y: 0.3306405, z: -3.1202176}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1902321336}
@@ -162,7 +162,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70b342d8ce5c2fd48b8fa3147d48d1d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Weight: 0.9999999
+  m_Weight: 0.99999994
   m_Effectors: []
 --- !u!1 &216639635823538893
 GameObject:
@@ -1527,8 +1527,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _specs: {fileID: 11400000, guid: e32174f7889a0ab429aeae9b2b0b2040, type: 2}
-  IsElectrocutionShader: 0
+  ElectrocutedBody: []
   MaterialElectricity: {fileID: 2100000, guid: 98fd08f6dd93b0d4688d40de5ac8a1cd, type: 2}
+  MaterialFreeze: {fileID: 0}
 --- !u!95 &4023742555457410973
 Animator:
   serializedVersion: 3
