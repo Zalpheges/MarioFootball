@@ -8,4 +8,8 @@ public class Match
     public PlayerSpecs Mate2;
 
     public PlayerSpecs GoalKeeper;
+
+    public int gameTime;
+    public float goalToWin;
+    public int AIDifficulty;
 }

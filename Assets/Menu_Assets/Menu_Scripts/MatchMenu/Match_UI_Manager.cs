@@ -24,7 +24,7 @@ public class Match_UI_Manager : MonoBehaviour
     private PlayerSpecs _AICaptain;
     private PlayerSpecs _AIAlly;
 
-    [HideInInspector] public float gameTime;
+    [HideInInspector] public int gameTime;
     [HideInInspector] public float goalToWin;
     [HideInInspector] public int AIDifficulty;
     //
@@ -257,6 +257,8 @@ public class Match_UI_Manager : MonoBehaviour
         Debug.Log(gameTime);
         Debug.Log(goalToWin);
         Debug.Log(AIDifficulty);
+
+        GameManager.AddMatch(_playerCaptain, _playerAlly, _AICaptain, _AIAlly,gameTime,goalToWin,AIDifficulty);
 
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }

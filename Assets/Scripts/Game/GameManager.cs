@@ -42,6 +42,10 @@ public class GameManager : MonoBehaviour
 
     public PlayerSpecs d_GoalKeeper;
 
+    public float d_gameTime;
+    public float d_goalToWin;
+    public int d_aIDifficulty;
+
     #endregion
 
     private void Awake()
@@ -75,7 +79,6 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         Random.InitState(System.DateTime.Now.Millisecond);
-        _chrono = new Chrono(5, 0);
     }
 
     private void Update()
@@ -149,6 +152,8 @@ public class GameManager : MonoBehaviour
         team2.Players.CopyTo(allPlayers, team1.Players.Length);
         CameraManager.Init(allPlayers.Select(player => player.transform).ToArray(), Field.Ball.transform);
         CameraManager.Follow(allPlayers[0].transform);
+
+        _instance._chrono = new Chrono(match.gameTime, 0);
     }
 
     public static void GoalScored(Team team)
@@ -184,6 +189,21 @@ public class GameManager : MonoBehaviour
         Field.Team2.Goalkeeper.IsWaiting = false;
     }
 
+    public static void AddMatch(PlayerSpecs playerCaptain, PlayerSpecs playerMate, PlayerSpecs AICaptain, PlayerSpecs AIMate, int gameTime, float goalToWin, int AIDifficulty)
+    {
+        Match newMatch = new Match()
+        {
+            Captain1 = playerCaptain,
+            Captain2 = AICaptain,
+            Mate1 = playerMate,
+            Mate2 = AIMate,
+            gameTime = gameTime,
+            goalToWin = goalToWin,
+            AIDifficulty = AIDifficulty
+        };
+
+        _instance._matches.Enqueue(newMatch);
+    }
 
     /// <summary>
     /// Ordonne aux joueurs de se diriger vers leur position de départ, ou vers des positions customs si l'argument positions est renseigné
