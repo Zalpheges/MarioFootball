@@ -27,9 +27,11 @@ public class T_NearbyAllyUnmarked : Node
 
                     if (Vector3.Dot(BallHolderToAlly.normalized, BallHolderToEnemy.normalized) > _root.passAlignmentThreshold)
                     {
-                        if(BallHolderToAlly.sqrMagnitude > BallHolderToEnemy.sqrMagnitude) 
+                        if (BallHolderToAlly.magnitude > BallHolderToEnemy.magnitude)
+                        {
                             allyMarked = true;
-                        break;
+                            break;
+                        }
                     }
 
                     if (!allyMarked)
