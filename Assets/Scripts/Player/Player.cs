@@ -96,36 +96,44 @@ public class Player : MonoBehaviour
         private Queue<Vector3> _positions;
         private Queue<System.Action> _animations;
         private Queue<float> _preActionDelays;
+        private Queue<bool> _animDetails;
 
         private void Init()
         {
             _positions = new Queue<Vector3>();
             _animations = new Queue<System.Action>();
             _preActionDelays = new Queue<float>();
+            _animDetails = new Queue<bool>();
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="position"></param>
-        /// <param name="anim">de la forme () => animator.SetBool("fdp")</param>
+        /// <param name="anim">de la forme () => animator.SetBool("string")</param>
         /// <param name="delay"></param>
-        public void AddAction(Vector3 position, System.Action anim, float delay)
+        public void AddAction(Vector3 position, System.Action anim, float delay, bool playWhileMoving)
         {
             if (_positions == null)
                 Init();
             _positions.Enqueue(position);
             _animations.Enqueue(anim);
             _preActionDelays.Enqueue(delay);
+            _animDetails.Enqueue(playWhileMoving);
         }
 
-        public (System.Action, float) GetNext(NavMeshAgent agent)
+        public (System.Action, float) GetNext(Player player)
         {
             if (_positions.Count < 1)
                 return (null, 0f);
 
-            agent.destination = _positions.Dequeue();
+            player.SetNavDriven(_positions.Dequeue(), 5f);
             System.Action anim = _animations.Dequeue();
+            if (_animDetails.Dequeue())
+            {
+                anim();
+                anim = null;
+            }
             return (anim, _preActionDelays.Dequeue());
         }
     }
