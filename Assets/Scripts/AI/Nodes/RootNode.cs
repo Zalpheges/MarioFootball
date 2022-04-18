@@ -152,7 +152,8 @@ public class RootNode : Node
         goalParentTree = iparentTree;
         player = goalParentTree.player;
 
-        passAlignmentThreshold = 0.85f;
+        passAlignmentThreshold = 0.9f;
+        headButtThreshold = 1f;
 
         Allies = goalParentTree.Allies;
         Enemies = goalParentTree.Enemies;
