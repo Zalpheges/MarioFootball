@@ -582,7 +582,10 @@ public class Player : MonoBehaviour
     {
         (Player player, float angle) best = (null, 0f);
 
-        foreach (Player player in team.Players)
+        List<Player> players = new List<Player>(team.Players);
+        players.Add(team.Goalkeeper);
+
+        foreach (Player player in players)
         {
             if (player == this)
                 continue;

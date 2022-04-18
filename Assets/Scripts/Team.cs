@@ -51,6 +51,12 @@ public class Team : MonoBehaviour
                 hasBall = Players[i];
         }
 
+        if (Goalkeeper.IsPiloted)
+            piloted = Goalkeeper;
+
+        if (Goalkeeper.HasBall)
+            hasBall = Goalkeeper;
+
         if (Brain.Player != piloted)
             Brain.Player = piloted;
 
