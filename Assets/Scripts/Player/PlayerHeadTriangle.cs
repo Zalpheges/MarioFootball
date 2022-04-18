@@ -4,14 +4,28 @@ using UnityEngine;
 
 public class PlayerHeadTriangle : MonoBehaviour
 {
-    public GameObject Cam;
+    private GameObject Cam;
+    public GameObject Triangle;
+    public Player _Player;
     void Start()
     {
-        
+        Cam = GameObject.FindGameObjectWithTag("MainCamera");
+
     }
 
     void LateUpdate()
     {
-        transform.LookAt( new Vector3(Cam.transform.position.x, Cam.transform.position.y, Cam.transform.position.z )  );
+        if (_Player.isPiloted)
+        {
+            Triangle.SetActive(true);
+            Triangle.transform.LookAt(Cam.transform.position);
+
+        }
+        else
+        {
+            Triangle.SetActive(false);
+        }
     }
 }
+
+

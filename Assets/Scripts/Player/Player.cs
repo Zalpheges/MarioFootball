@@ -142,7 +142,6 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        ChangeMaterialOnFreeze(true);
         Team.GainItem();
 
         //bool debug = Field.Team1.Players[0] == this;
