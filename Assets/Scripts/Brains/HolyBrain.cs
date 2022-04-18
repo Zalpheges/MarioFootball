@@ -11,7 +11,7 @@ public class HolyBrain : PlayerBrain
     private float attackThreshold = 0.3f;
     private float markThreshold = Field.Width / 25;
     private float headButtThreshold = 1f;
-    private float passAlignementThreshold = 0.6f;
+    private float passAlignementThreshold = 0.8f;
     private float shootAlignementThreshold = 0.9f;
     private float dangerRangeThreshold = 3f;
 
@@ -30,11 +30,6 @@ public class HolyBrain : PlayerBrain
         };
 
         behaviorTree.Setup(Allies, Enemies, this.Player, Thresholds);
-    }
-
-    private void Update()
-    {
-        //behaviorTree
     }
 
     public override Action GetAction()

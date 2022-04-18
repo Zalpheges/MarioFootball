@@ -152,6 +152,9 @@ public class GameManager : MonoBehaviour
             player.IsWaiting = false;
         foreach (Player player in Field.Team2.Players)
             player.IsWaiting = false;
+
+        Field.Team1.Goalkeeper.IsWaiting = false;
+        Field.Team2.Goalkeeper.IsWaiting = false;
     }
 
 

@@ -13,21 +13,22 @@ public class T_NearbyAllyUnmarked : Node
         if (!_rootInitialized)
             _root = GetRootNode();
 
-        foreach (Player allyPlayer in _root.parentTree.Allies)
+        foreach (Player allyPlayer in _root.Allies)
         {
             if (allyPlayer != _root.player)
             {
                 Vector3 BallHolderToAlly = allyPlayer.transform.position - _root.player.transform.position;
 
-                foreach (Player enemyPlayer in _root.parentTree.Enemies)
+                foreach (Player enemyPlayer in _root.Enemies)
                 {
                     bool allyMarked = false;
 
                     Vector3 BallHolderToEnemy = enemyPlayer.transform.position - _root.player.transform.position;
 
-                    if (Vector3.Dot(BallHolderToAlly, BallHolderToEnemy) > _root.parentTree.passAlignmentThreshold)
+                    if (Vector3.Dot(BallHolderToAlly.normalized, BallHolderToEnemy.normalized) > _root.passAlignmentThreshold)
                     {
-                        allyMarked = true;
+                        if(BallHolderToAlly.sqrMagnitude > BallHolderToEnemy.sqrMagnitude) 
+                            allyMarked = true;
                         break;
                     }
 
@@ -39,6 +40,7 @@ public class T_NearbyAllyUnmarked : Node
                 }
             }
         }
+
         return (NodeState.FAILURE, Action.None);
     }
 

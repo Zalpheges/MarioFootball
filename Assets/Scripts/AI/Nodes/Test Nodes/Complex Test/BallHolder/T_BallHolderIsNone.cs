@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using BehaviorTree;
 
-public class A_Move : Node
+public class T_BallHolderIsNone : Node
 {
     private RootNode _root;
     private bool _rootInitialized = false;
@@ -13,10 +13,10 @@ public class A_Move : Node
         if (!_rootInitialized)
             _root = GetRootNode();
 
-        _root.Position.y = _root.player.transform.position.y;
-        if ((_root.Position - _root.player.transform.position).magnitude < .5f)
+        if (_root.ballHolder == null)
             return (NodeState.SUCCESS, Action.None);
-        return (NodeState.SUCCESS, Action.MoveTo(_root.Position));
+
+        return (NodeState.FAILURE, Action.None);
     }
 
     private RootNode GetRootNode()
@@ -31,3 +31,4 @@ public class A_Move : Node
         return (RootNode)currentNode;
     }
 }
+

@@ -15,7 +15,7 @@ public class T_BallHolder_ShootRange : Node
 
         float DistanceToGoal = (_root.parentTree.enemyGoalTransform.position - _root.player.transform.position).magnitude;
 
-        if (DistanceToGoal < _root.parentTree.shootThreshold)
+        if (DistanceToGoal < _root.shootThreshold)
             return (NodeState.SUCCESS, Action.None);
 
         return (NodeState.FAILURE, Action.None);

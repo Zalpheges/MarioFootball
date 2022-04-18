@@ -13,9 +13,8 @@ public class T_BallHolderIsAlly : Node
         if (!_rootInitialized)
             _root = GetRootNode();
 
-        if(_root.parentTree.Allies.Contains(_root.ballHolder))
+        if(_root.Allies.Contains(_root.ballHolder))
             return (NodeState.SUCCESS, Action.None);
-
 
         return (NodeState.FAILURE, Action.None);
     }

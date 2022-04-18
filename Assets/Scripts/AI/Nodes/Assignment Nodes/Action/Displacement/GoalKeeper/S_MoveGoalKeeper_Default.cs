@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using BehaviorTree;
 
-public class A_Move : Node
+public class S_MoveGoalKeeper_Default : Node
 {
     private RootNode _root;
     private bool _rootInitialized = false;
@@ -13,10 +13,10 @@ public class A_Move : Node
         if (!_rootInitialized)
             _root = GetRootNode();
 
-        _root.Position.y = _root.player.transform.position.y;
-        if ((_root.Position - _root.player.transform.position).magnitude < .5f)
-            return (NodeState.SUCCESS, Action.None);
-        return (NodeState.SUCCESS, Action.MoveTo(_root.Position));
+        _root.actionToPerform = ActionToPerform.Move;
+        _root.Position = _root.goalParentTree.InitialGoalPosition - Mathf.Sign(_root.goalParentTree.InitialGoalPosition.x) * new Vector3(Field.GoalArea.y/2, 0, 0);
+
+        return (NodeState.SUCCESS, Action.None);
     }
 
     private RootNode GetRootNode()
