@@ -24,9 +24,9 @@ public class Match_UI_Manager : MonoBehaviour
     private PlayerSpecs _AICaptain;
     private PlayerSpecs _AIAlly;
 
-    public float gameTime;
-    public float goalToWin;
-    public int AIDifficulty;
+    [HideInInspector] public float gameTime;
+    [HideInInspector] public float goalToWin;
+    [HideInInspector] public int AIDifficulty;
     //
 
     //Chara buttons
