@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22b18ff61a2fb884a906898fb289f729, type: 3}
+  m_Name: BowserBotSpecs
+  m_EditorClassIdentifier: 
+  Name: Bowser
+  Weight: 70
+  Accuracy: 1
+  Speed: 5
+  StunTime: 1
+  Prefab: {fileID: 8340123892203791438, guid: d8a7100f0127eef4da9758e941e6621c, type: 3}
+  StaticPrefab: {fileID: 3815583688634873140, guid: d8a7100f0127eef4da9758e941e6621c, type: 3}
