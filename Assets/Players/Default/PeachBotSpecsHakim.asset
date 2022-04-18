@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 22b18ff61a2fb884a906898fb289f729, type: 3}
-  m_Name: PeachBotSpecs
+  m_Name: PeachBotSpecsHakim
   m_EditorClassIdentifier: 
   Name: PeachBot
   Weight: 40
