@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Match : MonoBehaviour
+public class Match
 {
     public PlayerSpecs Captain1;
     public PlayerSpecs Captain2;

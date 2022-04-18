@@ -171,6 +171,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 491908254, guid: 22ce5fb9fff15b844914ff5b6836d3da, type: 3}
+      propertyPath: _specs
+      value: 
+      objectReference: {fileID: 11400000, guid: dff12bb2441f9c748953d3781c3fd125, type: 2}
+    - target: {fileID: 1236553423, guid: 22ce5fb9fff15b844914ff5b6836d3da, type: 3}
+      propertyPath: m_RootOrder
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 1511719066, guid: 22ce5fb9fff15b844914ff5b6836d3da, type: 3}
+      propertyPath: m_RootOrder
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 7174329940306780831, guid: 22ce5fb9fff15b844914ff5b6836d3da, type: 3}
       propertyPath: m_Name
       value: PeachBot
@@ -231,7 +243,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 491908253, guid: 22ce5fb9fff15b844914ff5b6836d3da, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 22ce5fb9fff15b844914ff5b6836d3da, type: 3}
 --- !u!1 &4397365986926537431 stripped
 GameObject:
@@ -264,20 +277,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!136 &1116008574867848751
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4397365986926537431}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 1.5
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.75, z: 0}
 --- !u!95 &-6700268564498088644
 Animator:
   serializedVersion: 3
@@ -335,33 +334,3 @@ MonoBehaviour:
   - m_Rig: {fileID: 4127069411054592194}
     m_Active: 1
   m_Effectors: []
---- !u!114 &238874432466132748
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4397365986926537431}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf3749ec1addc444c9fb1852bd6b9194, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _headposition: {fileID: 1049438373324647742, guid: c980638bcc706d947a8ce11b551d5f5f, type: 3}
-  _target: {fileID: 379599807, guid: 6baf0259e1bc5ab4cb382b98d27d06a2, type: 3}
-  _headRig: {fileID: 1902321335, guid: 6baf0259e1bc5ab4cb382b98d27d06a2, type: 3}
---- !u!114 &3179669781708073414
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4397365986926537431}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 60e97a61de2da7449b048b89ee980f48, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _specs: {fileID: 11400000, guid: dff12bb2441f9c748953d3781c3fd125, type: 2}
-  IsElectrocutionShader: 0
-  MaterialElectricity: {fileID: 2100000, guid: 98fd08f6dd93b0d4688d40de5ac8a1cd, type: 2}

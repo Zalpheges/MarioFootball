@@ -12,8 +12,6 @@ public class PlayerHeadControl : MonoBehaviour
 
     private GameObject Weight;
     
-
-
     void Update()
     {
         //Debug.Log(_headposition.transform.position - _target.transform.position);
@@ -28,12 +26,6 @@ public class PlayerHeadControl : MonoBehaviour
         {
             //_headRig.weight = 0;
             _headRig.weight=Mathf.Lerp(_headRig.weight, 0, Time.deltaTime * 3);
-
         }
-
-
-
-
-
     }
 }

@@ -17,7 +17,7 @@ public class T_BallHolder_enemyInRange : Node
         {
             float distanceToEnemy = (_root.player.transform.position - enemyPlayer.transform.position).magnitude;
 
-            if (distanceToEnemy < _root.parentTree.dangerRangeThreshold)
+            if (distanceToEnemy < _root.dangerRangeThreshold)
                 return (NodeState.SUCCESS, Action.None);
         }
 

@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22b18ff61a2fb884a906898fb289f729, type: 3}
+  m_Name: YoshiBotSpecs
+  m_EditorClassIdentifier: 
+  Name: Yoshi
+  Weight: 50
+  Accuracy: 0.7
+  Speed: 4
+  StunTime: 1
+  Prefab: {fileID: 2001341569, guid: 46b5475e9a5d1a646832008773056474, type: 3}
+  StaticPrefab: {fileID: 2443728413580246982, guid: 46b5475e9a5d1a646832008773056474, type: 3}

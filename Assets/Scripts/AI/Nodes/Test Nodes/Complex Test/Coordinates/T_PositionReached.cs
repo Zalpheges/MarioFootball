@@ -15,7 +15,7 @@ public class T_PositionReached : Node
 
         float distance = (_root.player.transform.position - _root.CoordinatePosition).magnitude;
         
-        if (distance < _root.parentTree.attackThreshold)
+        if (distance < .5f)
             return (NodeState.SUCCESS, Action.None);
 
         return (NodeState.FAILURE, Action.None);

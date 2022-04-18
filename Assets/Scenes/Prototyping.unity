@@ -4105,7 +4105,6 @@ GameObject:
   - component: {fileID: 1642756263}
   - component: {fileID: 1642756262}
   - component: {fileID: 1642756265}
-  - component: {fileID: 1642756264}
   - component: {fileID: 1642756266}
   - component: {fileID: 1642756268}
   - component: {fileID: 1642756267}
@@ -4128,10 +4127,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ff4baedbbf009f459e8492fba7370d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _debugMatch: {fileID: 1642756264}
   _debugMatchDuration: 60
   _debugOnlyPlayer: 0
   _enemiesAreRetard: 0
+  d_Captain1: {fileID: 11400000, guid: 26793e13432ba1346a58e9f5dc9a52c8, type: 2}
+  d_Captain2: {fileID: 11400000, guid: f5a9dca6287283a4b847a5644f44c221, type: 2}
+  d_Mate1: {fileID: 11400000, guid: aa8b16f128f1eb04a82f8fc6eedb172e, type: 2}
+  d_Mate2: {fileID: 11400000, guid: 5175c591c741d7241b3c9bc3ccbbedff, type: 2}
+  d_GoalKeeper: {fileID: 11400000, guid: dff12bb2441f9c748953d3781c3fd125, type: 2}
 --- !u!4 &1642756263
 Transform:
   m_ObjectHideFlags: 0
@@ -4146,23 +4149,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1642756264
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1642756261}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 09eb34fcacb82354f823900c48510f76, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Captain1: {fileID: 11400000, guid: 26793e13432ba1346a58e9f5dc9a52c8, type: 2}
-  Captain2: {fileID: 11400000, guid: f5a9dca6287283a4b847a5644f44c221, type: 2}
-  Mate1: {fileID: 11400000, guid: 5175c591c741d7241b3c9bc3ccbbedff, type: 2}
-  Mate2: {fileID: 11400000, guid: aa8b16f128f1eb04a82f8fc6eedb172e, type: 2}
-  GoalKeeper: {fileID: 11400000, guid: dff12bb2441f9c748953d3781c3fd125, type: 2}
 --- !u!114 &1642756265
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9689,7 +9675,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 10
+      scalar: 1.39
       minScalar: 10
       maxCurve:
         serializedVersion: 2
@@ -10586,7 +10572,7 @@ ParticleSystem:
     orbitalZ:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1.7
+      scalar: 4.31
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -15421,7 +15407,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 10
+      scalar: 1.39
       minScalar: 10
       maxCurve:
         serializedVersion: 2
@@ -16318,7 +16304,7 @@ ParticleSystem:
     orbitalZ:
       serializedVersion: 2
       minMaxState: 0
-      scalar: -1.7
+      scalar: -4.31
       minScalar: 0
       maxCurve:
         serializedVersion: 2

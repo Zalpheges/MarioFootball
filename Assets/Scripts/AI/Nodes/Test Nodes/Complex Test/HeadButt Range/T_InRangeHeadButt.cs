@@ -13,7 +13,7 @@ public class T_InRangeHeadButt : Node
         if (!_rootInitialized)
             _root = GetRootNode();
 
-        if ((_root.ballHolder.transform.position - _root.player.transform.position).magnitude < _root.parentTree.headButtThreshold)
+        if ((_root.ballHolder.transform.position - _root.player.transform.position).magnitude < _root.headButtThreshold)
             return (NodeState.SUCCESS, Action.None);
         return (NodeState.FAILURE, Action.None);
     }

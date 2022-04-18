@@ -13,8 +13,9 @@ public class T_BallHolderIsMe : Node
         if (!_rootInitialized)
             _root = GetRootNode();
 
-        if (_root.ballHolder == _root.player)
+        if (_root.player.HasBall)
             return (NodeState.SUCCESS, Action.None);
+
         return (NodeState.FAILURE, Action.None);
     }
 

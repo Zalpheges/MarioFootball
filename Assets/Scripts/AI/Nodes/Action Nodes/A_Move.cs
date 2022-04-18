@@ -14,6 +14,8 @@ public class A_Move : Node
             _root = GetRootNode();
 
         _root.Position.y = _root.player.transform.position.y;
+        if ((_root.Position - _root.player.transform.position).magnitude < .5f)
+            return (NodeState.SUCCESS, Action.None);
         return (NodeState.SUCCESS, Action.MoveTo(_root.Position));
     }
 

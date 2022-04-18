@@ -13,7 +13,7 @@ public class S_UpdateBallHolder : Node
         if(!_rootInitialized)
             _root = GetRootNode();
 
-        foreach (Player player in _root.parentTree.Allies)
+        foreach (Player player in _root.Allies)
             if (player.HasBall)
             {
                 _root.previousBallHolder = _root.ballHolder;
@@ -21,7 +21,7 @@ public class S_UpdateBallHolder : Node
                 return (NodeState.SUCCESS, Action.None);
             }
 
-        foreach (Player player in _root.parentTree.Enemies)
+        foreach (Player player in _root.Enemies)
             if (player.HasBall)
             {
                 _root.previousBallHolder = _root.ballHolder;
@@ -29,6 +29,7 @@ public class S_UpdateBallHolder : Node
                 return (NodeState.SUCCESS, Action.None);
             }
 
+        _root.previousBallHolder = _root.ballHolder;
         _root.ballHolder = null;
         return (NodeState.SUCCESS, Action.None);
     }

@@ -7,9 +7,6 @@ using UnityEngine.AI;
 public class GameManager : MonoBehaviour
 {
     [SerializeField]
-    private Match _debugMatch;
-
-    [SerializeField]
     private float _debugMatchDuration = 60f;
 
     [SerializeField]
@@ -18,9 +15,15 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     private bool _enemiesAreRetard = false;
+    [SerializeField]
+    private bool _startWithoutAnim = true;
     public static bool EnemiesAreRetard => _instance._enemiesAreRetard;
 
+    public static bool StartWithoutAnim => _instance._startWithoutAnim;
+
     public static Team LosingTeam => _instance._currentResult.LosingTeam;
+
+    public static Chrono Chrono => _instance._chrono;
 
     private static GameManager _instance;
 
@@ -29,6 +32,17 @@ public class GameManager : MonoBehaviour
     private MatchResult _currentResult;
     private Chrono _chrono;
     private float _timer = 0f;
+
+    #region Debug
+
+    public PlayerSpecs d_Captain1;
+    public PlayerSpecs d_Captain2;
+    public PlayerSpecs d_Mate1;
+    public PlayerSpecs d_Mate2;
+
+    public PlayerSpecs d_GoalKeeper;
+
+    #endregion
 
     private void Awake()
     {
@@ -42,8 +56,20 @@ public class GameManager : MonoBehaviour
         else
             Destroy(this.gameObject);
 
+        if (d_Captain1 == null)
+            return;
+
+        Match debugMatch = new Match()
+        {
+            Captain1 = d_Captain1,
+            Captain2 = d_Captain2,
+            GoalKeeper = d_GoalKeeper,
+            Mate1 = d_Mate1,
+            Mate2 = d_Mate2
+        };
+
         _matches = new Queue<Match>();
-        _matches.Enqueue(_debugMatch);
+        _matches.Enqueue(debugMatch);
     }
 
     private void Start()
@@ -134,16 +160,17 @@ public class GameManager : MonoBehaviour
         {
             UIManager.SetScore(scoreTeam2: ++_instance._currentResult.ScoreTeam2);
             _instance.RedirectPlayers(Field.Team1.Players, Field.Team2.Players);
+            //Field.Ball.transform.position = Field.Team2.Players[0].transform.position;
         }
         else if (team == Field.Team2)
         {
             UIManager.SetScore(scoreTeam1: ++_instance._currentResult.ScoreTeam1);
             _instance.RedirectPlayers(Field.Team2.Players, Field.Team1.Players);
+            //Field.Ball.transform.position = Field.Team1.Players[0].transform.position;
         }
-        else
-            Debug.Log("This team does not exist");
 
         Field.Ball.transform.position = Field.Team1.Players[0].transform.position;
+        _instance._chrono.Stop();
     }
 
     public static void FreePlayers()
@@ -152,6 +179,9 @@ public class GameManager : MonoBehaviour
             player.IsWaiting = false;
         foreach (Player player in Field.Team2.Players)
             player.IsWaiting = false;
+
+        Field.Team1.Goalkeeper.IsWaiting = false;
+        Field.Team2.Goalkeeper.IsWaiting = false;
     }
 
 
@@ -160,7 +190,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     /// <param name="attackingPlayers">Joueurs possédant le ballon au moment de l'engagement</param>
     /// <param name="defendingPlayers">Joueurs ne possédant pas le ballon au moment de l'engagement</param>
-    /// <param name="positions">Positions vers lesquelles se dirigent les joueurs, avec en premier celles de l'équipe attaquantes</param>
+    /// <param name="positions">Positions vers lesquelles se dirigent les joueurs, en commençant par celles de l'équipe attaquantes</param>
     private void RedirectPlayers(Player[] attackingPlayers, Player[] defendingPlayers, List<Vector3> positions = null)
     {
         positions ??= Field.GetStartPositions();
@@ -168,14 +198,18 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < positions.Count; i++)
         {
             Player player = i < n ? attackingPlayers[i] : defendingPlayers[i - n];
-
-            Vector3 destination = player.Team == Field.Team1 ? positions[i] : new Vector3(-positions[i].x, positions[i].y, -positions[i].z);
-            player.SetNavDriven(destination);
+            Vector3 destination = player.Team == Field.Team1 ? positions[i] : -positions[i];
+            player.ActionsQueue.AddAction(destination, () => { 
+                player.Animator.SetBool("Run", true);
+                player.Animator.SetBool("Idle", false);
+            }, 1f, true);
+            player.ReadQueue();
         }
 
         Field.Team1.Goalkeeper.SetNavDriven(Field.GetGoalKeeperPosition(Field.Team1));
         Field.Team2.Goalkeeper.SetNavDriven(Field.GetGoalKeeperPosition(Field.Team2));
     }
+
     private IEnumerator Match()
     {
         yield return new WaitForSeconds(_instance._debugMatchDuration);
