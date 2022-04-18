@@ -37,6 +37,12 @@ public class GoalKeeperTree
                 {
                     new Sequence(new List<Node>
                     {
+                        new T_PassInProgress(),
+                        new T_PassTargetIsMe(),
+                        new S_Static()
+                    }),
+                    new Sequence(new List<Node>
+                    {
                         new T_BallHolderIsMe(),
                         new Sequence(new List<Node>
                         {
