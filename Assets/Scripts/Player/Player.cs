@@ -175,6 +175,8 @@ public class Player : MonoBehaviour
         _rgdb.angularVelocity = Vector3.zero;
         _rgdb.velocity = Vector3.zero;
 
+
+
         if (ProcessQueue)
             UpdateNavQueue();
 
@@ -188,7 +190,9 @@ public class Player : MonoBehaviour
             if (Vector3.Distance(transform.position, _agent.destination) <= 0.1f)
             {
                 if (!ProcessQueue)
+
                 {
+
                     IsNavDriven = false;
 
                     IsWaiting = true;
@@ -199,6 +203,7 @@ public class Player : MonoBehaviour
                     transform.rotation = Quaternion.LookRotation(Vector3.Project(transform.position - Team.transform.position, Field.Transform.forward));
                 }
                 else
+
                 {
                     if (_timer > 0.1f)
                     {
@@ -216,8 +221,8 @@ public class Player : MonoBehaviour
 
         if (IsWaiting)
         {
-            _animator.SetBool("Idle", true);
-            _animator.SetBool("Run", false);
+            Animator.SetBool("Idle", true);
+            Animator.SetBool("Run", false);
 
             if (!IsPiloted)
             {
@@ -281,10 +286,13 @@ public class Player : MonoBehaviour
         MakeAction(action);
     }
 
+
+
     public void ReadQueue()
+
     {
 
-        (_nextAnimToPerform, _currentTimeLimit) = ActionsQueue.GetNext(_agent);
+        (_nextAnimToPerform, _currentTimeLimit) = ActionsQueue.GetNext(this);
     }
     private void UpdateNavQueue()
     {
@@ -363,7 +371,7 @@ public class Player : MonoBehaviour
         {
             case Action.Type.Move:
                 _rgdb.position += direction * 2f * _speed * Time.deltaTime;
-                _animator.SetBool("Run", true);
+                Animator.SetBool("Run", true);
 
                 break;
 
@@ -489,7 +497,7 @@ public class Player : MonoBehaviour
         if (other.tag == "Wall")
         {
             if (State != PlayerState.Stunned && !InWall)
-                Stun();
+                Stun(StunType.Electrocuted);
 
             InWall = true;
         }
@@ -534,6 +542,7 @@ public class Player : MonoBehaviour
     {
         force = Mathf.Max(0.2f, force);
 
+        Debug.Log(_specs.Accuracy * force);
         Transform goal = Enemies.transform;
 
         //float angle = Vector3.SignedAngle(transform.forward, goal.forward, Vector3.up);
@@ -546,7 +555,10 @@ public class Player : MonoBehaviour
         else
         {
             if (Random.value > _specs.Accuracy * force)
+            {
+                Debug.Log("Poteau");
                 GoalPostShoot(goal);
+            }
             else
                 ShootOnTarget(goal, force);
         }
@@ -625,16 +637,15 @@ public class Player : MonoBehaviour
 
     #region FindMate
 
-    private Player FindMateInRange(Vector3 direction, float range, bool standOut = false)
+    public Player FindMateInRange(Vector3 direction, float range, bool standOut = false)
     {
         return FindPlayerInRange(Team, direction, range, standOut);
     }
 
-    private Player FindEnemyInRange(Vector3 direction, float range, bool standOut = false)
+    public Player FindEnemyInRange(Vector3 direction, float range, bool standOut = false)
     {
         return FindPlayerInRange(Enemies, direction, range, standOut);
     }
-
     private Player FindPlayerInRange(Team team, Vector3 direction, float range, bool standOut)
     {
         (Player player, float angle) best = (null, 0f);
@@ -673,8 +684,6 @@ public class Player : MonoBehaviour
         return false;
     }
 
-
-
     #endregion
 
     #region ThrowItem
@@ -686,14 +695,14 @@ public class Player : MonoBehaviour
         if (!data)
             return;
 
-        GameObject itemGo = Instantiate(data.Prefab, transform.position, Quaternion.identity);
+        GameObject itemGo = Instantiate(data.Prefab, transform.position + transform.forward * 2f, Quaternion.identity);
         itemGo.GetComponent<Item>().Init(data, this, direction);
     }
-
+    
     #endregion
 
     #region Events
-    
+
     public void OnMissedShoot()
     {
         Team.GainItem();
@@ -724,7 +733,7 @@ public class Player : MonoBehaviour
         Dash(direction, 8f, 1.2f, 0.5f);
     }
 
-    private void Fall(Vector3 direction, float distance = 4f, float time = 1.5f, float standUpDelay = 2f)
+    public void Fall(Vector3 direction, float distance = 4f, float time = 1.5f, float standUpDelay = 2f)
     {
         State = PlayerState.Falling;
         Animator.SetTrigger("isTackled");
@@ -735,11 +744,16 @@ public class Player : MonoBehaviour
         Dash(direction, distance, time, standUpDelay);
     }
 
-    private void Stun(float duration = 2f)
+    public void Stun(StunType stunType, float duration = 2f)
     {
         State = PlayerState.Stunned;
-        _animator.SetTrigger("Electrocuted");
+        Animator.SetTrigger("Electrocuted");
         ChangeMaterialOnElectrocution(true); 
+
+        if (stunType == StunType.Electrocuted)
+            ChangeMaterialOnElectrocution(true);
+        else if (stunType == StunType.Chomped) ;
+        else if (stunType == StunType.Frozen) ;
 
         Dash(Vector3.zero, 0f, duration);
 
@@ -754,7 +768,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void Dash(Vector3 direction, float distance, float time, float standUpDelay = 0f)
+    public void Dash(Vector3 direction, float distance, float time, float standUpDelay = 0f)
     {
         _waitingAction = null;
 
