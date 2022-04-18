@@ -1,7 +1,7 @@
 fileFormatVersion: 2
 guid: 9c7ab46ba788a474a8f0b42de5fba09a
 ModelImporter:
-  serializedVersion: 19301
+  serializedVersion: 20200
   internalIDToNameTable: []
   externalObjects:
   - first:
@@ -99,6 +99,7 @@ ModelImporter:
     useFileUnits: 1
     keepQuads: 0
     weldVertices: 1
+    bakeAxisConversion: 0
     preserveHierarchy: 0
     skinWeightsMode: 0
     maxBonesPerVertex: 4
@@ -108,6 +109,9 @@ ModelImporter:
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 1
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
     secondaryUVPackMargin: 4
     useFileScale: 1
   tangentSpace:
@@ -187,14 +191,12 @@ ModelImporter:
     - name: Tail2
       parentName: Tail1
       position: {x: -0.804672, y: -0.0000001550293, z: 0.00000008211707}
-      rotation: {x: 0.000000029802306, y: 0.000000003725322, z: -0.00000008940698,
-        w: 1}
+      rotation: {x: 0.000000029802306, y: 0.000000003725322, z: -0.00000008940698, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: Tail3
       parentName: Tail2
       position: {x: -0.7292341, y: 0.0000001550293, z: -0.000000027166084}
-      rotation: {x: -0.000000014901144, y: -0.0000000521541, z: 0.00000013411045,
-        w: 1}
+      rotation: {x: -0.000000014901144, y: -0.0000000521541, z: 0.00000013411045, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: LegL1
       parentName: Hip1
@@ -274,8 +276,7 @@ ModelImporter:
     - name: FingerLA3
       parentName: FingerLA2
       position: {x: -0.15087545, y: -0.0000006201172, z: -0.0000004650879}
-      rotation: {x: -0.000000014901156, y: 0.000000025262121, z: 0.0000000015133994,
-        w: 1}
+      rotation: {x: -0.000000014901156, y: 0.000000025262121, z: 0.0000000015133994, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: FingerLC1
       parentName: WristL
@@ -290,8 +291,7 @@ ModelImporter:
     - name: FingerLC3
       parentName: FingerLC2
       position: {x: -0.15087575, y: -0.0000009301758, z: 0}
-      rotation: {x: -0.000000014901156, y: 0.000000025262121, z: 0.0000000015133994,
-        w: 1}
+      rotation: {x: -0.000000014901156, y: 0.000000025262121, z: 0.0000000015133994, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: FingerLB1
       parentName: WristL
@@ -306,14 +306,12 @@ ModelImporter:
     - name: FingerLB3
       parentName: FingerLB2
       position: {x: -0.15087545, y: -0.0000006201172, z: -0.0000001550293}
-      rotation: {x: -0.000000014901156, y: 0.000000025262121, z: 0.0000000015133994,
-        w: 1}
+      rotation: {x: -0.000000014901156, y: 0.000000025262121, z: 0.0000000015133994, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: BraceL
       parentName: ArmL2
       position: {x: -0.49506512, y: -0.0000009301758, z: 0.00000054260255}
-      rotation: {x: 0.000000014901159, y: 0.000000010302757, z: 0.0000000042491592,
-        w: 1}
+      rotation: {x: 0.000000014901159, y: 0.000000010302757, z: 0.0000000042491592, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: Neck
       parentName: Spine
@@ -453,8 +451,7 @@ ModelImporter:
     - name: HairBack4
       parentName: HairBack3
       position: {x: -0.30175197, y: -0.0000003100586, z: -0.0000000022482054}
-      rotation: {x: -0.00000003352761, y: -0.000000041443855, z: -0.0000000063419088,
-        w: 1}
+      rotation: {x: -0.00000003352761, y: -0.000000041443855, z: -0.0000000063419088, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: HairR1
       parentName: Face
@@ -544,8 +541,7 @@ ModelImporter:
     - name: FingerRC2
       parentName: FingerRC1
       position: {x: -0.18859468, y: 0.0000009301758, z: 0}
-      rotation: {x: 0.000000104308135, y: 0.000000009255018, z: -0.0000000021245805,
-        w: 1}
+      rotation: {x: 0.000000104308135, y: 0.000000009255018, z: -0.0000000021245805, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: FingerRC3
       parentName: FingerRC2
@@ -560,8 +556,7 @@ ModelImporter:
     - name: FingerRB2
       parentName: FingerRB1
       position: {x: -0.188595, y: 0.0000006201172, z: -0.00000023254395}
-      rotation: {x: 0.000000104308135, y: 0.000000009255018, z: -0.0000000021245805,
-        w: 1}
+      rotation: {x: 0.000000104308135, y: 0.000000009255018, z: -0.0000000021245805, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: FingerRB3
       parentName: FingerRB2
@@ -576,8 +571,7 @@ ModelImporter:
     - name: FingerRA2
       parentName: FingerRA1
       position: {x: -0.18859468, y: -0.0000003100586, z: 0}
-      rotation: {x: 0.000000104308135, y: 0.000000009255018, z: -0.0000000021245805,
-        w: 1}
+      rotation: {x: 0.000000104308135, y: 0.000000009255018, z: -0.0000000021245805, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: FingerRA3
       parentName: FingerRA2
@@ -683,9 +677,10 @@ ModelImporter:
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   autoGenerateAvatarMappingIfUnspecified: 1
-  animationType: 2
+  animationType: 3
   humanoidOversampling: 1
-  avatarSetup: 0
+  avatarSetup: 1
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 0
   additionalBone: 0
   userData: 
   assetBundleName: 
