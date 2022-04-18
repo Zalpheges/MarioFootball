@@ -18,9 +18,15 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     private bool _enemiesAreRetard = false;
+    [SerializeField]
+    private bool _startWithoutAnim = true;
     public static bool EnemiesAreRetard => _instance._enemiesAreRetard;
 
+    public static bool StartWithoutAnim => _instance._startWithoutAnim;
+
     public static Team LosingTeam => _instance._currentResult.LosingTeam;
+
+    public static Chrono Chrono => _instance._chrono;
 
     private static GameManager _instance;
 
@@ -146,6 +152,7 @@ public class GameManager : MonoBehaviour
         }
 
         Field.Ball.transform.position = Field.Team1.Players[0].transform.position;
+        _instance._chrono.Stop();
     }
 
     public static void FreePlayers()
@@ -175,7 +182,7 @@ public class GameManager : MonoBehaviour
                 player.Animator.SetBool("Run", true);
                 player.Animator.SetBool("Idle", false);
             }, 1f, true);
-            player.SetNavDriven(destination);
+            player.ReadQueue();
         }
     }
 

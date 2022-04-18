@@ -174,8 +174,8 @@ public class Player : MonoBehaviour
 
                     ResetState();
 
-                    _animator.SetBool("Idle", true);
-                    _animator.SetBool("Run", false);
+                    Animator.SetBool("Idle", true);
+                    Animator.SetBool("Run", false);
 
                     transform.rotation = Quaternion.LookRotation(Enemies.transform.position - transform.position, Vector3.up);
                 }
@@ -236,7 +236,10 @@ public class Player : MonoBehaviour
         if (IsWaiting)
         {
             if (action.ActionType == Action.Type.Pass)
+            {
                 GameManager.FreePlayers();
+                GameManager.Chrono.Play();
+            }
             else
                 return;
         }
@@ -388,8 +391,8 @@ public class Player : MonoBehaviour
 
         State = PlayerState.Dribbling;
 
-        _animator.SetBool("Idle", false);
-        _animator.SetBool("Run", true);
+        Animator.SetBool("Idle", false);
+        Animator.SetBool("Run", true);
     }
 
     #region Collisions
@@ -446,6 +449,7 @@ public class Player : MonoBehaviour
             }
         }
     }
+    #endregion
 
     public void SetNavDriven(Vector3 destination, float speed = 10f)
     {

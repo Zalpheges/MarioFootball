@@ -142,8 +142,8 @@ public class Field : MonoBehaviour
     {
         _instance._ball = ball;
 
-        //_instance.SetTeamPosition();
-        _instance.SpawnPlayers();
+        if(GameManager.StartWithoutAnim) _instance.SetTeamPosition();
+        else _instance.SpawnPlayers();
 
         ball.transform.position = _instance.VectorToPosition(_instance._attackPosCaptain);
     }
