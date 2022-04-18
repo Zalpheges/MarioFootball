@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -50,6 +51,12 @@ public class Field : MonoBehaviour
 
     [SerializeField]
     private Vector2 _defPosMate3;
+
+    [SerializeField]
+    private Transform[] _spawnPointsTeam1;
+
+    [SerializeField]
+    private Transform[] _spawnPointsTeam2;
 
     public static Team Team1 => _instance._team1;
     public static Team Team2 => _instance._team2;
@@ -135,7 +142,8 @@ public class Field : MonoBehaviour
     {
         _instance._ball = ball;
 
-        _instance.SetTeamPosition();
+        //_instance.SetTeamPosition();
+        _instance.SpawnPlayers();
 
         ball.transform.position = _instance.VectorToPosition(_instance._attackPosCaptain);
     }
@@ -163,23 +171,50 @@ public class Field : MonoBehaviour
 
     public static List<Vector3> GetStartPositions()
     {
-        List<Vector3> positions = new List<Vector3>();
+        List<Vector3> positions = new List<Vector3>
+        {
+            _instance.VectorToPosition(_instance._attackPosCaptain),
+            _instance.VectorToPosition(_instance._attackPosMate1),
+            _instance.VectorToPosition(_instance._attackPosMate2),
+            _instance.VectorToPosition(_instance._attackPosMate3),
 
-        positions.Add(_instance.VectorToPosition(_instance._attackPosCaptain));
-        positions.Add(_instance.VectorToPosition(_instance._attackPosMate1));
-        positions.Add(_instance.VectorToPosition(_instance._attackPosMate2));
-        positions.Add(_instance.VectorToPosition(_instance._attackPosMate3));
-
-        positions.Add(_instance.VectorToPosition(-_instance._defPosCaptain));
-        positions.Add(_instance.VectorToPosition(-_instance._defPosMate1));
-        positions.Add(_instance.VectorToPosition(-_instance._defPosMate2));
-        positions.Add(_instance.VectorToPosition(-_instance._defPosMate3));
+            _instance.VectorToPosition(-_instance._defPosCaptain),
+            _instance.VectorToPosition(-_instance._defPosMate1),
+            _instance.VectorToPosition(-_instance._defPosMate2),
+            _instance.VectorToPosition(-_instance._defPosMate3)
+        };
 
         return positions;
     }
     public static bool ArePlayersAllWaiting()
     {
         return Team1.ArePlayersAllWaiting() && Team2.ArePlayersAllWaiting();
+    }
+
+    private void SpawnPlayers()
+    {
+        List<Vector3> startPositions = GetStartPositions();
+        for (int i = 0; i < Team1.Players.Length; i++)
+        {
+            Player player = Team1.Players[i];
+            player.transform.position = _spawnPointsTeam1[i % _spawnPointsTeam1.Length].position;
+            player.ActionsQueue.AddAction(startPositions[i], () => player.Animator.SetBool("Run", true), 1f, true);
+            player.ReadQueue();
+            CameraManager.CamerasQueue.AddCameraControl(player.transform, i == 0 ? 0.1f : 1.1f);
+        }
+
+        for (int i = 0; i < Team2.Players.Length; i++)
+        {
+            Player player = Team2.Players[i];
+            player.transform.position = _spawnPointsTeam2[i % _spawnPointsTeam2.Length].position;
+            player.ActionsQueue.AddAction(-startPositions[i + Team1.Players.Length], () => {
+                player.Animator.SetBool("Run", true);
+                player.Animator.SetBool("Idle", false);
+            }, 1f, true);
+            player.ReadQueue();
+            CameraManager.CamerasQueue.AddCameraControl(player.transform, 1.1f);
+        }
+        CameraManager.ReadQueue();
     }
 
     private Vector3 VectorToPosition(Vector2 vector)
