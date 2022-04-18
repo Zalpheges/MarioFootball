@@ -25,10 +25,10 @@ public class Player : MonoBehaviour
     [SerializeField]
     private PlayerSpecs _specs;
 
-    private Animator _animator;
     private Rigidbody _rgdb;
     private NavMeshAgent _agent;
 
+    public Animator Animator { get; private set; }
     public PlayerBrain IABrain { get; private set; }
 
     public PlayerState State { get; private set; }
@@ -140,7 +140,7 @@ public class Player : MonoBehaviour
 
     private void Awake()
     {
-        _animator = GetComponent<Animator>();
+        Animator = GetComponent<Animator>();
         _rgdb = GetComponent<Rigidbody>();
         _agent = GetComponent<NavMeshAgent>();
     }
@@ -192,8 +192,14 @@ public class Player : MonoBehaviour
                 }
                 else
                 {
-                    if(_timer > 0.2f)
-                        _nextAnimToPerform();
+                    if (_timer > 0.1f)
+                    {
+                        if (_nextAnimToPerform != null)
+                            _nextAnimToPerform();
+                        else
+                            _timer += _currentTimeLimit;//force the next animation to come
+                    }
+
                 }
             }
 
@@ -256,7 +262,10 @@ public class Player : MonoBehaviour
         if (IsWaiting)
         {
             if (action.ActionType == Action.Type.Pass)
+            {
                 GameManager.FreePlayers();
+                GameManager.Chrono.Play();
+            }
             else
                 return;
         }
@@ -266,7 +275,6 @@ public class Player : MonoBehaviour
 
     public void ReadQueue()
     {
-        ProcessQueue = IsNavDriven = true;
 
         (_nextAnimToPerform, _currentTimeLimit) = ActionsQueue.GetNext(_agent);
     }
@@ -275,9 +283,9 @@ public class Player : MonoBehaviour
         if ((_timer += Time.deltaTime) > _currentTimeLimit)
         {
             _timer = 0f;
-            (_nextAnimToPerform, _currentTimeLimit) = ActionsQueue.GetNext(_agent);
+            (_nextAnimToPerform, _currentTimeLimit) = ActionsQueue.GetNext(this);
             if (_currentTimeLimit == 0f)
-                ProcessQueue = IsNavDriven = false;
+                ProcessQueue = false;
         }
     }
 
@@ -336,11 +344,11 @@ public class Player : MonoBehaviour
             transform.LookAt(_rgdb.position + direction, Vector3.up);
 
         if (action)
-            _animator.SetBool("Idle", false);
+            Animator.SetBool("Idle", false);
         else
         {
-            _animator.SetBool("Idle", true);
-            _animator.SetBool("Run", false);
+            Animator.SetBool("Idle", true);
+            Animator.SetBool("Run", false);
         }
 
         switch (action.ActionType)
@@ -354,7 +362,7 @@ public class Player : MonoBehaviour
             case Action.Type.MoveTo:
                 _agent.enabled = true;
                 _agent.SetDestination(action.Position);
-                _animator.SetBool("Run", true);
+                Animator.SetBool("Run", true);
 
                 break;
 
@@ -362,7 +370,7 @@ public class Player : MonoBehaviour
                 if (HasBall)
                 {
                     Shoot(action.Force);
-                    _animator.SetTrigger("Strike");
+                    Animator.SetTrigger("Strike");
                 }
 
                 break;
@@ -390,7 +398,7 @@ public class Player : MonoBehaviour
             case Action.Type.Dribble:
                 State = PlayerState.Dribbling;
                 Dash(direction, 9f, 1.2f);
-                _animator.SetTrigger("Spin");
+                Animator.SetTrigger("Spin");
 
                 break;
 
@@ -398,7 +406,7 @@ public class Player : MonoBehaviour
                 if (HasBall)
                 {
                     LobPass(direction);
-                    _animator.SetTrigger("Pass");
+                    Animator.SetTrigger("Pass");
                 }
 
                 break;
@@ -407,7 +415,7 @@ public class Player : MonoBehaviour
                 if (HasBall)
                 {
                     DirectPass(direction);
-                    _animator.SetTrigger("Pass");
+                    Animator.SetTrigger("Pass");
                 }
 
                 break;
@@ -438,8 +446,8 @@ public class Player : MonoBehaviour
 
         State = PlayerState.Dribbling;
 
-        _animator.SetBool("Idle", false);
-        _animator.SetBool("Run", true);
+        Animator.SetBool("Idle", false);
+        Animator.SetBool("Run", true);
     }
 
     #region Collisions
@@ -501,8 +509,16 @@ public class Player : MonoBehaviour
             }
         }
     }
-
     #endregion
+
+    public void SetNavDriven(Vector3 destination, float speed = 10f)
+    {
+        IsNavDriven = true;
+
+        _agent.enabled = true;
+        _agent.destination = destination;
+        _agent.speed = speed;
+    }
 
     #region Shoot
 
@@ -687,7 +703,7 @@ public class Player : MonoBehaviour
     private void Headbutt(Vector3 direction)
     {
         State = PlayerState.Headbutting;
-        _animator.SetTrigger("Electrocuted");
+        Animator.SetTrigger("Electrocuted");
 
         Dash(direction, 3f, 0.2f);
     }
@@ -695,7 +711,7 @@ public class Player : MonoBehaviour
     private void Tackle(Vector3 direction)
     {
         State = PlayerState.Tackling;
-        _animator.SetTrigger("Tackled");
+        Animator.SetTrigger("Tackled");
 
         Dash(direction, 8f, 1.2f, 0.5f);
     }
@@ -703,7 +719,7 @@ public class Player : MonoBehaviour
     private void Fall(Vector3 direction, float distance = 4f, float time = 1.5f, float standUpDelay = 2f)
     {
         State = PlayerState.Falling;
-        _animator.SetTrigger("isTackled");
+        Animator.SetTrigger("isTackled");
 
         if (HasBall)
             Field.Ball.Free();
@@ -736,8 +752,8 @@ public class Player : MonoBehaviour
 
         CanGetBall = false;
 
-        _animator.SetBool("Idle", false);
-        _animator.SetBool("Run", false);
+        Animator.SetBool("Idle", false);
+        Animator.SetBool("Run", false);
 
         _agent.enabled = false;
 
