@@ -166,6 +166,8 @@ public class GameManager : MonoBehaviour
     {
         AudioManager._instance.PlaySFX(AudioManager.SFXType.Goal); //GoalScoredSound
 
+        UIManager.EndOfGame(true);// TO REMOVE AFTER DEBUG TEST END OF GAME OVERLAY
+
         Field.Ball.Free();
         if (team == Field.Team1)
         {

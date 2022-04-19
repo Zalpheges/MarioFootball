@@ -16,6 +16,10 @@ public class UIManager : MonoBehaviour
     [SerializeField] private SpriteRenderer _item1Team2;
     [SerializeField] private SpriteRenderer _item2Team2;
 
+    [SerializeField] private TextMeshProUGUI _endOfGameText;
+    [SerializeField] private GameObject _pressToContinue;
+    [SerializeField] private Animator _uIAnimator;
+
     private void Awake()
     {
         _instance = this;
@@ -52,5 +56,28 @@ public class UIManager : MonoBehaviour
     private string FormatInt(int number)
     {
         return (number < 10 ? "0" : "") + number;
+    }
+
+    public static void EndOfGame( bool isWin)
+    {
+        if(isWin)
+        {
+            _instance._endOfGameText.text = "YOU WIN";
+        }
+        else
+        {
+            _instance._endOfGameText.text = "YOU LOOSE";
+        }
+
+        _instance._uIAnimator.SetTrigger("EndOfGame");
+
+        _instance.StartCoroutine(_instance.waitBeforeContinue());
+    }
+
+
+    IEnumerator waitBeforeContinue()
+    {
+        yield return new WaitForSeconds(2);
+        _pressToContinue.SetActive(true);
     }
 }
