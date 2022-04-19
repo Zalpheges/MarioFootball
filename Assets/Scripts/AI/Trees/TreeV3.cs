@@ -12,6 +12,9 @@ public class TreeV3
     public List<Player> Allies;
     public List<Player> Enemies;
 
+    public Player allyGoalKeeper;
+    public Player enemyGoalKeeper;
+
     public Player player;
     public Player playerWithBall;
 
@@ -29,6 +32,9 @@ public class TreeV3
         Allies = iAllies.Players.ToList();
         Enemies = iEnemies.Players.ToList();
 
+        allyGoalKeeper = iAllies.Goalkeeper;
+        enemyGoalKeeper = iEnemies.Goalkeeper;
+
         allyGoalTransform = iAllies.transform;
         enemyGoalTransform = iEnemies.transform;
 
@@ -37,8 +43,8 @@ public class TreeV3
 
         Thresholds = iThresholds;
 
-        EastTeamEnabled = false;
-        WestTeamEnabled = false;
+        EastTeamEnabled = true;
+        WestTeamEnabled = true;
 
         root = new RootNode(this, new List<Node>()
         {
@@ -60,6 +66,7 @@ public class TreeV3
                 new S_UpdateBallHolder(),
                 new Selector(new List<Node>
                 {
+                    #region Verify If Player Switched
                     new T_AITeam(),
                     new Selector(new List<Node>
                     {
@@ -71,9 +78,43 @@ public class TreeV3
                             new S_PlayerType_Unassigned()
                         })
                     })
+                    #endregion
                 }),
                 new Selector(new List<Node>
                 {
+                    #region GoalKeeper Has Ball
+                    new Sequence(new List<Node>
+                    {
+                        new Selector(new List<Node>
+                        {
+                            new T_AllyGoalKeeperHasBall(),
+                            new T_EnemyGoalKeeperHasBall()
+                        }),
+                        new S_UpdateCoordinates(),
+                        new Selector(new List<Node>
+                        {
+                            new Sequence(new List<Node>
+                            {
+                                new T_BallState_Goal(),
+                                new Selector(new List<Node>
+                                {
+                                    new Sequence(new List<Node>
+                                    {
+                                        new T_PositionReached(),
+                                        new S_WanderAroundPosition()
+                                    })
+                                })
+                            }),
+                            new Sequence(new List<Node>
+                            {
+                                new S_BallState_Goal(),
+                                new S_DetermineOptimalCoords_Goal(),
+                                new S_AssignTargetCoordinates_Goal(),
+                                new S_MovePlayer()
+                            })
+                        })
+                    }),
+                    #endregion
                     #region Enemy Team Has Ball
                     new Sequence(new List<Node>
                     {
@@ -267,36 +308,20 @@ public class TreeV3
                             {
                                 new Sequence(new List<Node>
                                 {
-                                    new T_BallState_Ally(),
-                                    new Sequence(new List<Node>
+                                    new T_PassInProgress(),
+                                    new Selector(new List<Node>
                                     {
-                                        new T_PassInProgress(),
-                                        new Selector(new List<Node>
+                                        new Sequence(new List<Node>
                                         {
-                                            new Sequence(new List<Node>
-                                            {
-                                                new T_PassTargetIsMe(),
-                                                new S_PlayerType_Receiver()
-                                            }),
-                                            new S_PlayerType_Supporter()
-                                        })
-                                    })
-                                }),
-                                new Sequence(new List<Node>
-                                {
-                                    new T_BallState_Enemy(),
-                                    new Sequence(new List<Node>
-                                    {
-                                        new T_PassInProgress(),
-                                        new Selector(new List<Node>
+                                            new T_PassTargetIsMe(),
+                                            new S_PlayerType_Receiver()
+                                        }),
+                                        new Sequence(new List<Node>
                                         {
-                                            new Sequence(new List<Node>
-                                            {
-                                                new T_PassTargetIsMine(),
-                                                new S_PlayerType_BallSeeker()
-                                            }),
-                                            new S_PlayerType_Supporter()
-                                        })
+                                            new T_PassTargetIsMine(),
+                                            new S_PlayerType_BallSeeker()
+                                        }),
+                                        new S_PlayerType_Supporter()
                                     })
                                 }),
                                 new Sequence(new List<Node>
@@ -316,6 +341,7 @@ public class TreeV3
                     #endregion
                 }),
                 #region Perform Action
+                new CoucouNode(),
                 new Selector(new List<Node>
                 {
                     new Sequence(new List<Node>

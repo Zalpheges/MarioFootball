@@ -37,6 +37,7 @@ public enum BallState
     unassigned,
     Ally,
     Enemy,
+    Goal,
     None
 }
 public enum Positionning
@@ -69,6 +70,9 @@ public class RootNode : Node
 
     public Player player = null;
     public Player pilotedPlayer = null;
+
+    public Player allyGoalKeeper = null;
+    public Player enemyGoalKeeper = null;
 
     public Player target = null;
     public Player passTarget = null;
@@ -130,6 +134,9 @@ public class RootNode : Node
 
         Allies = parentTree.Allies;
         Enemies = parentTree.Enemies;
+
+        allyGoalKeeper = iparentTree.allyGoalKeeper;
+        enemyGoalKeeper = iparentTree.enemyGoalKeeper;
 
         InitializeThresholds(iparentTree.Thresholds);
 
