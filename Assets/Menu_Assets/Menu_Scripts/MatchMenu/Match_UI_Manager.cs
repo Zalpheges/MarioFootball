@@ -248,17 +248,8 @@ public class Match_UI_Manager : MonoBehaviour
     {
         GetRandomEnnemies();
 
-        Debug.Log(_playerCaptain.Name);
-        Debug.Log(_playerAlly.Name);
-
-        Debug.Log(_AICaptain.Name);
-        Debug.Log(_AIAlly.Name);
-
-        Debug.Log(gameTime);
-        Debug.Log(goalToWin);
-        Debug.Log(AIDifficulty);
-
         GameManager.AddMatch(_playerCaptain, _playerAlly, _AICaptain, _AIAlly,gameTime,goalToWin,AIDifficulty);
+        AudioManager._instance.SetCharaAudio(_playerCaptain, _playerAlly, _AICaptain, _AIAlly);
 
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }

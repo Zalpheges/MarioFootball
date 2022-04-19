@@ -42,7 +42,7 @@ public class GameManager : MonoBehaviour
 
     public PlayerSpecs d_GoalKeeper;
 
-    public float d_gameTime;
+    public int d_gameTime;
     public float d_goalToWin;
     public int d_aIDifficulty;
 
@@ -60,8 +60,12 @@ public class GameManager : MonoBehaviour
         else
             Destroy(this.gameObject);
 
+        _matches = new Queue<Match>();
+
         if (d_Captain1 == null)
             return;
+
+        Debug.Log(true);
 
         Match debugMatch = new Match()
         {
@@ -69,10 +73,12 @@ public class GameManager : MonoBehaviour
             Captain2 = d_Captain2,
             GoalKeeper = d_GoalKeeper,
             Mate1 = d_Mate1,
-            Mate2 = d_Mate2
+            Mate2 = d_Mate2,
+            gameTime = d_gameTime,
+            goalToWin = d_goalToWin,
+            AIDifficulty= d_aIDifficulty
         };
 
-        _matches = new Queue<Match>();
         _matches.Enqueue(debugMatch);
     }
 
@@ -197,6 +203,9 @@ public class GameManager : MonoBehaviour
             Captain2 = AICaptain,
             Mate1 = playerMate,
             Mate2 = AIMate,
+
+            GoalKeeper = _instance.d_GoalKeeper,
+
             gameTime = gameTime,
             goalToWin = goalToWin,
             AIDifficulty = AIDifficulty

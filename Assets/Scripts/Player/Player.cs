@@ -386,12 +386,14 @@ public class Player : MonoBehaviour
                 if (HasBall)
                 {
                     Shoot(action.Force);
+                    PlaySound(AudioManager.charaSFXType.Shoot);
                     Animator.SetTrigger("Strike");
                 }
 
                 break;
 
             case Action.Type.Throw:
+                PlaySound(AudioManager.charaSFXType.ThrowItem);
                 ThrowItem(direction);
 
                 break;
@@ -422,6 +424,7 @@ public class Player : MonoBehaviour
                 if (HasBall)
                 {
                     LobPass(direction);
+                    PlaySound(AudioManager.charaSFXType.Pass);
                     Animator.SetTrigger("Pass");
                 }
 
@@ -431,6 +434,7 @@ public class Player : MonoBehaviour
                 if (HasBall)
                 {
                     DirectPass(direction);
+                    PlaySound(AudioManager.charaSFXType.Pass);
                     Animator.SetTrigger("Pass");
                 }
 
@@ -751,7 +755,10 @@ public class Player : MonoBehaviour
         ChangeMaterialOnElectrocution(true); 
 
         if (stunType == StunType.Electrocuted)
+        {
             ChangeMaterialOnElectrocution(true);
+            PlaySound(AudioManager.charaSFXType.Electrocuted);
+        }
         else if (stunType == StunType.Chomped) ;
         else if (stunType == StunType.Frozen) ;
 
@@ -834,5 +841,31 @@ public class Player : MonoBehaviour
             }
         }
         return -1;
+    }
+
+    private void PlaySound(AudioManager.charaSFXType sfxType)
+    {
+        if(Team == Field.Team1) // not AI
+        {
+            if(this == Team.Players[0])// captain
+            {
+                AudioManager._instance.PlayCharaSFX(sfxType, AudioManager._instance._playerCaptainAudio);
+            }
+            else // Mate
+            {
+                AudioManager._instance.PlayCharaSFX(sfxType, AudioManager._instance._playerMateAudio);
+            }
+        }   
+        else // AI
+        {
+            if (this == Team.Players[0])// captain
+            {
+                AudioManager._instance.PlayCharaSFX(sfxType, AudioManager._instance._aiCaptainAudio);
+            }
+            else // Mate
+            {
+                AudioManager._instance.PlayCharaSFX(sfxType, AudioManager._instance._aiMateAudio);
+            }
+        }
     }
 }
