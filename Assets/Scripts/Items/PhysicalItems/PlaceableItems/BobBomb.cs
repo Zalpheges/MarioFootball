@@ -16,7 +16,8 @@ public class BobBomb : PlaceableItem
 
     protected override void ApplyEffect(Player player)
     {
-        if(!_exploded)
+        base.ApplyEffect(player);
+        if (!_exploded)
         {
             _exploded = true;
             foreach(Collider collider in Physics.OverlapSphere(transform.position, _explosionRadius))

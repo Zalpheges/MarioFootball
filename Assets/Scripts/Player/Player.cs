@@ -63,7 +63,7 @@ public class Player : MonoBehaviour
 
     private float _speed;
 
-    private bool _isGoalKeeper;
+    public bool IsGoalKeeper { get; private set; }
 
     #region Debug
 
@@ -83,7 +83,7 @@ public class Player : MonoBehaviour
 
         player.Team = team;
 
-        player._isGoalKeeper = isGoalKeeper;
+        player.IsGoalKeeper = isGoalKeeper;
 
         return player;
     }
@@ -94,6 +94,7 @@ public class Player : MonoBehaviour
     public struct PlayerActionsQueue
     {
         private Queue<Vector3> _positions;
+        private Queue<float> _speeds;
         private Queue<System.Action> _animations;
         private Queue<float> _preActionDelays;
         private Queue<bool> _animDetails;
@@ -101,6 +102,7 @@ public class Player : MonoBehaviour
         private void Init()
         {
             _positions = new Queue<Vector3>();
+            _speeds = new Queue<float>();
             _animations = new Queue<System.Action>();
             _preActionDelays = new Queue<float>();
             _animDetails = new Queue<bool>();
@@ -112,11 +114,12 @@ public class Player : MonoBehaviour
         /// <param name="position"></param>
         /// <param name="anim">de la forme () => animator.SetBool("string")</param>
         /// <param name="delay"></param>
-        public void AddAction(Vector3 position, System.Action anim, float delay, bool playWhileMoving)
+        public void AddAction(Vector3 position, float moveSpeed, System.Action anim, float delay, bool playWhileMoving)
         {
             if (_positions == null)
                 Init();
             _positions.Enqueue(position);
+            _speeds.Enqueue(moveSpeed);
             _animations.Enqueue(anim);
             _preActionDelays.Enqueue(delay);
             _animDetails.Enqueue(playWhileMoving);
@@ -127,7 +130,7 @@ public class Player : MonoBehaviour
             if (_positions.Count < 1)
                 return (null, 0f);
 
-            player.SetNavDriven(_positions.Dequeue(), 5f);
+            player.SetNavDriven(_positions.Dequeue(), _speeds.Dequeue());
             System.Action anim = _animations.Dequeue();
             if (_animDetails.Dequeue())
             {
@@ -178,7 +181,7 @@ public class Player : MonoBehaviour
         if (ProcessQueue)
             UpdateNavQueue();
 
-        _agent.enabled = IsNavDriven || !IsPiloted || InWall || _isGoalKeeper;
+        _agent.enabled = IsNavDriven || !IsPiloted || InWall || IsGoalKeeper;
 
         if (_agent.enabled)
             _agent.isStopped = !IsNavDriven && IsPiloted;
@@ -193,8 +196,8 @@ public class Player : MonoBehaviour
 
                     IsWaiting = true;
 
-                    if (_isGoalKeeper)
-                        _agent.agentTypeID = GetAgenTypeIDByName("Goal Keeper");
+                    if (IsGoalKeeper)
+                        _agent.agentTypeID = GetAgentTypeIDByName("Goal Keeper");
 
                     transform.rotation = Quaternion.LookRotation(Vector3.Project(transform.position - Team.transform.position, Field.Transform.forward));
                 }
@@ -452,14 +455,14 @@ public class Player : MonoBehaviour
         return direction.normalized;
     }
 
-    public void SetNavDriven(Vector3 destination)
+    public void SetNavDriven(Vector3 destination, float speed = 10f)
     {
         IsNavDriven = true;
-        _agent.agentTypeID = GetAgenTypeIDByName("Default");
+        _agent.agentTypeID = GetAgentTypeIDByName("Default");
 
         _agent.enabled = true;
         _agent.destination = destination;
-        _agent.speed = 10f;
+        _agent.speed = speed;
 
         State = PlayerState.Dribbling;
 
@@ -528,15 +531,6 @@ public class Player : MonoBehaviour
     }
 
     #endregion
-
-    public void SetNavDriven(Vector3 destination, float speed = 10f)
-    {
-        IsNavDriven = true;
-
-        _agent.enabled = true;
-        _agent.destination = destination;
-        _agent.speed = speed;
-    }
 
     #region Shoot
 
@@ -840,7 +834,7 @@ public class Player : MonoBehaviour
 
     #endregion
 
-    public static int GetAgenTypeIDByName(string agentTypeName)
+    public static int GetAgentTypeIDByName(string agentTypeName)
     {
         int count = NavMesh.GetSettingsCount();
         for (var i = 0; i < count; i++)

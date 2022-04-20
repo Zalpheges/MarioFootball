@@ -73,14 +73,17 @@ public class CameraManager : MonoBehaviour
         if ((_timer += Time.deltaTime) > _currentTimeLimit)
         {
             _timer = 0f;
-            LookAt(_nextTransformToFollow);
-            (_nextTransformToFollow, _currentTimeLimit) = CamerasQueue.GetNext();
-        }
-        if (_currentTimeLimit == 0f)
-        {
-            ProcessQueue = false;
-            Camera.main.GetComponent<CinemachineBrain>().m_DefaultBlend.m_Style = CinemachineBlendDefinition.Style.EaseInOut;
-            _instance._currentTopCamera.MoveToTopOfPrioritySubqueue();
+            if(_nextTransformToFollow == null)
+            {
+                ProcessQueue = false;
+                Camera.main.GetComponent<CinemachineBrain>().m_DefaultBlend.m_Style = CinemachineBlendDefinition.Style.EaseInOut;
+                _instance._currentTopCamera.MoveToTopOfPrioritySubqueue();
+            }
+            else
+            {
+                LookAt(_nextTransformToFollow);
+                (_nextTransformToFollow, _currentTimeLimit) = CamerasQueue.GetNext();
+            }
         }
     }
     public static void ReadQueue()

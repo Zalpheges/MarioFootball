@@ -18,6 +18,7 @@ public class RedTurtleShell : PhysicalItem
 
     protected override void ApplyEffect(Player player)
     {
+        base.ApplyEffect(player);
         player.Fall((player.transform.position - transform.position).normalized);
         DestroyItem();
     }

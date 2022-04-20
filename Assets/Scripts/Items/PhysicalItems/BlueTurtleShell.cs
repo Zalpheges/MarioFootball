@@ -9,6 +9,7 @@ public class BlueTurtleShell : PhysicalItem
 
     protected override void ApplyEffect(Player player)
     {
+        base.ApplyEffect(player);
         player.Stun(Player.StunType.Frozen);
     }
 }
