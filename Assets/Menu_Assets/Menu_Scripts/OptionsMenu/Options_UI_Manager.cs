@@ -48,7 +48,7 @@ public class Options_UI_Manager : MonoBehaviour
                 ES.SetSelectedGameObject(FS_Options);
             }
             else
-                SceneManager.LoadScene(0,LoadSceneMode.Single);
+                LevelLoader.LoadNextLevel(0);
         }
     }
     public void OnMusicValueChanged(float Value)

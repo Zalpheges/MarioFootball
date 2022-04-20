@@ -112,7 +112,7 @@ public class Match_UI_Manager : MonoBehaviour
                 ES.SetSelectedGameObject(FS_mainCharacter);
             }
             else
-                SceneManager.LoadScene(0, LoadSceneMode.Single);
+                LevelLoader.LoadNextLevel(0);
         }
     }
 
@@ -251,7 +251,7 @@ public class Match_UI_Manager : MonoBehaviour
         GameManager.AddMatch(_playerCaptain, _playerAlly, _AICaptain, _AIAlly,gameTime,goalToWin,AIDifficulty);
         AudioManager._instance.SetCharaAudio(_playerCaptain, _playerAlly, _AICaptain, _AIAlly);
 
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        LevelLoader.LoadNextLevel(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
     private void GetRandomEnnemies()

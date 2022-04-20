@@ -3,6 +3,8 @@ using System.Collections;
 using UnityEngine;
 using System.Linq;
 using UnityEngine.AI;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
 
 public class GameManager : MonoBehaviour
 {
@@ -32,6 +34,7 @@ public class GameManager : MonoBehaviour
     private MatchResult _currentResult;
     private Chrono _chrono;
     private float _timer = 0f;
+    private bool _endOfGameUIDone =false;
 
     #region Debug
 
@@ -92,13 +95,36 @@ public class GameManager : MonoBehaviour
         if (!UIManager._instance)
             return;
 
+        if(_chrono.Finished)
+        {
+            if(!_endOfGameUIDone)
+            {
+                _endOfGameUIDone = true;
+                if (Field.Team2 == LosingTeam)
+                    UIManager.EndOfGame(UIManager.gameState.Win);
+                else if ( Field.Team1 == LosingTeam)
+                    UIManager.EndOfGame(UIManager.gameState.Loose);
+                else
+                    UIManager.EndOfGame(UIManager.gameState.Draw);
+            }
+
+            if (((Gamepad.current?.allControls.Any(x => x is ButtonControl button && x.IsPressed() && !x.synthetic) ?? false) ||  (Keyboard.current?.anyKey.wasPressedThisFrame ?? false)) && _endOfGameUIDone)
+            {
+                AudioManager._instance.PlayMusic(AudioManager.MusicType.Menu);
+                LevelLoader.LoadNextLevel(0);
+            }
+        }
+
         UIManager.SetChrono(_chrono);
+
         _timer += Time.deltaTime;
         if (_timer >= 1f)
         {
             --_chrono;
             if (_chrono.Finished)
+            {
                 Debug.Log("Match end");
+            }
             --_timer;
         }
     }
@@ -165,8 +191,6 @@ public class GameManager : MonoBehaviour
     public static void GoalScored(Team team)
     {
         AudioManager._instance.PlaySFX(AudioManager.SFXType.Goal); //GoalScoredSound
-
-        UIManager.EndOfGame(true);// TO REMOVE AFTER DEBUG TEST END OF GAME OVERLAY
 
         Field.Ball.Free();
         if (team == Field.Team1)

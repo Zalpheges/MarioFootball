@@ -20,6 +20,13 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject _pressToContinue;
     [SerializeField] private Animator _uIAnimator;
 
+
+    public enum gameState
+    {
+        Win,
+        Loose,
+        Draw
+    }
     private void Awake()
     {
         _instance = this;
@@ -58,15 +65,19 @@ public class UIManager : MonoBehaviour
         return (number < 10 ? "0" : "") + number;
     }
 
-    public static void EndOfGame( bool isWin)
+    public static void EndOfGame( gameState state)
     {
-        if(isWin)
+        if(state == gameState.Win)
         {
             _instance._endOfGameText.text = "YOU WIN";
         }
-        else
+        else if(state == gameState.Loose)
         {
             _instance._endOfGameText.text = "YOU LOOSE";
+        }
+        else
+        {
+            _instance._endOfGameText.text = "DRAW";
         }
 
         _instance._uIAnimator.SetTrigger("EndOfGame");
