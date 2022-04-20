@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
 using TMPro;
+using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
 
 public class UIManager : MonoBehaviour
 {
@@ -16,11 +18,47 @@ public class UIManager : MonoBehaviour
     [SerializeField] private SpriteRenderer _item1Team2;
     [SerializeField] private SpriteRenderer _item2Team2;
 
+    [SerializeField] private EventSystem ES;
+    [SerializeField] private GameObject PauseMenu;
+    private GameObject FS_PauseMenu;
+    [SerializeField] private GameObject SubPauseMenu;
+    [SerializeField] private GameObject FS_SubPauseMenu;
+
+    [SerializeField] private TextMeshProUGUI _endOfGameText;
+    [SerializeField] private GameObject _pressToContinue;
+    [SerializeField] private Animator _uIAnimator;
+
+
+    public enum gameState
+    {
+        Win,
+        Loose,
+        Draw
+    }
     private void Awake()
     {
+        FS_PauseMenu = ES.firstSelectedGameObject;
         _instance = this;
     }
 
+    private void Update()
+    {
+        if ((Keyboard.current?.escapeKey.wasPressedThisFrame ?? false) || (Gamepad.current?.selectButton.wasPressedThisFrame ?? false))
+        {
+            if (PauseMenu.activeSelf)
+                OnGoBack();
+            else
+            {
+                TimeManager.Pause();
+                PauseMenu.SetActive(true);
+            }
+        }
+
+        if (((Gamepad.current?.buttonEast.wasPressedThisFrame ?? false) || (Gamepad.current?.selectButton.wasPressedThisFrame ?? false)) && PauseMenu.activeSelf)
+        {
+            OnGoBack();
+        }
+    }
     public static void SetChrono(Chrono chrono)
     {
         _instance._chrono.text = $"{_instance.FormatInt(chrono.Minutes)}:{_instance.FormatInt(chrono.Seconds)}";
@@ -52,5 +90,56 @@ public class UIManager : MonoBehaviour
     private string FormatInt(int number)
     {
         return (number < 10 ? "0" : "") + number;
+    }
+
+    public static void EndOfGame( gameState state)
+    {
+        if(state == gameState.Win)
+        {
+            _instance._endOfGameText.text = "YOU WIN";
+        }
+        else if(state == gameState.Loose)
+        {
+            _instance._endOfGameText.text = "YOU LOOSE";
+        }
+        else
+        {
+            _instance._endOfGameText.text = "DRAW";
+        }
+
+        _instance._uIAnimator.SetTrigger("EndOfGame");
+
+        _instance.StartCoroutine(_instance.waitBeforeContinue());
+    }
+
+
+    IEnumerator waitBeforeContinue()
+    {
+        yield return new WaitForSeconds(2);
+        _pressToContinue.SetActive(true);
+    }
+    public void OnQuit()
+    {
+        SubPauseMenu.SetActive(true);
+        ES.SetSelectedGameObject(FS_SubPauseMenu);
+    }
+
+    public void OnYes()
+    {
+        LevelLoader.LoadNextLevel(0);
+    }
+
+    public void OnGoBack()
+    {
+        if (SubPauseMenu.activeSelf)
+        {
+            SubPauseMenu.SetActive(false);
+            ES.SetSelectedGameObject(FS_PauseMenu);
+        }
+        else
+        {
+            PauseMenu.SetActive(false);
+            TimeManager.Play();
+        }
     }
 }

@@ -16,5 +16,7 @@ public class MaxGoalSlider: MonoBehaviour, ISliderValue
     {
         int newValue = (int)Mathf.Round(Value * MaxGoal);
         text.text = newValue.ToString();
+
+        Match_UI_Manager._instance.goalToWin = newValue;
     }
 }

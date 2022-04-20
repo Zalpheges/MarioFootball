@@ -507,15 +507,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 9c7ab46ba788a474a8f0b42de5fba09a, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.49
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 9c7ab46ba788a474a8f0b42de5fba09a, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.49
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 9c7ab46ba788a474a8f0b42de5fba09a, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.49
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 9c7ab46ba788a474a8f0b42de5fba09a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -559,7 +559,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -927199367670048503, guid: 9c7ab46ba788a474a8f0b42de5fba09a, type: 3}
       propertyPath: m_Name
-      value: Bowser
+      value: BowserBot
       objectReference: {fileID: 0}
     - target: {fileID: 35004529218842985, guid: 9c7ab46ba788a474a8f0b42de5fba09a, type: 3}
       propertyPath: m_LocalRotation.w
@@ -889,12 +889,6 @@ MonoBehaviour:
   - {fileID: 8963223814290671114}
   MaterialElectricity: {fileID: 2100000, guid: 98fd08f6dd93b0d4688d40de5ac8a1cd, type: 2}
   MaterialFreeze: {fileID: 2100000, guid: 9e4953594a6ce23438614852f15a6f23, type: 2}
-  state: 0
-  isPiloted: 0
-  hasBall: 0
-  input: {x: 0, y: 0, z: 0}
-  isWaiting: 0
-  isNavDriven: 0
 --- !u!195 &8768193015217309815
 NavMeshAgent:
   m_ObjectHideFlags: 0

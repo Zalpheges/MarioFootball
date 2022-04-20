@@ -3,6 +3,8 @@ using System.Collections;
 using UnityEngine;
 using System.Linq;
 using UnityEngine.AI;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
 
 public class GameManager : MonoBehaviour
 {
@@ -32,6 +34,7 @@ public class GameManager : MonoBehaviour
     private MatchResult _currentResult;
     private Chrono _chrono;
     private float _timer = 0f;
+    private bool _endOfGameUIDone =false;
 
     #region Debug
 
@@ -41,6 +44,10 @@ public class GameManager : MonoBehaviour
     public PlayerSpecs d_Mate2;
 
     public PlayerSpecs d_GoalKeeper;
+
+    public int d_gameTime;
+    public float d_goalToWin;
+    public int d_aIDifficulty;
 
     #endregion
 
@@ -56,8 +63,12 @@ public class GameManager : MonoBehaviour
         else
             Destroy(this.gameObject);
 
+        _matches = new Queue<Match>();
+
         if (d_Captain1 == null)
             return;
+
+        Debug.Log(true);
 
         Match debugMatch = new Match()
         {
@@ -65,17 +76,18 @@ public class GameManager : MonoBehaviour
             Captain2 = d_Captain2,
             GoalKeeper = d_GoalKeeper,
             Mate1 = d_Mate1,
-            Mate2 = d_Mate2
+            Mate2 = d_Mate2,
+            gameTime = d_gameTime,
+            goalToWin = d_goalToWin,
+            AIDifficulty= d_aIDifficulty
         };
 
-        _matches = new Queue<Match>();
         _matches.Enqueue(debugMatch);
     }
 
     private void Start()
     {
         Random.InitState(System.DateTime.Now.Millisecond);
-        _chrono = new Chrono(5, 0);
     }
 
     private void Update()
@@ -83,13 +95,36 @@ public class GameManager : MonoBehaviour
         if (!UIManager._instance)
             return;
 
+        if(_chrono.Finished)
+        {
+            if(!_endOfGameUIDone)
+            {
+                _endOfGameUIDone = true;
+                if (Field.Team2 == LosingTeam)
+                    UIManager.EndOfGame(UIManager.gameState.Win);
+                else if ( Field.Team1 == LosingTeam)
+                    UIManager.EndOfGame(UIManager.gameState.Loose);
+                else
+                    UIManager.EndOfGame(UIManager.gameState.Draw);
+            }
+
+            if (((Gamepad.current?.allControls.Any(x => x is ButtonControl button && x.IsPressed() && !x.synthetic) ?? false) ||  (Keyboard.current?.anyKey.wasPressedThisFrame ?? false)) && _endOfGameUIDone)
+            {
+                AudioManager._instance.PlayMusic(AudioManager.MusicType.Menu);
+                LevelLoader.LoadNextLevel(0);
+            }
+        }
+
         UIManager.SetChrono(_chrono);
+
         _timer += Time.deltaTime;
         if (_timer >= 1f)
         {
             --_chrono;
             if (_chrono.Finished)
+            {
                 Debug.Log("Match end");
+            }
             --_timer;
         }
     }
@@ -151,6 +186,8 @@ public class GameManager : MonoBehaviour
         allPlayers[team1.Players.Length + team2.Players.Length + 1] = team2.Goalkeeper;
         CameraManager.Init(allPlayers.Select(player => player.transform).ToArray(), Field.Ball.transform);
         CameraManager.Follow(allPlayers[0].transform);
+
+        _instance._chrono = new Chrono(match.gameTime, 0);
     }
 
     public static void GoalScored(Team team)
@@ -186,6 +223,24 @@ public class GameManager : MonoBehaviour
         Field.Team2.Goalkeeper.IsWaiting = false;
     }
 
+    public static void AddMatch(PlayerSpecs playerCaptain, PlayerSpecs playerMate, PlayerSpecs AICaptain, PlayerSpecs AIMate, int gameTime, float goalToWin, int AIDifficulty)
+    {
+        Match newMatch = new Match()
+        {
+            Captain1 = playerCaptain,
+            Captain2 = AICaptain,
+            Mate1 = playerMate,
+            Mate2 = AIMate,
+
+            GoalKeeper = _instance.d_GoalKeeper,
+
+            gameTime = gameTime,
+            goalToWin = goalToWin,
+            AIDifficulty = AIDifficulty
+        };
+
+        _instance._matches.Enqueue(newMatch);
+    }
 
     /// <summary>
     /// Ordonne aux joueurs de se diriger vers leur position de départ, ou vers des positions customs si l'argument positions est renseigné

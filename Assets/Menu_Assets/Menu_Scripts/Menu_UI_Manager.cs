@@ -14,15 +14,15 @@ public class Menu_UI_Manager : MonoBehaviour
     {
         if ((Keyboard.current?.escapeKey.wasPressedThisFrame ?? false) || (Gamepad.current?.buttonEast.wasPressedThisFrame ?? false))
         {
-            if(Success != null && SceneManager.GetActiveScene().buildIndex == 0)
+            if (Success != null && SceneManager.GetActiveScene().buildIndex == 0)
             {
                 if (Success.activeSelf)
                     Success.SetActive(false);
                 else
                     Application.Quit();
-            }          
+            }
             else
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex-1);
+                LevelLoader.LoadNextLevel(SceneManager.GetActiveScene().buildIndex - 1);
         }
         
     }
@@ -33,12 +33,12 @@ public class Menu_UI_Manager : MonoBehaviour
 
     public void OnOptions()
     {
-        SceneManager.LoadScene(3);
+        LevelLoader.LoadNextLevel(3);
     }
 
     public void OnContinue()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        LevelLoader.LoadNextLevel(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
     
