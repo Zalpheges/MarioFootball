@@ -144,9 +144,11 @@ public class GameManager : MonoBehaviour
 
         Field.Init(Instantiate(PrefabManager.Ball).GetComponent<Ball>());
 
-        Player[] allPlayers = new Player[team1.Players.Length + team2.Players.Length];
+        Player[] allPlayers = new Player[team1.Players.Length + team2.Players.Length + 2];
         team1.Players.CopyTo(allPlayers, 0);
         team2.Players.CopyTo(allPlayers, team1.Players.Length);
+        allPlayers[team1.Players.Length + team2.Players.Length] = team1.Goalkeeper;
+        allPlayers[team1.Players.Length + team2.Players.Length + 1] = team2.Goalkeeper;
         CameraManager.Init(allPlayers.Select(player => player.transform).ToArray(), Field.Ball.transform);
         CameraManager.Follow(allPlayers[0].transform);
     }
@@ -199,7 +201,7 @@ public class GameManager : MonoBehaviour
         {
             Player player = i < n ? attackingPlayers[i] : defendingPlayers[i - n];
             Vector3 destination = player.Team == Field.Team1 ? positions[i] : -positions[i];
-            player.ActionsQueue.AddAction(destination, () => { 
+            player.ActionsQueue.AddAction(destination, 10f, () => { 
                 player.Animator.SetBool("Run", true);
                 player.Animator.SetBool("Idle", false);
             }, 1f, true);

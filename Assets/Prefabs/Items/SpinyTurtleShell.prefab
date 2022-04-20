@@ -132,6 +132,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7843916923557245315, guid: 23838b75514cddc40abd0cf867b0f277, type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8783657572472234761, guid: 23838b75514cddc40abd0cf867b0f277, type: 3}
       propertyPath: m_Name
       value: SpinyTurtleShell
@@ -148,6 +152,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7529193728238252548, guid: 23838b75514cddc40abd0cf867b0f277, type: 3}
   m_PrefabInstance: {fileID: 2585496644937175576}
   m_PrefabAsset: {fileID: 0}
+--- !u!198 &8806679970545084028 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 6473391501846180964, guid: 23838b75514cddc40abd0cf867b0f277, type: 3}
+  m_PrefabInstance: {fileID: 2585496644937175576}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &-2981598948272641308
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -160,4 +169,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fa88d76d3bfc124393455732f0d0659, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _onHitPS: {fileID: 8806679970545084028}
+  _onDestroyPS: {fileID: 1558614337254153299, guid: a265943a9003200408b56d4a36464c34, type: 3}
   _maxRebounds: 2

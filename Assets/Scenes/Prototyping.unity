@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028334, g: 0.22571328, b: 0.3069217, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -122,7 +122,7 @@ NavMeshSettings:
     preserveTilesOutsideBounds: 0
     debug:
       m_Flags: 0
-  m_NavMeshData: {fileID: 0}
+  m_NavMeshData: {fileID: 23800000, guid: 9f7b88fc5403c794d948c19359418942, type: 2}
 --- !u!1 &11909982
 GameObject:
   m_ObjectHideFlags: 0
@@ -4219,8 +4219,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _debugMatchDuration: 60
   _debugOnlyPlayer: 0
-  _enemiesAreRetard: 1
-  _startWithoutAnim: 1
+  _enemiesAreRetard: 0
+  _startWithoutAnim: 0
   d_Captain1: {fileID: 11400000, guid: 26793e13432ba1346a58e9f5dc9a52c8, type: 2}
   d_Captain2: {fileID: 11400000, guid: f5a9dca6287283a4b847a5644f44c221, type: 2}
   d_Mate1: {fileID: 11400000, guid: aa8b16f128f1eb04a82f8fc6eedb172e, type: 2}

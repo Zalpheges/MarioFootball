@@ -23,6 +23,7 @@ public class Chomp : PhysicalItem
     }
     protected override void ApplyEffect(Player player)
     {
+        base.ApplyEffect(player);
         if (player == _followedPlayer)
         {
             if (++_targetCounter < _nTargets)

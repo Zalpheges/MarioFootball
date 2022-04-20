@@ -4,6 +4,8 @@ using UnityEngine;
 
 public abstract class PhysicalItem : Item
 {
+    [SerializeField] private ParticleSystem _onHitPS;
+    [SerializeField] private GameObject _onDestroyPS;
     [SerializeField] private int _maxRebounds;
     private int _nRebounds = 0;
 
@@ -15,6 +17,12 @@ public abstract class PhysicalItem : Item
     {
         transform.position += _data.Speed * Time.deltaTime * _direction;
     }
+
+    protected override void ApplyEffect(Player player)
+    {
+        _onHitPS.Play();
+    }
+
     protected void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Wall"))
@@ -33,7 +41,7 @@ public abstract class PhysicalItem : Item
 
         Player player = other.GetComponent<Player>();
         Item item = other.GetComponent<Item>();
-        if (player)
+        if (player && player != player.Team.Goalkeeper)
         {
             ApplyEffect(player);
         }
@@ -42,5 +50,9 @@ public abstract class PhysicalItem : Item
             if (GetType() != typeof(Chomp))
                 DestroyItem();
         }
+    }
+    private void OnDestroy()
+    {
+        Destroy(Instantiate(_onDestroyPS, transform.position, Quaternion.identity), 2f);
     }
 }
