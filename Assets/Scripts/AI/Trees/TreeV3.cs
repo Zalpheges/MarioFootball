@@ -314,7 +314,9 @@ public class TreeV3
                                         new Sequence(new List<Node>
                                         {
                                             new T_PassTargetIsMe(),
-                                            new S_PlayerType_Receiver()
+                                            new CoucouNode(),
+                                            new S_PlayerType_Receiver(),
+                                            new S_Static()
                                         }),
                                         new Sequence(new List<Node>
                                         {
