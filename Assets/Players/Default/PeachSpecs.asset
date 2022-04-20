@@ -18,4 +18,4 @@ MonoBehaviour:
   Speed: 5
   StunTime: 1
   Prefab: {fileID: 6815848394718356694, guid: 136ba249aa7859145aaeedbe027ec3ef, type: 3}
-  StaticPrefab: {fileID: 7174329940306780831, guid: 22ce5fb9fff15b844914ff5b6836d3da, type: 3}
+  StaticPrefab: {fileID: 2899865498181493625, guid: 707f0344f0e420a458da29f52a62d061, type: 3}

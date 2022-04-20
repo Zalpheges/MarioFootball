@@ -11,6 +11,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5058211133209122999, guid: 160dce3344a5d49469a65d1cbe9750db, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5664301524426856783, guid: 160dce3344a5d49469a65d1cbe9750db, type: 3}
       propertyPath: m_Name
       value: RedToadBotStatic Variant

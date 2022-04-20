@@ -7,6 +7,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 264587663, guid: c980638bcc706d947a8ce11b551d5f5f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 271770972809645371, guid: c980638bcc706d947a8ce11b551d5f5f, type: 3}
       propertyPath: m_Name
       value: MarioBotStatic Variant
@@ -64,4 +68,5 @@ PrefabInstance:
     - {fileID: -6896400682970893008, guid: c980638bcc706d947a8ce11b551d5f5f, type: 3}
     - {fileID: 1172470068675592138, guid: c980638bcc706d947a8ce11b551d5f5f, type: 3}
     - {fileID: -3857968919107796238, guid: c980638bcc706d947a8ce11b551d5f5f, type: 3}
+    - {fileID: 859401090, guid: c980638bcc706d947a8ce11b551d5f5f, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: c980638bcc706d947a8ce11b551d5f5f, type: 3}

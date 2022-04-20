@@ -11,6 +11,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7943769258146109581, guid: b6fc94af124cce648b56b5367b960049, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8131217157830584482, guid: b6fc94af124cce648b56b5367b960049, type: 3}
       propertyPath: m_Name
       value: LuigiBotStatic Variant
@@ -64,4 +68,5 @@ PrefabInstance:
     - {fileID: 5820481229613935841, guid: b6fc94af124cce648b56b5367b960049, type: 3}
     - {fileID: 8757007367290661906, guid: b6fc94af124cce648b56b5367b960049, type: 3}
     - {fileID: 3007507409372899921, guid: b6fc94af124cce648b56b5367b960049, type: 3}
+    - {fileID: 1906430209636208155, guid: b6fc94af124cce648b56b5367b960049, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: b6fc94af124cce648b56b5367b960049, type: 3}

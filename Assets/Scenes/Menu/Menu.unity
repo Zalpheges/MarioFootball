@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028334, g: 0.22571328, b: 0.3069217, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -520,7 +520,7 @@ MonoBehaviour:
     - {fileID: 8300000, guid: c681755e6b8791946ba1397e4e0a4634, type: 3}
     - {fileID: 8300000, guid: 30c380bedf9af4442819cc2ea0fa0ffa, type: 3}
     playerLinkedTo: {fileID: 11400000, guid: f5a9dca6287283a4b847a5644f44c221, type: 2}
-  - name: Luigi
+  - name: BlueToad
     shoot:
     - {fileID: 8300000, guid: ddf5d0b40450c774682638d12af4365c, type: 3}
     - {fileID: 8300000, guid: b5cf72732970ee945b5f251da998de30, type: 3}
@@ -547,35 +547,7 @@ MonoBehaviour:
     - {fileID: 8300000, guid: c717e791592bdb845b5f2f3dbcb6a372, type: 3}
     - {fileID: 8300000, guid: c681755e6b8791946ba1397e4e0a4634, type: 3}
     - {fileID: 8300000, guid: 30c380bedf9af4442819cc2ea0fa0ffa, type: 3}
-    playerLinkedTo: {fileID: 11400000, guid: f5a9dca6287283a4b847a5644f44c221, type: 2}
-  - name: Luigi
-    shoot:
-    - {fileID: 8300000, guid: ddf5d0b40450c774682638d12af4365c, type: 3}
-    - {fileID: 8300000, guid: b5cf72732970ee945b5f251da998de30, type: 3}
-    - {fileID: 8300000, guid: 5a4318cb7a09cf544ba6b1b67122ea97, type: 3}
-    pass:
-    - {fileID: 8300000, guid: 951b913799b7fbf4ba568e6ab083d1c5, type: 3}
-    - {fileID: 8300000, guid: c21faf23820c04442a5b5de2e1604569, type: 3}
-    - {fileID: 8300000, guid: 4df1a5cfe96952241afe2c04120c4ca8, type: 3}
-    - {fileID: 8300000, guid: 7733d9efb03bf744cba5737f853b1e09, type: 3}
-    - {fileID: 8300000, guid: ccfe58e6ca5e01542aab72922f4ffb16, type: 3}
-    - {fileID: 8300000, guid: 66e71e2278771264eb456b2dd632f631, type: 3}
-    throwItem:
-    - {fileID: 8300000, guid: 4f28f91d6982f994f880616207ff3e86, type: 3}
-    - {fileID: 8300000, guid: 49f4e6f09ce5a2f4295ab017387a483b, type: 3}
-    - {fileID: 8300000, guid: ecfa950c3bd8e944d92583d3d3d95d75, type: 3}
-    celebrate:
-    - {fileID: 8300000, guid: 688ec58c8db2351488cc47fe01e245df, type: 3}
-    - {fileID: 8300000, guid: 7d19901a42cdadc45b91a09c5cbc6abd, type: 3}
-    - {fileID: 8300000, guid: 531d82ae5ee41ca42ac28bfa1af9b567, type: 3}
-    - {fileID: 8300000, guid: 01307e829be0e8044bf19ac958dee554, type: 3}
-    - {fileID: 8300000, guid: 6b89b45e3943a114f861b81c098e9873, type: 3}
-    - {fileID: 8300000, guid: d7b0757820f25e342a6a3a9e38a84006, type: 3}
-    electrocuted:
-    - {fileID: 8300000, guid: c717e791592bdb845b5f2f3dbcb6a372, type: 3}
-    - {fileID: 8300000, guid: c681755e6b8791946ba1397e4e0a4634, type: 3}
-    - {fileID: 8300000, guid: 30c380bedf9af4442819cc2ea0fa0ffa, type: 3}
-    playerLinkedTo: {fileID: 11400000, guid: f5a9dca6287283a4b847a5644f44c221, type: 2}
+    playerLinkedTo: {fileID: 11400000, guid: aa8b16f128f1eb04a82f8fc6eedb172e, type: 2}
   _playerCaptainAudio:
     name: 
     shoot: []
@@ -1066,6 +1038,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8335287289179896490, guid: 149771b5df3df34468876a81d67137c3, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8335287289482741480, guid: 149771b5df3df34468876a81d67137c3, type: 3}
+      propertyPath: m_Alpha
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8335287290197235781, guid: 149771b5df3df34468876a81d67137c3, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 201102978}
+    - target: {fileID: 8335287290197235781, guid: 149771b5df3df34468876a81d67137c3, type: 3}
+      propertyPath: m_RenderMode
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -1562,8 +1546,8 @@ Canvas:
   m_GameObject: {fileID: 606590909}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
+  m_RenderMode: 1
+  m_Camera: {fileID: 201102978}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
