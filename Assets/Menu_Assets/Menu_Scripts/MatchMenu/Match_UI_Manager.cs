@@ -89,7 +89,18 @@ public class Match_UI_Manager : MonoBehaviour
     }
     private void Update()
     {
-        //UpdateStat
+        //MatchSetting
+        if(matchSettings.activeSelf)
+        {
+            if((Keyboard.current?.enterKey.wasPressedThisFrame ?? false) || (Gamepad.current?.buttonSouth.wasPressedThisFrame ?? false))
+            {
+                Slider sliderGo = null;
+                if(ES.currentSelectedGameObject.TryGetComponent(out sliderGo))
+                    ES.SetSelectedGameObject(sliderGo.navigation.selectOnDown.transform.gameObject);
+            }
+        }
+
+        //UpdateStatChara
         if(ES.currentSelectedGameObject != actualSelectedGameObject && !matchSettings.activeSelf)
         {
             actualSelectedGameObject = ES.currentSelectedGameObject;
@@ -215,8 +226,8 @@ public class Match_UI_Manager : MonoBehaviour
     {
         if (allieSelection.activeSelf)
         {
-            matchSettings.SetActive(true);
             ES.SetSelectedGameObject(FS_matchSettings);
+            matchSettings.SetActive(true);
 
             allieSelection.SetActive(false);
 

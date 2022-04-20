@@ -447,8 +447,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5baf185070e56944882d1470c13c3d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MusicAudioSource: {fileID: 0}
-  SFXAudioSource: {fileID: 0}
+  MusicAudioSource: {fileID: 96002682}
+  SFXAudioSource: {fileID: 96002683}
   MenuMusic: {fileID: 8300000, guid: 3381c508bade53a46bf4b85b5cf70985, type: 3}
   _matchMusic:
   - {fileID: 8300000, guid: d012e2524d5bc624e8fc944324eeb543, type: 3}
