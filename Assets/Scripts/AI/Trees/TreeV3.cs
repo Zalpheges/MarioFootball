@@ -43,7 +43,7 @@ public class TreeV3
 
         Thresholds = iThresholds;
 
-        EastTeamEnabled = true;
+        EastTeamEnabled = false;
         WestTeamEnabled = true;
 
         root = new RootNode(this, new List<Node>()
@@ -314,7 +314,9 @@ public class TreeV3
                                         new Sequence(new List<Node>
                                         {
                                             new T_PassTargetIsMe(),
-                                            new S_PlayerType_Receiver()
+                                            new CoucouNode(),
+                                            new S_PlayerType_Receiver(),
+                                            new S_Static()
                                         }),
                                         new Sequence(new List<Node>
                                         {
@@ -341,7 +343,6 @@ public class TreeV3
                     #endregion
                 }),
                 #region Perform Action
-                new CoucouNode(),
                 new Selector(new List<Node>
                 {
                     new Sequence(new List<Node>
