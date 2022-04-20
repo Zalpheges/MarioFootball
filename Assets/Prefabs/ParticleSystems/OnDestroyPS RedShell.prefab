@@ -8,6 +8,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 697663595963461114, guid: da54babc129147e46a295e058bab8afa, type: 3}
+      propertyPath: looping
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 697663595963461114, guid: da54babc129147e46a295e058bab8afa, type: 3}
       propertyPath: InitialModule.startColor.maxColor.b
       value: 0
       objectReference: {fileID: 0}
@@ -63,6 +67,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7994549020648705802, guid: da54babc129147e46a295e058bab8afa, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: d0dafc74d3d31ff4abd25b9abf2c3fae, type: 2}
     - target: {fileID: 8950324786343734877, guid: da54babc129147e46a295e058bab8afa, type: 3}
       propertyPath: m_Name
       value: OnDestroyPS RedShell

@@ -4893,7 +4893,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _onHitPS: {fileID: 8806679970545084028}
-  _onDestroyPS: {fileID: 1558614337254153299, guid: 2b839311b6cc8f84caa6142712afecf1, type: 3}
+  _onDestroyPS: {fileID: 100000, guid: 8a6cb487d4ead1c4eba481b0481df0a0, type: 3}
   _maxRebounds: 2
   _explosionRadius: 12
   _explosionDelay: 5

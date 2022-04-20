@@ -12,6 +12,8 @@ public abstract class ConsumableItem : Item
     {
         ApplyEffect(_player);
         _effectPS.Play();
+        transform.SetParent(_player.transform, true);
+        transform.localPosition = Vector3.zero;
     }
 
     protected void Update()
