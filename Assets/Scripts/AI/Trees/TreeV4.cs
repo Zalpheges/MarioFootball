@@ -4,7 +4,7 @@ using UnityEngine;
 using BehaviorTree;
 using System.Linq;
 
-public class TreeV3
+public class TreeV4
 {
     public Transform allyGoalTransform;
     public Transform enemyGoalTransform;
@@ -43,7 +43,7 @@ public class TreeV3
 
         Thresholds = iThresholds;
 
-        EastTeamEnabled = false;
+        EastTeamEnabled = true;
         WestTeamEnabled = true;
 
         root = new RootNode(this, new List<Node>()

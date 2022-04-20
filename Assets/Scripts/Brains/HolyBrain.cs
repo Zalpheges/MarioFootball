@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class HolyBrain : PlayerBrain
 {
-    private TreeV3 behaviorTree = new TreeV3();
+    private TreeV4 behaviorTree = new TreeV4();
 
     private float shootThreshold = Field.Width / 4;
     private float defendThreshold = Field.Width / 20;

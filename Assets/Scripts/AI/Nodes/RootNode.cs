@@ -65,7 +65,7 @@ public enum ActionToPerform
 
 public class RootNode : Node
 {
-    public TreeV3 parentTree;
+    public TreeV4 parentTree;
     public GoalKeeperTree goalParentTree;
 
     public Player player = null;
@@ -127,7 +127,7 @@ public class RootNode : Node
 
     public List<Vector2Int> OptimalCoordinates = new List<Vector2Int>();
 
-    public RootNode(TreeV3 iparentTree, List<Node> ichildren)
+    public RootNode(TreeV4 iparentTree, List<Node> ichildren)
     {
         parentTree = iparentTree;
         player = parentTree.player;
