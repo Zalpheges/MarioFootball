@@ -20,7 +20,7 @@ public class S_AssignSeeker : Node
         {
             float distance = (Field.Ball.transform.position - ally.transform.position).sqrMagnitude;
 
-            if (closestPlayer == null || distance < shortestDistance)
+            if ((closestPlayer == null || distance < shortestDistance) && !ally.IsStunned)
             {
                 closestPlayer = ally;
                 shortestDistance = distance;
