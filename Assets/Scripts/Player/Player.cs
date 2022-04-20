@@ -193,6 +193,7 @@ public class Player : MonoBehaviour
                 if (!ProcessQueue)
                 {
                     IsNavDriven = false;
+                    _agent.speed = 10f;
 
                     IsWaiting = true;
 
@@ -513,7 +514,7 @@ public class Player : MonoBehaviour
             Fall((_rgdb.position - player.transform.position).normalized, 6f * player._specs.Weight / 70f, 1.5f, 1f);
         }
 
-        if (player && CanGetBall && !IsDoped && !_isGoalKeeper)
+        if (player && CanGetBall && !IsDoped && !IsGoalKeeper)
         {
             if (player.State == PlayerState.Tackling)
             {
@@ -614,7 +615,7 @@ public class Player : MonoBehaviour
 
         if (mate)
         {
-            if (_isGoalKeeper)
+            if (IsGoalKeeper)
             {
                 direction = mate.transform.position - transform.position;
                 float distance = direction.magnitude;
