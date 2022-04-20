@@ -175,8 +175,6 @@ public class Player : MonoBehaviour
         _rgdb.angularVelocity = Vector3.zero;
         _rgdb.velocity = Vector3.zero;
 
-
-
         if (ProcessQueue)
             UpdateNavQueue();
 
@@ -190,9 +188,7 @@ public class Player : MonoBehaviour
             if (Vector3.Distance(transform.position, _agent.destination) <= 0.1f)
             {
                 if (!ProcessQueue)
-
                 {
-
                     IsNavDriven = false;
 
                     IsWaiting = true;
@@ -286,14 +282,11 @@ public class Player : MonoBehaviour
         MakeAction(action);
     }
 
-
-
     public void ReadQueue()
-
     {
-
         (_nextAnimToPerform, _currentTimeLimit) = ActionsQueue.GetNext(this);
     }
+
     private void UpdateNavQueue()
     {
         if ((_timer += Time.deltaTime) > _currentTimeLimit)
@@ -372,6 +365,14 @@ public class Player : MonoBehaviour
             case Action.Type.Move:
                 _rgdb.position += direction * 2f * _speed * Time.deltaTime;
                 Animator.SetBool("Run", true);
+
+                break;
+
+            case Action.Type.Stop:
+                _agent.isStopped = true;
+                _agent.velocity = Vector3.zero;
+                Animator.SetBool("Idle", true);
+                Animator.SetBool("Run", false);
 
                 break;
 
@@ -492,11 +493,11 @@ public class Player : MonoBehaviour
         Ball ball = other.GetComponent<Ball>();
 
         if (Field.Ball == ball && !HasBall && CanGetBall)
-            ball.Take(this);
+                ball.Take(this);
 
         if (other.tag == "Wall")
         {
-            if (State != PlayerState.Stunned && !InWall)
+            if (State == PlayerState.Falling && !InWall)
                 Stun(StunType.Electrocuted);
 
             InWall = true;
@@ -509,7 +510,7 @@ public class Player : MonoBehaviour
             Fall((_rgdb.position - player.transform.position).normalized, 6f * player._specs.Weight / 70f, 1.5f, 1f);
         }
 
-        if (player && CanGetBall && !IsDoped)
+        if (player && CanGetBall && !IsDoped && !_isGoalKeeper)
         {
             if (player.State == PlayerState.Tackling)
             {
@@ -525,6 +526,7 @@ public class Player : MonoBehaviour
             }
         }
     }
+
     #endregion
 
     public void SetNavDriven(Vector3 destination, float speed = 10f)
@@ -542,7 +544,7 @@ public class Player : MonoBehaviour
     {
         force = Mathf.Max(0.2f, force);
 
-        Debug.Log(_specs.Accuracy * force);
+        //Debug.Log(_specs.Accuracy * force);
         Transform goal = Enemies.transform;
 
         //float angle = Vector3.SignedAngle(transform.forward, goal.forward, Vector3.up);
@@ -618,7 +620,15 @@ public class Player : MonoBehaviour
 
         if (mate)
         {
-            Field.Ball.Pass(mate, 33f);
+            if (_isGoalKeeper)
+            {
+                direction = mate.transform.position - transform.position;
+                float distance = direction.magnitude;
+
+                Field.Ball.LobPass(direction.normalized, distance);
+            }
+            else
+                Field.Ball.Pass(mate, 33f);
 
             //Debug.Log("Passe directe vers " + direction.ToString());
         }
@@ -626,9 +636,9 @@ public class Player : MonoBehaviour
             LobPass(direction);
     }
 
-    private void LobPass(Vector3 direction)
+    private void LobPass(Vector3 direction, float distance = 20f)
     {
-        Field.Ball.LobPass(direction);
+        Field.Ball.LobPass(direction, distance);
 
         //Debug.Log("Passe lobée vers " + direction.ToString());
     }
@@ -637,21 +647,24 @@ public class Player : MonoBehaviour
 
     #region FindMate
 
-    public Player FindMateInRange(Vector3 direction, float range, bool standOut = false)
+    public Player FindMateInRange(Vector3 direction, float range, bool standOut = false, bool includeGoalKeeper = true)
     {
-        return FindPlayerInRange(Team, direction, range, standOut);
+        return FindPlayerInRange(Team, direction, range, standOut, includeGoalKeeper);
     }
 
-    public Player FindEnemyInRange(Vector3 direction, float range, bool standOut = false)
+    public Player FindEnemyInRange(Vector3 direction, float range, bool standOut = false, bool includeGoalKeeper = true)
     {
-        return FindPlayerInRange(Enemies, direction, range, standOut);
+        return FindPlayerInRange(Enemies, direction, range, standOut, includeGoalKeeper);
     }
-    private Player FindPlayerInRange(Team team, Vector3 direction, float range, bool standOut)
+
+    private Player FindPlayerInRange(Team team, Vector3 direction, float range, bool standOut, bool includeGoalKeeper)
     {
-        (Player player, float angle) best = (null, 0f);
+        (Player player, float score) best = (null, -Mathf.Infinity);
 
         List<Player> players = new List<Player>(team.Players);
-        players.Add(team.Goalkeeper);
+
+        if (includeGoalKeeper)
+            players.Add(team.Goalkeeper);
 
         foreach (Player player in players)
         {
@@ -659,10 +672,16 @@ public class Player : MonoBehaviour
                 continue;
 
             float angle = Vector3.Angle(direction, player.transform.position - transform.position);
+            float distance = Vector3.Distance(player.transform.position, transform.position);
 
             if (angle <= range && (!standOut || IsPlayerStandOut(player)))
-                if (best.player == null || angle < best.angle)
-                    best = (player, angle);
+            {
+                float score = - angle - distance;
+                //Debug.Log(player.name + " " + score);
+
+                if (best.player == null || score > best.score)
+                    best = (player, score);
+            }
         }
 
         return best.player;

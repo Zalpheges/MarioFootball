@@ -13,6 +13,9 @@ public class A_Move : Node
         if (!_rootInitialized)
             _root = GetRootNode();
 
+        if (Field.Ball.Target == _root.player)
+            return (NodeState.SUCCESS, Action.Stop());
+
         _root.Position.y = _root.player.transform.position.y;
         if ((_root.Position - _root.player.transform.position).magnitude < .5f)
             return (NodeState.SUCCESS, Action.None);

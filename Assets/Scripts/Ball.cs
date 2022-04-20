@@ -6,21 +6,22 @@ public class Ball : MonoBehaviour
 {
     private Vector3 _startPoint;
     private Vector3 _interpolator;
-    private Vector3 _endPoint;
+    public Vector3 EndPoint { get; private set; }
 
     private float _speed;
 
     private bool _isFree = true;
-    private bool _isMoving = false;
+    public bool IsMoving { get; private set; } = false;
 
     private Vector3 _lastVelocity;
     private float _bezierTime;
 
     public Player Shooter { get; private set; }
     public Player Target { get; private set; }
+    public Player LastOwner { get; private set; }
 
     private Rigidbody _rgdb;
-    private Player Parent => transform.parent?.GetComponent<Player>();
+    private Player _parent;
 
     IEnumerator SlowDown()
     {
@@ -38,9 +39,9 @@ public class Ball : MonoBehaviour
 
     private void Update()
     {
-        if (_isMoving)
+        if (IsMoving)
         {
-            float length = Vector3.Distance(_startPoint, _interpolator) + Vector3.Distance(_interpolator, _endPoint);
+            float length = Vector3.Distance(_startPoint, _interpolator) + Vector3.Distance(_interpolator, EndPoint);
 
             _bezierTime += Time.deltaTime / (length / _speed);
 
@@ -48,15 +49,15 @@ public class Ball : MonoBehaviour
             {
                 StopMoving();
 
-                Vector3 newPosition = ComputeBezierPosition(_startPoint, _interpolator, _endPoint, 0.95f);
-                Vector3 lastPosition = ComputeBezierPosition(_startPoint, _interpolator, _endPoint, 0.1f);
+                Vector3 newPosition = ComputeBezierPosition(_startPoint, _interpolator, EndPoint, 0.95f);
+                Vector3 lastPosition = ComputeBezierPosition(_startPoint, _interpolator, EndPoint, 0.1f);
 
                 _rgdb.velocity = (newPosition - lastPosition).normalized * _speed;
             }
             else
             {
                 Vector3 lastPosition = _rgdb.position;
-                Vector3 newPosition = ComputeBezierPosition(_startPoint, _interpolator, _endPoint, _bezierTime);
+                Vector3 newPosition = ComputeBezierPosition(_startPoint, _interpolator, EndPoint, _bezierTime);
 
                 _rgdb.MovePosition(newPosition);
             }
@@ -96,7 +97,7 @@ public class Ball : MonoBehaviour
 
         _startPoint = _rgdb.position;
         _interpolator = interpolator;
-        _endPoint = to;
+        EndPoint = to;
 
         _speed = force;
     }
@@ -119,22 +120,26 @@ public class Ball : MonoBehaviour
         _rgdb.AddForce(direction.normalized * force, ForceMode.Impulse);
     }
 
-    public void LobPass(Vector3 direction)
+    public void LobPass(Player target)
+    {
+        Target = target;
+
+        Vector3 direction = target.transform.position - transform.position;
+
+        float distance = direction.magnitude;
+
+        LobPass(direction.normalized, distance);
+    }
+
+    public void LobPass(Vector3 direction, float distance)
     {
         Free();
 
         ResetMovements();
 
-        direction = direction * 20f;
-
-        float h = direction.y;
-        direction.y = 0;
-
-        float distance = direction.magnitude;
         float a = 45f * Mathf.Deg2Rad;
 
-        direction.y = distance * Mathf.Tan(a);
-        distance += h / Mathf.Tan(a);
+        direction.y = Mathf.Tan(a);
 
         float velocity = Mathf.Sqrt(distance * Physics.gravity.magnitude / Mathf.Sin(2f * a));
         _rgdb.AddForce(velocity * direction.normalized, ForceMode.Impulse);
@@ -146,9 +151,11 @@ public class Ball : MonoBehaviour
 
     public void Free()
     {
-        _isFree = true;
+        Shooter = _parent;
 
-        Shooter = Parent;
+        _isFree = true;
+        _parent = null;
+
         Invoke(nameof(ResetShooter), 1f);
 
         Target = null;
@@ -171,6 +178,7 @@ public class Ball : MonoBehaviour
 
         if (parent.transform != Shooter?.transform && (!owner || owner.Team != parent?.Team))
         {
+            _parent = LastOwner = parent;
             _isFree = false;
 
             transform.parent = parent.transform;
@@ -183,7 +191,7 @@ public class Ball : MonoBehaviour
 
     private void StartMoving()
     {
-        _isMoving = true;
+        IsMoving = true;
 
         _rgdb.useGravity = false;
 
@@ -192,7 +200,7 @@ public class Ball : MonoBehaviour
 
     private void StopMoving()
     {
-        _isMoving = false;
+        IsMoving = false;
 
         _rgdb.useGravity = true;
     }

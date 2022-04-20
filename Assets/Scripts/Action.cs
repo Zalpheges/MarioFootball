@@ -5,6 +5,7 @@ public class Action
     public enum Type
     {
         None,
+        Stop,
         NavMove,
         Shoot,
         Pass,
@@ -69,6 +70,11 @@ public class Action
     public static Action NavMove()
     {
         return new Action(Type.NavMove);
+    }
+
+    public static Action Stop()
+    {
+        return new Action(Type.Stop);
     }
 
     public static Action Shoot(float force)
