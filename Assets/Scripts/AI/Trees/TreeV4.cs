@@ -102,7 +102,8 @@ public class TreeV4
                                     {
                                         new T_PositionReached(),
                                         new S_WanderAroundPosition()
-                                    })
+                                    }),
+                                    new S_MovePlayer()
                                 })
                             }),
                             new Sequence(new List<Node>
