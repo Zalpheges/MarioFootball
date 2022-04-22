@@ -41,7 +41,7 @@ public abstract class PhysicalItem : Item
 
         Player player = other.GetComponent<Player>();
         Item item = other.GetComponent<Item>();
-        if (player && player != player.Team.Goalkeeper)
+        if (player)
         {
             ApplyEffect(player);
         }
@@ -53,6 +53,9 @@ public abstract class PhysicalItem : Item
     }
     private void OnDestroy()
     {
-        Destroy(Instantiate(_onDestroyPS, transform.position, Quaternion.identity), 2f);
+        if (!_isQuitting)
+        {
+            Destroy(Instantiate(_onDestroyPS, transform.position, Quaternion.identity), 2f);
+        }
     }
 }

@@ -25,9 +25,4 @@ public abstract class ConsumableItem : Item
     }
 
     protected abstract void RemoveEffect(Player player);
-
-    public override void DestroyItem()
-    {
-        Destroy(gameObject);
-    }
 }

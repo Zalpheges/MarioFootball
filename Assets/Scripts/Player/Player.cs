@@ -277,7 +277,7 @@ public class Player : MonoBehaviour
             if (action.ActionType == Action.Type.Pass)
             {
                 GameManager.FreePlayers();
-                GameManager.Chrono.Play();
+                GameManager.ChronoStopped = false;
             }
             else
                 return;
