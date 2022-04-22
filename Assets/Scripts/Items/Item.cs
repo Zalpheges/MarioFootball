@@ -6,6 +6,7 @@ public abstract class Item : MonoBehaviour
     protected Player _player;
     protected ItemData _data;
     protected Vector3 _direction;
+    protected bool _isQuitting = false;
     protected abstract void ApplyEffect(Player player);
     public void Init(ItemData data, Player player, Vector3 direction)
     {
@@ -14,5 +15,12 @@ public abstract class Item : MonoBehaviour
         _direction = direction;
         _data = data;
     }
-    public abstract void DestroyItem();
+    public virtual void DestroyItem()
+    {
+        Destroy(gameObject);
+    }
+    protected void OnApplicationQuit()
+    {
+        _isQuitting = true;
+    }
 }

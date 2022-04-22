@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028334, g: 0.22571328, b: 0.3069217, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3636,7 +3636,7 @@ MonoBehaviour:
   _debugMatchDuration: 60
   _debugOnlyPlayer: 0
   _enemiesAreRetard: 0
-  _startWithoutAnim: 0
+  _startWithoutAnim: 1
   d_Captain1: {fileID: 11400000, guid: 26793e13432ba1346a58e9f5dc9a52c8, type: 2}
   d_Captain2: {fileID: 11400000, guid: f5a9dca6287283a4b847a5644f44c221, type: 2}
   d_Mate1: {fileID: 11400000, guid: aa8b16f128f1eb04a82f8fc6eedb172e, type: 2}
@@ -26639,7 +26639,7 @@ Canvas:
   m_Enabled: 1
   serializedVersion: 3
   m_RenderMode: 1
-  m_Camera: {fileID: 0}
+  m_Camera: {fileID: 2022457962}
   m_PlaneDistance: 0.5
   m_PixelPerfect: 0
   m_ReceivesEvents: 1

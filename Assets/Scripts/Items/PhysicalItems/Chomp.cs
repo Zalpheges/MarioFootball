@@ -8,12 +8,12 @@ public class Chomp : PhysicalItem
 
     private void Start()
     {
-        _followedPlayer = _player.FindEnemyInRange(_player.transform.forward, 60f, false);
+        _followedPlayer = _player.FindEnemyInRange(_player.transform.forward, 60f, includeGoalKeeper: false);
     }
 
     private void SearchForPlayer(Player player)
     {
-        _followedPlayer = player.FindMateInRange(_player.transform.forward, 180f, false);
+        _followedPlayer = player.FindMateInRange(_player.transform.forward, 180f, includeGoalKeeper: false);
     }
 
     protected override void Update()
@@ -23,6 +23,12 @@ public class Chomp : PhysicalItem
     }
     protected override void ApplyEffect(Player player)
     {
+        if (player == player.Team.Goalkeeper || player.IsWaiting || player.IsNavDriven)
+        {
+            if (player == _followedPlayer)
+                DestroyItem();
+            return;
+        }
         base.ApplyEffect(player);
         if (player == _followedPlayer)
         {
@@ -33,10 +39,5 @@ public class Chomp : PhysicalItem
         }
 
         player.Stun(Player.StunType.Chomped);
-    }
-
-    public override void DestroyItem()
-    {
-        Destroy(gameObject);
     }
 }

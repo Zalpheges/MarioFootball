@@ -27,6 +27,8 @@ public class GameManager : MonoBehaviour
 
     public static Chrono Chrono => _instance._chrono;
 
+    public static bool ChronoStopped = true;
+
     private static GameManager _instance;
 
     private Queue<Match> _matches;
@@ -61,14 +63,12 @@ public class GameManager : MonoBehaviour
             DontDestroyOnLoad(this);
         }
         else
-            Destroy(this.gameObject);
+            Destroy(gameObject);
 
         _matches = new Queue<Match>();
 
         if (d_Captain1 == null)
             return;
-
-        Debug.Log(true);
 
         Match debugMatch = new Match()
         {
@@ -114,18 +114,21 @@ public class GameManager : MonoBehaviour
                 LevelLoader.LoadNextLevel(0);
             }
         }
-
+        Debug.Log(ChronoStopped);
         UIManager.SetChrono(_chrono);
-
-        _timer += Time.deltaTime;
-        if (_timer >= 1f)
+        if(!ChronoStopped)
         {
-            --_chrono;
-            if (_chrono.Finished)
+            _timer += Time.deltaTime;
+            if (_timer >= 1f)
             {
-                Debug.Log("Match end");
+                --_chrono;
+                if (_chrono.Finished)
+                {
+                    ChronoStopped = true;
+                    Debug.Log("Match end");
+                }
+                --_timer;
             }
-            --_timer;
         }
     }
 
@@ -195,6 +198,21 @@ public class GameManager : MonoBehaviour
         AudioManager._instance.PlaySFX(AudioManager.SFXType.Goal); //GoalScoredSound
 
         Field.Ball.Free();
+        Player scorer = Field.Ball.LastOwner;
+        System.Action anim = () =>
+        {
+            scorer.Animator.SetBool("Idle", false);
+            scorer.Animator.SetBool("Run", true);
+        };
+        if (scorer.Team == team)
+        {
+            anim = () =>
+            {
+                scorer.Animator.SetBool("Idle", true);
+                scorer.Animator.SetBool("Run", false);
+            };
+        }
+        scorer.ActionsQueue.AddAction(scorer.transform.position, 10f, anim, 0.5f, false);
         if (team == Field.Team1)
         {
             UIManager.SetScore(scoreTeam2: ++_instance._currentResult.ScoreTeam2);
@@ -209,7 +227,7 @@ public class GameManager : MonoBehaviour
         }
 
         Field.Ball.transform.position = Field.Team1.Players[0].transform.position;
-        _instance._chrono.Stop();
+        ChronoStopped = true;
     }
 
     public static void FreePlayers()

@@ -4,19 +4,10 @@ public class Chrono
     public readonly int Seconds = 0;
     public bool Finished => Minutes <= 0 && Seconds <= 0;
 
-    private bool _stopped = true;
     public Chrono(int minutes, int seconds)
     {
         Minutes = minutes;
         Seconds = seconds;
-    }
-    public void Stop()
-    {
-        _stopped = true;
-    }
-    public void Play()
-    {
-        _stopped = false;
     }
     #region OPERATOR OVERLOADS (+, -, <, >, ++, --)
     public static Chrono operator +(Chrono a, Chrono b) {
@@ -59,8 +50,6 @@ public class Chrono
     }
     public static Chrono operator --(Chrono a)
     {
-        if (a._stopped)
-            return a;
         a -= new Chrono(0, 1);
         return a;
     }

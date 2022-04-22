@@ -29,7 +29,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6473391501846180964, guid: 23838b75514cddc40abd0cf867b0f277, type: 3}
       propertyPath: InitialModule.startSize.scalar
-      value: 5
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6473391501846180964, guid: 23838b75514cddc40abd0cf867b0f277, type: 3}
       propertyPath: EmissionModule.m_Bursts.Array.size
