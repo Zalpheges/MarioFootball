@@ -231,7 +231,10 @@ public class Player : MonoBehaviour
             }
 
             if (Field.ArePlayersAllWaiting())
+            {
+                GameManager.IsGoalScored = false;
                 ResetState();
+            }
             else
                 return;
         }

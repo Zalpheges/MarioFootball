@@ -29,6 +29,8 @@ public class GameManager : MonoBehaviour
 
     public static bool ChronoStopped = true;
 
+    public static bool IsGoalScored = false;
+
     private static GameManager _instance;
 
     private Queue<Match> _matches;
@@ -193,10 +195,10 @@ public class GameManager : MonoBehaviour
         _instance._chrono = new Chrono(match.gameTime, 0);
     }
 
-    public static void GoalScored(Team team)
+    public static void OnGoalScored(Team team)
     {
         AudioManager._instance.PlaySFX(AudioManager.SFXType.Goal); //GoalScoredSound
-
+        IsGoalScored = true;
         Field.Ball.Free();
         Player scorer = Field.Ball.LastOwner;
         System.Action anim = () =>
