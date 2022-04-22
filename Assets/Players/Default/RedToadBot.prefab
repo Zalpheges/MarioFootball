@@ -569,8 +569,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _headposition: {fileID: 1049438373324647742, guid: c980638bcc706d947a8ce11b551d5f5f, type: 3}
-  _target: {fileID: 379599807, guid: 6baf0259e1bc5ab4cb382b98d27d06a2, type: 3}
-  _headRig: {fileID: 1902321335, guid: 6baf0259e1bc5ab4cb382b98d27d06a2, type: 3}
+  _target: {fileID: 3946086873715603309}
+  _headRig: {fileID: 2365614682554846790}
 --- !u!195 &279273856175721855
 NavMeshAgent:
   m_ObjectHideFlags: 0
