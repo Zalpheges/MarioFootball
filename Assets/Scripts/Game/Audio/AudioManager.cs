@@ -8,8 +8,10 @@ public class AudioManager : MonoBehaviour
     [Header("Global")]
     public AudioSource MusicAudioSource;
     public AudioSource SFXAudioSource;
+
     [Header("Menu")]
     [SerializeField] private AudioClip MenuMusic;
+
     [Header("Match")]
     [SerializeField] private AudioClip[] _matchMusic;
     [SerializeField] private AudioClip _kickoff;
@@ -17,6 +19,10 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioClip[] _matchOver;
 
     [SerializeField] private CharaAudio[] charaAudios;
+
+    [SerializeField] private AudioClip _crowdNomal;
+    [SerializeField] private AudioClip _crowdGoal;
+
 
     [HideInInspector] public CharaAudio _playerCaptainAudio;
     [HideInInspector] public CharaAudio _playerMateAudio;
@@ -43,6 +49,12 @@ public class AudioManager : MonoBehaviour
         Shoot,
         Pass,
         ThrowItem
+    }
+
+    public enum CrowdSoundType
+    {
+        Normal,
+        Goal
     }
 
     public static AudioManager _instance;
@@ -105,6 +117,45 @@ public class AudioManager : MonoBehaviour
         {
             SFXAudioSource.clip = clip;
             SFXAudioSource.Play();
+        }
+    }
+
+    public void PlayCrowdSound(CrowdSoundType type)
+    {
+        AudioClip clip = null;
+
+        bool isLooping = false;
+
+        if (type == CrowdSoundType.Goal)
+        {
+            clip = _crowdGoal;
+            isLooping = true;
+        }
+        else
+        {
+            clip = _crowdNomal;
+        }
+
+        if (clip != null)
+        {
+            GameObject go = new GameObject();
+            go.name = clip.name;
+            AudioSource AS = go.AddComponent<AudioSource>();
+            AS.volume = 0.3f;
+            AS.clip = clip;
+            AS.Play();
+
+            if (isLooping)
+            {
+                AS.loop = true;
+
+            }
+            else
+            {
+                Destroy(go, AS.clip.length);
+            }
+            
+            
         }
     }
 
