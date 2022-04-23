@@ -116,7 +116,6 @@ public class GameManager : MonoBehaviour
                 LevelLoader.LoadNextLevel(0);
             }
         }
-        Debug.Log(ChronoStopped);
         UIManager.SetChrono(_chrono);
         if(!ChronoStopped)
         {
