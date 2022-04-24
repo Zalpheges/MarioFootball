@@ -234,7 +234,10 @@ public class Player : MonoBehaviour
             }
 
             if (Field.ArePlayersAllWaiting())
+            {
+                GameManager.IsGoalScored = false;
                 ResetState();
+            }
             else
                 return;
         }
@@ -284,7 +287,7 @@ public class Player : MonoBehaviour
             if (action.ActionType == Action.Type.Pass)
             {
                 GameManager.FreePlayers();
-                GameManager.Chrono.Play();
+                GameManager.ChronoStopped = false;
             }
             else
                 return;

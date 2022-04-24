@@ -6,7 +6,7 @@ public class RedTurtleShell : PhysicalItem
 
     private void Start()
     {
-        _followedPlayer = _player.FindEnemyInRange(_player.transform.forward, 60f, false);
+        _followedPlayer = _player.FindEnemyInRange(_player.transform.forward, 60f, includeGoalKeeper: false);
     }
 
     protected override void Update()
@@ -18,12 +18,13 @@ public class RedTurtleShell : PhysicalItem
 
     protected override void ApplyEffect(Player player)
     {
+        if (player == player.Team.Goalkeeper || player.IsWaiting || player.IsNavDriven)
+        {
+            DestroyItem();
+            return;
+        }
         base.ApplyEffect(player);
         player.Fall((player.transform.position - transform.position).normalized);
         DestroyItem();
-    }
-    public override void DestroyItem()
-    {
-        Destroy(gameObject);
     }
 }

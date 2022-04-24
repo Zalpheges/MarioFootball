@@ -114,28 +114,43 @@ public class AudioManager : MonoBehaviour
 
         if (SFXtype == charaSFXType.Pass && Chara.pass.Length > 0)
         {
-            int rndIndex = Random.Range(0, Chara.pass.Length);
-            clip = Chara.pass[rndIndex];
+            if(Chara.pass.Length > 0)
+            {
+                int rndIndex = Random.Range(0, Chara.pass.Length);
+                clip = Chara.pass[rndIndex];
+            }
         }
         else if(SFXtype==charaSFXType.Electrocuted && Chara.electrocuted.Length > 0)
         {
-            int rndIndex = Random.Range(0, Chara.electrocuted.Length);
-            clip = Chara.electrocuted[rndIndex];
+            if(Chara.electrocuted.Length > 0)
+            {
+                int rndIndex = Random.Range(0, Chara.electrocuted.Length);
+                clip = Chara.electrocuted[rndIndex];
+            }
         }
         else if(SFXtype == charaSFXType.Celebrate && Chara.celebrate.Length > 0)
         {
-            int rndIndex = Random.Range(0, Chara.celebrate.Length);
-            clip = Chara.celebrate[rndIndex];
+            if(Chara.celebrate.Length > 0)
+            {
+                int rndIndex = Random.Range(0, Chara.celebrate.Length);
+                clip = Chara.celebrate[rndIndex];
+            }
         }
         else if(SFXtype == charaSFXType.Shoot && Chara.shoot.Length > 0)
         {
-            int rndIndex = Random.Range(0, Chara.shoot.Length);
-            clip = Chara.shoot[rndIndex];
+            if(Chara.shoot.Length > 0)
+            {
+                int rndIndex = Random.Range(0, Chara.shoot.Length);
+                clip = Chara.shoot[rndIndex];
+            }
         }
         else if(SFXtype == charaSFXType.ThrowItem && Chara.throwItem.Length > 0)
         {
-            int rndIndex = Random.Range(0, Chara.throwItem.Length);
-            clip = Chara.throwItem[rndIndex];
+            if(Chara.throwItem.Length > 0)
+            {
+                int rndIndex = Random.Range(0, Chara.throwItem.Length);
+                clip = Chara.throwItem[rndIndex];
+            }
         }
 
         if (clip != null)

@@ -33,12 +33,16 @@ public class BobBomb : PlaceableItem
             DestroyItem();
         }
         else
+        {
+            if (player == player.Team.Goalkeeper || player.IsWaiting || player.IsNavDriven)
+                return;
             player.Fall((player.transform.position - transform.position).normalized, 6f, 1.5f, 2f);
+        }
     }
     public override void DestroyItem()
     {
         if (!_exploded)
             ApplyEffect(null);
-        Destroy(gameObject);
+        base.DestroyItem();
     }
 }
