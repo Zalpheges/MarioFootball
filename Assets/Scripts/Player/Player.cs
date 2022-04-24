@@ -176,6 +176,9 @@ public class Player : MonoBehaviour
     {
         _lookAt.position = HasBall ? Enemies.transform.position : Field.Ball.transform.position;
 
+        if (HasBall)
+            Field.Ball.SetLoading(0f);
+
         Team.GainItem();
 
         _rgdb.angularVelocity = Vector3.zero;
@@ -469,6 +472,11 @@ public class Player : MonoBehaviour
                 }
 
                 break;
+
+            case Action.Type.Loading:
+                Field.Ball.SetLoading(action.Force);
+
+                break;
         }
     }
 
@@ -640,7 +648,7 @@ public class Player : MonoBehaviour
 
     private void DirectPass(Vector3 direction)
     {
-        Player mate = FindMateInRange(direction, 90f);
+        Player mate = FindMateInRange(direction, IsGoalKeeper ? 360f : 90f);
 
         if (mate)
         {

@@ -23,6 +23,9 @@ public class Ball : MonoBehaviour
     private Rigidbody _rgdb;
     private Player _parent;
 
+    [SerializeField]
+    private ParticleSystem _circle;
+
     IEnumerator SlowDown()
     {
         yield return new WaitForSeconds(1f);
@@ -221,4 +224,10 @@ public class Ball : MonoBehaviour
     }
 
     #endregion
+
+    public void SetLoading(float force)
+    {
+        var main = _circle.main;
+        main.startSize = force * 3f;
+    }
 }

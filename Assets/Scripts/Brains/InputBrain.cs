@@ -86,10 +86,18 @@ public class InputBrain : PlayerBrain
             else
                 return Action.Headbutt(_movementInput);
         }
-        else if (_movementInput != Vector3.zero && !westButtonPressed)
-            return Action.Move(_movementInput);
         else
-            return Action.None;
+        {
+            if (westButtonHeld)
+                return Action.Loading(shootForce / loadTime);
+            else
+            {
+                if (_movementInput != Vector3.zero)
+                    return Action.Move(_movementInput);
+                else
+                    return Action.None;
+            }
+        }
     }
 
     public void OnMove(InputAction.CallbackContext input)
