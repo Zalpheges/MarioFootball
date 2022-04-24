@@ -89,7 +89,7 @@ public class InputBrain : PlayerBrain
         else
         {
             if (westButtonHeld)
-                return Action.Loading(shootForce / loadTime);
+                return Action.Loading(1f);// shootForce / loadTime);
             else
             {
                 if (_movementInput != Vector3.zero)

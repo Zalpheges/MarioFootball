@@ -83,8 +83,10 @@ public class Team : MonoBehaviour
         {
             if (hasBall)
                 _sortedPlayers = Players.OrderBy(p => Vector3.Distance(p.transform.position, position)).ToArray();
+            else if (Field.Ball.transform.parent)
+                _sortedPlayers = Players.OrderBy(p => p.transform.position.x < Field.Ball.transform.position.x ? Vector3.Distance(p.transform.position, Field.Ball.transform.position) : Mathf.Infinity).ToArray();
             else
-                _sortedPlayers = Players.OrderBy(p => Vector3.Distance(Field.Ball.transform.position, position)).ToArray();
+                _sortedPlayers = Players.OrderBy(p => Vector3.Distance(p.transform.position, Field.Ball.transform.position)).ToArray();
 
             _hadBallAtChange = hasBall;
 
