@@ -615,7 +615,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: ad68fe6a0a2397148abe8146d9d34736, type: 3}
       propertyPath: m_Name
-      value: Birdo
+      value: BirdoBot
       objectReference: {fileID: 0}
     - target: {fileID: 962772685594370738, guid: ad68fe6a0a2397148abe8146d9d34736, type: 3}
       propertyPath: m_IsActive
@@ -850,12 +850,7 @@ MonoBehaviour:
   - {fileID: 912173137869431537}
   MaterialElectricity: {fileID: 2100000, guid: 98fd08f6dd93b0d4688d40de5ac8a1cd, type: 2}
   MaterialFreeze: {fileID: 2100000, guid: 9e4953594a6ce23438614852f15a6f23, type: 2}
-  state: 0
-  isPiloted: 0
-  hasBall: 0
-  input: {x: 0, y: 0, z: 0}
-  isWaiting: 0
-  isNavDriven: 0
+  debug: 0
 --- !u!114 &2155495988275505407
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -909,7 +904,7 @@ NavMeshAgent:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2317579844972356919}
   m_Enabled: 1
-  m_AgentTypeID: 0
+  m_AgentTypeID: 1479372276
   m_Radius: 0.35
   m_Speed: 10
   m_Acceleration: 50

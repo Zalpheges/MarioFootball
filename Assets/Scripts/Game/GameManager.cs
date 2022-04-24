@@ -68,8 +68,6 @@ public class GameManager : MonoBehaviour
         if (d_Captain1 == null)
             return;
 
-        Debug.Log(true);
-
         Match debugMatch = new Match()
         {
             Captain1 = d_Captain1,

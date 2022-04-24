@@ -579,7 +579,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: c3f91a06df8cdf7409f37aef3d18b4ac, type: 2}
     - target: {fileID: 919132149155446097, guid: 20324f5d22eeed6469e14c953f26a3a8, type: 3}
       propertyPath: m_Name
-      value: Rosalina
+      value: RosalinaBot
       objectReference: {fileID: 0}
     - target: {fileID: 2799745593097645100, guid: 20324f5d22eeed6469e14c953f26a3a8, type: 3}
       propertyPath: m_LocalRotation.w
@@ -763,7 +763,7 @@ NavMeshAgent:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3879061812221578449}
   m_Enabled: 1
-  m_AgentTypeID: 0
+  m_AgentTypeID: 1479372276
   m_Radius: 0.35
   m_Speed: 10
   m_Acceleration: 50
@@ -816,12 +816,7 @@ MonoBehaviour:
   - {fileID: 4828854600113536115}
   MaterialElectricity: {fileID: 2100000, guid: 98fd08f6dd93b0d4688d40de5ac8a1cd, type: 2}
   MaterialFreeze: {fileID: 2100000, guid: 9e4953594a6ce23438614852f15a6f23, type: 2}
-  state: 0
-  isPiloted: 0
-  hasBall: 0
-  input: {x: 0, y: 0, z: 0}
-  isWaiting: 0
-  isNavDriven: 0
+  debug: 0
 --- !u!114 &1844798934
 MonoBehaviour:
   m_ObjectHideFlags: 0

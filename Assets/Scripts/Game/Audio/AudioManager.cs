@@ -112,27 +112,27 @@ public class AudioManager : MonoBehaviour
     {
         AudioClip clip = null;
 
-        if (SFXtype == charaSFXType.Pass)
+        if (SFXtype == charaSFXType.Pass && Chara.pass.Length > 0)
         {
             int rndIndex = Random.Range(0, Chara.pass.Length);
             clip = Chara.pass[rndIndex];
         }
-        else if(SFXtype==charaSFXType.Electrocuted)
+        else if(SFXtype==charaSFXType.Electrocuted && Chara.electrocuted.Length > 0)
         {
             int rndIndex = Random.Range(0, Chara.electrocuted.Length);
             clip = Chara.electrocuted[rndIndex];
         }
-        else if(SFXtype == charaSFXType.Celebrate)
+        else if(SFXtype == charaSFXType.Celebrate && Chara.celebrate.Length > 0)
         {
             int rndIndex = Random.Range(0, Chara.celebrate.Length);
             clip = Chara.celebrate[rndIndex];
         }
-        else if(SFXtype == charaSFXType.Shoot)
+        else if(SFXtype == charaSFXType.Shoot && Chara.shoot.Length > 0)
         {
             int rndIndex = Random.Range(0, Chara.shoot.Length);
             clip = Chara.shoot[rndIndex];
         }
-        else if(SFXtype == charaSFXType.ThrowItem)
+        else if(SFXtype == charaSFXType.ThrowItem && Chara.throwItem.Length > 0)
         {
             int rndIndex = Random.Range(0, Chara.throwItem.Length);
             clip = Chara.throwItem[rndIndex];
