@@ -122,6 +122,8 @@ public class Ball : MonoBehaviour
 
     public void LobPass(Player target)
     {
+        Free();
+
         Target = target;
 
         Vector3 direction = target.transform.position - transform.position;
@@ -133,7 +135,8 @@ public class Ball : MonoBehaviour
 
     public void LobPass(Vector3 direction, float distance)
     {
-        Free();
+        if (!_isFree)
+            Free();
 
         ResetMovements();
 

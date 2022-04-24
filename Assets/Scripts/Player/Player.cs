@@ -57,6 +57,7 @@ public class Player : MonoBehaviour
     private float _dashSpeed;
     private Vector3 _dashEndPoint;
 
+    private int lockFrames = 0;
     private Action _waitingAction = null;
 
     private Transform _lookAt;
@@ -169,6 +170,8 @@ public class Player : MonoBehaviour
         ResetBoost();
     }
 
+    public bool debug = false;
+
     private void Update()
     {
         _lookAt.position = HasBall ? Enemies.transform.position : Field.Ball.transform.position;
@@ -183,7 +186,7 @@ public class Player : MonoBehaviour
 
         _agent.enabled = IsNavDriven || !IsPiloted || InWall || IsGoalKeeper;
 
-        if (_agent.enabled)
+        if (_agent.enabled && _agent.isOnNavMesh)
             _agent.isStopped = !IsNavDriven && IsPiloted;
 
         if (IsNavDriven)
@@ -194,6 +197,7 @@ public class Player : MonoBehaviour
                 {
                     IsNavDriven = false;
                     _agent.speed = 10f;
+                    State = PlayerState.Moving;
 
                     IsWaiting = true;
 
@@ -203,7 +207,6 @@ public class Player : MonoBehaviour
                     transform.rotation = Quaternion.LookRotation(Vector3.Project(transform.position - Team.transform.position, Field.Transform.forward));
                 }
                 else
-
                 {
                     if (_timer > 0.1f)
                     {
@@ -258,7 +261,11 @@ public class Player : MonoBehaviour
         else
             action = IABrain.GetAction();
 
-        if (action.DirectionalAction)
+        if (IsGoalKeeper)
+        {
+            transform.LookAt(Enemies.transform.position, Vector3.up);
+        }
+        else if (action.DirectionalAction)
         {
             Vector3 direction = ComputeDirection(action);
 
@@ -286,7 +293,14 @@ public class Player : MonoBehaviour
                 return;
         }
 
-        MakeAction(action);
+        if (lockFrames++ >= 100 && _agent.isOnNavMesh && _agent.remainingDistance >= 0.1f && _agent.pathStatus == NavMeshPathStatus.PathComplete && _agent.velocity == Vector3.zero)
+        {
+            _agent.enabled = false;
+            _waitingAction = action;
+            lockFrames = 0;
+        }
+        else
+            MakeAction(action);
     }
 
     public void ReadQueue()
@@ -356,7 +370,7 @@ public class Player : MonoBehaviour
     {
         Vector3 direction = ComputeDirection(action);
 
-        if (action.DirectionalAction && action.WaitForRotation)
+        if (action.DirectionalAction && action.WaitForRotation && !IsGoalKeeper)
             transform.LookAt(_rgdb.position + direction, Vector3.up);
 
         if (action)
@@ -370,7 +384,15 @@ public class Player : MonoBehaviour
         switch (action.ActionType)
         {
             case Action.Type.Move:
-                _rgdb.position += direction * 2f * _speed * Time.deltaTime;
+                if (debug)
+                {
+                    Debug.Log(_agent.isStopped);
+                    Debug.Log(action.ActionType);
+                }
+                if (_agent.enabled)
+                    _agent.Move(direction * 2f * _speed * Time.deltaTime);
+                else
+                    _rgdb.position += direction * 2f * _speed * Time.deltaTime;
                 Animator.SetBool("Run", true);
 
                 break;
@@ -431,7 +453,7 @@ public class Player : MonoBehaviour
             case Action.Type.LobPass:
                 if (HasBall)
                 {
-                    LobPass(direction);
+                    Field.Ball.LobPass(direction, 20f);
                     PlaySound(AudioManager.charaSFXType.Pass);
                     Animator.SetTrigger("Pass");
                 }
@@ -466,7 +488,7 @@ public class Player : MonoBehaviour
     public void SetNavDriven(Vector3 destination, float speed = 10f)
     {
         IsNavDriven = true;
-        _agent.agentTypeID = GetAgentTypeIDByName("Default");
+        _agent.agentTypeID = GetAgentTypeIDByName("Default Player");
 
         _agent.enabled = true;
         _agent.destination = destination;
@@ -627,7 +649,7 @@ public class Player : MonoBehaviour
                 direction = mate.transform.position - transform.position;
                 float distance = direction.magnitude;
 
-                Field.Ball.LobPass(direction.normalized, distance);
+                Field.Ball.LobPass(mate);
             }
             else
                 Field.Ball.Pass(mate, 33f);
@@ -635,14 +657,7 @@ public class Player : MonoBehaviour
             //Debug.Log("Passe directe vers " + direction.ToString());
         }
         else
-            LobPass(direction);
-    }
-
-    private void LobPass(Vector3 direction, float distance = 20f)
-    {
-        Field.Ball.LobPass(direction, distance);
-
-        //Debug.Log("Passe lobée vers " + direction.ToString());
+            Field.Ball.LobPass(direction, 20f);
     }
 
     #endregion

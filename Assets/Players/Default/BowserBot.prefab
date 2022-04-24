@@ -813,6 +813,7 @@ MonoBehaviour:
   - {fileID: 8963223814290671114}
   MaterialElectricity: {fileID: 2100000, guid: 98fd08f6dd93b0d4688d40de5ac8a1cd, type: 2}
   MaterialFreeze: {fileID: 2100000, guid: 9e4953594a6ce23438614852f15a6f23, type: 2}
+  debug: 0
 --- !u!195 &8768193015217309815
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -821,7 +822,7 @@ NavMeshAgent:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3815583688634873140}
   m_Enabled: 1
-  m_AgentTypeID: 0
+  m_AgentTypeID: 1479372276
   m_Radius: 0.35
   m_Speed: 10
   m_Acceleration: 50
