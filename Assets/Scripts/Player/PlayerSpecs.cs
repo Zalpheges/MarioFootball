@@ -4,7 +4,8 @@ using UnityEngine;
 public class PlayerSpecs : ScriptableObject
 {
     public string Name;
-
+    public Sprite Icon;
+    public Color Color;
     public float Weight;
 
     [Range(0f, 1f)]
