@@ -16,7 +16,8 @@ public class Action
         Headbutt,
         Dribble,
         Throw,
-        ChangePlayer
+        ChangePlayer,
+        Loading
     }
 
     public readonly Type ActionType;
@@ -125,5 +126,10 @@ public class Action
     public static Action ChangePlayer()
     {
         return new Action(Type.ChangePlayer);
+    }
+
+    public static Action Loading(float force)
+    {
+        return new Action(Type.Loading, force);
     }
 }

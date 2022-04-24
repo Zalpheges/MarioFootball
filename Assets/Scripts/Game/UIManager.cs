@@ -28,6 +28,13 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject _pressToContinue;
     [SerializeField] private Animator _uIAnimator;
 
+    [SerializeField] private SpriteRenderer _CornerTeam1;
+    [SerializeField] private SpriteRenderer _CornerTeam2;
+    [SerializeField] private SpriteRenderer _IconCaptain1;
+    [SerializeField] private SpriteRenderer _IconCaptain2;
+    [SerializeField] private TextMeshProUGUI _NameCaptain1;
+    [SerializeField] private TextMeshProUGUI _NameCaptain2;
+
 
     public enum gameState
     {
@@ -39,6 +46,18 @@ public class UIManager : MonoBehaviour
     {
         FS_PauseMenu = ES.firstSelectedGameObject;
         _instance = this;
+    }
+
+    public void InitHUD(PlayerSpecs specsTeam1, PlayerSpecs specsTeam2)
+    {
+        _CornerTeam1.color = specsTeam1.Color;
+        _CornerTeam2.color = specsTeam2.Color;
+
+        _IconCaptain1.sprite = specsTeam1.Icon;
+        _IconCaptain2.sprite = specsTeam2.Icon;
+
+        _NameCaptain1.text = specsTeam1.Name;
+        _NameCaptain2.text = specsTeam2.Name;
     }
 
     private void Update()

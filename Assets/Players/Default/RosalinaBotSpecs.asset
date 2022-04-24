@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: RosalinaBotSpecs
   m_EditorClassIdentifier: 
   Name: Rosalina
+  Icon: {fileID: 21300000, guid: d2cca575bb5ca8e408fe9b4c32cf7c21, type: 3}
+  Color: {r: 0.3160377, g: 0.9640018, b: 1, a: 0.29411766}
   Weight: 40
   Accuracy: 0.093
   Speed: 4

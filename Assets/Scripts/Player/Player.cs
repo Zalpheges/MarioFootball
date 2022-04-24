@@ -176,6 +176,9 @@ public class Player : MonoBehaviour
     {
         _lookAt.position = HasBall ? Enemies.transform.position : Field.Ball.transform.position;
 
+        if (HasBall)
+            Field.Ball.SetLoading(0f);
+
         Team.GainItem();
 
         _rgdb.angularVelocity = Vector3.zero;
@@ -242,16 +245,6 @@ public class Player : MonoBehaviour
                 return;
         }
 
-        if (State != PlayerState.Moving)
-        {
-            _rgdb.position = Vector3.MoveTowards(_rgdb.position, _dashEndPoint, _dashSpeed * Time.deltaTime);
-
-            return;
-        }
-
-        if ((GameManager.DebugOnlyPlayer && (!HasBall && !IsPiloted)) || _isRetard)
-            return;
-
         Action action;
 
         if (_waitingAction)
@@ -260,6 +253,16 @@ public class Player : MonoBehaviour
             action = Team.Brain.GetAction();
         else
             action = IABrain.GetAction();
+
+        if (State != PlayerState.Moving && action.ActionType != Action.Type.ChangePlayer)
+        {
+            _rgdb.position = Vector3.MoveTowards(_rgdb.position, _dashEndPoint, _dashSpeed * Time.deltaTime);
+
+            return;
+        }
+
+        if ((GameManager.DebugOnlyPlayer && (!HasBall && !IsPiloted)) || _isRetard)
+            return;
 
         if (IsGoalKeeper)
         {
@@ -469,6 +472,11 @@ public class Player : MonoBehaviour
                 }
 
                 break;
+
+            case Action.Type.Loading:
+                Field.Ball.SetLoading(action.Force);
+
+                break;
         }
     }
 
@@ -640,7 +648,7 @@ public class Player : MonoBehaviour
 
     private void DirectPass(Vector3 direction)
     {
-        Player mate = FindMateInRange(direction, 90f);
+        Player mate = FindMateInRange(direction, IsGoalKeeper ? 360f : 90f);
 
         if (mate)
         {

@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22b18ff61a2fb884a906898fb289f729, type: 3}
   m_Name: PeachBotSpecsHakim
   m_EditorClassIdentifier: 
-  Name: PeachBot
+  Name: Peach
+  Icon: {fileID: 21300000, guid: 2e7f0cb23e2fd2f4e8c968e3c61d889e, type: 3}
+  Color: {r: 0.9716981, g: 0.46293163, b: 0.92199105, a: 0.29411766}
   Weight: 40
   Accuracy: 0.7
   Speed: 4

@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22b18ff61a2fb884a906898fb289f729, type: 3}
   m_Name: LuigiSpecs
   m_EditorClassIdentifier: 
-  Name: Luigi Offishialz
+  Name: Luigi
+  Icon: {fileID: 21300000, guid: 3792c531eafe9cd42858019074c10c9d, type: 3}
+  Color: {r: 0, g: 0.7075472, b: 0.099125, a: 0.29411766}
   Weight: 70
   Accuracy: 1
   Speed: 5

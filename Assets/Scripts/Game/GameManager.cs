@@ -143,6 +143,8 @@ public class GameManager : MonoBehaviour
     {
         Match match = _instance._matches.Dequeue();
 
+        UIManager._instance.InitHUD(match.Captain1, match.Captain2);
+
         _instance._currentResult = new MatchResult
         {
             Match = match
