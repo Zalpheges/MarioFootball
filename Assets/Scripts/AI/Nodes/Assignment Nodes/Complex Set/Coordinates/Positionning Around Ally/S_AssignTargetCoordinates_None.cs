@@ -1,21 +1,20 @@
-using System.Collections;
+using BehaviorTree;
 using System.Collections.Generic;
 using UnityEngine;
-using BehaviorTree;
 
-public class S_AssignTargetCoordinates : Node
+public class S_AssignTargetCoordinates_None : Node
 {
     private RootNode _root;
     private bool _rootInitialized = false;
 
-    private int ballHolderIndex = new int();
+    private int ballSeekerIndex = new int();
 
     public override (NodeState, Action) Evaluate()
     {
         if (!_rootInitialized)
             _root = GetRootNode();
 
-        ballHolderIndex = GetBallHolderIndex();
+        ballSeekerIndex = GetBallSeekerIndex();
         FindOptimalPositionning();
 
         return (NodeState.SUCCESS, Action.None);
@@ -108,7 +107,7 @@ public class S_AssignTargetCoordinates : Node
     {
         List<Vector2Int> CoordsToReturn = new List<Vector2Int>();
         CoordsToReturn.AddRange(_root.PlayersCoordinates);
-        CoordsToReturn.RemoveAt(ballHolderIndex);
+        CoordsToReturn.RemoveAt(ballSeekerIndex);
         return CoordsToReturn;
     }
 
@@ -116,17 +115,17 @@ public class S_AssignTargetCoordinates : Node
     {
         List<Player> PlayersToReturn = new List<Player>();
         PlayersToReturn.AddRange(_root.parentTree.Allies);
-        PlayersToReturn.RemoveAt(ballHolderIndex);
+        PlayersToReturn.RemoveAt(ballSeekerIndex);
         return PlayersToReturn;
     }
 
-    private int GetBallHolderIndex()
+    private int GetBallSeekerIndex()
     {
         int index = 0;
 
         foreach (Player ally in _root.parentTree.Allies)
         {
-            if (_root.ballHolder == ally)
+            if (_root.ballSeeker == ally)
                 return index;
             index++;
         }

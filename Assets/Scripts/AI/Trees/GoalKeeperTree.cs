@@ -95,7 +95,7 @@ public class GoalKeeperTree
                     new Sequence(new List<Node>
                     {
                         new T_ActionType_Pass(),
-                        //new A_Pass()
+                        new A_Pass()
                     }),
                     new Sequence(new List<Node>
                     {

@@ -13,8 +13,11 @@ public class S_DetermineOptimalCoords : Node
         if (!_rootInitialized)
             _root = GetRootNode();
 
-        int SideModifier = _root.allyTeamSide == TeamSide.West ? 1 : -1;
-        Vector2Int Coords = _root.BallHolderCoordinates;
+        Vector2Int Coords = new Vector2Int();
+
+        int SideModifier = _root.ModifyingCoeff;
+        Coords = _root.currentBallState == BallState.Ally || (_root.ballHolder != null && _root.ballHolder.HasBall) ? _root.BallHolderCoordinates : _root.BallSeekerCoordinates;     
+ 
         _root.OptimalCoordinates.Clear();
 
         if (Mathf.Abs(Coords.x) + Mathf.Abs(Coords.y) == (_root.WidthDivisionAmount - 1) / 2 + (_root.HeightDivisionAmount - 1) / 2) //Corner

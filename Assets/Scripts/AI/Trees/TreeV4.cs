@@ -43,13 +43,14 @@ public class TreeV4
 
         Thresholds = iThresholds;
 
-        EastTeamEnabled = false;
+        EastTeamEnabled = true;
         WestTeamEnabled = true;
 
         root = new RootNode(this, new List<Node>()
         {
             new Sequence(new List<Node>()
             {
+                #region Verify if AI is Enabled
                 new Selector(new List<Node>
                 {
                     new Sequence(new List<Node>
@@ -63,6 +64,7 @@ public class TreeV4
                         new T_WestEnabled()
                     })
                 }),
+                #endregion
                 new S_UpdateBallHolder(),
                 new Selector(new List<Node>
                 {
@@ -92,10 +94,10 @@ public class TreeV4
                         }),
                         new S_UpdateCoordinates(),
                         new Selector(new List<Node>
-                        {                           
+                        {
                             new Sequence(new List<Node>
                             {
-                                new T_BallState_Goal(),                               
+                                new T_BallState_Goal(),
                                 new Selector(new List<Node>
                                 {
                                     new Sequence(new List<Node>
@@ -273,7 +275,7 @@ public class TreeV4
                                     new Sequence(new List<Node>
                                     {
                                         new S_DetermineOptimalCoords(),
-                                        new S_AssignTargetCoordinates(),
+                                        new S_AssignTargetCoordinates_Ally(),
                                         new S_MovePlayer()
                                     })
                                 })
@@ -298,10 +300,39 @@ public class TreeV4
                                 }),
                                 new Sequence(new List<Node>
                                 {
-                                    new T_PlayerType_Supporter(),
-                                    new S_MoveSupporter()
-                                }),
-                                new S_MoveSeeker()
+                                    new T_BallSeekerNotDebuffed(),
+                                    new Selector(new List<Node>
+                                    {
+                                        new Sequence(new List<Node>
+                                        {
+                                            new T_PlayerType_Supporter(),
+                                            new S_UpdateCoordinates(),
+                                            new S_UpdateBallSeekerCoordinates(),
+                                            new Selector(new List<Node>
+                                            {
+                                                new Sequence(new List<Node>
+                                                {
+                                                    new T_BallSeekerCoordinatesUnchanged(),
+                                                    new Selector(new List<Node>
+                                                    {
+                                                        new Sequence(new List<Node>
+                                                        {
+                                                            new T_PositionReached(),
+                                                            new S_WanderAroundPosition()
+                                                        }),
+                                                        new S_MovePlayer()
+                                                    })                                                   
+                                                }),
+                                                new Sequence(new List<Node>
+                                                {
+                                                    new S_DetermineOptimalCoords(),
+                                                    new S_AssignTargetCoordinates_None()
+                                                })
+                                            })
+                                        }),
+                                        new S_MoveSeeker()
+                                    })
+                                })
                             })
                         }),
                         new Sequence(new List<Node>
@@ -324,7 +355,14 @@ public class TreeV4
                                             new T_PassTargetIsMine(),
                                             new S_PlayerType_BallSeeker()
                                         }),
-                                        new S_PlayerType_Supporter()
+                                        new Sequence(new List<Node>
+                                        {
+                                            new S_PlayerType_Supporter(),
+                                            new S_UpdateCoordinates(),
+                                            new S_UpdateBallSeekerCoordinates(),
+                                            new S_DetermineOptimalCoords(),
+                                            new S_AssignTargetCoordinates_None()
+                                        })
                                     })
                                 }),
                                 new Sequence(new List<Node>
@@ -333,7 +371,14 @@ public class TreeV4
                                     new Selector(new List<Node>
                                     {
                                         new T_PlayerType_Seeker(),
-                                        new S_PlayerType_Supporter()
+                                        new Sequence(new List<Node>
+                                        {
+                                            new S_PlayerType_Supporter(),
+                                            new S_UpdateCoordinates(),
+                                            new S_UpdateBallSeekerCoordinates(),
+                                            new S_DetermineOptimalCoords(),
+                                            new S_AssignTargetCoordinates_None()
+                                        })
                                     })
                                 })
                             }),
