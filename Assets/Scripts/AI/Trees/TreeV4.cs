@@ -43,7 +43,7 @@ public class TreeV4
 
         Thresholds = iThresholds;
 
-        EastTeamEnabled = true;
+        EastTeamEnabled = false;
         WestTeamEnabled = true;
 
         root = new RootNode(this, new List<Node>()
@@ -92,14 +92,15 @@ public class TreeV4
                         }),
                         new S_UpdateCoordinates(),
                         new Selector(new List<Node>
-                        {
+                        {                           
                             new Sequence(new List<Node>
                             {
-                                new T_BallState_Goal(),
+                                new T_BallState_Goal(),                               
                                 new Selector(new List<Node>
                                 {
                                     new Sequence(new List<Node>
                                     {
+                                        new CoucouNode(),
                                         new T_PositionReached(),
                                         new S_WanderAroundPosition()
                                     }),
@@ -315,7 +316,6 @@ public class TreeV4
                                         new Sequence(new List<Node>
                                         {
                                             new T_PassTargetIsMe(),
-                                            new CoucouNode(),
                                             new S_PlayerType_Receiver(),
                                             new S_Static()
                                         }),

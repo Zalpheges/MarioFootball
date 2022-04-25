@@ -62,6 +62,9 @@ public class UIManager : MonoBehaviour
 
     private void Update()
     {
+        if(_chrono.text[0] == '0' && _chrono.text[1] == '0')
+            _chrono.color = Color.red;
+
         if ((Keyboard.current?.escapeKey.wasPressedThisFrame ?? false) || (Gamepad.current?.selectButton.wasPressedThisFrame ?? false))
         {
             if (PauseMenu.activeSelf)
