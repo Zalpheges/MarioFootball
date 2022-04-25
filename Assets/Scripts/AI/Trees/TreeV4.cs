@@ -175,12 +175,12 @@ public class TreeV4
                     #region Ally Team Has Ball
                     new Sequence(new List<Node>
                     {
+                        #region Variables Reset Upon GameState Switch
                         new T_BallHolderIsAlly(),
                         new T_BallHolderUnchanged(),
                         new Selector(new List<Node>
                         {
                             new T_BallState_Ally(),
-                            #region Variables Reset Upon GameState Switch
                             new Sequence(new List<Node>
                             {
                                 new Selector(new List<Node>
@@ -197,17 +197,32 @@ public class TreeV4
                                     })
                                 })
                             }),
-                            #endregion
                         }),
+                        #endregion
                         new Selector(new List<Node>
                         {
                             #region AI Striker has Ball
                             new Sequence(new List<Node>
                             {
                                 new T_PlayerType_BallHolder(),
-
                                 new Selector(new List<Node>
                                 {
+                                    #region Loading to Shoot
+                                    new Sequence(new List<Node>
+                                    {
+                                        new T_ActionType_Load(),
+                                        new Selector(new List<Node>
+                                        {
+                                            new Sequence(new List<Node>
+                                            {
+                                                new T_Loading_Complete(),
+                                                new S_Shoot()
+                                            }),
+                                            new S_Load()
+                                        })
+                                    }),
+                                    #endregion
+                                    #region Deciding for action in Shoot Range
                                     new Sequence(new List<Node>
                                     {
                                         new T_BallHolder_ShootRange(),
@@ -216,7 +231,8 @@ public class TreeV4
                                             new Sequence(new List<Node>
                                             {
                                                 new T_GoalUncovered(),
-                                                new S_Shoot()
+                                                new S_ResetLoadTime(),
+                                                new S_Load()
                                             }),
                                             new Sequence(new List<Node>
                                             {
@@ -235,6 +251,8 @@ public class TreeV4
                                             new S_MoveBallHolderUp()
                                         })
                                     }),
+                                    #endregion
+                                    #region Deciding for action in the rest of the Field
                                     new Selector(new List<Node>
                                     {
                                         new Sequence(new List<Node>
@@ -245,6 +263,7 @@ public class TreeV4
                                         }),
                                         new S_MoveBallHolderToGoal()
                                     })
+                                    #endregion
                                 })
                             }),
                             #endregion
@@ -410,6 +429,11 @@ public class TreeV4
                     {
                         new T_ActionType_Pass(),
                         new A_Pass()
+                    }),
+                    new Sequence(new List<Node>
+                    {
+                        new T_ActionType_Load(),
+                        new A_Load()
                     })
                 })
                 #endregion
