@@ -407,15 +407,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 418ac3f0f85c6054c8c03e74d97738a5, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 7.2536902
+      value: 15.805228
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 418ac3f0f85c6054c8c03e74d97738a5, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.00000011920929
+      value: 2.5514755
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 418ac3f0f85c6054c8c03e74d97738a5, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -15.932926
+      value: -14.9078665
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 418ac3f0f85c6054c8c03e74d97738a5, type: 3}
       propertyPath: m_LocalRotation.w
@@ -700,6 +700,10 @@ MonoBehaviour:
   _headposition: {fileID: 1670010332186368444}
   _target: {fileID: 1651890758}
   _headRig: {fileID: 1298653273}
+  minlookatX: -0.6
+  maxlookatX: 0.6
+  minlookatY: 200
+  maxlookatY: 200
 --- !u!195 &2001341572
 NavMeshAgent:
   m_ObjectHideFlags: 0

@@ -395,15 +395,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1885335131331726593, guid: bf9f419ca202a1c44badfce89719b932, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.6876907
+      value: -27.110638
       objectReference: {fileID: 0}
     - target: {fileID: 1885335131331726593, guid: bf9f419ca202a1c44badfce89719b932, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -1.3808627
       objectReference: {fileID: 0}
     - target: {fileID: 1885335131331726593, guid: bf9f419ca202a1c44badfce89719b932, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -15.747559
+      value: -18.354591
       objectReference: {fileID: 0}
     - target: {fileID: 1885335131331726593, guid: bf9f419ca202a1c44badfce89719b932, type: 3}
       propertyPath: m_LocalRotation.w
@@ -435,7 +435,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3202437055120506642, guid: bf9f419ca202a1c44badfce89719b932, type: 3}
       propertyPath: m_Name
-      value: MarioBot
+      value: MarioBot (1)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bf9f419ca202a1c44badfce89719b932, type: 3}
@@ -624,6 +624,10 @@ MonoBehaviour:
   _headposition: {fileID: 1049438373324647742}
   _target: {fileID: 2403804129572223049}
   _headRig: {fileID: 251073810017087271}
+  minlookatX: -0.6
+  maxlookatX: 0.6
+  minlookatY: 200
+  maxlookatY: 200
 --- !u!195 &2996328365512225139
 NavMeshAgent:
   m_ObjectHideFlags: 0
