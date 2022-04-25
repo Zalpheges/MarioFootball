@@ -199,6 +199,8 @@ public class GameManager : MonoBehaviour
     public static void OnGoalScored(Team team)
     {
         AudioManager._instance.PlaySFX(AudioManager.SFXType.Goal); //GoalScoredSound
+        AudioManager._instance.PlayCrowdSound(AudioManager.CrowdSoundType.Goal);//GoalcrowdSound
+
         IsGoalScored = true;
         Field.Ball.Free();
         Player scorer = Field.Ball.LastOwner;

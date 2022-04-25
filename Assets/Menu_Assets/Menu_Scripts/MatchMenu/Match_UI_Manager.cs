@@ -179,6 +179,12 @@ public class Match_UI_Manager : MonoBehaviour
             PlayerSpecs spectopass = charaspecs[i];
             btn.onClick.AddListener(() => OnContinue(spectopass));
 
+            EventTrigger ET = newChara.GetComponent<EventTrigger>();
+            EventTrigger.Entry entry = new EventTrigger.Entry();
+            entry.eventID = EventTriggerType.Deselect;
+            entry.callback.AddListener((data) => { OnSelected(); });
+            ET.triggers.Add(entry);
+
             Buttons.Add(btn);
 
             if(i==0)
@@ -222,8 +228,16 @@ public class Match_UI_Manager : MonoBehaviour
 
         return FS;
     }
+
+    public void OnSelected()
+    {
+        AudioManager._instance.PlaySFX(AudioManager.SFXType.ButtonSelected);
+    }
+
     public void OnContinue(PlayerSpecs CharaSpec)
     {
+        AudioManager._instance.PlaySFX(AudioManager.SFXType.ButtonClicked);
+
         if (allieSelection.activeSelf)
         {
             ES.SetSelectedGameObject(FS_matchSettings);
@@ -257,6 +271,8 @@ public class Match_UI_Manager : MonoBehaviour
 
     public void OnPlay()
     {
+        AudioManager._instance.PlaySFX(AudioManager.SFXType.ButtonClicked);
+
         GetRandomEnnemies();
 
         GameManager.AddMatch(_playerCaptain, _playerAlly, _AICaptain, _AIAlly,gameTime,goalToWin,AIDifficulty);

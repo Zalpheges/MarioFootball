@@ -8,15 +8,23 @@ public class AudioManager : MonoBehaviour
     [Header("Global")]
     public AudioSource MusicAudioSource;
     public AudioSource SFXAudioSource;
+
     [Header("Menu")]
     [SerializeField] private AudioClip MenuMusic;
+
     [Header("Match")]
     [SerializeField] private AudioClip[] _matchMusic;
     [SerializeField] private AudioClip _kickoff;
     [SerializeField] private AudioClip[] _goal;
     [SerializeField] private AudioClip[] _matchOver;
+    [SerializeField] private AudioClip _buttonSelected;
+    [SerializeField] private AudioClip _buttonClicked;
 
     [SerializeField] private CharaAudio[] charaAudios;
+
+    [SerializeField] private AudioClip _crowdNomal;
+    [SerializeField] private AudioClip _crowdGoal;
+
 
     [HideInInspector] public CharaAudio _playerCaptainAudio;
     [HideInInspector] public CharaAudio _playerMateAudio;
@@ -33,7 +41,9 @@ public class AudioManager : MonoBehaviour
     {
         Kickoff,
         Goal,
-        MatchOver
+        MatchOver,
+        ButtonSelected,
+        ButtonClicked
     }
 
     public enum charaSFXType
@@ -43,6 +53,12 @@ public class AudioManager : MonoBehaviour
         Shoot,
         Pass,
         ThrowItem
+    }
+
+    public enum CrowdSoundType
+    {
+        Normal,
+        Goal
     }
 
     public static AudioManager _instance;
@@ -100,6 +116,14 @@ public class AudioManager : MonoBehaviour
             int rndIndex = Random.Range(0, _matchOver.Length);
             clip = _matchOver[rndIndex];
         }
+        else if(type==SFXType.ButtonSelected)
+        {
+            clip = _buttonSelected;
+        }
+        else if(type == SFXType.ButtonClicked)
+        {
+            clip = _buttonClicked;
+        }
 
         if (clip != null)
         {
@@ -108,11 +132,50 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+    public void PlayCrowdSound(CrowdSoundType type)
+    {
+        AudioClip clip = null;
+
+        bool isLooping = false;
+
+        if (type == CrowdSoundType.Goal)
+        {
+            clip = _crowdGoal;
+            isLooping = true;
+        }
+        else
+        {
+            clip = _crowdNomal;
+        }
+
+        if (clip != null)
+        {
+            GameObject go = new GameObject();
+            go.name = clip.name;
+            AudioSource AS = go.AddComponent<AudioSource>();
+            AS.volume = 0.3f;
+            AS.clip = clip;
+            AS.Play();
+
+            if (isLooping)
+            {
+                AS.loop = true;
+
+            }
+            else
+            {
+                Destroy(go, AS.clip.length);
+            }
+            
+            
+        }
+    }
+
     public void PlayCharaSFX(charaSFXType SFXtype, CharaAudio Chara)
     {
         AudioClip clip = null;
 
-        if (SFXtype == charaSFXType.Pass && Chara.pass.Length > 0)
+        if (SFXtype == charaSFXType.Pass)
         {
             if(Chara.pass.Length > 0)
             {
@@ -120,7 +183,7 @@ public class AudioManager : MonoBehaviour
                 clip = Chara.pass[rndIndex];
             }
         }
-        else if(SFXtype==charaSFXType.Electrocuted && Chara.electrocuted.Length > 0)
+        else if(SFXtype==charaSFXType.Electrocuted)
         {
             if(Chara.electrocuted.Length > 0)
             {
@@ -128,7 +191,7 @@ public class AudioManager : MonoBehaviour
                 clip = Chara.electrocuted[rndIndex];
             }
         }
-        else if(SFXtype == charaSFXType.Celebrate && Chara.celebrate.Length > 0)
+        else if(SFXtype == charaSFXType.Celebrate)
         {
             if(Chara.celebrate.Length > 0)
             {
@@ -136,7 +199,7 @@ public class AudioManager : MonoBehaviour
                 clip = Chara.celebrate[rndIndex];
             }
         }
-        else if(SFXtype == charaSFXType.Shoot && Chara.shoot.Length > 0)
+        else if(SFXtype == charaSFXType.Shoot)
         {
             if(Chara.shoot.Length > 0)
             {
@@ -144,7 +207,7 @@ public class AudioManager : MonoBehaviour
                 clip = Chara.shoot[rndIndex];
             }
         }
-        else if(SFXtype == charaSFXType.ThrowItem && Chara.throwItem.Length > 0)
+        else if(SFXtype == charaSFXType.ThrowItem)
         {
             if(Chara.throwItem.Length > 0)
             {

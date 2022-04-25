@@ -12,12 +12,12 @@ public class AIDifficultySlider : MonoBehaviour, ISliderValue
     private Text text;
     public void OnValueChange(float Value)
     {
-        if (Value > 0.66f)
+        if (Value > 1)
         {
             text.text = "Difficult";
             Match_UI_Manager._instance.AIDifficulty = 3;
         } 
-        else if (Value > 0.33f)
+        else if (Value ==1)
         {
             text.text = "Normal";
             Match_UI_Manager._instance.AIDifficulty = 2;

@@ -114,6 +114,7 @@ public class Field : MonoBehaviour
     private void Start()
     {
         AudioManager._instance.PlayMusic(AudioManager.MusicType.Match); //MatchMusicPlay
+        AudioManager._instance.PlayCrowdSound(AudioManager.CrowdSoundType.Normal); //CrowdSound
 
         _bottomLeftCorner = transform.TransformPoint(new Vector3(-_width / 2f, 0f, -_height / 2f));
         _bottomRightCorner = transform.TransformPoint(new Vector3(_width / 2f, 0f, -_height / 2f));
