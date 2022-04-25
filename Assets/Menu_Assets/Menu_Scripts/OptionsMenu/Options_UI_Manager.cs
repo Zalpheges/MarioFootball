@@ -70,11 +70,23 @@ public class Options_UI_Manager : MonoBehaviour
     {
         Audio_Options.SetActive(true);
         ES.SetSelectedGameObject(FS_Audio_Options);
+        AudioManager._instance.PlaySFX(AudioManager.SFXType.ButtonClicked);
     }
 
     public void OnControls()
     {
         Controls_Options.SetActive(true);
         ES.SetSelectedGameObject(FS_Controls);
+        AudioManager._instance.PlaySFX(AudioManager.SFXType.ButtonClicked);
+    }
+
+    public void OnSelected()
+    {
+        AudioManager._instance.PlaySFX(AudioManager.SFXType.ButtonSelected);
+    }
+
+    public void OnClicked()
+    {
+        AudioManager._instance.PlaySFX(AudioManager.SFXType.ButtonClicked);
     }
 }

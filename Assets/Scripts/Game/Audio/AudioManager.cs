@@ -17,6 +17,8 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioClip _kickoff;
     [SerializeField] private AudioClip[] _goal;
     [SerializeField] private AudioClip[] _matchOver;
+    [SerializeField] private AudioClip _buttonSelected;
+    [SerializeField] private AudioClip _buttonClicked;
 
     [SerializeField] private CharaAudio[] charaAudios;
 
@@ -39,7 +41,9 @@ public class AudioManager : MonoBehaviour
     {
         Kickoff,
         Goal,
-        MatchOver
+        MatchOver,
+        ButtonSelected,
+        ButtonClicked
     }
 
     public enum charaSFXType
@@ -111,6 +115,14 @@ public class AudioManager : MonoBehaviour
         {
             int rndIndex = Random.Range(0, _matchOver.Length);
             clip = _matchOver[rndIndex];
+        }
+        else if(type==SFXType.ButtonSelected)
+        {
+            clip = _buttonSelected;
+        }
+        else if(type == SFXType.ButtonClicked)
+        {
+            clip = _buttonClicked;
         }
 
         if (clip != null)
