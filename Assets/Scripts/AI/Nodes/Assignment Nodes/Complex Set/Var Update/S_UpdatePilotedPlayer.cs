@@ -17,6 +17,9 @@ public class S_UpdatePilotedPlayer : Node
             if (allyPlayer.IsPiloted)
                 _root.pilotedPlayer = allyPlayer;
 
+        if (_root.allyGoalKeeper.IsPiloted)
+            _root.pilotedPlayer = _root.allyGoalKeeper;
+
         return (NodeState.SUCCESS, Action.None);
     }
 

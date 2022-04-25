@@ -8,8 +8,6 @@ public class S_AssignTargetCoordinates_Goal : Node
     private RootNode _root;
     private bool _rootInitialized = false;
 
-    private int pilotedIndex = new int();
-
     public override (NodeState, Action) Evaluate()
     {
         if (!_rootInitialized)

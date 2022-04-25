@@ -60,6 +60,7 @@ public enum ActionToPerform
     Shoot,
     Pass,
     Move,
+    Load,
     HeadButt
 }
 
@@ -105,10 +106,17 @@ public class RootNode : Node
 
     public Vector2Int PreviousBallHolderCoordinates = new Vector2Int();
     public Vector2Int BallHolderCoordinates = new Vector2Int();
+
+    public Vector2Int PreviousBallSeekerCoordinates = new Vector2Int();
+    public Vector2Int BallSeekerCoordinates = new Vector2Int();
+
     public Vector2Int PlayerCoordinates = new Vector2Int();
     public Vector2Int[] PlayersCoordinates = new Vector2Int[4];
 
     public int playerIndex = new int();
+    public int ModifyingCoeff = new int();
+
+    public float TimeLoad = 0f;
 
     public float WidthDivision; 
     public float HeightDivision;
@@ -150,6 +158,8 @@ public class RootNode : Node
             allyTeamSide = TeamSide.West;
         else
             allyTeamSide = TeamSide.East;
+
+        ModifyingCoeff = allyTeamSide == TeamSide.West ? 1 : -1;
 
         foreach (Node child in ichildren)
             _Attach(child);

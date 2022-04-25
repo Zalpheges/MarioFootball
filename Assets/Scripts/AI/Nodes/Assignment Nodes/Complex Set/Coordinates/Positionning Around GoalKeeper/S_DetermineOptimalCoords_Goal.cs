@@ -18,10 +18,10 @@ public class S_DetermineOptimalCoords_Goal : Node
 
         if (_root.parentTree.allyGoalKeeper.HasBall)
         {
-            _root.OptimalCoordinates.Add(new Vector2Int(-SideModifier * (_root.WidthDivisionAmount - 1) / 2 + 1, 2));
-            _root.OptimalCoordinates.Add(new Vector2Int(-SideModifier * (_root.WidthDivisionAmount - 1) / 2 + 1, -2));
-            _root.OptimalCoordinates.Add(new Vector2Int(-SideModifier * (_root.WidthDivisionAmount - 1) / 2 + 2, 1));
-            _root.OptimalCoordinates.Add(new Vector2Int(-SideModifier * (_root.WidthDivisionAmount - 1) / 2 + 2, -1));
+            _root.OptimalCoordinates.Add(new Vector2Int(-SideModifier * ((_root.WidthDivisionAmount - 1) / 2 - 1), 2));
+            _root.OptimalCoordinates.Add(new Vector2Int(-SideModifier * ((_root.WidthDivisionAmount - 1) / 2 - 1), -2));
+            _root.OptimalCoordinates.Add(new Vector2Int(-SideModifier * ((_root.WidthDivisionAmount - 1) / 2 - 2), 1));
+            _root.OptimalCoordinates.Add(new Vector2Int(-SideModifier * ((_root.WidthDivisionAmount - 1) / 2 - 2), -1));
 
         }
         else
