@@ -116,7 +116,6 @@ public class GameManager : MonoBehaviour
                 LevelLoader.LoadNextLevel(0);
             }
         }
-        Debug.Log(ChronoStopped);
         UIManager.SetChrono(_chrono);
         if(!ChronoStopped)
         {
@@ -200,21 +199,14 @@ public class GameManager : MonoBehaviour
         AudioManager._instance.PlaySFX(AudioManager.SFXType.Goal); //GoalScoredSound
         IsGoalScored = true;
         Field.Ball.Free();
+
         Player scorer = Field.Ball.LastOwner;
-        System.Action anim = () =>
-        {
-            scorer.Animator.SetBool("Idle", false);
-            scorer.Animator.SetBool("Run", true);
-        };
-        if (scorer.Team == team)
-        {
-            anim = () =>
-            {
-                scorer.Animator.SetBool("Idle", true);
-                scorer.Animator.SetBool("Run", false);
-            };
-        }
-        scorer.ActionsQueue.AddAction(scorer.transform.position, 10f, anim, 0.5f, false);
+        bool ownGoal = team == scorer.Team;
+        void anim() => scorer.Idle(celebrate: !ownGoal, shameful: ownGoal);
+        scorer.ActionsQueue.AddAction(scorer.transform.position, 10f, anim, 5f, false);
+        CameraManager.CamerasQueue.AddCameraControl(scorer.transform, 5f);
+        CameraManager.ReadQueue();
+        CameraManager.LookAt(scorer.transform);
         if (team == Field.Team1)
         {
             UIManager.SetScore(scoreTeam2: ++_instance._currentResult.ScoreTeam2);
@@ -274,17 +266,18 @@ public class GameManager : MonoBehaviour
         int n = attackingPlayers.Length;
         for (int i = 0; i < positions.Count; i++)
         {
-            Player player = i < n ? attackingPlayers[i] : defendingPlayers[i - n];
+            bool attackers = i < n;
+            Player player = attackers ? attackingPlayers[i] : defendingPlayers[i - n];
             Vector3 destination = player.Team == Field.Team1 ? positions[i] : -positions[i];
-            player.ActionsQueue.AddAction(destination, 10f, () => { 
-                player.Animator.SetBool("Run", true);
-                player.Animator.SetBool("Idle", false);
-            }, 1f, true);
+            player.ActionsQueue.AddAction(destination, attackers ? 5f : 10f, () => player.Run(happy: !attackers, sad: attackers), 1f, true);
             player.ReadQueue();
         }
-
-        Field.Team1.Goalkeeper.SetNavDriven(Field.GetGoalKeeperPosition(Field.Team1));
-        Field.Team2.Goalkeeper.SetNavDriven(Field.GetGoalKeeperPosition(Field.Team2));
+        Player gk1 = Field.Team1.Goalkeeper;
+        gk1.ActionsQueue.AddAction(Field.GetGoalKeeperPosition(Field.Team1), 10f, () => gk1.Run(), 1f, true);
+        gk1.ReadQueue();
+        Player gk2 = Field.Team2.Goalkeeper;
+        gk2.ActionsQueue.AddAction(Field.GetGoalKeeperPosition(Field.Team2), 10f, () => gk2.Run(), 1f, true);
+        gk2.ReadQueue();
     }
 
     private IEnumerator Match()
