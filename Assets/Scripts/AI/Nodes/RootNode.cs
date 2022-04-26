@@ -2,18 +2,6 @@ using BehaviorTree;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum GameState
-{
-    unassigned,
-    Attack,
-    Defend,
-}
-public enum BallPosition
-{
-    unassigned,
-    AllyHalf,
-    EnemyHalf
-}
 public enum TargetType
 {
     unassigned,
@@ -26,8 +14,6 @@ public enum PlayerType
     BallSeeker,
     Contender,
     Supporter,
-    Attacker_Top,
-    Attacker_Bot,
     Defender,
     BallHolder,
     Receiver
@@ -39,13 +25,6 @@ public enum BallState
     Enemy,
     Goal,
     None
-}
-public enum Positionning
-{
-    unassigned,
-    left,
-    right,
-    center
 }
 public enum TeamSide
 {
@@ -90,12 +69,9 @@ public class RootNode : Node
     public bool AITeam = true;
 
     public ActionToPerform actionToPerform = ActionToPerform.unassigned;
-    public BallPosition currentBallPosition = BallPosition.unassigned;
-    public Positionning currentPositionning = Positionning.unassigned;
     public TargetType currentTargetType = TargetType.unassigned;
     public PlayerType currentPlayerType = PlayerType.unassigned;
     public BallState currentBallState = BallState.unassigned;
-    public GameState currentGameState = GameState.unassigned;
     public TeamSide allyTeamSide = TeamSide.unassigned;
 
     public List<Player> Allies = new List<Player>();

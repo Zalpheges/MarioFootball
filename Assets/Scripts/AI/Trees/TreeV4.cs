@@ -128,7 +128,6 @@ public class TreeV4
                             new T_BallState_Enemy(),
                             new Sequence(new List<Node>
                             {
-                                new S_GameState_Defend(),
                                 new S_BallState_Enemy(),
                                 new S_ResetTarget()
                             })
