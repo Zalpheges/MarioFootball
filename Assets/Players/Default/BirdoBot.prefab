@@ -790,6 +790,10 @@ MonoBehaviour:
   _headposition: {fileID: 1652114150180471629}
   _target: {fileID: 330243525}
   _headRig: {fileID: 1634116138}
+  minlookatX: -0.6
+  maxlookatX: 0.6
+  minlookatY: 200
+  maxlookatY: 200
 --- !u!114 &4496836258315651299
 MonoBehaviour:
   m_ObjectHideFlags: 0
