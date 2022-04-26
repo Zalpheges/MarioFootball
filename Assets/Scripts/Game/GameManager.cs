@@ -201,6 +201,8 @@ public class GameManager : MonoBehaviour
         AudioManager._instance.PlaySFX(AudioManager.SFXType.Goal); //GoalScoredSound
         AudioManager._instance.PlayCrowdSound(AudioManager.CrowdSoundType.Goal);//GoalcrowdSound
 
+        UIManager._instance.DisplayAnnouncement(UIManager.AnnouncementType.Goal);
+
         IsGoalScored = true;
         Field.Ball.Free();
 
