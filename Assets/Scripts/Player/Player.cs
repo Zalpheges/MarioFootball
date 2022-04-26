@@ -202,6 +202,9 @@ public class Player : MonoBehaviour
 
                     IsWaiting = true;
 
+                    if (Field.ArePlayersAllWaiting())
+                        UIManager._instance.DisplayAnnouncement(UIManager.AnnouncementType.ReadySetGo);
+
                     if (IsGoalKeeper)
                         _agent.agentTypeID = GetAgentTypeIDByName("Goal Keeper");
 
