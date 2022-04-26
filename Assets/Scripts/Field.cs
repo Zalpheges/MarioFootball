@@ -214,17 +214,19 @@ public class Field : MonoBehaviour
     private void SpawnPlayers()
     {
         List<Vector3> startPositions = GetStartPositions();
+
+        static void RunHappy(Player player) => player.Run(happy: true);
         for (int i = 0; i < Team1.Players.Length; i++)
         {
             Player player = Team1.Players[i];
             player.transform.position = _spawnPointsTeam1[i % _spawnPointsTeam1.Length].position;
-            player.ActionsQueue.AddAction(startPositions[i], 4f, () => player.Animator.SetBool("Run", true), 1f, true);
+            player.ActionsQueue.AddAction(startPositions[i], 4f, () => RunHappy(player), 1f, true);
             player.ReadQueue();
             CameraManager.CamerasQueue.AddCameraControl(player.transform, i == 0 ? 0.1f : 1.1f);
         }
         Player goalkeeper1 = Team1.Goalkeeper;
         goalkeeper1.transform.position = _spawnPointsTeam1[Random.Range(0, _spawnPointsTeam1.Length)].position;
-        goalkeeper1.ActionsQueue.AddAction(GetGoalKeeperPosition(Team1), 4f, () => goalkeeper1.Animator.SetBool("Run", true), 0f, true);
+        goalkeeper1.ActionsQueue.AddAction(GetGoalKeeperPosition(Team1), 4f, () => RunHappy(goalkeeper1), 0f, true);
         goalkeeper1.ReadQueue();
         CameraManager.CamerasQueue.AddCameraControl(goalkeeper1.transform, 1.1f);
 
@@ -232,17 +234,14 @@ public class Field : MonoBehaviour
         {
             Player player = Team2.Players[i];
             player.transform.position = _spawnPointsTeam2[i % _spawnPointsTeam2.Length].position;
-            player.ActionsQueue.AddAction(-startPositions[i + Team1.Players.Length], 4f, () => {
-                player.Animator.SetBool("Run", true);
-                player.Animator.SetBool("Idle", false);
-            }, 1f, true);
+            player.ActionsQueue.AddAction(-startPositions[i + Team1.Players.Length], 4f, () => RunHappy(player), 1f, true);
             player.ReadQueue();
             CameraManager.CamerasQueue.AddCameraControl(player.transform, 1.1f);
         }
 
         Player goalkeeper2 = Team2.Goalkeeper;
         goalkeeper2.transform.position = _spawnPointsTeam2[Random.Range(0, _spawnPointsTeam2.Length)].position;
-        goalkeeper2.ActionsQueue.AddAction(GetGoalKeeperPosition(Team2), 4f, () => goalkeeper2.Animator.SetBool("Run", true), 1f, true);
+        goalkeeper2.ActionsQueue.AddAction(GetGoalKeeperPosition(Team2), 4f, () => RunHappy(goalkeeper2), 1f, true);
         goalkeeper2.ReadQueue();
         CameraManager.CamerasQueue.AddCameraControl(goalkeeper2.transform, 1.1f);
 
