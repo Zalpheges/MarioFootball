@@ -235,6 +235,7 @@ public class Player : MonoBehaviour
             if (Field.ArePlayersAllWaiting())
             {
                 GameManager.IsGoalScored = false;
+                _kickOffTimer.run = true;
                 ResetState();
             }
             else
@@ -292,6 +293,8 @@ public class Player : MonoBehaviour
             else
                 return;
         }
+
+        if (debug) Debug.Log(name);
 
         if (lockFrames++ >= 100 && _agent.isOnNavMesh && _agent.remainingDistance >= 0.1f && _agent.pathStatus == NavMeshPathStatus.PathComplete && _agent.velocity == Vector3.zero)
         {
