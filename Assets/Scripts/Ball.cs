@@ -79,6 +79,12 @@ public class Ball : MonoBehaviour
         }
     }
 
+    public void OnTriggerStay(Collider other)
+    {
+        if (_isFree && other.tag == "Ball Constraint")
+            transform.position = LastOwner.transform.position;
+    }
+
     #region Shoot
 
     public void Shoot(Vector3 to, float force)
