@@ -132,7 +132,12 @@ public class UIManager : MonoBehaviour
                 if (_instance._announcementContent.Count == 0)
                     _AnnouncementDisplayed = false;
                 else
-                    _timerReset = true;
+                {
+                    _instance._timer = 0f;
+                    _currentTimer = _announcementDuration[0];
+                    _instance._Announcement.fontSize = _instance._announcementFontSize[0];
+                    _instance._Announcement.text = _instance._announcementContent[0];
+                }
             }   
 
             if (_instance._timer < _currentTimer / 4 || _instance._timer > 3 * _currentTimer / 4)
