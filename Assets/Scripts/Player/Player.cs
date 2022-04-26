@@ -236,7 +236,7 @@ public class Player : MonoBehaviour
             if (Field.ArePlayersAllWaiting())
             {
                 GameManager.IsGoalScored = false;
-                _kickOffTimer.run = true;
+                GameManager.KickOffTimer.run = true;
                 ResetState();
             }
             else
