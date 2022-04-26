@@ -62,6 +62,8 @@ public class Player : MonoBehaviour
 
     private float _speed;
 
+    private (bool run, float value) _kickOffTimer = (false, 0f);
+
     public bool IsGoalKeeper { get; private set; }
 
     #region Debug
@@ -167,6 +169,8 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
+        if(_kickOffTimer.run)
+            _kickOffTimer.value += Time.deltaTime;
         _lookAt.position = HasBall ? Enemies.transform.position : Field.Ball.transform.position;
 
         if (HasBall)
@@ -276,10 +280,11 @@ public class Player : MonoBehaviour
 
         if (IsWaiting)
         {
-            if (action.ActionType == Action.Type.Pass)
+            if (action.ActionType == Action.Type.Pass && _kickOffTimer.value > 2f)
             {
                 GameManager.FreePlayers();
                 GameManager.ChronoStopped = false;
+                _kickOffTimer = (false, 0f);
             }
             else
                 return;
@@ -387,6 +392,9 @@ public class Player : MonoBehaviour
         
         _animator.SetBool("HappyWalk", happy);
         _animator.SetBool("SadWalk", sad);
+
+        _animator.SetBool("Celebrate", false);
+        _animator.SetBool("Shameful", false);
     }
     public void Idle(bool celebrate = false, bool shameful = false)
     {
@@ -395,6 +403,9 @@ public class Player : MonoBehaviour
 
         _animator.SetBool("Celebrate", celebrate);
         _animator.SetBool("Shameful", shameful);
+
+        _animator.SetBool("HappyWalk", false);
+        _animator.SetBool("SadWalk", false);
     }
 
     private void MakeAction(Action action)
@@ -535,7 +546,7 @@ public class Player : MonoBehaviour
     {
         Ball ball = other.GetComponent<Ball>();
 
-        if (Field.Ball == ball && !HasBall && CanGetBall)
+        if (Field.Ball == ball && !HasBall && CanGetBall && (!ball.LastOwner || !ball.LastOwner.IsWaiting))
                 ball.Take(this);
 
         if (other.CompareTag("Wall"))
