@@ -233,12 +233,12 @@ public class GameManager : MonoBehaviour
     public static void FreePlayers()
     {
         foreach (Player player in Field.Team1.Players)
-            player.IsWaiting = false;
+            player.Free();
         foreach (Player player in Field.Team2.Players)
-            player.IsWaiting = false;
+            player.Free();
 
-        Field.Team1.Goalkeeper.IsWaiting = false;
-        Field.Team2.Goalkeeper.IsWaiting = false;
+        Field.Team1.Goalkeeper.Free();
+        Field.Team2.Goalkeeper.Free();
     }
 
     public static void AddMatch(PlayerSpecs playerCaptain, PlayerSpecs playerMate, PlayerSpecs AICaptain, PlayerSpecs AIMate, int gameTime, float goalToWin, int AIDifficulty)

@@ -198,7 +198,6 @@ public class Player : MonoBehaviour
                 {
                     IsNavDriven = false;
                     _agent.speed = 10f;
-                    State = PlayerState.Moving;
 
                     IsWaiting = true;
 
@@ -252,7 +251,7 @@ public class Player : MonoBehaviour
         else
             action = IABrain.GetAction();
 
-        if (State != PlayerState.Moving && action.ActionType != Action.Type.ChangePlayer)
+        if (State != PlayerState.Moving && action.ActionType != Action.Type.ChangePlayer && !IsWaiting)
         {
             _rgdb.position = Vector3.MoveTowards(_rgdb.position, _dashEndPoint, _dashSpeed * Time.deltaTime);
 
@@ -392,6 +391,12 @@ public class Player : MonoBehaviour
         Run();
     }
 
+    public void Free()
+    {
+        State = PlayerState.Moving;
+        IsWaiting = false;
+    }
+
     public void Run(bool happy = false, bool sad = false)
     {
         _animator.SetBool("Run", true);
@@ -510,6 +515,7 @@ public class Player : MonoBehaviour
 
             case Action.Type.Loading:
                 Field.Ball.SetLoading(action.Force);
+                Idle();
 
                 break;
         }
