@@ -46,7 +46,7 @@ public class Player : MonoBehaviour
     public bool IsNavDriven { get; private set; } = false;
     public bool IsWaiting { get; set; } = false;
 
-    public GameObject[] ElectrocutedBody;
+    private SkinnedMeshRenderer[] _electrocutedBody;
 
     public Material MaterialElectricity;
 
@@ -150,6 +150,7 @@ public class Player : MonoBehaviour
         _animator = GetComponent<Animator>();
         _rgdb = GetComponent<Rigidbody>();
         _agent = GetComponent<NavMeshAgent>();
+        _electrocutedBody = GetComponentsInChildren<SkinnedMeshRenderer>();
     }
 
     private void Start()
@@ -328,21 +329,21 @@ public class Player : MonoBehaviour
     {
         if (enabled)
         {
-            for (int i = 0; i < ElectrocutedBody.Length; i++)
+            for (int i = 0; i < _electrocutedBody.Length; i++)
             {
-                Material[] Mats = new Material[] { ElectrocutedBody[i].GetComponent<SkinnedMeshRenderer>().materials[0], MaterialElectricity };
+                Material[] Mats = new Material[] { _electrocutedBody[i].materials[0], MaterialElectricity };
                 //Debug.Log(gameObject.transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>().materials[1].name);
-                ElectrocutedBody[i].GetComponent<SkinnedMeshRenderer>().materials = Mats;
+                _electrocutedBody[i].materials = Mats;
             }
 
         }
         else
         {
-            for (int i = 0; i < ElectrocutedBody.Length; i++)
+            for (int i = 0; i < _electrocutedBody.Length; i++)
             {
-                Material[] Mats = new Material[] { ElectrocutedBody[i].GetComponent<SkinnedMeshRenderer>().materials[0] };
+                Material[] Mats = new Material[] { _electrocutedBody[i].materials[0] };
                 //Debug.Log(gameObject.transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>().materials[1].name);
-                ElectrocutedBody[i].GetComponent<SkinnedMeshRenderer>().materials = Mats;
+                _electrocutedBody[i].materials = Mats;
             }
 
         }
@@ -352,20 +353,20 @@ public class Player : MonoBehaviour
     {
         if (enabled)
         {
-            for (int i = 0; i < ElectrocutedBody.Length; i++)
+            for (int i = 0; i < _electrocutedBody.Length; i++)
             {
-                Material[] Mats = new Material[] { ElectrocutedBody[i].GetComponent<SkinnedMeshRenderer>().materials[0], MaterialFreeze };
+                Material[] Mats = new Material[] { _electrocutedBody[i].materials[0], MaterialFreeze };
                 //Debug.Log(gameObject.transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>().materials[1].name);
-                ElectrocutedBody[i].GetComponent<SkinnedMeshRenderer>().materials = Mats;
+                _electrocutedBody[i].materials = Mats;
             }
         }
         else
         {
-            for (int i = 0; i < ElectrocutedBody.Length; i++)
+            for (int i = 0; i < _electrocutedBody.Length; i++)
             {
-                Material[] Mats = new Material[] { ElectrocutedBody[i].GetComponent<SkinnedMeshRenderer>().materials[0] };
+                Material[] Mats = new Material[] { _electrocutedBody[i].materials[0] };
                 //Debug.Log(gameObject.transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>().materials[1].name);
-                ElectrocutedBody[i].GetComponent<SkinnedMeshRenderer>().materials = Mats;
+                _electrocutedBody[i].materials = Mats;
             }
 
         }
