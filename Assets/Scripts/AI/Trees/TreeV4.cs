@@ -102,7 +102,6 @@ public class TreeV4
                                 {
                                     new Sequence(new List<Node>
                                     {
-                                        new CoucouNode(),
                                         new T_PositionReached(),
                                         new S_WanderAroundPosition()
                                     }),

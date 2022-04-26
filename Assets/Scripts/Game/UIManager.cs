@@ -35,6 +35,12 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _NameCaptain1;
     [SerializeField] private TextMeshProUGUI _NameCaptain2;
 
+    [SerializeField] private TextMeshProUGUI _Announcement;
+
+    private bool _AnnouncementDisplayed;
+
+    private float _timer = 0f;
+    private float _announcementDuration = 0f;
 
     public enum gameState
     {
@@ -42,6 +48,13 @@ public class UIManager : MonoBehaviour
         Loose,
         Draw
     }
+    public enum AnnouncementType
+    {
+        Goal,
+        CountDown,
+        OneMinuteLeft
+    }
+
     private void Awake()
     {
         FS_PauseMenu = ES.firstSelectedGameObject;
@@ -62,8 +75,13 @@ public class UIManager : MonoBehaviour
 
     private void Update()
     {
-        if(_chrono.text[0] == '0' && _chrono.text[1] == '0')
+        if (_chrono.color != Color.red && _chrono.text[0] == '0' && _chrono.text[1] == '0')
+        {
             _chrono.color = Color.red;
+            DisplayAnnouncement(AnnouncementType.OneMinuteLeft);
+        }
+
+        DisplayAnnouncement();
 
         if ((Keyboard.current?.escapeKey.wasPressedThisFrame ?? false) || (Gamepad.current?.selectButton.wasPressedThisFrame ?? false))
         {
@@ -81,6 +99,64 @@ public class UIManager : MonoBehaviour
             OnGoBack();
         }
     }
+
+    private void DisplayAnnouncement()
+    {
+        if (_AnnouncementDisplayed)
+        {
+            if (_instance._timer < _announcementDuration)
+                _instance._timer += Time.deltaTime;
+            else
+                _AnnouncementDisplayed = false;
+
+            if (_instance._timer < _announcementDuration / 4 || _instance._timer > 3 * _announcementDuration / 4)
+            {
+                Color color = _Announcement.color;
+                float gradient;
+
+                if (_instance._timer < _announcementDuration / 4)
+                    gradient = _instance._timer / (_announcementDuration / 4);
+                else
+                    gradient = 1 - (_instance._timer - 3 * _announcementDuration / 4) / (_announcementDuration / 4);
+
+                _Announcement.color = new Color(color.r, color.g, color.b, Mathf.Lerp(0, 1, gradient));
+            }
+            _Announcement.gameObject.SetActive(_AnnouncementDisplayed);
+        }
+    }
+
+    public void DisplayAnnouncement(AnnouncementType type)
+    {
+        _instance._AnnouncementDisplayed = true;
+        _instance._timer = 0f;
+
+        switch (type)
+        {
+            case AnnouncementType.Goal:
+                DisplayGoal();
+                break;
+            case AnnouncementType.OneMinuteLeft:
+                DisplayOneMinuteLeft();
+                break;
+            default:
+                break;
+        }
+    }
+
+    private static void DisplayOneMinuteLeft()
+    {
+        _instance._Announcement.text = "One Minute left";
+        _instance._Announcement.fontSize = 50;
+        _instance._announcementDuration = 3f;
+    }
+
+    public static void DisplayGoal()
+    {
+        _instance._Announcement.text = "GOAL";
+        _instance._Announcement.fontSize = 130;
+        _instance._announcementDuration = 5f;
+    }
+
     public static void SetChrono(Chrono chrono)
     {
         _instance._chrono.text = $"{_instance.FormatInt(chrono.Minutes)}:{_instance.FormatInt(chrono.Seconds)}";
@@ -114,13 +190,13 @@ public class UIManager : MonoBehaviour
         return (number < 10 ? "0" : "") + number;
     }
 
-    public static void EndOfGame( gameState state)
+    public static void EndOfGame(gameState state)
     {
-        if(state == gameState.Win)
+        if (state == gameState.Win)
         {
             _instance._endOfGameText.text = "YOU WIN";
         }
-        else if(state == gameState.Loose)
+        else if (state == gameState.Loose)
         {
             _instance._endOfGameText.text = "YOU LOOSE";
         }
