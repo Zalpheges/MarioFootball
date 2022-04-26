@@ -38,9 +38,14 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _Announcement;
 
     private bool _AnnouncementDisplayed;
+    private bool _timerReset = false;
 
     private float _timer = 0f;
-    private float _announcementDuration = 0f;
+    private float _currentTimer = 0f;
+
+    private List<int> _announcementFontSize = new List<int>();
+    private List<string> _announcementContent = new List<string>();
+    private List<float> _announcementDuration = new List<float>();
 
     public enum gameState
     {
@@ -52,7 +57,8 @@ public class UIManager : MonoBehaviour
     {
         Goal,
         CountDown,
-        OneMinuteLeft
+        OneMinuteLeft,
+        ReadySetGo
     }
 
     private void Awake()
@@ -80,7 +86,6 @@ public class UIManager : MonoBehaviour
             _chrono.color = Color.red;
             DisplayAnnouncement(AnnouncementType.OneMinuteLeft);
         }
-
         DisplayAnnouncement();
 
         if ((Keyboard.current?.escapeKey.wasPressedThisFrame ?? false) || (Gamepad.current?.selectButton.wasPressedThisFrame ?? false))
@@ -104,20 +109,41 @@ public class UIManager : MonoBehaviour
     {
         if (_AnnouncementDisplayed)
         {
-            if (_instance._timer < _announcementDuration)
-                _instance._timer += Time.deltaTime;
-            else
-                _AnnouncementDisplayed = false;
+            //Debug.Log($"{_announcementContent[0]}, {_announcementDuration}, {_AnnouncementDisplayed}, {_timer}, {_timerReset}");
 
-            if (_instance._timer < _announcementDuration / 4 || _instance._timer > 3 * _announcementDuration / 4)
+            if (_timerReset)
+            {   
+                _timerReset = false;
+                _instance._timer = 0f;
+                _currentTimer = _announcementDuration[0];
+                _instance._Announcement.fontSize = _instance._announcementFontSize[0];
+                _instance._Announcement.text = _instance._announcementContent[0];
+            }
+
+            else if (_instance._timer < _currentTimer)
+                _instance._timer += Time.deltaTime;
+
+            else
+            {
+                _instance._announcementFontSize.RemoveAt(0);
+                _instance._announcementContent.RemoveAt(0);
+                _instance._announcementDuration.RemoveAt(0);
+
+                if (_instance._announcementContent.Count == 0)
+                    _AnnouncementDisplayed = false;
+                else
+                    _timerReset = true;
+            }   
+
+            if (_instance._timer < _currentTimer / 4 || _instance._timer > 3 * _currentTimer / 4)
             {
                 Color color = _Announcement.color;
                 float gradient;
 
-                if (_instance._timer < _announcementDuration / 4)
-                    gradient = _instance._timer / (_announcementDuration / 4);
+                if (_instance._timer < _currentTimer / 4)
+                    gradient = _instance._timer / (_currentTimer / 4);
                 else
-                    gradient = 1 - (_instance._timer - 3 * _announcementDuration / 4) / (_announcementDuration / 4);
+                    gradient = 1 - (_instance._timer - 3 * _currentTimer / 4) / (_currentTimer / 4);
 
                 _Announcement.color = new Color(color.r, color.g, color.b, Mathf.Lerp(0, 1, gradient));
             }
@@ -128,7 +154,7 @@ public class UIManager : MonoBehaviour
     public void DisplayAnnouncement(AnnouncementType type)
     {
         _instance._AnnouncementDisplayed = true;
-        _instance._timer = 0f;
+        _timerReset = true;
 
         switch (type)
         {
@@ -138,6 +164,9 @@ public class UIManager : MonoBehaviour
             case AnnouncementType.OneMinuteLeft:
                 DisplayOneMinuteLeft();
                 break;
+            case AnnouncementType.ReadySetGo:
+                DisplayReadySetGo();
+                break;
             default:
                 break;
         }
@@ -145,16 +174,35 @@ public class UIManager : MonoBehaviour
 
     private static void DisplayOneMinuteLeft()
     {
-        _instance._Announcement.text = "One Minute left";
-        _instance._Announcement.fontSize = 50;
-        _instance._announcementDuration = 3f;
+        _instance._announcementFontSize.Add(50);
+
+        _instance._announcementContent.Add("One Minute left");
+
+        _instance._announcementDuration.Add(3f);
+    }
+
+    private static void DisplayReadySetGo()
+    {
+        _instance._announcementFontSize.Add(100); 
+        _instance._announcementFontSize.Add(100); 
+        _instance._announcementFontSize.Add(100); 
+
+        _instance._announcementContent.Add("Ready");
+        _instance._announcementContent.Add("Set");
+        _instance._announcementContent.Add("GO !");
+
+        _instance._announcementDuration.Add(0.7f);
+        _instance._announcementDuration.Add(0.7f);
+        _instance._announcementDuration.Add(0.7f);
     }
 
     public static void DisplayGoal()
     {
-        _instance._Announcement.text = "GOAL";
-        _instance._Announcement.fontSize = 130;
-        _instance._announcementDuration = 5f;
+        _instance._announcementFontSize.Add(130); 
+
+        _instance._announcementContent.Add("GOAL");
+        
+        _instance._announcementDuration.Add(5f);
     }
 
     public static void SetChrono(Chrono chrono)
