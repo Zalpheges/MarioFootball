@@ -13,7 +13,11 @@ public class A_Shoot : Node
         if (!_rootInitialized)
             _root = GetRootNode();
 
-        return (NodeState.SUCCESS, Action.Shoot(1f));
+        float random = Random.Range(0.0f, _root.randomMaxValue);
+        if (random < 1f)
+            return (NodeState.SUCCESS, Action.Shoot(1f));
+        _root.actionToPerform = ActionToPerform.Load;
+        return (NodeState.SUCCESS, Action.Stop());
     }
 
     private RootNode GetRootNode()
