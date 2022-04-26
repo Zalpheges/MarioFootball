@@ -31,6 +31,8 @@ public class GameManager : MonoBehaviour
 
     public static bool IsGoalScored = false;
 
+    public static (bool run, float value) KickOffTimer = (false, 0f);
+
     private static GameManager _instance;
 
     private Queue<Match> _matches;
@@ -38,7 +40,7 @@ public class GameManager : MonoBehaviour
     private MatchResult _currentResult;
     private Chrono _chrono;
     private float _timer = 0f;
-    private bool _endOfGameUIDone =false;
+    private bool _endOfGameUIDone = false;
 
     #region Debug
 
@@ -96,7 +98,8 @@ public class GameManager : MonoBehaviour
     {
         if (!UIManager._instance)
             return;
-
+        if (KickOffTimer.run)
+            KickOffTimer.value += Time.deltaTime;
         if(_chrono.Finished)
         {
             if(!_endOfGameUIDone)
