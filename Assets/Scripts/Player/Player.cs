@@ -62,8 +62,6 @@ public class Player : MonoBehaviour
 
     private float _speed;
 
-    private (bool run, float value) _kickOffTimer = (false, 0f);
-
     public bool IsGoalKeeper { get; private set; }
 
     #region Debug
@@ -170,8 +168,6 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        if(_kickOffTimer.run)
-            _kickOffTimer.value += Time.deltaTime;
         _lookAt.position = HasBall ? Enemies.transform.position : Field.Ball.transform.position;
 
         if (HasBall)
@@ -202,7 +198,11 @@ public class Player : MonoBehaviour
                     IsWaiting = true;
 
                     if (Field.ArePlayersAllWaiting())
+                    {
                         UIManager._instance.DisplayAnnouncement(UIManager.AnnouncementType.ReadySetGo);
+                        AudioManager._instance.PlaySFX(AudioManager.SFXType.Kickoff);
+                        GameManager.KickOffTimer.run = true;
+                    }
 
                     if (IsGoalKeeper)
                         _agent.agentTypeID = GetAgentTypeIDByName("Goal Keeper");
@@ -235,7 +235,7 @@ public class Player : MonoBehaviour
             if (Field.ArePlayersAllWaiting())
             {
                 GameManager.IsGoalScored = false;
-                _kickOffTimer.run = true;
+                GameManager.KickOffTimer.run = true;
                 ResetState();
             }
             else
@@ -284,11 +284,11 @@ public class Player : MonoBehaviour
 
         if (IsWaiting)
         {
-            if (action.ActionType == Action.Type.Pass && _kickOffTimer.value > 2f)
+            if (action.ActionType == Action.Type.Pass && GameManager.KickOffTimer.value > 2f)
             {
                 GameManager.FreePlayers();
                 GameManager.ChronoStopped = false;
-                _kickOffTimer = (false, 0f);
+                GameManager.KickOffTimer = (false, 0f);
             }
             else
                 return;
