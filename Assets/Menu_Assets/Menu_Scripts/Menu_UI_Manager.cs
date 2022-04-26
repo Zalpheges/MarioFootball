@@ -29,24 +29,24 @@ public class Menu_UI_Manager : MonoBehaviour
     public void OnSuccess()
     {
         Success.SetActive(true);
-        AudioManager._instance.PlaySFX(AudioManager.SFXType.ButtonClicked);
+        AudioManager.PlaySFX(AudioManager.SFXType.ButtonClicked);
     }
 
     public void OnOptions()
     {
         LevelLoader.LoadNextLevel(3);
-        AudioManager._instance.PlaySFX(AudioManager.SFXType.ButtonClicked);
+        AudioManager.PlaySFX(AudioManager.SFXType.ButtonClicked);
     }
 
     public void OnContinue()
     {
         LevelLoader.LoadNextLevel(SceneManager.GetActiveScene().buildIndex + 1);
-        AudioManager._instance.PlaySFX(AudioManager.SFXType.ButtonClicked);
+        AudioManager.PlaySFX(AudioManager.SFXType.ButtonClicked);
     }
 
     public void OnSelected()
     {
-        AudioManager._instance.PlaySFX(AudioManager.SFXType.ButtonSelected);
+        AudioManager.PlaySFX(AudioManager.SFXType.ButtonSelected);
     }
 
 }

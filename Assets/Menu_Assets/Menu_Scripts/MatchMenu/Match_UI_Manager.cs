@@ -240,12 +240,12 @@ public class Match_UI_Manager : MonoBehaviour
 
     public void OnSelected()
     {
-        AudioManager._instance.PlaySFX(AudioManager.SFXType.ButtonSelected);
+        AudioManager.PlaySFX(AudioManager.SFXType.ButtonSelected);
     }
 
     public void OnContinue(PlayerSpecs CharaSpec)
     {
-        AudioManager._instance.PlaySFX(AudioManager.SFXType.ButtonClicked);
+        AudioManager.PlaySFX(AudioManager.SFXType.ButtonClicked);
 
         if (allieSelection.activeSelf)
         {
@@ -280,12 +280,12 @@ public class Match_UI_Manager : MonoBehaviour
 
     public void OnPlay()
     {
-        AudioManager._instance.PlaySFX(AudioManager.SFXType.ButtonClicked);
+        AudioManager.PlaySFX(AudioManager.SFXType.ButtonClicked);
 
         GetRandomEnnemies();
 
         GameManager.AddMatch(_playerCaptain, _playerAlly.mateSpec, _AICaptain, _AIAlly.mateSpec,gameTime,goalToWin,AIDifficulty);
-        AudioManager._instance.SetCharaAudio(_playerCaptain, _playerAlly.mateSpec, _AICaptain, _AIAlly.mateSpec);
+        AudioManager.SetCharaAudio(_playerCaptain, _playerAlly.mateSpec, _AICaptain, _AIAlly.mateSpec);
 
         LevelLoader.LoadNextLevel(SceneManager.GetActiveScene().buildIndex + 1);
     }
