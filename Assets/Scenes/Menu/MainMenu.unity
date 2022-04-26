@@ -157,10 +157,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4125deaffafe701439bdf2e27157db74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _ball: {fileID: 266137186057966708, guid: 5f9a23016bc8ab94fb2a55df45b2bfa2, type: 3}
-  _virtualCameraOrbital: {fileID: 0}
-  _virtualCameraTop: {fileID: 0}
-  _items: []
+  _ball: {fileID: 1975457108487340, guid: ec3e8f3ed27e2244caaedaf589590a03, type: 3}
+  _virtualCameraOrbital: {fileID: 3719828912903332698, guid: b990ae970a0b68f468ac4f0ebee56c7d, type: 3}
+  _virtualCameraTop: {fileID: 3719828912903332698, guid: aca5d63aa096fab459fea5a960a53911, type: 3}
+  _items:
+  - {fileID: 11400000, guid: 867523135a98c4947aa11c7bbedcb948, type: 2}
+  - {fileID: 11400000, guid: 4e6677f6a14bca549be07da706789fd2, type: 2}
+  - {fileID: 11400000, guid: 0246aab41f398924891e2ffa85c77cf9, type: 2}
+  - {fileID: 11400000, guid: f65f93b8d138a9d4f9e9ec03d66cf244, type: 2}
+  - {fileID: 11400000, guid: 3fd300622e2a23f4e8d5cba4b9897049, type: 2}
+  - {fileID: 11400000, guid: ff0f018d771d63e4595c540b7e299d9f, type: 2}
+  - {fileID: 11400000, guid: 489a84bcd95461c46b7458e5a10f5cd8, type: 2}
+  - {fileID: 11400000, guid: 533a52d94e7a57b409a98c7e351d07c6, type: 2}
+  - {fileID: 11400000, guid: 28d9001d7dbd8bf428779767d868ef8e, type: 2}
 --- !u!114 &96002679
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -176,7 +185,7 @@ MonoBehaviour:
   _debugMatchDuration: 60
   _debugOnlyPlayer: 0
   _enemiesAreRetard: 0
-  _startWithoutAnim: 1
+  _startWithoutAnim: 0
   d_Captain1: {fileID: 0}
   d_Captain2: {fileID: 0}
   d_Mate1: {fileID: 0}
