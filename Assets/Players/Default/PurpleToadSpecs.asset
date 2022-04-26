@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22b18ff61a2fb884a906898fb289f729, type: 3}
+  m_Name: PurpleToadSpecs
+  m_EditorClassIdentifier: 
+  Name: PurpleToad
+  Icon: {fileID: 0}
+  Color: {r: 0, g: 0, b: 0, a: 0}
+  Weight: 70
+  Accuracy: 0.7
+  Speed: 4
+  StunTime: 1
+  Prefab: {fileID: -1496860289521580080, guid: 3ad5312af5259d94f896f65d4012ff33, type: 3}
+  StaticPrefab: {fileID: 407555675821523888, guid: ee1446096b05aae4ab1c9f1983fa5c7d, type: 3}

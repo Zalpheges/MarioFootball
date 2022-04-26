@@ -729,7 +729,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60e97a61de2da7449b048b89ee980f48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _specs: {fileID: 11400000, guid: aa8b16f128f1eb04a82f8fc6eedb172e, type: 2}
+  _specs: {fileID: 11400000, guid: af6a1b2b9eb40ae42a3edfe67433b0cd, type: 2}
   ElectrocutedBody:
   - {fileID: 872756478418016965}
   - {fileID: 1610161357318706547}

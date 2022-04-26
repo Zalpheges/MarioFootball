@@ -157,10 +157,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4125deaffafe701439bdf2e27157db74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _ball: {fileID: 266137186057966708, guid: 5f9a23016bc8ab94fb2a55df45b2bfa2, type: 3}
-  _virtualCameraOrbital: {fileID: 0}
-  _virtualCameraTop: {fileID: 0}
-  _items: []
+  _ball: {fileID: 1975457108487340, guid: ec3e8f3ed27e2244caaedaf589590a03, type: 3}
+  _virtualCameraOrbital: {fileID: 3719828912903332698, guid: b990ae970a0b68f468ac4f0ebee56c7d, type: 3}
+  _virtualCameraTop: {fileID: 3719828912903332698, guid: aca5d63aa096fab459fea5a960a53911, type: 3}
+  _items:
+  - {fileID: 11400000, guid: 867523135a98c4947aa11c7bbedcb948, type: 2}
+  - {fileID: 11400000, guid: 4e6677f6a14bca549be07da706789fd2, type: 2}
+  - {fileID: 11400000, guid: 0246aab41f398924891e2ffa85c77cf9, type: 2}
+  - {fileID: 11400000, guid: f65f93b8d138a9d4f9e9ec03d66cf244, type: 2}
+  - {fileID: 11400000, guid: 3fd300622e2a23f4e8d5cba4b9897049, type: 2}
+  - {fileID: 11400000, guid: ff0f018d771d63e4595c540b7e299d9f, type: 2}
+  - {fileID: 11400000, guid: 489a84bcd95461c46b7458e5a10f5cd8, type: 2}
+  - {fileID: 11400000, guid: 533a52d94e7a57b409a98c7e351d07c6, type: 2}
+  - {fileID: 11400000, guid: 28d9001d7dbd8bf428779767d868ef8e, type: 2}
 --- !u!114 &96002679
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -176,7 +185,7 @@ MonoBehaviour:
   _debugMatchDuration: 60
   _debugOnlyPlayer: 0
   _enemiesAreRetard: 0
-  _startWithoutAnim: 1
+  _startWithoutAnim: 0
   d_Captain1: {fileID: 0}
   d_Captain2: {fileID: 0}
   d_Mate1: {fileID: 0}
@@ -667,6 +676,101 @@ MonoBehaviour:
     - {fileID: 8300000, guid: 0ad35ea2388fa294c90821819206fdd6, type: 3}
     - {fileID: 8300000, guid: 13ab328042569bf42b4c7a1bc3ad90fd, type: 3}
     playerLinkedTo: {fileID: 11400000, guid: 5175c591c741d7241b3c9bc3ccbbedff, type: 2}
+  - name: GreenToad
+    shoot:
+    - {fileID: 8300000, guid: 49ed4f7a93cccfa44a236428fff0928a, type: 3}
+    pass:
+    - {fileID: 8300000, guid: 87914838634af8247b375c2b9fdeaf19, type: 3}
+    - {fileID: 8300000, guid: e3f65fe7d19d01d4bacd4a4347be336e, type: 3}
+    - {fileID: 8300000, guid: 67ec703334637bd49a62456f5178a717, type: 3}
+    throwItem:
+    - {fileID: 8300000, guid: 3402c9819befeda43bbec7b9bcc311f9, type: 3}
+    - {fileID: 8300000, guid: 62b36dece9c199845bdeb143c7251f30, type: 3}
+    - {fileID: 8300000, guid: cce2ce15e7af3304db5face7550bc1ed, type: 3}
+    celebrate:
+    - {fileID: 8300000, guid: 31fb70687d231c44b9cbc236963798d4, type: 3}
+    - {fileID: 8300000, guid: 97121b2228a140942b2014cea069d22a, type: 3}
+    electrocuted:
+    - {fileID: 8300000, guid: 3000422bd22e7404fac6e85ad23b06fd, type: 3}
+    - {fileID: 8300000, guid: 0ad35ea2388fa294c90821819206fdd6, type: 3}
+    - {fileID: 8300000, guid: 13ab328042569bf42b4c7a1bc3ad90fd, type: 3}
+    playerLinkedTo: {fileID: 11400000, guid: 895b9d20a2767be46bb7b703446c06db, type: 2}
+  - name: PurpleToad
+    shoot:
+    - {fileID: 8300000, guid: 49ed4f7a93cccfa44a236428fff0928a, type: 3}
+    pass:
+    - {fileID: 8300000, guid: 87914838634af8247b375c2b9fdeaf19, type: 3}
+    - {fileID: 8300000, guid: e3f65fe7d19d01d4bacd4a4347be336e, type: 3}
+    - {fileID: 8300000, guid: 67ec703334637bd49a62456f5178a717, type: 3}
+    throwItem:
+    - {fileID: 8300000, guid: 3402c9819befeda43bbec7b9bcc311f9, type: 3}
+    - {fileID: 8300000, guid: 62b36dece9c199845bdeb143c7251f30, type: 3}
+    - {fileID: 8300000, guid: cce2ce15e7af3304db5face7550bc1ed, type: 3}
+    celebrate:
+    - {fileID: 8300000, guid: 31fb70687d231c44b9cbc236963798d4, type: 3}
+    - {fileID: 8300000, guid: 97121b2228a140942b2014cea069d22a, type: 3}
+    electrocuted:
+    - {fileID: 8300000, guid: 3000422bd22e7404fac6e85ad23b06fd, type: 3}
+    - {fileID: 8300000, guid: 0ad35ea2388fa294c90821819206fdd6, type: 3}
+    - {fileID: 8300000, guid: 13ab328042569bf42b4c7a1bc3ad90fd, type: 3}
+    playerLinkedTo: {fileID: 11400000, guid: 85f7e80895fd8d04fa942b4067423300, type: 2}
+  - name: YellowToad
+    shoot:
+    - {fileID: 8300000, guid: 49ed4f7a93cccfa44a236428fff0928a, type: 3}
+    pass:
+    - {fileID: 8300000, guid: 87914838634af8247b375c2b9fdeaf19, type: 3}
+    - {fileID: 8300000, guid: e3f65fe7d19d01d4bacd4a4347be336e, type: 3}
+    - {fileID: 8300000, guid: 67ec703334637bd49a62456f5178a717, type: 3}
+    throwItem:
+    - {fileID: 8300000, guid: 3402c9819befeda43bbec7b9bcc311f9, type: 3}
+    - {fileID: 8300000, guid: 62b36dece9c199845bdeb143c7251f30, type: 3}
+    - {fileID: 8300000, guid: cce2ce15e7af3304db5face7550bc1ed, type: 3}
+    celebrate:
+    - {fileID: 8300000, guid: 31fb70687d231c44b9cbc236963798d4, type: 3}
+    - {fileID: 8300000, guid: 97121b2228a140942b2014cea069d22a, type: 3}
+    electrocuted:
+    - {fileID: 8300000, guid: 3000422bd22e7404fac6e85ad23b06fd, type: 3}
+    - {fileID: 8300000, guid: 0ad35ea2388fa294c90821819206fdd6, type: 3}
+    - {fileID: 8300000, guid: 13ab328042569bf42b4c7a1bc3ad90fd, type: 3}
+    playerLinkedTo: {fileID: 11400000, guid: a5c4ae3bd84a2444b95217c969e4408d, type: 2}
+  - name: Koopa
+    shoot:
+    - {fileID: 8300000, guid: 49ed4f7a93cccfa44a236428fff0928a, type: 3}
+    pass:
+    - {fileID: 8300000, guid: 87914838634af8247b375c2b9fdeaf19, type: 3}
+    - {fileID: 8300000, guid: e3f65fe7d19d01d4bacd4a4347be336e, type: 3}
+    - {fileID: 8300000, guid: 67ec703334637bd49a62456f5178a717, type: 3}
+    throwItem:
+    - {fileID: 8300000, guid: 3402c9819befeda43bbec7b9bcc311f9, type: 3}
+    - {fileID: 8300000, guid: 62b36dece9c199845bdeb143c7251f30, type: 3}
+    - {fileID: 8300000, guid: cce2ce15e7af3304db5face7550bc1ed, type: 3}
+    celebrate:
+    - {fileID: 8300000, guid: 31fb70687d231c44b9cbc236963798d4, type: 3}
+    - {fileID: 8300000, guid: 97121b2228a140942b2014cea069d22a, type: 3}
+    electrocuted:
+    - {fileID: 8300000, guid: 3000422bd22e7404fac6e85ad23b06fd, type: 3}
+    - {fileID: 8300000, guid: 0ad35ea2388fa294c90821819206fdd6, type: 3}
+    - {fileID: 8300000, guid: 13ab328042569bf42b4c7a1bc3ad90fd, type: 3}
+    playerLinkedTo: {fileID: 11400000, guid: c474653721e8bbf4db8d01d19c5fee80, type: 2}
+  - name: NakedKoopa
+    shoot:
+    - {fileID: 8300000, guid: 49ed4f7a93cccfa44a236428fff0928a, type: 3}
+    pass:
+    - {fileID: 8300000, guid: 87914838634af8247b375c2b9fdeaf19, type: 3}
+    - {fileID: 8300000, guid: e3f65fe7d19d01d4bacd4a4347be336e, type: 3}
+    - {fileID: 8300000, guid: 67ec703334637bd49a62456f5178a717, type: 3}
+    throwItem:
+    - {fileID: 8300000, guid: 3402c9819befeda43bbec7b9bcc311f9, type: 3}
+    - {fileID: 8300000, guid: 62b36dece9c199845bdeb143c7251f30, type: 3}
+    - {fileID: 8300000, guid: cce2ce15e7af3304db5face7550bc1ed, type: 3}
+    celebrate:
+    - {fileID: 8300000, guid: 31fb70687d231c44b9cbc236963798d4, type: 3}
+    - {fileID: 8300000, guid: 97121b2228a140942b2014cea069d22a, type: 3}
+    electrocuted:
+    - {fileID: 8300000, guid: 3000422bd22e7404fac6e85ad23b06fd, type: 3}
+    - {fileID: 8300000, guid: 0ad35ea2388fa294c90821819206fdd6, type: 3}
+    - {fileID: 8300000, guid: 13ab328042569bf42b4c7a1bc3ad90fd, type: 3}
+    playerLinkedTo: {fileID: 11400000, guid: 09ec9647a308e39468c398deb64f3bae, type: 2}
   _crowdNomal: {fileID: 8300000, guid: 698eb34f54dacb548a539335f85e7e71, type: 3}
   _crowdGoal: {fileID: 8300000, guid: b3d7b675bb9ed19468106a5f2d603a25, type: 3}
   _playerCaptainAudio:

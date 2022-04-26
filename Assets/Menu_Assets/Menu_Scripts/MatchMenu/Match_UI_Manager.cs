@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -20,9 +21,9 @@ public class Match_UI_Manager : MonoBehaviour
 
     //Data
     private PlayerSpecs _playerCaptain;
-    private PlayerSpecs _playerAlly;
+    private MateSpecs _playerAlly;
     private PlayerSpecs _AICaptain;
-    private PlayerSpecs _AIAlly;
+    private MateSpecs _AIAlly;
 
     [HideInInspector] public int gameTime;
     [HideInInspector] public float goalToWin;
@@ -49,7 +50,9 @@ public class Match_UI_Manager : MonoBehaviour
     public List<GameObject> matchParams = new List<GameObject>();
 
     public List<PlayerSpecs> maincharaSpecs = new List<PlayerSpecs>();
-    public List<PlayerSpecs> alliecharaSpecs = new List<PlayerSpecs>();
+    public List<MateSpecs> mateSpecs = new List<MateSpecs>();
+    private List<PlayerSpecs> _onlyMateSpecs = new List<PlayerSpecs>();
+    //public List<PlayerSpecs> alliecharaSpecs = new List<PlayerSpecs>();
 
     List<Button> charaButtons;
     List<Button> allieButtons;
@@ -63,6 +66,7 @@ public class Match_UI_Manager : MonoBehaviour
     //
 
     public static Match_UI_Manager _instance;
+
     private void Awake()
     {
         _instance = this;
@@ -85,6 +89,12 @@ public class Match_UI_Manager : MonoBehaviour
 
             if (slider != null)
                 slider.OnValueChange(param.GetComponentInChildren<Slider>().value);
+        }
+
+        //Initialize onlyMateSpecs
+        foreach(var elem in mateSpecs)
+        {
+            _onlyMateSpecs.Add( elem.mateSpec);
         }
     }
     private void Update()
@@ -132,7 +142,7 @@ public class Match_UI_Manager : MonoBehaviour
         PlayerSpecs chara;
 
         if (allieSelection.activeSelf)
-            chara = alliecharaSpecs[allieButtons.IndexOf(button.GetComponent<Button>())];
+            chara = mateSpecs[allieButtons.IndexOf(button.GetComponent<Button>())].mateSpec;
         else
             chara = maincharaSpecs[charaButtons.IndexOf(button.GetComponent<Button>())];
 
@@ -153,12 +163,11 @@ public class Match_UI_Manager : MonoBehaviour
         Vector3 pos = new Vector3(0, -25, -15);
         Vector3 scale = new Vector3(30, 30, 30);
 
-
         List<PlayerSpecs> charaspecs;
 
         if(allieSelection.activeSelf)
         {
-            charaspecs = alliecharaSpecs;
+            charaspecs = _onlyMateSpecs;
         }
         else
         {
@@ -245,7 +254,7 @@ public class Match_UI_Manager : MonoBehaviour
 
             allieSelection.SetActive(false);
 
-            _playerAlly = CharaSpec;
+            _playerAlly = mateSpecs[_onlyMateSpecs.IndexOf(CharaSpec)];
         }
         else if(!allieSelected)
         {
@@ -275,22 +284,34 @@ public class Match_UI_Manager : MonoBehaviour
 
         GetRandomEnnemies();
 
-        GameManager.AddMatch(_playerCaptain, _playerAlly, _AICaptain, _AIAlly,gameTime,goalToWin,AIDifficulty);
-        AudioManager._instance.SetCharaAudio(_playerCaptain, _playerAlly, _AICaptain, _AIAlly);
+        GameManager.AddMatch(_playerCaptain, _playerAlly.mateSpec, _AICaptain, _AIAlly.mateSpec,gameTime,goalToWin,AIDifficulty);
+        AudioManager._instance.SetCharaAudio(_playerCaptain, _playerAlly.mateSpec, _AICaptain, _AIAlly.mateSpec);
 
         LevelLoader.LoadNextLevel(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
     private void GetRandomEnnemies()
     {
-        maincharaSpecs.Remove(_playerCaptain);
-        alliecharaSpecs.Remove(_playerAlly);
+        List<PlayerSpecs> charas = new List<PlayerSpecs>();
 
-        _AICaptain = maincharaSpecs[Random.Range(0, maincharaSpecs.Count)];
-        _AIAlly = alliecharaSpecs[Random.Range(0, alliecharaSpecs.Count)];
+        foreach (var chara in maincharaSpecs)
+        {
+            if (chara != _playerCaptain)
+                charas.Add(chara);
+        }
+        
+        _AICaptain = charas[Random.Range(0, charas.Count)];
 
-        maincharaSpecs.Add(_playerCaptain);
-        alliecharaSpecs.Add(_playerAlly);
+
+        charas.Clear();
+
+        foreach (var chara in _onlyMateSpecs)
+        {
+            if (mateSpecs[_onlyMateSpecs.IndexOf(chara)].mateType != _playerAlly.mateType) 
+                charas.Add(chara);
+        }
+
+        _AIAlly = mateSpecs[_onlyMateSpecs.IndexOf(charas[Random.Range(0, charas.Count)])];
     }
-
+    
 }
