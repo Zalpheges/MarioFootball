@@ -13,7 +13,11 @@ public class A_HeadButt : Node
         if (!_rootInitialized)
             _root = GetRootNode();
 
-        return (NodeState.SUCCESS, Action.Headbutt(_root.target.transform.position - _root.player.transform.position));
+        float random = Random.Range(0.0f, _root.randomMaxValue);
+        if (random < 1f)
+            return (NodeState.SUCCESS, Action.Headbutt(_root.target.transform.position - _root.player.transform.position));
+        else
+            return (NodeState.SUCCESS, Action.Stop());
     }
 
     private RootNode GetRootNode()

@@ -15,7 +15,7 @@ public class A_Load : Node
 
         _root.TimeLoad += Time.deltaTime;
 
-        return (NodeState.SUCCESS, Action.Loading(_root.TimeLoad/1.5f));
+        return (NodeState.SUCCESS, Action.Loading(_root.TimeLoad / 1.5f));
     }
 
     private RootNode GetRootNode()

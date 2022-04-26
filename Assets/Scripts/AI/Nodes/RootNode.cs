@@ -129,6 +129,7 @@ public class RootNode : Node
     public float passAlignmentThreshold;
     public float shootAlignmentThreshold;
     public float dangerRangeThreshold;
+    public float randomMaxValue;
 
     public int WidthDivisionAmount = 9;
     public int HeightDivisionAmount = 7;
@@ -147,6 +148,7 @@ public class RootNode : Node
         enemyGoalKeeper = iparentTree.enemyGoalKeeper;
 
         InitializeThresholds(iparentTree.Thresholds);
+        randomMaxValue = 200f;
 
         WidthDivision = Field.Width / WidthDivisionAmount;
         HeightDivision = Field.Height / HeightDivisionAmount;
