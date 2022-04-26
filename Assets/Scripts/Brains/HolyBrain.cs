@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
 
 public class HolyBrain : PlayerBrain
 {
@@ -19,17 +17,17 @@ public class HolyBrain : PlayerBrain
     {
         List<float> Thresholds = new List<float>
         {
-        shootThreshold,
-        defendThreshold,
-        attackThreshold,
-        headButtThreshold,
-        markThreshold,
-        passAlignementThreshold,
-        shootAlignementThreshold,
-        dangerRangeThreshold
+            shootThreshold,
+            defendThreshold,
+            attackThreshold,
+            headButtThreshold,
+            markThreshold,
+            passAlignementThreshold,
+            shootAlignementThreshold,
+            dangerRangeThreshold
         };
 
-        behaviorTree.Setup(Allies, Enemies, this.Player, Thresholds);
+        behaviorTree.Setup(Allies, Enemies, Player, Thresholds);
     }
 
     public override Action GetAction()

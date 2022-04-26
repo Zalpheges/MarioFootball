@@ -5,8 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class LevelLoader : MonoBehaviour
 {
-    public Animator transition;
-    public float transitionTime = 1;
+    [SerializeField] private Animator _transition;
+    [SerializeField] private float _transitionTime = 1;
 
     private static LevelLoader _instance;
     private void Awake()
@@ -20,9 +20,9 @@ public class LevelLoader : MonoBehaviour
 
     IEnumerator LoadLevel(int levelIndex)
     {
-        transition.SetTrigger("Start");
+        _transition.SetTrigger("Start");
 
-        yield return new WaitForSeconds(transitionTime);
+        yield return new WaitForSeconds(_transitionTime);
 
         SceneManager.LoadScene(levelIndex);
     }

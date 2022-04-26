@@ -201,7 +201,7 @@ public class Player : MonoBehaviour
                     if (Field.ArePlayersAllWaiting())
                     {
                         UIManager._instance.DisplayAnnouncement(UIManager.AnnouncementType.ReadySetGo);
-                        AudioManager._instance.PlaySFX(AudioManager.SFXType.Kickoff);
+                        AudioManager.PlaySFX(AudioManager.SFXType.Kickoff);
                         GameManager.KickOffTimer.run = true;
                     }
 
@@ -454,14 +454,14 @@ public class Player : MonoBehaviour
                 if (HasBall)
                 {
                     Shoot(action.Force);
-                    PlaySound(AudioManager.charaSFXType.Shoot);
+                    PlaySound(AudioManager.CharaSFXType.Shoot);
                     _animator.SetTrigger("Strike");
                 }
 
                 break;
 
             case Action.Type.Throw:
-                PlaySound(AudioManager.charaSFXType.ThrowItem);
+                PlaySound(AudioManager.CharaSFXType.ThrowItem);
                 ThrowItem(direction);
 
                 break;
@@ -492,7 +492,7 @@ public class Player : MonoBehaviour
                 if (HasBall)
                 {
                     Field.Ball.LobPass(direction, 20f);
-                    PlaySound(AudioManager.charaSFXType.Pass);
+                    PlaySound(AudioManager.CharaSFXType.Pass);
                     _animator.SetTrigger("Pass");
                 }
 
@@ -502,7 +502,7 @@ public class Player : MonoBehaviour
                 if (HasBall)
                 {
                     DirectPass(direction);
-                    PlaySound(AudioManager.charaSFXType.Pass);
+                    PlaySound(AudioManager.CharaSFXType.Pass);
                     _animator.SetTrigger("Pass");
                 }
 
@@ -817,10 +817,10 @@ public class Player : MonoBehaviour
         if (stunType == StunType.Electrocuted)
         {
             ChangeMaterialOnElectrocution(true);
-            PlaySound(AudioManager.charaSFXType.Electrocuted);
+            PlaySound(AudioManager.CharaSFXType.Electrocuted);
         }
-        else if (stunType == StunType.Chomped) ;
-        else if (stunType == StunType.Frozen) ;
+        else if (stunType == StunType.Chomped) ;//TODO
+        else if (stunType == StunType.Frozen) ;//TODO
 
         Dash(Vector3.zero, 0f, duration);
 
@@ -903,28 +903,28 @@ public class Player : MonoBehaviour
         return -1;
     }
 
-    private void PlaySound(AudioManager.charaSFXType sfxType)
+    private void PlaySound(AudioManager.CharaSFXType sfxType)
     {
         if(Team == Field.Team1) // not AI
         {
             if(this == Team.Players[0])// captain
             {
-                AudioManager._instance.PlayCharaSFX(sfxType, AudioManager._instance._playerCaptainAudio);
+                AudioManager.PlayCharaSFX(sfxType, AudioManager.PlayerCaptainAudio);
             }
             else // Mate
             {
-                AudioManager._instance.PlayCharaSFX(sfxType, AudioManager._instance._playerMateAudio);
+                AudioManager.PlayCharaSFX(sfxType, AudioManager.PlayerMateAudio);
             }
         }   
         else // AI
         {
             if (this == Team.Players[0])// captain
             {
-                AudioManager._instance.PlayCharaSFX(sfxType, AudioManager._instance._aiCaptainAudio);
+                AudioManager.PlayCharaSFX(sfxType, AudioManager.AiCaptainAudio);
             }
             else // Mate
             {
-                AudioManager._instance.PlayCharaSFX(sfxType, AudioManager._instance._aiMateAudio);
+                AudioManager.PlayCharaSFX(sfxType, AudioManager.AiMateAudio);
             }
         }
     }

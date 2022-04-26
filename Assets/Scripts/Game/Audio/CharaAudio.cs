@@ -5,17 +5,17 @@ using UnityEngine;
 [System.Serializable]
 public class CharaAudio
 {
-    public string name;
+    public string Name;
 
-    public AudioClip[] shoot;
+    public AudioClip[] Shoot;
 
-    public AudioClip[] pass;
+    public AudioClip[] Pass;
 
-    public AudioClip[] throwItem;
+    public AudioClip[] ThrowItem;
 
-    public AudioClip[] celebrate;
+    public AudioClip[] Celebrate;
 
-    public AudioClip[] electrocuted;
+    public AudioClip[] Electrocuted;
 
-    public PlayerSpecs playerLinkedTo;
+    public PlayerSpecs PlayerLinkedTo;
 }

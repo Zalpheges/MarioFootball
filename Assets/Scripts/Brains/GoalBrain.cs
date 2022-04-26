@@ -12,7 +12,7 @@ public class GoalBrain : PlayerBrain
     private void Start()
     {
         Vector3 InitialGoalPosition = Field.GetGoalKeeperPosition(Player.Team);
-        behaviorTree.Setup(Allies, Enemies, this.Player, InitialGoalPosition);
+        behaviorTree.Setup(Allies, Enemies, Player, InitialGoalPosition);
     }
 
     public override Action GetAction()

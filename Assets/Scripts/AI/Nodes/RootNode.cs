@@ -118,7 +118,7 @@ public class RootNode : Node
 
     public float TimeLoad = 0f;
 
-    public float WidthDivision; 
+    public float WidthDivision;
     public float HeightDivision;
 
     public float shootThreshold;

@@ -6,10 +6,23 @@ using Cinemachine;
 public class CameraManager : MonoBehaviour
 {
     private static CameraManager _instance;
+    public static GameObject ActiveCam => CinemachineCore.Instance?.GetActiveBrain(0)?.ActiveVirtualCamera?.VirtualCameraGameObject;
+
+    #region Lockers
+
     [SerializeField] private Transform _lockerLeft;
     [SerializeField] private Transform _lockerRight;
     [SerializeField] private Transform _lockerDown;
     [SerializeField] private Transform _lockerDynamic;
+
+    public static Transform LockerLeft => _instance._lockerLeft;
+    public static Transform LockerRight => _instance._lockerRight;
+    public static Transform LockerDown => _instance._lockerDown;
+    public static Transform LockerDynamic => _instance._lockerDynamic;
+
+    #endregion
+
+    #region Camera Queue
 
     public struct CameraControlQueue
     {
@@ -38,12 +51,6 @@ public class CameraManager : MonoBehaviour
         }
     }
 
-    public static Transform LockerLeft => _instance._lockerLeft;
-    public static Transform LockerRight => _instance._lockerRight;
-    public static Transform LockerDown => _instance._lockerDown;
-    public static Transform LockerDynamic => _instance._lockerDynamic;
-    public static GameObject ActiveCam => CinemachineCore.Instance?.GetActiveBrain(0)?.ActiveVirtualCamera?.VirtualCameraGameObject;
-
     public static CameraControlQueue CamerasQueue;
 
     private bool _processQueue = false;
@@ -51,9 +58,57 @@ public class CameraManager : MonoBehaviour
     private float _currentTimeLimit;
     private Transform _nextTransformToFollow;
 
+    #endregion
+
     private Dictionary<Transform, CinemachineVirtualCamera[]> _virtualCameras;
 
     private CinemachineVirtualCamera _currentTopCamera;
+
+    #region Public functions
+    public static void ReadQueue()
+    {
+        if (_instance._processQueue)
+            return;
+        _instance._processQueue = true;
+        Camera.main.GetComponent<CinemachineBrain>().m_DefaultBlend.m_Style = CinemachineBlendDefinition.Style.Cut;
+        (_instance._nextTransformToFollow, _instance._currentTimeLimit) = CamerasQueue.GetNext();
+    }
+
+    public static void Init(Transform[] players, Transform ball)
+    {
+        _instance._virtualCameras = new Dictionary<Transform, CinemachineVirtualCamera[]>();
+        for (int i = 0; i < players.Length + 1; i++)
+        {
+            Transform t = i < players.Length ? players[i].transform : ball.transform;
+            CinemachineVirtualCamera virtualCamTop =
+                Instantiate(PrefabManager.VirtualCameraTop, _instance.transform).GetComponent<CinemachineVirtualCamera>();
+            virtualCamTop.Follow = t;
+
+            CinemachineVirtualCamera virtualCamOrbital =
+                Instantiate(PrefabManager.VirtualCameraOrbital, _instance.transform).GetComponent<CinemachineVirtualCamera>();
+            virtualCamOrbital.Follow = virtualCamOrbital.LookAt = t;
+
+            _instance._virtualCameras[t] = new CinemachineVirtualCamera[]
+            {
+                virtualCamTop, 
+                virtualCamOrbital
+            };
+        }
+    }
+
+    public static void Follow(Transform toFollow)
+    {
+        _instance._currentTopCamera = _instance._virtualCameras[toFollow][0];
+        if (!_instance._processQueue)
+            _instance._currentTopCamera.MoveToTopOfPrioritySubqueue();
+    }
+
+    public static void LookAt(Transform toLookAt)
+    {
+        _instance._virtualCameras[toLookAt][1].MoveToTopOfPrioritySubqueue();
+    }
+
+    #endregion
 
     private void Awake()
     {
@@ -81,9 +136,7 @@ public class CameraManager : MonoBehaviour
                 _timer = 0f;
                 if(_nextTransformToFollow == null)
                 {
-                    _processQueue = false;
-                    Camera.main.GetComponent<CinemachineBrain>().m_DefaultBlend.m_Style = CinemachineBlendDefinition.Style.EaseInOut;
-                    _instance._currentTopCamera.MoveToTopOfPrioritySubqueue();
+                    EndQueueProcess();
                 }
                 else
                 {
@@ -91,47 +144,14 @@ public class CameraManager : MonoBehaviour
                     (_nextTransformToFollow, _currentTimeLimit) = CamerasQueue.GetNext();
                 }
             }
+
+            void EndQueueProcess()
+            {
+                _processQueue = false;
+                Camera.main.GetComponent<CinemachineBrain>().m_DefaultBlend.m_Style = CinemachineBlendDefinition.Style.EaseInOut;
+                _instance._currentTopCamera.MoveToTopOfPrioritySubqueue();
+            }
         }
         #endregion
-    }
-    public static void ReadQueue()
-    {
-        if (_instance._processQueue)
-            return;
-        _instance._processQueue = true;
-        Camera.main.GetComponent<CinemachineBrain>().m_DefaultBlend.m_Style = CinemachineBlendDefinition.Style.Cut;
-        (_instance._nextTransformToFollow, _instance._currentTimeLimit) = CamerasQueue.GetNext();
-    }
-
-    public static void Init(Transform[] players, Transform ball)
-    {
-        _instance._virtualCameras = new Dictionary<Transform, CinemachineVirtualCamera[]>();
-        for (int i = 0; i < players.Length + 1; i++)
-        {
-            Transform t = i < players.Length ? players[i].transform : ball.transform;
-            CinemachineVirtualCamera virtualCamTop =
-                Instantiate(PrefabManager.VirtualCameraTop, _instance.transform).GetComponent<CinemachineVirtualCamera>();
-            virtualCamTop.Follow = t;
-            //virtualCam.LookAt = t;
-            CinemachineVirtualCamera virtualCamOrbital =
-                Instantiate(PrefabManager.VirtualCameraOrbital, _instance.transform).GetComponent<CinemachineVirtualCamera>();
-            virtualCamOrbital.Follow = t;
-            virtualCamOrbital.LookAt = t;
-            _instance._virtualCameras[t] = new CinemachineVirtualCamera[2];
-            _instance._virtualCameras[t][0] = virtualCamTop;
-            _instance._virtualCameras[t][1] = virtualCamOrbital;
-        }
-    }
-
-    public static void Follow(Transform toFollow)
-    {
-        _instance._currentTopCamera = _instance._virtualCameras[toFollow][0];
-        if(!_instance._processQueue)
-            _instance._currentTopCamera.MoveToTopOfPrioritySubqueue();
-    }
-
-    public static void LookAt(Transform toLookAt)
-    {
-        _instance._virtualCameras[toLookAt][1].MoveToTopOfPrioritySubqueue();
     }
 }

@@ -18,10 +18,10 @@ public class InputBrain : PlayerBrain
     private const float loadTime = 1.5f;
 
     /// <summary>
-    /// Calcule le d�placement que la manette applique au joueur 
+    /// Compute the displacement applied to the player by the device
     /// </summary>
-    /// <param name="team">L'�quipe du joueur</param>
-    /// <returns>Le vecteur de d�placement.</returns>
+    /// <param name="team">The player's team</param>
+    /// <returns>The displacement vector.</returns>
     /// 
     private void Start()
     {
@@ -46,7 +46,7 @@ public class InputBrain : PlayerBrain
     //-------------------------------------------------------Revoir tout les return de GetAction() !!!!
     public override Action GetAction()
     {
-        if (westButtonPressed) // Tire|Tacle
+        if (westButtonPressed) // Shoot|Tackle
         {
             westButtonPressed = false;
 
@@ -89,7 +89,7 @@ public class InputBrain : PlayerBrain
         else
         {
             if (westButtonHeld)
-                return Action.Loading(1f);// shootForce / loadTime);
+                return Action.Loading(1f);// shootForce / loadTime
             else
             {
                 if (_movementInput != Vector3.zero)
