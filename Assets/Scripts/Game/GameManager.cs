@@ -45,6 +45,8 @@ public class GameManager : MonoBehaviour
     private bool _endOfGameUIDone = false;
     private bool _inMatch = false;
 
+    public static int Difficulty { get; private set; }
+
     #region Debug
 
     public PlayerSpecs d_Captain1;
@@ -163,6 +165,7 @@ public class GameManager : MonoBehaviour
     public static void BreedMePlease(Team team1, Team team2)
     {
         Match match = _instance._matches.Dequeue();
+        Difficulty = match.AIDifficulty;
 
         UIManager.InitHUD(match.Captain1, match.Captain2);
 

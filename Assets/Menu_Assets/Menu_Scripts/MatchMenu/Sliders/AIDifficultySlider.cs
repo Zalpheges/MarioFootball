@@ -13,17 +13,17 @@ public class AIDifficultySlider : MonoBehaviour, ISliderValue
         if (Value > 1)
         {
             _text.text = "Difficult";
-            Match_UI_Manager.AIDifficulty = 3;
+            Match_UI_Manager.AIDifficulty = 2;
         }
         else if (Value == 1)
         {
             _text.text = "Normal";
-            Match_UI_Manager.AIDifficulty = 2;
+            Match_UI_Manager.AIDifficulty = 1;
         }
         else
         {
             _text.text = "Easy";
-            Match_UI_Manager.AIDifficulty = 1;
+            Match_UI_Manager.AIDifficulty = 0;
         }
 
     }

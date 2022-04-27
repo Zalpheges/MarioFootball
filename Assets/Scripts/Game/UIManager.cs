@@ -246,7 +246,7 @@ public class UIManager : MonoBehaviour
 
                 if (_instance._timer < _currentTimer / 4 || _instance._timer > 3 * _currentTimer / 4)
                 {
-                    Color color = _Announcement.color;
+                    Color color = _announcement.color;
                     float gradient;
 
                     if (_instance._timer < _currentTimer / 4)
@@ -254,10 +254,9 @@ public class UIManager : MonoBehaviour
                     else
                         gradient = 1 - (_instance._timer - 3 * _currentTimer / 4) / (_currentTimer / 4);
 
-                    _Announcement.color = new Color(color.r, color.g, color.b, Mathf.Lerp(0, 1, gradient));
+                    _announcement.color = new Color(color.r, color.g, color.b, Mathf.Lerp(0, 1, gradient));
                 }
             }
-
             else
             {
                 _instance._announcementFontSize.RemoveAt(0);
@@ -268,22 +267,23 @@ public class UIManager : MonoBehaviour
                     _announcementDisplayed = false;
                 else
                     _timerReset = true;
-                    _instance._announcement.fontSize = _instance._announcementFontSize[0];
             }
 
-            _Announcement.gameObject.SetActive(_AnnouncementDisplayed);
+            _announcement.gameObject.SetActive(_announcementDisplayed);
         }
     }
 
     private void OnGoBack()
     {
-        _timerReset = !_AnnouncementDisplayed;
-        _instance._AnnouncementDisplayed = true;
-
-        switch (type)
+        if (_subPauseMenu.activeSelf)
         {
             _subPauseMenu.SetActive(false);
             _es.SetSelectedGameObject(_fsPauseMenu);
+        }
+        else
+        {
+            _pauseMenu.SetActive(false);
+            TimeManager.Play();
         }
     }
 
@@ -322,55 +322,12 @@ public class UIManager : MonoBehaviour
         _instance._announcementDuration.Add(5f);
     }
 
-    public static void SetChrono(Chrono chrono)
-    {
-        _instance._chrono.text = $"{_instance.FormatInt(chrono.Minutes)}:{_instance.FormatInt(chrono.Seconds)}";
-    }
-
-    public static void SetScore(int scoreTeam1 = -1, int scoreTeam2 = -1)
-    {
-        if (!_instance)
-            return;
-
-        if (scoreTeam1 != -1)
-            _instance._scoreTeam1.text = $"{scoreTeam1}";
-
-        if (scoreTeam2 != -1)
-            _instance._scoreTeam2.text = $"{scoreTeam2}";
-    }
-
-    public static void UpdateItems(Queue<ItemData> items, Team team)
-    {
-        if (!_instance)
-            return;
-
-        ItemData[] itemsArray = items.ToArray();
-        bool isTeam1 = team == Field.Team1;
-        (isTeam1 ? _instance._item1Team1 : _instance._item1Team2).sprite = items.Count > 0 ? itemsArray[0].Sprite : null;
-        (isTeam1 ? _instance._item2Team1 : _instance._item2Team2).sprite = items.Count > 1 ? itemsArray[1].Sprite : null;
-    }
-
     private string FormatInt(int number)
     {
         return (number < 10 ? "0" : "") + number;
     }
 
-    public static void EndOfGame(gameState state)
-    {
-        if (state == gameState.Win)
-        {
-            _instance._endOfGameText.text = "YOU WIN";
-        }
-        else if (state == gameState.Loose)
-        {
-            _instance._endOfGameText.text = "YOU LOOSE";
-        }
-        else
-        {
-            _pauseMenu.SetActive(false);
-            TimeManager.Play();
-        }
-    }
+    #endregion
 
     public void OnQuit()
     {
@@ -382,12 +339,4 @@ public class UIManager : MonoBehaviour
     {
         LevelLoader.LoadNextLevel(0);
     }
-
-    private string FormatInt(int number)
-    {
-        return (number < 10 ? "0" : "") + number;
-    }
-
-    #endregion
-
 }

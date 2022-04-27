@@ -434,9 +434,9 @@ public class Player : MonoBehaviour
         {
             case Action.Type.Move:
                 if (_agent.enabled)
-                    _agent.Move(direction * 2f * _speed * Time.deltaTime);
+                    _agent.Move(_speed * 2f * Time.deltaTime * direction);
                 else
-                    _rgdb.position += direction * 2f * _speed * Time.deltaTime;
+                    _rgdb.position += _speed * 2f * Time.deltaTime * direction;
                 Run();
 
                 break;
@@ -450,6 +450,7 @@ public class Player : MonoBehaviour
 
             case Action.Type.MoveTo:
                 _agent.enabled = true;
+                _agent.speed = (IsGoalKeeper && Field.Ball.IsMoving) ? 30f : 10f;
                 _agent.SetDestination(action.Position);
                 Run();
 

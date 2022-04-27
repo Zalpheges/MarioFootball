@@ -124,7 +124,7 @@ public class RootNode : Node
         enemyGoalKeeper = iparentTree.enemyGoalKeeper;
 
         InitializeThresholds(iparentTree.Thresholds);
-        randomMaxValue = 200f;
+        randomMaxValue = 1f + 100f * (2 - GameManager.Difficulty);
 
         WidthDivision = Field.Width / WidthDivisionAmount;
         HeightDivision = Field.Height / HeightDivisionAmount;
@@ -209,7 +209,7 @@ public class RootNode : Node
 
     public override (NodeState, Action) Evaluate()
     {
-        if (this.Children != null)
+        if (Children != null)
             return Children[0].Evaluate();
 
         return base.Evaluate();
