@@ -181,18 +181,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ff4baedbbf009f459e8492fba7370d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _debugMatchDuration: 60
-  _debugOnlyPlayer: 0
-  _enemiesAreRetard: 0
-  _startWithoutAnim: 0
-  d_Captain1: {fileID: 0}
-  d_Captain2: {fileID: 0}
-  d_Mate1: {fileID: 0}
-  d_Mate2: {fileID: 0}
-  d_GoalKeeper: {fileID: 11400000, guid: e32174f7889a0ab429aeae9b2b0b2040, type: 2}
-  d_gameTime: 0
-  d_goalToWin: 1
-  d_aIDifficulty: 3
 --- !u!4 &96002680
 Transform:
   m_ObjectHideFlags: 0

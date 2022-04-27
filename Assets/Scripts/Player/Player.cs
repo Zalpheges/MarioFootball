@@ -631,7 +631,7 @@ public class Player : MonoBehaviour
 
     private void Shoot(float force)
     {
-        force = Mathf.Max(0.2f, Random.value);
+        force = Mathf.Max(0.2f, Random.value * 1.5f);
 
         Transform goal = Enemies.transform;
 
