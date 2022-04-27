@@ -164,6 +164,7 @@ public class Team : MonoBehaviour
     /// <returns>The gameObject corresponding to the deleted item</returns>
     public ItemData GetItem()
     {
+        Debug.Log(_items.Count);
         if (_items.Count == 0)
             return null;
         ItemData item = _items.Dequeue();

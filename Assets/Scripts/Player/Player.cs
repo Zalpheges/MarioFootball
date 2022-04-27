@@ -97,6 +97,7 @@ public class Player : MonoBehaviour
         private Queue<System.Action> _animations;
         private Queue<float> _durations;
         private Queue<bool> _playWhileMovingBools;
+        private Vector3 _lastDestination;
 
         private void Init()
         {
@@ -123,7 +124,7 @@ public class Player : MonoBehaviour
             if (_positions.Count < 1)
                 return (null, 0f);
 
-            player.SetNavDriven(_positions.Dequeue(), _speeds.Dequeue());
+            player.SetNavDriven(_lastDestination = _positions.Dequeue(), _speeds.Dequeue());
             System.Action anim = _animations.Dequeue();
             if (_playWhileMovingBools.Dequeue())
             {
@@ -132,6 +133,36 @@ public class Player : MonoBehaviour
             }
             return (anim, _durations.Dequeue());
         }
+
+        public void Clear()
+        {
+            _positions.Clear();
+            _speeds.Clear();
+            _animations.Clear();
+            _durations.Clear();
+            _playWhileMovingBools.Clear();
+        }
+
+        public Vector3 GetFinalDestination()
+        {
+            Queue<Vector3> tmpQueue = new Queue<Vector3>();
+            Vector3 tmp = _lastDestination;
+            while(_positions.Count > 0)
+            {
+                if (_positions.Count == 1)
+                {
+                    Debug.Log("fdp");
+                    tmp = _positions.Peek();
+                }
+                tmpQueue.Enqueue(_positions.Dequeue());
+            }
+            foreach(Vector3 pos in tmpQueue)
+            {
+                _positions.Enqueue(pos);
+            }
+            return tmp;
+        }
+
     }
 
     public PlayerActionsQueue ActionsQueue;
@@ -199,9 +230,12 @@ public class Player : MonoBehaviour
 
                     if (Field.ArePlayersAllWaiting())
                     {
-                        UIManager.DisplayAnnouncement(UIManager.AnnouncementType.ReadySetGo);
-                        AudioManager.PlaySFX(AudioManager.SFXType.Kickoff);
-                        GameManager.KickOffTimer.run = true;
+                        if (!GameManager.KickOffTimer.run)
+                        {
+                            UIManager.DisplayAnnouncement(UIManager.AnnouncementType.ReadySetGo);
+                            AudioManager.PlaySFX(AudioManager.SFXType.Kickoff);
+                            GameManager.KickOffTimer.run = true;
+                        }
                     }
 
                     if (IsGoalKeeper)
@@ -467,8 +501,8 @@ public class Player : MonoBehaviour
                 break;
 
             case Action.Type.Throw:
-                PlaySound(AudioManager.CharaSFXType.ThrowItem);
                 ThrowItem(direction);
+                PlaySound(AudioManager.CharaSFXType.ThrowItem);
 
                 break;
 

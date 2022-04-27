@@ -208,7 +208,8 @@ public class UIManager : MonoBehaviour
         }
         DisplayAnnouncement();
 
-        if ((Keyboard.current?.escapeKey.wasPressedThisFrame ?? false) || (Gamepad.current?.selectButton.wasPressedThisFrame ?? false))
+        if ((Keyboard.current?.escapeKey.wasPressedThisFrame ?? false) 
+            || (Gamepad.current?.selectButton.wasPressedThisFrame ?? false))
         {
             if (_pauseMenu.activeSelf)
                 OnGoBack();
@@ -219,7 +220,8 @@ public class UIManager : MonoBehaviour
             }
         }
 
-        if (((Gamepad.current?.buttonEast.wasPressedThisFrame ?? false) || (Gamepad.current?.selectButton.wasPressedThisFrame ?? false)) && _pauseMenu.activeSelf)
+        if (((Gamepad.current?.buttonEast.wasPressedThisFrame ?? false) 
+            || (Gamepad.current?.selectButton.wasPressedThisFrame ?? false)) && _pauseMenu.activeSelf)
         {
             OnGoBack();
         }

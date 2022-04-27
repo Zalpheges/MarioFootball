@@ -111,9 +111,17 @@ public class GameManager : MonoBehaviour
         if (!_inMatch)//if we're not in match
             return;
 
+        if ((Keyboard.current?.enterKey.wasPressedThisFrame ?? false)
+            || (Gamepad.current?.startButton.wasPressedThisFrame ?? false))
+        {
+            CameraManager.SkipQueue();
+            Field.SkipPlayersQueue();
+        }
+
         if (KickOffTimer.run)
             KickOffTimer.value += Time.deltaTime;
 
+        //Chrono check
         UIManager.SetChrono(_chrono);
         if (!ChronoStopped)
         {
@@ -287,7 +295,7 @@ public class GameManager : MonoBehaviour
             bool ownGoal = team == scorer.Team;
             void anim() => scorer.Idle(celebrate: !ownGoal, shameful: ownGoal);
             scorer.ActionsQueue.AddAction(scorer.transform.position, 10f, anim, 5f, false);
-            CameraManager.CamerasQueue.AddCameraControl(scorer.transform, 5f);
+            CameraManager.CamerasQueue.AddCameraFocus(scorer.transform, 5f);
             CameraManager.ReadQueue();
             CameraManager.LookAt(scorer.transform);
         }
