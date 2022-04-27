@@ -1,9 +1,9 @@
 #if UNITY_EDITOR || UNITY_STANDALONE
+using NUnit.Framework;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.TestTools;
-using NUnit.Framework;
-using System.Collections;
 
 public class NavMeshSurfaceAgentTests
 {
@@ -55,20 +55,20 @@ public class NavMeshSurfaceAgentTests
     }
 
 
-/*
-    [Test]
-    public void AgentIsOnNavMeshWhenMatchingAgentTypeID()
-    {
-        m_Surface.agentTypeID = 1234;
-        m_Surface.BuildNavMesh();
+    /*
+        [Test]
+        public void AgentIsOnNavMeshWhenMatchingAgentTypeID()
+        {
+            m_Surface.agentTypeID = 1234;
+            m_Surface.BuildNavMesh();
 
-        m_Agent = new GameObject("Agent").AddComponent<NavMeshAgent>();
-        Assert.IsFalse(m_Agent.isOnNavMesh);
+            m_Agent = new GameObject("Agent").AddComponent<NavMeshAgent>();
+            Assert.IsFalse(m_Agent.isOnNavMesh);
 
-        m_Agent.agentTypeID = 1234;
-        Assert.IsTrue(m_Agent.isOnNavMesh);
-    }
-*/
+            m_Agent.agentTypeID = 1234;
+            Assert.IsTrue(m_Agent.isOnNavMesh);
+        }
+    */
 
     [UnityTest]
     public IEnumerator AgentAlignsToSurfaceNextFrame()

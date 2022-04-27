@@ -1,7 +1,6 @@
-using System.Collections;
+using BehaviorTree;
 using System.Collections.Generic;
 using UnityEngine;
-using BehaviorTree;
 
 public class S_AssignTargetCoordinates_Goal : Node
 {

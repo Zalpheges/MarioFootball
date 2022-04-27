@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using BehaviorTree;
+using UnityEngine;
 
 public class S_MoveSupporter : Node
 {
@@ -13,7 +11,7 @@ public class S_MoveSupporter : Node
         if (!_rootInitialized)
             _root = GetRootNode();
 
-        (int,int) Indexes = RetrieveIndexes();
+        (int, int) Indexes = RetrieveIndexes();
 
         int SeekerIndex = Indexes.Item1;
         int PlayerIndex = Indexes.Item2;
@@ -21,12 +19,12 @@ public class S_MoveSupporter : Node
         if (SeekerIndex < PlayerIndex)
             PlayerIndex--;
 
-        float defendPositionX = _root.allyTeamSide == TeamSide.West ? - Field.Width / 4 : Field.Width / 4;
+        float defendPositionX = _root.allyTeamSide == TeamSide.West ? -Field.Width / 4 : Field.Width / 4;
 
         switch (PlayerIndex)
         {
             case 0:
-                _root.Position = new Vector3(defendPositionX, 0f, - Field.Height /3);
+                _root.Position = new Vector3(defendPositionX, 0f, -Field.Height / 3);
                 break;
             case 1:
                 _root.Position = new Vector3(defendPositionX, 0f, 0f);
@@ -40,7 +38,7 @@ public class S_MoveSupporter : Node
         return (NodeState.SUCCESS, Action.None);
     }
 
-    private (int,int) RetrieveIndexes()
+    private (int, int) RetrieveIndexes()
     {
         int SeekerIndex = 0;
         int PlayerIndex = 0;

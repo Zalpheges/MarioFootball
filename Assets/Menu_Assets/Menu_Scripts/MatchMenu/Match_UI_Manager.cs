@@ -287,7 +287,7 @@ public class Match_UI_Manager : MonoBehaviour
 
         GetRandomEnemies();
 
-        GameManager.AddMatch(_playerCaptain, _playerAlly.MateSpec, _aiCaptain, _aiAlly.MateSpec, _goalSpecs,GameTime, GoalToWin, AIDifficulty);
+        GameManager.AddMatch(_playerCaptain, _playerAlly.MateSpec, _aiCaptain, _aiAlly.MateSpec, _goalSpecs, GameTime, GoalToWin, AIDifficulty);
         AudioManager.SetCharaAudio(_playerCaptain, _playerAlly.MateSpec, _aiCaptain, _aiAlly.MateSpec);
 
         LevelLoader.LoadNextLevel(SceneManager.GetActiveScene().buildIndex + 1);

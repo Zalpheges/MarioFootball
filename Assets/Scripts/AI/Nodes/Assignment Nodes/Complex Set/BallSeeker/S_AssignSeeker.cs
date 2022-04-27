@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using BehaviorTree;
 
 public class S_AssignSeeker : Node
@@ -16,7 +13,7 @@ public class S_AssignSeeker : Node
         Player closestPlayer = null;
         float shortestDistance = 0f;
 
-        foreach(Player ally in _root.parentTree.Allies)
+        foreach (Player ally in _root.parentTree.Allies)
         {
             float distance = (Field.Ball.transform.position - ally.transform.position).sqrMagnitude;
 

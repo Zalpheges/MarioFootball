@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using BehaviorTree;
+using UnityEngine;
 
 public class T_GoalUncovered : Node
 {
@@ -15,7 +13,7 @@ public class T_GoalUncovered : Node
 
         Vector3 BallHolderToGoal = _root.parentTree.enemyGoalTransform.position - _root.player.transform.position;
 
-        foreach(Player enemyPlayer in _root.parentTree.Enemies)
+        foreach (Player enemyPlayer in _root.parentTree.Enemies)
         {
             Vector3 BallHolderToEnemy = enemyPlayer.transform.position - _root.player.transform.position;
             float DotProduct = Vector3.Dot(BallHolderToEnemy.normalized, BallHolderToGoal.normalized);

@@ -1,8 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using BehaviorTree;
+using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 public class TreeV4
 {
@@ -345,7 +344,7 @@ public class TreeV4
                                                             new S_WanderAroundPosition()
                                                         }),
                                                         new S_MovePlayer()
-                                                    })                                                   
+                                                    })
                                                 }),
                                                 new Sequence(new List<Node>
                                                 {

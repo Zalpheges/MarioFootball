@@ -1,9 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using BehaviorTree;
 
-public class T_PassInProgress: Node
+public class T_PassInProgress : Node
 {
     private RootNode _root;
     private bool _rootInitialized = false;

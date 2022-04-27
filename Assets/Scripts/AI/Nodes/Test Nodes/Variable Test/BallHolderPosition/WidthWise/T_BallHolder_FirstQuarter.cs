@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using BehaviorTree;
 
 public class T_BallHolder_FirstQuarter : Node
@@ -13,7 +10,7 @@ public class T_BallHolder_FirstQuarter : Node
         if (!_rootInitialized)
             _root = GetRootNode();
 
-        if (_root.ballHolder.transform.position.x < - (Field.Width / 4))
+        if (_root.ballHolder.transform.position.x < -(Field.Width / 4))
             return (NodeState.SUCCESS, Action.None);
 
         return (NodeState.FAILURE, Action.None);
