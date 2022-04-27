@@ -1,10 +1,10 @@
 ﻿//#define KEEP_ARTIFACTS_FOR_INSPECTION
 //#define ENABLE_TEST_LOGS
 
+using NUnit.Framework;
 using System;
 using System.Collections;
 using System.IO;
-using NUnit.Framework;
 using UnityEditor;
 using UnityEditor.AI;
 using UnityEditor.Experimental.SceneManagement;
@@ -791,7 +791,7 @@ public class NavMeshSurfaceInPrefabTests
 
         TestNavMeshExistsAloneAtPosition(k_RedArea, Vector3.zero);
 
-        var posNearby = new Vector3(20,0,0);
+        var posNearby = new Vector3(20, 0, 0);
         Assert.IsFalse(HasNavMeshAtPosition(posNearby, 1 << k_RedArea),
             "NavMesh with the prefab's area exists at position {1}, outside the prefab's plane. ({0})",
             k_RedArea, posNearby);

@@ -1,6 +1,6 @@
+using System.Linq;
 using System.Reflection;
 using UnityEditor;
-using System.Linq;
 
 [CustomEditor(typeof(Team))]
 public class TeamEditor : Editor
@@ -19,7 +19,7 @@ public class TeamEditor : Editor
         System.Type[] possible = (from System.Type type in types where type.IsSubclassOf(typeof(PlayerBrain)) select type).ToArray();
 
         brainTypes = possible.Where(type => !type.IsAbstract).Select(type => type.Name).ToArray();
-            
+
         teamType = serializedObject.FindProperty("_ateamBrainType");
         goalType = serializedObject.FindProperty("_agoalBrainType");
 

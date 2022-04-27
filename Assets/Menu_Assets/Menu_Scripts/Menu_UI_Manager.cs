@@ -9,7 +9,7 @@ public class Menu_UI_Manager : MonoBehaviour
 
     private void Update()
     {
-        if ((Keyboard.current?.escapeKey.wasPressedThisFrame ?? false) 
+        if ((Keyboard.current?.escapeKey.wasPressedThisFrame ?? false)
             || (Gamepad.current?.buttonEast.wasPressedThisFrame ?? false))
         {
             if (Success != null && SceneManager.GetActiveScene().buildIndex == 0)

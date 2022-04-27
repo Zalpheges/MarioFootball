@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using BehaviorTree;
 
 public class T_BallHolderCoordinatesUnchanged : Node
@@ -13,7 +10,7 @@ public class T_BallHolderCoordinatesUnchanged : Node
         if (!_rootInitialized)
             _root = GetRootNode();
 
-        if(_root.PreviousBallHolderCoordinates == _root.BallHolderCoordinates)  
+        if (_root.PreviousBallHolderCoordinates == _root.BallHolderCoordinates)
             return (NodeState.SUCCESS, Action.None);
 
         return (NodeState.FAILURE, Action.None);

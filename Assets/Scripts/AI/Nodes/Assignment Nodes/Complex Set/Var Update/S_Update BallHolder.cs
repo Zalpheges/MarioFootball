@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using BehaviorTree;
 
 public class S_UpdateBallHolder : Node
@@ -10,7 +7,7 @@ public class S_UpdateBallHolder : Node
 
     public override (NodeState, Action) Evaluate()
     {
-        if(!_rootInitialized)
+        if (!_rootInitialized)
             _root = GetRootNode();
 
         foreach (Player player in _root.Allies)

@@ -1,9 +1,9 @@
 ﻿//#define KEEP_ARTIFACTS_FOR_INSPECTION
 
+using NUnit.Framework;
 using System;
 using System.Collections;
 using System.IO;
-using NUnit.Framework;
 using UnityEditor;
 using UnityEditor.AI;
 using UnityEditor.Experimental.SceneManagement;

@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using BehaviorTree;
+using UnityEngine;
 
 public class S_MoveGoalKeeper_Defend : Node
 {
@@ -13,8 +11,8 @@ public class S_MoveGoalKeeper_Defend : Node
         if (!_rootInitialized)
             _root = GetRootNode();
 
-        if (Mathf.Abs(Field.Ball.transform.position.x) > (Field.Width/2) - Field.GoalArea.y && 
-                                                        Mathf.Abs(Field.Ball.transform.position.z) < Field.GoalArea.x/2)
+        if (Mathf.Abs(Field.Ball.transform.position.x) > (Field.Width / 2) - Field.GoalArea.y &&
+                                                        Mathf.Abs(Field.Ball.transform.position.z) < Field.GoalArea.x / 2)
         {
             if ((_root.ballHolder.transform.position - _root.player.transform.position).magnitude < _root.headButtThreshold)
             {
@@ -25,7 +23,7 @@ public class S_MoveGoalKeeper_Defend : Node
             {
                 _root.actionToPerform = ActionToPerform.Move;
                 _root.Position = Field.Ball.transform.position;
-            }    
+            }
         }
         else
         {

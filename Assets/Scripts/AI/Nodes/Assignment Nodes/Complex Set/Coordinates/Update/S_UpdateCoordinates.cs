@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using BehaviorTree;
+using UnityEngine;
 
 public class S_UpdateCoordinates : Node
 {
@@ -17,7 +15,7 @@ public class S_UpdateCoordinates : Node
 
         foreach (Player ally in _root.parentTree.Allies)
         {
-            if(ally == _root.ballHolder)
+            if (ally == _root.ballHolder)
             {
                 if (ally == _root.ballHolder)
                     _root.PreviousBallHolderCoordinates = _root.BallHolderCoordinates;
@@ -41,13 +39,13 @@ public class S_UpdateCoordinates : Node
         {
             if (!xCoordDetermined)
             {
-                if (player.transform.position.x < _root.WidthDivision * (x + 0.5) && 
+                if (player.transform.position.x < _root.WidthDivision * (x + 0.5) &&
                                                 player.transform.position.x > _root.WidthDivision * (x - 0.5))
                 {
                     Coord.x = x;
                     xCoordDetermined = true;
                 }
-                else if (player.transform.position.x < -_root.WidthDivision * (x - 0.5) && 
+                else if (player.transform.position.x < -_root.WidthDivision * (x - 0.5) &&
                                                 player.transform.position.x > -_root.WidthDivision * (x + 0.5))
                 {
                     Coord.x = -x;
@@ -74,7 +72,7 @@ public class S_UpdateCoordinates : Node
         if (player == _root.ballHolder)
             _root.BallHolderCoordinates = Coord;
 
-        if(player == _root.player)
+        if (player == _root.player)
             _root.PlayerCoordinates = Coord;
 
         return Coord;

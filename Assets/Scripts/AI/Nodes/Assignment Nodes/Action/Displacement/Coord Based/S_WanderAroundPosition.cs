@@ -1,9 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using BehaviorTree;
+using UnityEngine;
 
-public class S_WanderAroundPosition: Node
+public class S_WanderAroundPosition : Node
 {
     private RootNode _root;
     private bool _rootInitialized = false;

@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using BehaviorTree;
+using UnityEngine;
 
 public class S_DetermineOptimalCoords : Node
 {
@@ -16,8 +14,8 @@ public class S_DetermineOptimalCoords : Node
         Vector2Int Coords = new Vector2Int();
 
         int SideModifier = _root.ModifyingCoeff;
-        Coords = _root.currentBallState == BallState.Ally || (_root.ballHolder != null && _root.ballHolder.HasBall) ? _root.BallHolderCoordinates : _root.BallSeekerCoordinates;     
- 
+        Coords = _root.currentBallState == BallState.Ally || (_root.ballHolder != null && _root.ballHolder.HasBall) ? _root.BallHolderCoordinates : _root.BallSeekerCoordinates;
+
         _root.OptimalCoordinates.Clear();
 
         if (Mathf.Abs(Coords.x) + Mathf.Abs(Coords.y) == (_root.WidthDivisionAmount - 1) / 2 + (_root.HeightDivisionAmount - 1) / 2) //Corner
@@ -56,12 +54,12 @@ public class S_DetermineOptimalCoords : Node
 
             if (Coords.x + 2 * SideModifier < (_root.WidthDivisionAmount - 1) / 2 - 1)
             {
-                if (Coords.y < (_root.HeightDivisionAmount - 1)/ 2 - 1)
+                if (Coords.y < (_root.HeightDivisionAmount - 1) / 2 - 1)
                     _root.OptimalCoordinates.Add(new Vector2Int(Coords.x + 2 * SideModifier, Coords.y + 2));
                 else
                     _root.OptimalCoordinates.Add(new Vector2Int(Coords.x + 2 * SideModifier, Coords.y + 1));
 
-                if(Coords.y > -(_root.HeightDivisionAmount - 1) / 2 + 1)
+                if (Coords.y > -(_root.HeightDivisionAmount - 1) / 2 + 1)
                     _root.OptimalCoordinates.Add(new Vector2Int(Coords.x + 2 * SideModifier, Coords.y - 2));
                 else
                     _root.OptimalCoordinates.Add(new Vector2Int(Coords.x + 2 * SideModifier, Coords.y - 1));

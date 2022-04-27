@@ -113,7 +113,7 @@ public class GameManager : MonoBehaviour
         if (!_inMatch)
             return;
 
-        if (CanSkip) 
+        if (CanSkip)
         {
             if ((Keyboard.current?.enterKey.wasPressedThisFrame ?? false)
                 || (Gamepad.current?.startButton.wasPressedThisFrame ?? false))
@@ -122,7 +122,7 @@ public class GameManager : MonoBehaviour
                 CameraManager.SkipQueue();
                 SkipPlayersQueue();
                 CanSkip = false;
-            } 
+            }
         }
 
         if (KickOffTimer.run)
@@ -257,7 +257,7 @@ public class GameManager : MonoBehaviour
         _instance._inMatch = true;
     }
 
-    public static void AddMatch(PlayerSpecs playerCaptain, PlayerSpecs playerMate, PlayerSpecs AICaptain, PlayerSpecs AIMate,PlayerSpecs GoalKeeper, int gameTime, float goalToWin, int AIDifficulty)
+    public static void AddMatch(PlayerSpecs playerCaptain, PlayerSpecs playerMate, PlayerSpecs AICaptain, PlayerSpecs AIMate, PlayerSpecs GoalKeeper, int gameTime, float goalToWin, int AIDifficulty)
     {
         Match newMatch = new Match()
         {
@@ -305,7 +305,7 @@ public class GameManager : MonoBehaviour
         }
 
         CanSkip = true;
-        
+
         Field.Ball.transform.position = team.Players[0].transform.position;
 
         #region Local functions

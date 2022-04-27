@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using BehaviorTree;
+using UnityEngine;
 
 public class S_Marking : Node
 {
@@ -20,7 +18,7 @@ public class S_Marking : Node
 
         float Alignment = Vector3.Dot(targetToPlayer.normalized, targetToBallholder.normalized);
 
-        if ((positionToMark - _root.player.transform.position).magnitude < _root.defenseThreshold && Mathf.Abs(Alignment)>0.9f)
+        if ((positionToMark - _root.player.transform.position).magnitude < _root.defenseThreshold && Mathf.Abs(Alignment) > 0.9f)
         {
             _root.actionToPerform = ActionToPerform.None;
             return (NodeState.SUCCESS, Action.None);

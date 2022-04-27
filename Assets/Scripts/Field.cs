@@ -109,7 +109,7 @@ public class Field : MonoBehaviour
         {
             List<Vector3> startPositions = GetStartPositions();
 
-            foreach(Team team in Teams)
+            foreach (Team team in Teams)
             {
                 Vector3 spawnPosition;
                 Transform[] spawnPoints = _instance._spawnPoints[team];

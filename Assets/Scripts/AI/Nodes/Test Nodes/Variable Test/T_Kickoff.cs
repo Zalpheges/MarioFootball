@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using BehaviorTree;
 
 public class T_Kickoff : Node
@@ -13,12 +10,12 @@ public class T_Kickoff : Node
         if (!_rootInitialized)
             _root = GetRootNode();
 
-        if (Field.ArePlayersAllWaiting()) 
+        if (Field.ArePlayersAllWaiting())
         {
             _root.passTarget = _root.allyPlayersOrder[1];
-            return (NodeState.SUCCESS, Action.None); 
+            return (NodeState.SUCCESS, Action.None);
         }
-            
+
         return (NodeState.FAILURE, Action.None);
     }
 

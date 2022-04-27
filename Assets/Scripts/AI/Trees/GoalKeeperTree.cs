@@ -1,8 +1,7 @@
-using System.Collections;
+using BehaviorTree;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using BehaviorTree;
 
 public class GoalKeeperTree
 {
@@ -26,7 +25,7 @@ public class GoalKeeperTree
         enemyGoalTransform = iEnemies.transform;
 
         InitialGoalPosition = iInitialGoalPosition;
-        
+
         player = iplayer;
 
         root = new RootNode(this, new List<Node>
@@ -62,7 +61,7 @@ public class GoalKeeperTree
                     }),
                     new Sequence(new List<Node>
                     {
-                        new T_BallInAllyHalf(),                        
+                        new T_BallInAllyHalf(),
                         new Selector(new List<Node>
                         {
                             new Sequence(new List<Node>

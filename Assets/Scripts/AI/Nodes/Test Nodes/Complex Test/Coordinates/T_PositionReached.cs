@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using BehaviorTree;
 
 public class T_PositionReached : Node
@@ -14,12 +11,12 @@ public class T_PositionReached : Node
             _root = GetRootNode();
 
         float distance = (_root.player.transform.position - _root.CoordinatePosition).magnitude;
-        
+
         if (distance < .5f)
             return (NodeState.SUCCESS, Action.None);
 
         return (NodeState.FAILURE, Action.None);
-            
+
     }
 
     private RootNode GetRootNode()

@@ -237,7 +237,7 @@ public class UIManager : MonoBehaviour
         }
         DisplayAnnouncement();
 
-        if ((Keyboard.current?.escapeKey.wasPressedThisFrame ?? false) 
+        if ((Keyboard.current?.escapeKey.wasPressedThisFrame ?? false)
             || (Gamepad.current?.selectButton.wasPressedThisFrame ?? false))
         {
             if (_pauseMenu.activeSelf)
@@ -249,7 +249,7 @@ public class UIManager : MonoBehaviour
             }
         }
 
-        if (((Gamepad.current?.buttonEast.wasPressedThisFrame ?? false) 
+        if (((Gamepad.current?.buttonEast.wasPressedThisFrame ?? false)
             || (Gamepad.current?.selectButton.wasPressedThisFrame ?? false)) && _pauseMenu.activeSelf)
         {
             OnGoBack();
