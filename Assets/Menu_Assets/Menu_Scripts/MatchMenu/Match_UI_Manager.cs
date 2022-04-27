@@ -1,89 +1,83 @@
-using System.Collections;
-using System.Linq;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using UnityEditor;
-using System;
-using TMPro;
-using UnityEngine.Animations.Rigging;
-using UnityEngine.AI;
 using Random = UnityEngine.Random;
 
 public class Match_UI_Manager : MonoBehaviour
 {
-    public GameObject charaButton;
+    [SerializeField] private GameObject _charaButton;
 
-    private bool allieSelected;
+    private bool _allySelected;
 
     //Data
     private PlayerSpecs _playerCaptain;
     private MateSpecs _playerAlly;
-    private PlayerSpecs _AICaptain;
-    private MateSpecs _AIAlly;
+    private PlayerSpecs _aiCaptain;
+    private MateSpecs _aiAlly;
 
-    [HideInInspector] public int gameTime;
-    [HideInInspector] public float goalToWin;
-    [HideInInspector] public int AIDifficulty;
-    //
+    [HideInInspector] public static int GameTime;
+    [HideInInspector] public static float GoalToWin;
+    [HideInInspector] public static int AIDifficulty;
 
     //Chara buttons
     [SerializeField]
-    private GameObject mainCharacterSelection;
-    private GameObject FS_mainCharacter;
+    private GameObject _mainCharacterSelection;
+    private GameObject _fsMainCharacter;
 
     [SerializeField]
-    private GameObject allieSelection;
-    private GameObject FS_allie;
+    private GameObject _allySelection;
+    private GameObject _fsAlly;
 
     [SerializeField]
-    private GameObject matchSettings;
+    private GameObject _matchSettings;
     [SerializeField]
-    private GameObject FS_matchSettings;
+    private GameObject _fsMatchSettings;
 
     [SerializeField]
-    private EventSystem ES;
+    private EventSystem _es;
 
-    public List<GameObject> matchParams = new List<GameObject>();
+    private List<GameObject> _matchParams = new List<GameObject>();
 
-    public List<PlayerSpecs> maincharaSpecs = new List<PlayerSpecs>();
-    public List<MateSpecs> mateSpecs = new List<MateSpecs>();
+    private List<PlayerSpecs> _maincharaSpecs = new List<PlayerSpecs>();
+    private List<MateSpecs> _mateSpecs = new List<MateSpecs>();
     private List<PlayerSpecs> _onlyMateSpecs = new List<PlayerSpecs>();
-    //public List<PlayerSpecs> alliecharaSpecs = new List<PlayerSpecs>();
 
-    List<Button> charaButtons;
-    List<Button> allieButtons;
+    private List<Button> _charaButtons;
+    private List<Button> _allyButtons;
 
-    private GameObject actualSelectedGameObject;
+    private GameObject _currentSelectedGameObject;
 
     //Stats
-    public TextMeshProUGUI accuracy;
-    public TextMeshProUGUI speed;
-    public TextMeshProUGUI stunTime;
+    public TextMeshProUGUI Accuracy;
+    public TextMeshProUGUI Speed;
+    public TextMeshProUGUI StunTime;
     //
 
-    public static Match_UI_Manager _instance;
+    private static Match_UI_Manager _instance;
+
+    #region Awake/Start/Update
 
     private void Awake()
     {
         _instance = this;
     }
+
     private void Start()
     {
+        _allySelected = false;
+        _fsMainCharacter = InitCharacters(_mainCharacterSelection);
 
-        allieSelected = false;
-        FS_mainCharacter=InitCharacters(mainCharacterSelection);
-
-        ES.SetSelectedGameObject(FS_mainCharacter);
+        _es.SetSelectedGameObject(_fsMainCharacter);
 
         //UpdateStat
-        actualSelectedGameObject = FS_mainCharacter;
-        UpdateStat(actualSelectedGameObject);
+        _currentSelectedGameObject = _fsMainCharacter;
+        UpdateStat(_currentSelectedGameObject);
 
-        foreach (var param in matchParams)
+        foreach (var param in _matchParams)
         {
             ISliderValue slider = param.GetComponent<ISliderValue>();
 
@@ -92,72 +86,75 @@ public class Match_UI_Manager : MonoBehaviour
         }
 
         //Initialize onlyMateSpecs
-        foreach(var elem in mateSpecs)
+        foreach (var elem in _mateSpecs)
         {
-            _onlyMateSpecs.Add( elem.mateSpec);
+            _onlyMateSpecs.Add(elem.MateSpec);
         }
     }
+
     private void Update()
     {
         //MatchSetting
-        if(matchSettings.activeSelf)
+        if (_matchSettings.activeSelf)
         {
-            if((Keyboard.current?.enterKey.wasPressedThisFrame ?? false) || (Gamepad.current?.buttonSouth.wasPressedThisFrame ?? false))
+            if ((Keyboard.current?.enterKey.wasPressedThisFrame ?? false)
+                || (Gamepad.current?.buttonSouth.wasPressedThisFrame ?? false))
             {
-                Slider sliderGo = null;
-                if(ES.currentSelectedGameObject.TryGetComponent(out sliderGo))
-                    ES.SetSelectedGameObject(sliderGo.navigation.selectOnDown.transform.gameObject);
+                if (_es.currentSelectedGameObject.TryGetComponent(out Slider sliderGo))
+                    _es.SetSelectedGameObject(sliderGo.navigation.selectOnDown.transform.gameObject);
             }
         }
 
         //UpdateStatChara
-        if(ES.currentSelectedGameObject != actualSelectedGameObject && !matchSettings.activeSelf)
+        if (_es.currentSelectedGameObject != _currentSelectedGameObject && !_matchSettings.activeSelf)
         {
-            actualSelectedGameObject = ES.currentSelectedGameObject;
-            UpdateStat(actualSelectedGameObject);
+            _currentSelectedGameObject = _es.currentSelectedGameObject;
+            UpdateStat(_currentSelectedGameObject);
         }
 
         //GoBack
-        if ((Keyboard.current?.escapeKey.wasPressedThisFrame ?? false) || (Gamepad.current?.buttonEast.wasPressedThisFrame ?? false))
+        if ((Keyboard.current?.escapeKey.wasPressedThisFrame ?? false)
+            || (Gamepad.current?.buttonEast.wasPressedThisFrame ?? false))
         {
-            if (matchSettings.activeSelf)
+            if (_matchSettings.activeSelf)
             {
-                matchSettings.SetActive(false);
-                allieSelection.SetActive(true);
-                ES.SetSelectedGameObject(FS_allie);
+                _matchSettings.SetActive(false);
+                _allySelection.SetActive(true);
+                _es.SetSelectedGameObject(_fsAlly);
             }
-            else if (allieSelection.activeSelf)
+            else if (_allySelection.activeSelf)
             {
-                allieSelection.SetActive(false);
-                mainCharacterSelection.SetActive(true);
-                ES.SetSelectedGameObject(FS_mainCharacter);
+                _allySelection.SetActive(false);
+                _mainCharacterSelection.SetActive(true);
+                _es.SetSelectedGameObject(_fsMainCharacter);
             }
             else
                 LevelLoader.LoadNextLevel(0);
         }
     }
 
+    #endregion
+
     private void UpdateStat(GameObject button)
     {
         PlayerSpecs chara;
 
-        if (allieSelection.activeSelf)
-            chara = mateSpecs[allieButtons.IndexOf(button.GetComponent<Button>())].mateSpec;
+        if (_allySelection.activeSelf)
+            chara = _mateSpecs[_allyButtons.IndexOf(button.GetComponent<Button>())].MateSpec;
         else
-            chara = maincharaSpecs[charaButtons.IndexOf(button.GetComponent<Button>())];
+            chara = _maincharaSpecs[_charaButtons.IndexOf(button.GetComponent<Button>())];
 
-        accuracy.text = "Accuracy: "+ chara.Accuracy;
-        speed.text = "Speed :" + chara.Speed;
-        stunTime.text = "StunTime: " + chara.StunTime;
+        Accuracy.text = "Accuracy : " + chara.Accuracy;
+        Speed.text = "Speed : " + chara.Speed;
+        StunTime.text = "StunTime : " + chara.StunTime;
     }
 
     GameObject InitCharacters(GameObject Step)
     {
         GridLayoutGroup CharaSection = Step.GetComponentInChildren<GridLayoutGroup>();
-        GameObject FS=null;
+        GameObject FS = null;
 
         List<Button> Buttons = new List<Button>();
-
 
         Quaternion rot = Quaternion.Euler(new Vector3(0, 180, 0));
         Vector3 pos = new Vector3(0, -25, -15);
@@ -165,17 +162,17 @@ public class Match_UI_Manager : MonoBehaviour
 
         List<PlayerSpecs> charaspecs;
 
-        if(allieSelection.activeSelf)
+        if (_allySelection.activeSelf)
         {
             charaspecs = _onlyMateSpecs;
         }
         else
         {
-            charaspecs = maincharaSpecs;
+            charaspecs = _maincharaSpecs;
         }
-        for (int i = 0; i< charaspecs.Count; i++)
+        for (int i = 0; i < charaspecs.Count; i++)
         {
-            GameObject newChara = Instantiate(charaButton,CharaSection.transform);
+            GameObject newChara = Instantiate(_charaButton, CharaSection.transform);
             newChara.name = charaspecs[i].Name;
 
             GameObject charaPrefab = Instantiate(charaspecs[i].StaticPrefab, newChara.transform);
@@ -196,26 +193,26 @@ public class Match_UI_Manager : MonoBehaviour
 
             Buttons.Add(btn);
 
-            if(i==0)
+            if (i == 0)
             {
                 FS = newChara;
             }
         }
 
         Navigation btnNav = new Navigation();
-        for (int i =0; i< Buttons.Count; i++)
+        for (int i = 0; i < Buttons.Count; i++)
         {
             btnNav.mode = Navigation.Mode.Explicit;
 
-            if(i==0)
+            if (i == 0)
             {
-                btnNav.selectOnRight = Buttons[i+1];
-                btnNav.selectOnLeft = Buttons[Buttons.Count-1];
+                btnNav.selectOnRight = Buttons[i + 1];
+                btnNav.selectOnLeft = Buttons[Buttons.Count - 1];
             }
-            else if(i== Buttons.Count-1)
+            else if (i == Buttons.Count - 1)
             {
                 btnNav.selectOnRight = Buttons[0];
-                btnNav.selectOnLeft = Buttons[i-1];
+                btnNav.selectOnLeft = Buttons[i - 1];
             }
             else
             {
@@ -226,13 +223,13 @@ public class Match_UI_Manager : MonoBehaviour
             Buttons[i].navigation = btnNav;
         }
 
-        if(allieSelection.activeSelf)
+        if (_allySelection.activeSelf)
         {
-            allieButtons = Buttons;
+            _allyButtons = Buttons;
         }
         else
         {
-            charaButtons = Buttons;
+            _charaButtons = Buttons;
         }
 
         return FS;
@@ -247,33 +244,35 @@ public class Match_UI_Manager : MonoBehaviour
     {
         AudioManager.PlaySFX(AudioManager.SFXType.ButtonClicked);
 
-        if (allieSelection.activeSelf)
+        if (_allySelection.activeSelf)
         {
-            ES.SetSelectedGameObject(FS_matchSettings);
-            matchSettings.SetActive(true);
+            _es.SetSelectedGameObject(_fsMatchSettings);
+            _matchSettings.SetActive(true);
 
-            allieSelection.SetActive(false);
+            _allySelection.SetActive(false);
 
-            _playerAlly = mateSpecs[_onlyMateSpecs.IndexOf(CharaSpec)];
+            _playerAlly = _mateSpecs[_onlyMateSpecs.IndexOf(CharaSpec)];
         }
-        else if(!allieSelected)
+
+        else if (!_allySelected)
         {
-            allieSelected = true;
+            _allySelected = true;
 
-            allieSelection.SetActive(true);
+            _allySelection.SetActive(true);
 
-            FS_allie = InitCharacters(allieSelection);
+            _fsAlly = InitCharacters(_allySelection);
 
-            mainCharacterSelection.SetActive(false);
-            ES.SetSelectedGameObject(FS_allie);
+            _mainCharacterSelection.SetActive(false);
+            _es.SetSelectedGameObject(_fsAlly);
 
             _playerCaptain = CharaSpec;
         }
+
         else
         {
-            mainCharacterSelection.SetActive(false);
-            allieSelection.SetActive(true);
-            ES.SetSelectedGameObject(FS_allie);
+            _mainCharacterSelection.SetActive(false);
+            _allySelection.SetActive(true);
+            _es.SetSelectedGameObject(_fsAlly);
             _playerCaptain = CharaSpec;
         }
     }
@@ -282,36 +281,35 @@ public class Match_UI_Manager : MonoBehaviour
     {
         AudioManager.PlaySFX(AudioManager.SFXType.ButtonClicked);
 
-        GetRandomEnnemies();
+        GetRandomEnemies();
 
-        GameManager.AddMatch(_playerCaptain, _playerAlly.mateSpec, _AICaptain, _AIAlly.mateSpec,gameTime,goalToWin,AIDifficulty);
-        AudioManager.SetCharaAudio(_playerCaptain, _playerAlly.mateSpec, _AICaptain, _AIAlly.mateSpec);
+        GameManager.AddMatch(_playerCaptain, _playerAlly.MateSpec, _aiCaptain, _aiAlly.MateSpec, GameTime, GoalToWin, AIDifficulty);
+        AudioManager.SetCharaAudio(_playerCaptain, _playerAlly.MateSpec, _aiCaptain, _aiAlly.MateSpec);
 
         LevelLoader.LoadNextLevel(SceneManager.GetActiveScene().buildIndex + 1);
-    }
 
-    private void GetRandomEnnemies()
-    {
-        List<PlayerSpecs> charas = new List<PlayerSpecs>();
-
-        foreach (var chara in maincharaSpecs)
+        void GetRandomEnemies()
         {
-            if (chara != _playerCaptain)
-                charas.Add(chara);
+            List<PlayerSpecs> charas = new List<PlayerSpecs>();
+
+            foreach (var chara in _maincharaSpecs)
+            {
+                if (chara != _playerCaptain)
+                    charas.Add(chara);
+            }
+
+            _aiCaptain = charas[Random.Range(0, charas.Count)];
+
+
+            charas.Clear();
+
+            foreach (var chara in _onlyMateSpecs)
+            {
+                if (_mateSpecs[_onlyMateSpecs.IndexOf(chara)].Type != _playerAlly.Type)
+                    charas.Add(chara);
+            }
+
+            _aiAlly = _mateSpecs[_onlyMateSpecs.IndexOf(charas[Random.Range(0, charas.Count)])];
         }
-        
-        _AICaptain = charas[Random.Range(0, charas.Count)];
-
-
-        charas.Clear();
-
-        foreach (var chara in _onlyMateSpecs)
-        {
-            if (mateSpecs[_onlyMateSpecs.IndexOf(chara)].mateType != _playerAlly.mateType) 
-                charas.Add(chara);
-        }
-
-        _AIAlly = mateSpecs[_onlyMateSpecs.IndexOf(charas[Random.Range(0, charas.Count)])];
     }
-    
 }

@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class Mushroom : ConsumableItem
 {
     protected override void ApplyEffect(Player player)

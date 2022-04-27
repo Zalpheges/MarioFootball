@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 [System.Serializable]
 public class MateSpecs
 {
@@ -11,6 +7,6 @@ public class MateSpecs
         Koopa
     }
 
-    public MateType mateType;
-    public PlayerSpecs mateSpec;
+    public MateType Type;
+    public PlayerSpecs MateSpec;
 }

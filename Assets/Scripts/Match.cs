@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class Match
 {
     public PlayerSpecs Captain1;
@@ -9,7 +7,7 @@ public class Match
 
     public PlayerSpecs GoalKeeper;
 
-    public int gameTime;
-    public float goalToWin;
+    public int GameTime;
+    public float NGoalsToWin;
     public int AIDifficulty;
 }

@@ -659,34 +659,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ad68fe6a0a2397148abe8146d9d34736, type: 3}
---- !u!1 &7734618412114824211 stripped
+--- !u!1 &2317579844972356919 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 5169632307793843317, guid: ad68fe6a0a2397148abe8146d9d34736, type: 3}
-  m_PrefabInstance: {fileID: 3236077429753878630}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &1778686737979126114 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -5456126973387331324, guid: ad68fe6a0a2397148abe8146d9d34736, type: 3}
-  m_PrefabInstance: {fileID: 3236077429753878630}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1652114150180471629 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4180930717846657835, guid: ad68fe6a0a2397148abe8146d9d34736, type: 3}
-  m_PrefabInstance: {fileID: 3236077429753878630}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &5389519941147191195 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: -1863451679625183235, guid: ad68fe6a0a2397148abe8146d9d34736, type: 3}
-  m_PrefabInstance: {fileID: 3236077429753878630}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &55380649787713402 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3182948924048899868, guid: ad68fe6a0a2397148abe8146d9d34736, type: 3}
-  m_PrefabInstance: {fileID: 3236077429753878630}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &6083457867325498904 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8684087920201465470, guid: ad68fe6a0a2397148abe8146d9d34736, type: 3}
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: ad68fe6a0a2397148abe8146d9d34736, type: 3}
   m_PrefabInstance: {fileID: 3236077429753878630}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &3126169099518803853 stripped
@@ -694,14 +669,14 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: ad68fe6a0a2397148abe8146d9d34736, type: 3}
   m_PrefabInstance: {fileID: 3236077429753878630}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &912173137869431537 stripped
+--- !u!1 &1652114150180471629 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 2323976035567139479, guid: ad68fe6a0a2397148abe8146d9d34736, type: 3}
+  m_CorrespondingSourceObject: {fileID: 4180930717846657835, guid: ad68fe6a0a2397148abe8146d9d34736, type: 3}
   m_PrefabInstance: {fileID: 3236077429753878630}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &2317579844972356919 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: ad68fe6a0a2397148abe8146d9d34736, type: 3}
+--- !u!4 &1778686737979126114 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -5456126973387331324, guid: ad68fe6a0a2397148abe8146d9d34736, type: 3}
   m_PrefabInstance: {fileID: 3236077429753878630}
   m_PrefabAsset: {fileID: 0}
 --- !u!54 &3105366890916820645
@@ -766,12 +741,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _specs: {fileID: 11400000, guid: 2a8fc57e639adce4a96e39f19c92cc8e, type: 2}
-  ElectrocutedBody:
-  - {fileID: 6083457867325498904}
-  - {fileID: 55380649787713402}
-  - {fileID: 5389519941147191195}
-  - {fileID: 7734618412114824211}
-  - {fileID: 912173137869431537}
   MaterialElectricity: {fileID: 2100000, guid: 98fd08f6dd93b0d4688d40de5ac8a1cd, type: 2}
   MaterialFreeze: {fileID: 2100000, guid: 9e4953594a6ce23438614852f15a6f23, type: 2}
   debug: 0
@@ -790,10 +759,10 @@ MonoBehaviour:
   _headposition: {fileID: 1652114150180471629}
   _target: {fileID: 330243525}
   _headRig: {fileID: 1634116138}
-  minlookatX: -0.6
-  maxlookatX: 0.6
-  minlookatY: 200
-  maxlookatY: 200
+  _minlookatX: -0.6
+  _maxlookatX: 0.6
+  _minlookatY: 200
+  _maxlookatY: 200
 --- !u!114 &4496836258315651299
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -822,8 +791,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bffb1dd9bf7a294f992beff224833be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Triangle: {fileID: 803565489}
-  _Player: {fileID: 1154968654047812947}
+  _triangle: {fileID: 803565489}
+  _player: {fileID: 1154968654047812947}
 --- !u!195 &6803740231039244804
 NavMeshAgent:
   m_ObjectHideFlags: 0

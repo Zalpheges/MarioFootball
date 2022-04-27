@@ -1,51 +1,49 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 
 public class Options_UI_Manager : MonoBehaviour
 {
-    private AudioSource Music;
+    private AudioSource _music;
     [SerializeField]
-    private AudioMixer Mixer;
+    private AudioMixer _mixer;
 
     [SerializeField]
-    private GameObject Audio_Options;
+    private GameObject _audioOptions;
     [SerializeField]
-    private GameObject FS_Audio_Options;
+    private GameObject _fsAudioOptions;
 
     [SerializeField]
-    private GameObject Controls_Options;
+    private GameObject _controlsOptions;
     [SerializeField]
-    private GameObject FS_Controls;
+    private GameObject _fsControls;
 
     [SerializeField]
-    private GameObject FS_Options;
+    private GameObject _fsOptions;
 
     [SerializeField]
-    private EventSystem ES;
+    private EventSystem _es;
 
     private void Awake()
     {
-        Music = AudioManager.GameObject.GetComponent<AudioSource>();
+        _music = AudioManager.GameObject.GetComponent<AudioSource>();
     }
 
     private void Update()
     {
-        if ((Keyboard.current?.escapeKey.wasPressedThisFrame ?? false) || (Gamepad.current?.buttonEast.wasPressedThisFrame ?? false))
+        if ((Keyboard.current?.escapeKey.wasPressedThisFrame ?? false)
+            || (Gamepad.current?.buttonEast.wasPressedThisFrame ?? false))
         {
-            if (Audio_Options.activeSelf)
+            if (_audioOptions.activeSelf)
             {
-                Audio_Options.SetActive(false);
-                ES.SetSelectedGameObject(FS_Options);
+                _audioOptions.SetActive(false);
+                _es.SetSelectedGameObject(_fsOptions);
             }
-            else if (Controls_Options.activeSelf)
+            else if (_controlsOptions.activeSelf)
             {
-                Controls_Options.SetActive(false);
-                ES.SetSelectedGameObject(FS_Options);
+                _controlsOptions.SetActive(false);
+                _es.SetSelectedGameObject(_fsOptions);
             }
             else
                 LevelLoader.LoadNextLevel(0);
@@ -53,7 +51,7 @@ public class Options_UI_Manager : MonoBehaviour
     }
     public void OnMusicValueChanged(float Value)
     {
-        Music.volume = Value;
+        _music.volume = Value;
     }
 
     public void OnSFXValueChanged(float Value)
@@ -63,20 +61,20 @@ public class Options_UI_Manager : MonoBehaviour
 
         float volume = Mathf.Log10(Value) * 20;
 
-        Mixer.SetFloat("SFX_Volume", volume);
+        _mixer.SetFloat("SFX_Volume", volume);
     }
 
     public void OnAudio()
     {
-        Audio_Options.SetActive(true);
-        ES.SetSelectedGameObject(FS_Audio_Options);
+        _audioOptions.SetActive(true);
+        _es.SetSelectedGameObject(_fsAudioOptions);
         AudioManager.PlaySFX(AudioManager.SFXType.ButtonClicked);
     }
 
     public void OnControls()
     {
-        Controls_Options.SetActive(true);
-        ES.SetSelectedGameObject(FS_Controls);
+        _controlsOptions.SetActive(true);
+        _es.SetSelectedGameObject(_fsControls);
         AudioManager.PlaySFX(AudioManager.SFXType.ButtonClicked);
     }
 

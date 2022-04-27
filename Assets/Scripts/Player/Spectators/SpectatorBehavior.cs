@@ -1,28 +1,24 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SpectatorBehavior : MonoBehaviour
 {
-    public float ProbaCelebrationWithGoal =0.8f;
-    public float ProbaCelebrationWithOUTGoal = 0.1f;
-    public bool isSit;
+    public float ProbaCelebrationWithGoal = 0.8f;
+    private bool _isSit = true;
     void Start()
     {
-        gameObject.GetComponent<Animator>().SetBool("isSit", isSit);
+        gameObject.GetComponent<Animator>().SetBool("isSit", _isSit);
     }
 
     void Update()
     {
         float random = Random.Range(0.0f, 1.0f);
-        
-        if (GameManager.IsGoalScored && random <= ProbaCelebrationWithGoal / 200)
+
+        if (GameManager.IsGoalScored)
         {
-            gameObject.GetComponent<Animator>().SetBool("SitVictory", true);
+            if (random <= ProbaCelebrationWithGoal)
+                gameObject.GetComponent<Animator>().SetBool("SitVictory", true);
         }
         else
-        {
             gameObject.GetComponent<Animator>().SetBool("SitVictory", false);
-        }
     }
 }

@@ -1,18 +1,16 @@
-using System.Collections.Generic;
-using UnityEngine;
-using System.Linq;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
 public class Team : MonoBehaviour
 {
     [SerializeField]
     private string _ateamBrainType;
-
     public Type TeamBrainType => Type.GetType(_ateamBrainType);
 
     [SerializeField]
     private string _agoalBrainType;
-
     public Type GoalBrainType => Type.GetType(_agoalBrainType);
 
     public Player[] Players { get; private set; }
@@ -28,6 +26,8 @@ public class Team : MonoBehaviour
     private float _lastChange;
     private Player[] _sortedPlayers;
     private bool _hadBallAtChange;
+
+    #region Awake/Update
 
     private void Awake()
     {
@@ -72,6 +72,8 @@ public class Team : MonoBehaviour
         }
     }
 
+    #endregion
+
     public void ChangePlayer(Vector3 position)
     {
         bool hasBall = false;
@@ -106,6 +108,8 @@ public class Team : MonoBehaviour
         CameraManager.Follow(Brain.Player.transform);
     }
 
+    #region Not Used
+
     public Player GetBallOwner()
     {
         foreach (Player player in Players)
@@ -118,13 +122,17 @@ public class Team : MonoBehaviour
         return null;
     }
 
+    #endregion
+
     public bool ArePlayersAllWaiting()
     {
-        foreach(Player player in Players)
-            if(!player.IsWaiting)
+        foreach (Player player in Players)
+            if (!player.IsWaiting)
                 return false;
         return true;
     }
+
+    #region Items
 
     /// <summary>
     /// Add an item to the team's item queue, only if it's not full already
@@ -133,14 +141,12 @@ public class Team : MonoBehaviour
     {
         if (_items.Count == _itemCapacity)
             return;
-        Item item;
         ItemData data;
         do
         {
             List<ItemData> itemDatas = PrefabManager.Items;
             data = itemDatas[UnityEngine.Random.Range(0, itemDatas.Count)];
-            item = data.Prefab.GetComponent<Item>();
-        } while (!item || (data.TeamHasToLose && GameManager.LosingTeam != this));
+        } while (data.TeamHasToLose && GameManager.LosingTeam != this);
         _items.Enqueue(data);
         UIManager.UpdateItems(_items, this);
     }
@@ -151,12 +157,14 @@ public class Team : MonoBehaviour
     /// <returns>The gameObject corresponding to the deleted item</returns>
     public ItemData GetItem()
     {
-        if(_items.Count == 0) 
+        if (_items.Count == 0)
             return null;
         ItemData item = _items.Dequeue();
         UIManager.UpdateItems(_items, this);
         return item;
     }
+
+    #endregion
 
     /// <summary>
     /// Initialize the team's players and item queue

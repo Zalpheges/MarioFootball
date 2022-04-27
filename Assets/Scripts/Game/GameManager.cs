@@ -1,7 +1,6 @@
 using System.Collections.Generic;
-using System.Collections;
-using UnityEngine;
 using System.Linq;
+using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
 
@@ -44,6 +43,7 @@ public class GameManager : MonoBehaviour
     private Chrono _chrono;
     private float _timer = 0f;
     private bool _endOfGameUIDone = false;
+    private bool _inMatch = false;
 
     #region Debug
 
@@ -60,7 +60,100 @@ public class GameManager : MonoBehaviour
 
     #endregion
 
-    #region Public functions
+
+    #region Awake/Start/Update
+
+    private void Awake()
+    {
+        Random.InitState(System.DateTime.Now.Millisecond);
+
+        if (_instance == null)
+        {
+            _instance = this;
+            DontDestroyOnLoad(this);
+        }
+        else
+            Destroy(gameObject);
+
+        _matches = new Queue<Match>();
+
+        #region Debug
+
+        if (d_Captain1 == null)
+            return;
+
+        Match debugMatch = new Match()
+        {
+            Captain1 = d_Captain1,
+            Captain2 = d_Captain2,
+            GoalKeeper = d_GoalKeeper,
+            Mate1 = d_Mate1,
+            Mate2 = d_Mate2,
+            GameTime = d_gameTime,
+            NGoalsToWin = d_goalToWin,
+            AIDifficulty = d_aIDifficulty
+        };
+
+        _matches.Enqueue(debugMatch);
+
+        #endregion
+    }
+
+    private void Start()
+    {
+        Random.InitState(System.DateTime.Now.Millisecond);
+    }
+
+    private void Update()
+    {
+        if (!_inMatch)//if we're not in match
+            return;
+
+        if (KickOffTimer.run)
+            KickOffTimer.value += Time.deltaTime;
+
+        UIManager.SetChrono(_chrono);
+        if (!ChronoStopped)
+        {
+            _timer += Time.deltaTime;
+            if (_timer >= 1f)
+            {
+                --_chrono;
+                if (_chrono.Finished)
+                {
+                    ChronoStopped = true;
+                    MatchOver();
+                }
+                --_timer;
+            }
+        }
+
+        void MatchOver()
+        {
+            if (!_endOfGameUIDone)
+            {
+                _endOfGameUIDone = true;
+                if (Field.Team2 == LosingTeam)
+                    UIManager.EndOfGame(UIManager.GameState.Win);
+                else if (Field.Team1 == LosingTeam)
+                    UIManager.EndOfGame(UIManager.GameState.Loose);
+                else
+                    UIManager.EndOfGame(UIManager.GameState.Draw);
+            }
+
+            if (((Gamepad.current?.allControls.Any(x => x is ButtonControl button && x.IsPressed() && !x.synthetic) ?? false)
+                || (Keyboard.current?.anyKey.wasPressedThisFrame ?? false)) && _endOfGameUIDone)
+            {
+                _inMatch = false;
+                AudioManager.PlayMusic(AudioManager.MusicType.Menu);
+                LevelLoader.LoadNextLevel(0);
+            }
+        }
+    }
+
+    #endregion
+
+    #region Managing
 
     /// <summary>
     /// Gives each team's players, place them, and instantiate the ball
@@ -71,7 +164,7 @@ public class GameManager : MonoBehaviour
     {
         Match match = _instance._matches.Dequeue();
 
-        UIManager._instance.InitHUD(match.Captain1, match.Captain2);
+        UIManager.InitHUD(match.Captain1, match.Captain2);
 
         _instance._currentResult = new MatchResult
         {
@@ -105,7 +198,7 @@ public class GameManager : MonoBehaviour
 
         teammates[0] = Player.CreatePlayer(match.Captain2.Prefab, team2);
         teammates[0].name = "Captain Team 2";
-
+        Debug.Log(match.Mate2.Prefab.name);
         for (int i = 1; i < 4; ++i)
         {
             teammates[i] = Player.CreatePlayer(match.Mate2.Prefab, team2);
@@ -113,13 +206,12 @@ public class GameManager : MonoBehaviour
         }
 
         Player goal2 = Player.CreatePlayer(match.GoalKeeper.Prefab, team2, true);
-        goal1.name = "Goal Team 2";
+        goal2.name = "Goal Team 2";
 
         team2.Init(teammates, goal2);
 
         #endregion
 
-        Field.Init(Instantiate(PrefabManager.Ball).GetComponent<Ball>());
 
         //Create allPlayers array
         Player[] allPlayers = new Player[team1.Players.Length + team2.Players.Length + 2];
@@ -128,61 +220,14 @@ public class GameManager : MonoBehaviour
         allPlayers[team1.Players.Length + team2.Players.Length] = team1.Goalkeeper;
         allPlayers[team1.Players.Length + team2.Players.Length + 1] = team2.Goalkeeper;
 
-        CameraManager.Init(allPlayers.Select(player => player.transform).ToArray(), Field.Ball.transform);
+        Ball ball = Instantiate(PrefabManager.Ball).GetComponent<Ball>();
+        CameraManager.Init(allPlayers.Select(player => player.transform).ToArray(), ball.transform);
         CameraManager.Follow(allPlayers[0].transform);
+        Field.Init(ball);
 
-        _instance._chrono = new Chrono(match.gameTime, 0);
-    }
 
-    public static void OnGoalScored(Team team)
-    {
-        AudioManager.PlaySFX(AudioManager.SFXType.Goal); //GoalScoredSound
-        AudioManager.PlayCrowdSound(AudioManager.CrowdSoundType.Goal);//GoalcrowdSound
-
-        UIManager._instance.DisplayAnnouncement(UIManager.AnnouncementType.Goal);
-
-        IsGoalScored = true;
-        Field.Ball.Free();
-        ChronoStopped = true;
-
-        HandleScorer();
-
-        if (team == Field.Team1)
-        {
-            UIManager.SetScore(scoreTeam2: ++_instance._currentResult.ScoreTeam2);
-            _instance.RedirectPlayers(Field.Team1.Players, Field.Team2.Players);
-            //Field.Ball.transform.position = Field.Team2.Players[0].transform.position;
-        }
-        else if (team == Field.Team2)
-        {
-            UIManager.SetScore(scoreTeam1: ++_instance._currentResult.ScoreTeam1);
-            _instance.RedirectPlayers(Field.Team2.Players, Field.Team1.Players);
-            //Field.Ball.transform.position = Field.Team1.Players[0].transform.position;
-        }
-
-        Field.Ball.transform.position = Field.Team1.Players[0].transform.position;
-
-        void HandleScorer()
-        {
-            Player scorer = Field.Ball.LastOwner;
-            bool ownGoal = team == scorer.Team;
-            void anim() => scorer.Idle(celebrate: !ownGoal, shameful: ownGoal);
-            scorer.ActionsQueue.AddAction(scorer.transform.position, 10f, anim, 5f, false);
-            CameraManager.CamerasQueue.AddCameraControl(scorer.transform, 5f);
-            CameraManager.ReadQueue();
-            CameraManager.LookAt(scorer.transform);
-        }
-    }
-
-    public static void FreePlayers()
-    {
-        foreach (Player player in Field.Team1.Players)
-            player.IsWaiting = false;
-        foreach (Player player in Field.Team2.Players)
-            player.IsWaiting = false;
-
-        Field.Team1.Goalkeeper.IsWaiting = false;
-        Field.Team2.Goalkeeper.IsWaiting = false;
+        _instance._chrono = new Chrono(match.GameTime, 0);
+        _instance._inMatch = true;
     }
 
     public static void AddMatch(PlayerSpecs playerCaptain, PlayerSpecs playerMate, PlayerSpecs AICaptain, PlayerSpecs AIMate, int gameTime, float goalToWin, int AIDifficulty)
@@ -196,8 +241,8 @@ public class GameManager : MonoBehaviour
 
             GoalKeeper = _instance.d_GoalKeeper,
 
-            gameTime = gameTime,
-            goalToWin = goalToWin,
+            GameTime = gameTime,
+            NGoalsToWin = goalToWin,
             AIDifficulty = AIDifficulty
         };
 
@@ -206,132 +251,94 @@ public class GameManager : MonoBehaviour
 
     #endregion
 
-    #region Awake/Start/Update
+    #region Gameplay
 
-    private void Awake()
+    public static void OnGoalScored(Team team)
     {
-        Random.InitState(System.DateTime.Now.Millisecond);
+        AudioManager.PlaySFX(AudioManager.SFXType.Goal); //GoalScoredSound
+        AudioManager.PlayCrowdSound(AudioManager.CrowdSoundType.Goal);//GoalcrowdSound
 
-        if (_instance == null)
+        UIManager.DisplayAnnouncement(UIManager.AnnouncementType.Goal);
+
+        IsGoalScored = true;
+        Field.Ball.Free();
+        ChronoStopped = true;
+
+        HandleScorer();
+
+        if (team == Field.Team1)
         {
-            _instance = this;
-            DontDestroyOnLoad(this);
+            UIManager.SetScore(scoreTeam2: ++_instance._currentResult.ScoreTeam2);
+            RedirectPlayers(Field.Team1.Players, Field.Team2.Players);
+            //Field.Ball.transform.position = Field.Team2.Players[0].transform.position;
         }
-        else
-            Destroy(gameObject);
-
-        _matches = new Queue<Match>();
-
-        #region Debug
-
-        if (d_Captain1 == null)
-            return;
-
-        Match debugMatch = new Match()
+        else if (team == Field.Team2)
         {
-            Captain1 = d_Captain1,
-            Captain2 = d_Captain2,
-            GoalKeeper = d_GoalKeeper,
-            Mate1 = d_Mate1,
-            Mate2 = d_Mate2,
-            gameTime = d_gameTime,
-            goalToWin = d_goalToWin,
-            AIDifficulty= d_aIDifficulty
-        };
+            UIManager.SetScore(scoreTeam1: ++_instance._currentResult.ScoreTeam1);
+            RedirectPlayers(Field.Team2.Players, Field.Team1.Players);
+            //Field.Ball.transform.position = Field.Team1.Players[0].transform.position;
+        }
 
-        _matches.Enqueue(debugMatch);
+        Field.Ball.transform.position = Field.Team1.Players[0].transform.position;
+
+        #region Local functions
+
+        void HandleScorer()
+        {
+            Player scorer = Field.Ball.LastOwner;
+            bool ownGoal = team == scorer.Team;
+            void anim() => scorer.Idle(celebrate: !ownGoal, shameful: ownGoal);
+            scorer.ActionsQueue.AddAction(scorer.transform.position, 10f, anim, 5f, false);
+            CameraManager.CamerasQueue.AddCameraControl(scorer.transform, 5f);
+            CameraManager.ReadQueue();
+            CameraManager.LookAt(scorer.transform);
+        }
+
+        /// <summary>
+        /// Command to the players to head to their start positions, or customs ones if given
+        /// </summary>
+        /// <param name="attackingPlayers">Players who just conceded a goal</param>
+        /// <param name="defendingPlayers">Players who just scored a goal</param>
+        /// <param name="positions">Positions for the players to head to, starting with the attackers</param>
+        void RedirectPlayers(Player[] attackingPlayers, Player[] defendingPlayers, List<Vector3> positions = null)
+        {
+            positions ??= Field.GetStartPositions();
+            int n = attackingPlayers.Length;
+            for (int i = 0; i < positions.Count; i++)
+            {
+                bool attackers = i < n;
+                Player player = attackers ? attackingPlayers[i] : defendingPlayers[i - n];
+                Vector3 destination = player.Team == Field.Team1 ? positions[i] : -positions[i];
+                player.ActionsQueue.AddAction(destination, attackers ? 5f : 10f, () => player.Run(happy: !attackers, sad: attackers), 1f, true);
+                player.ReadQueue();
+            }
+            RedirectGoalkeeper(Field.Team1);
+            RedirectGoalkeeper(Field.Team2);
+
+            void RedirectGoalkeeper(Team team)
+            {
+                Player gk = team.Goalkeeper;
+                gk.ActionsQueue.AddAction(Field.GetGoalKeeperPosition(team), 10f, () => gk.Run(), 1f, true);
+                gk.ReadQueue();
+            }
+        }
 
         #endregion
+
     }
 
-    private void Start()
+    public static void FreePlayers()
     {
-        Random.InitState(System.DateTime.Now.Millisecond);
+        foreach (Player player in Field.Team1.Players)
+            player.IsWaiting = false;
+        foreach (Player player in Field.Team2.Players)
+            player.IsWaiting = false;
+
+        Field.Team1.Goalkeeper.IsWaiting = false;
+        Field.Team2.Goalkeeper.IsWaiting = false;
     }
 
-    private void Update()
-    {
-        if (!UIManager._instance)//if we're not in match
-            return;
-
-        if (KickOffTimer.run)
-            KickOffTimer.value += Time.deltaTime;
-
-        UIManager.SetChrono(_chrono);
-        if(!ChronoStopped)
-        {
-            _timer += Time.deltaTime;
-            if (_timer >= 1f)
-            {
-                --_chrono;
-                if (_chrono.Finished)
-                {
-                    ChronoStopped = true;
-                    MatchOver();
-                }
-                --_timer;
-            }
-        }
-
-        void MatchOver()
-        {
-            if (!_endOfGameUIDone)
-            {
-                _endOfGameUIDone = true;
-                if (Field.Team2 == LosingTeam)
-                    UIManager.EndOfGame(UIManager.gameState.Win);
-                else if (Field.Team1 == LosingTeam)
-                    UIManager.EndOfGame(UIManager.gameState.Loose);
-                else
-                    UIManager.EndOfGame(UIManager.gameState.Draw);
-            }
-
-            if (((Gamepad.current?.allControls.Any(x => x is ButtonControl button && x.IsPressed() && !x.synthetic) ?? false) 
-                || (Keyboard.current?.anyKey.wasPressedThisFrame ?? false)) && _endOfGameUIDone)
-            {
-                AudioManager.PlayMusic(AudioManager.MusicType.Menu);
-                LevelLoader.LoadNextLevel(0);
-            }
-        }
-    }
 
     #endregion
 
-    /// <summary>
-    /// Command to the players to head to their start positions, or customs ones if given
-    /// </summary>
-    /// <param name="attackingPlayers">Players who just conceded a goal</param>
-    /// <param name="defendingPlayers">Players who just scored a goal</param>
-    /// <param name="positions">Positions for the players to head to, starting with the attackers</param>
-    private void RedirectPlayers(Player[] attackingPlayers, Player[] defendingPlayers, List<Vector3> positions = null)
-    {
-        positions ??= Field.GetStartPositions();
-        int n = attackingPlayers.Length;
-        for (int i = 0; i < positions.Count; i++)
-        {
-            bool attackers = i < n;
-            Player player = attackers ? attackingPlayers[i] : defendingPlayers[i - n];
-            Vector3 destination = player.Team == Field.Team1 ? positions[i] : -positions[i];
-            player.ActionsQueue.AddAction(destination, attackers ? 5f : 10f, () => player.Run(happy: !attackers, sad: attackers), 1f, true);
-            player.ReadQueue();
-        }
-        RedirectGoalkeeper(Field.Team1);
-        RedirectGoalkeeper(Field.Team2);
-
-        void RedirectGoalkeeper(Team team)
-        {
-            Player gk = team.Goalkeeper;
-            gk.ActionsQueue.AddAction(Field.GetGoalKeeperPosition(team), 10f, () => gk.Run(), 1f, true);
-            gk.ReadQueue();
-        }
-    }
-
-    private IEnumerator Match()
-    {
-        yield return new WaitForSeconds(_instance._debugMatchDuration);
-
-        _instance._currentResult.Duration = _instance._debugMatchDuration;
-
-        _instance._results.Enqueue(_instance._currentResult);
-    }
 }

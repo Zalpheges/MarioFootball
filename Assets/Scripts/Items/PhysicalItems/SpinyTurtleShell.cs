@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class SpinyTurtleShell : PhysicalItem
 {
     protected override void ApplyEffect(Player player)

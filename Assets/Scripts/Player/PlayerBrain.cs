@@ -2,7 +2,7 @@ using UnityEngine;
 
 public abstract class PlayerBrain : MonoBehaviour
 {
-    public Player Player { get; set; }
+    public Player Player;
 
     protected Team Allies => Player.Team;
     protected Team Enemies => Allies == Field.Team1 ? Field.Team2 : Field.Team1;
@@ -18,9 +18,8 @@ public abstract class PlayerBrain : MonoBehaviour
     }
 
     /// <summary>
-    /// Calcule le déplacement que l'IA doit appliquer au joueur 
+    /// Ask the brain for an action the player will perform
     /// </summary>
-    /// <param name="team">L'équipe du joueur</param>
-    /// <returns>Le vecteur de déplacement.</returns>
+    /// <returns>The action.</returns>
     public abstract Action GetAction();
 }

@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class GreenTurtleShell : PhysicalItem
 {
     protected override void ApplyEffect(Player player)

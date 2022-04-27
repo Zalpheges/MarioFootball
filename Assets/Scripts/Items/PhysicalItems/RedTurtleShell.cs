@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class RedTurtleShell : PhysicalItem
 {
     private Player _followedPlayer;
@@ -11,7 +9,7 @@ public class RedTurtleShell : PhysicalItem
 
     protected override void Update()
     {
-        if(_followedPlayer)
+        if (_followedPlayer)
             _direction = (_followedPlayer.transform.position - transform.position).normalized;
         base.Update();
     }

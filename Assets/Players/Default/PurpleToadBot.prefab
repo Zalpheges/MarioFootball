@@ -511,6 +511,10 @@ MonoBehaviour:
   _headposition: {fileID: 6964923533953550917}
   _target: {fileID: 5527698272851589433}
   _headRig: {fileID: 3055279302806376034}
+  _minlookatX: -0.6
+  _maxlookatX: 0.6
+  _minlookatY: 200
+  _maxlookatY: 200
 --- !u!114 &-3968138508259059476
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -539,8 +543,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bffb1dd9bf7a294f992beff224833be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Triangle: {fileID: 5835273346978948902}
-  _Player: {fileID: -1496860289521580080}
+  _triangle: {fileID: 5835273346978948902}
+  _player: {fileID: -1496860289521580080}
 --- !u!114 &-1496860289521580080
 MonoBehaviour:
   m_ObjectHideFlags: 0

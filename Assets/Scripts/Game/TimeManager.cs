@@ -1,18 +1,18 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+using UnityEngine;
 
 public class TimeManager : MonoBehaviour
 {
-    private bool _isRunning = false;
     public static bool IsPlaying { get; private set; }
 
+    private bool _isRunning = false;
     private float _toTimeScale = 1f;
     private float _shadeDuration = 0f;
 
     private float _atPauseTimeScale = 0f;
 
     private static TimeManager _instance;
-    
+
     private void Awake()
     {
         if (_instance != null && _instance != this)
@@ -54,14 +54,13 @@ public class TimeManager : MonoBehaviour
         if (!_instance._isRunning)
             _instance.StartCoroutine(_instance._SlowDown(scale, duration, preShading, 0f));
     }
-    
 
     public static void SlowDown(float scale, float duration, float preShading, float postShading)
     {
         if (!_instance._isRunning)
             _instance.StartCoroutine(_instance._SlowDown(scale, duration, preShading, postShading));
     }
-    
+
     public IEnumerator _SlowDown(float scale, float duration, float preShading, float postShading)
     {
         _isRunning = true;
