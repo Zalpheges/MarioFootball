@@ -40,10 +40,12 @@ public class Match_UI_Manager : MonoBehaviour
     [SerializeField]
     private EventSystem _es;
 
-    private List<GameObject> _matchParams = new List<GameObject>();
+    [SerializeField] private List<GameObject> _matchParams = new List<GameObject>();
 
-    private List<PlayerSpecs> _maincharaSpecs = new List<PlayerSpecs>();
-    private List<MateSpecs> _mateSpecs = new List<MateSpecs>();
+    //Charas
+    [SerializeField] private PlayerSpecs _goalSpecs;
+    [SerializeField] private List<PlayerSpecs> _maincharaSpecs = new List<PlayerSpecs>();
+    [SerializeField] private List<MateSpecs> _mateSpecs = new List<MateSpecs>();
     private List<PlayerSpecs> _onlyMateSpecs = new List<PlayerSpecs>();
 
     private List<Button> _charaButtons;
@@ -77,6 +79,7 @@ public class Match_UI_Manager : MonoBehaviour
         _currentSelectedGameObject = _fsMainCharacter;
         UpdateStat(_currentSelectedGameObject);
 
+        //Initialize match params UI
         foreach (var param in _matchParams)
         {
             ISliderValue slider = param.GetComponent<ISliderValue>();
@@ -170,6 +173,7 @@ public class Match_UI_Manager : MonoBehaviour
         {
             charaspecs = _maincharaSpecs;
         }
+
         for (int i = 0; i < charaspecs.Count; i++)
         {
             GameObject newChara = Instantiate(_charaButton, CharaSection.transform);
@@ -283,7 +287,7 @@ public class Match_UI_Manager : MonoBehaviour
 
         GetRandomEnemies();
 
-        GameManager.AddMatch(_playerCaptain, _playerAlly.MateSpec, _aiCaptain, _aiAlly.MateSpec, GameTime, GoalToWin, AIDifficulty);
+        GameManager.AddMatch(_playerCaptain, _playerAlly.MateSpec, _aiCaptain, _aiAlly.MateSpec, _goalSpecs,GameTime, GoalToWin, AIDifficulty);
         AudioManager.SetCharaAudio(_playerCaptain, _playerAlly.MateSpec, _aiCaptain, _aiAlly.MateSpec);
 
         LevelLoader.LoadNextLevel(SceneManager.GetActiveScene().buildIndex + 1);

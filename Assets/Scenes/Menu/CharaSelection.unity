@@ -214,8 +214,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: adec24e1c0bb81d4eaa5eb8bc7c965f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slider: {fileID: 1851515597}
-  text: {fileID: 871792449}
+  _slider: {fileID: 1851515597}
+  _text: {fileID: 871792449}
 --- !u!222 &57584734
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -447,7 +447,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &198709776
 GameObject:
@@ -907,7 +907,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -183.80469, y: 0}
+  m_AnchoredPosition: {x: -204, y: 0}
   m_SizeDelta: {x: -367.6094, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &442646403
@@ -943,7 +943,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Max goals
+  m_Text: Goals to win
 --- !u!222 &442646404
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1100,6 +1100,640 @@ RectTransform:
   m_AnchoredPosition: {x: -0.00012207031, y: 131}
   m_SizeDelta: {x: 3600.96, y: 1501.0515}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &525178231
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 525178238}
+  - component: {fileID: 525178237}
+  - component: {fileID: 525178236}
+  - component: {fileID: 525178235}
+  - component: {fileID: 525178234}
+  - component: {fileID: 525178233}
+  - component: {fileID: 525178232}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!82 &525178232
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 525178231}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: -7444480804589367763, guid: 05569034d6901cc408f8a3c12684bd66, type: 2}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!82 &525178233
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 525178231}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 0.557
+  m_Pitch: 1
+  Loop: 1
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &525178234
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 525178231}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5baf185070e56944882d1470c13c3d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _musicAudioSource: {fileID: 525178233}
+  _sfxAudioSource: {fileID: 525178232}
+  _menuMusic: {fileID: 8300000, guid: 3381c508bade53a46bf4b85b5cf70985, type: 3}
+  _matchMusic:
+  - {fileID: 8300000, guid: d012e2524d5bc624e8fc944324eeb543, type: 3}
+  - {fileID: 8300000, guid: 6c5b39a0e22c5894d8350a4e963dfd70, type: 3}
+  - {fileID: 8300000, guid: 48c1db6296da7f744a26f1669b2b5990, type: 3}
+  _kickoff: {fileID: 8300000, guid: 13244609a97fa2045beef550f1f6b63d, type: 3}
+  _goal:
+  - {fileID: 8300000, guid: 053134ff0fa6ca442b7f24de49219a31, type: 3}
+  - {fileID: 8300000, guid: 66e96c19a2146e8468a90b044daab3c1, type: 3}
+  - {fileID: 8300000, guid: 72b880c65d5b89d4986b3cc55058b547, type: 3}
+  - {fileID: 8300000, guid: b463f7b6f519aae418fa6f92862c95e3, type: 3}
+  - {fileID: 8300000, guid: 27ff0fc2058411c4fb91cbfdb47d61f1, type: 3}
+  - {fileID: 8300000, guid: 50c682a4b734c6149b9d95643e950bd7, type: 3}
+  _matchOver:
+  - {fileID: 8300000, guid: 93b742ad671aacd4789771a2dcfcf03a, type: 3}
+  _buttonSelected: {fileID: 8300000, guid: cab7a899856db4c449380797b8771ea7, type: 3}
+  _buttonClicked: {fileID: 8300000, guid: e7a6ef1ddd8403045af0a5ac6f318768, type: 3}
+  _charaAudios:
+  - Name: Mario
+    Shoot:
+    - {fileID: 8300000, guid: 9d61c3dcde091db4787d3656fd3264a3, type: 3}
+    - {fileID: 8300000, guid: 16e19563440430c428f25e2ca5ac3273, type: 3}
+    - {fileID: 8300000, guid: 593db9b23713eda47bb5817d1367d064, type: 3}
+    - {fileID: 8300000, guid: a16f3aea600647549b87cebe7b6b3ac2, type: 3}
+    - {fileID: 8300000, guid: 197dab8d1d2d36f4482f4fb1c7592fa6, type: 3}
+    Pass:
+    - {fileID: 8300000, guid: bca325ad671c9d145ab6e7932830a9d5, type: 3}
+    - {fileID: 8300000, guid: a9fe4f1d064f0f543abd53c854761885, type: 3}
+    - {fileID: 8300000, guid: 59130eba40695b44b86c02540a9e7c94, type: 3}
+    ThrowItem:
+    - {fileID: 8300000, guid: 40e5a0674e002664381e3946ef402690, type: 3}
+    - {fileID: 8300000, guid: ef0119d0863416245b895d56be807248, type: 3}
+    - {fileID: 8300000, guid: 4dd99df9d38287b4db11855f87e4c7e0, type: 3}
+    Celebrate:
+    - {fileID: 8300000, guid: fae11431951f6f9469b7abea551d9b60, type: 3}
+    - {fileID: 8300000, guid: 0b2c3e015a2cad94080fa209d2c0860d, type: 3}
+    - {fileID: 8300000, guid: 96a9f9d2d22c1084283e3df83bb88fc6, type: 3}
+    - {fileID: 8300000, guid: 3020daffb914ab64aaf615fef8e034e8, type: 3}
+    - {fileID: 8300000, guid: 5908acd8d9e272347b5f4e6860601a67, type: 3}
+    - {fileID: 8300000, guid: 788ddb6882a333247a208cec6e423fc8, type: 3}
+    Electrocuted:
+    - {fileID: 8300000, guid: e706471e46bc4ae4eb0b78bf669c009a, type: 3}
+    - {fileID: 8300000, guid: f05d4fb54a44ca74395599dc9e6a23ac, type: 3}
+    - {fileID: 8300000, guid: 8b08875a4f146874ca5ff50c81ec50c3, type: 3}
+    PlayerLinkedTo: {fileID: 11400000, guid: 26793e13432ba1346a58e9f5dc9a52c8, type: 2}
+  - Name: Luigi
+    Shoot:
+    - {fileID: 8300000, guid: ddf5d0b40450c774682638d12af4365c, type: 3}
+    - {fileID: 8300000, guid: b5cf72732970ee945b5f251da998de30, type: 3}
+    - {fileID: 8300000, guid: 5a4318cb7a09cf544ba6b1b67122ea97, type: 3}
+    Pass:
+    - {fileID: 8300000, guid: 951b913799b7fbf4ba568e6ab083d1c5, type: 3}
+    - {fileID: 8300000, guid: c21faf23820c04442a5b5de2e1604569, type: 3}
+    - {fileID: 8300000, guid: 4df1a5cfe96952241afe2c04120c4ca8, type: 3}
+    - {fileID: 8300000, guid: 7733d9efb03bf744cba5737f853b1e09, type: 3}
+    - {fileID: 8300000, guid: ccfe58e6ca5e01542aab72922f4ffb16, type: 3}
+    - {fileID: 8300000, guid: 66e71e2278771264eb456b2dd632f631, type: 3}
+    ThrowItem:
+    - {fileID: 8300000, guid: 4f28f91d6982f994f880616207ff3e86, type: 3}
+    - {fileID: 8300000, guid: 49f4e6f09ce5a2f4295ab017387a483b, type: 3}
+    - {fileID: 8300000, guid: ecfa950c3bd8e944d92583d3d3d95d75, type: 3}
+    Celebrate:
+    - {fileID: 8300000, guid: 688ec58c8db2351488cc47fe01e245df, type: 3}
+    - {fileID: 8300000, guid: 7d19901a42cdadc45b91a09c5cbc6abd, type: 3}
+    - {fileID: 8300000, guid: 531d82ae5ee41ca42ac28bfa1af9b567, type: 3}
+    - {fileID: 8300000, guid: 01307e829be0e8044bf19ac958dee554, type: 3}
+    - {fileID: 8300000, guid: 6b89b45e3943a114f861b81c098e9873, type: 3}
+    - {fileID: 8300000, guid: d7b0757820f25e342a6a3a9e38a84006, type: 3}
+    Electrocuted:
+    - {fileID: 8300000, guid: c717e791592bdb845b5f2f3dbcb6a372, type: 3}
+    - {fileID: 8300000, guid: c681755e6b8791946ba1397e4e0a4634, type: 3}
+    - {fileID: 8300000, guid: 30c380bedf9af4442819cc2ea0fa0ffa, type: 3}
+    PlayerLinkedTo: {fileID: 11400000, guid: f5a9dca6287283a4b847a5644f44c221, type: 2}
+  - Name: Peach
+    Shoot:
+    - {fileID: 8300000, guid: 7f6d96b891d879a49a226a7634249584, type: 3}
+    - {fileID: 8300000, guid: 1c165dcbe3cfcdd49821ac4b2176b8eb, type: 3}
+    - {fileID: 8300000, guid: 6f596647db768d940b74b4a2756d5851, type: 3}
+    - {fileID: 8300000, guid: 201860d5c02af244d8b076d000c8ed6c, type: 3}
+    Pass:
+    - {fileID: 8300000, guid: bb14675b41d981d4baee569e32a745fe, type: 3}
+    - {fileID: 8300000, guid: e02ef729209f8b2498e6a11e4b2e27c8, type: 3}
+    ThrowItem:
+    - {fileID: 8300000, guid: 0e67f4f394acf0c46967795f63b902c9, type: 3}
+    - {fileID: 8300000, guid: 7c3fe7acf3996e74ba797acab07de09f, type: 3}
+    Celebrate:
+    - {fileID: 8300000, guid: 9666dc4d45704d74aae48ded2fb02dc7, type: 3}
+    - {fileID: 8300000, guid: cd9f202e791160f4ebc3666734f2e26a, type: 3}
+    - {fileID: 8300000, guid: b7820d2419110b94f80eb0e36fb00bf2, type: 3}
+    Electrocuted:
+    - {fileID: 8300000, guid: be6d716e449b7704296c9463b26ea712, type: 3}
+    - {fileID: 8300000, guid: 7ec458289e704184aadd29aec629d542, type: 3}
+    - {fileID: 8300000, guid: 49ba51637cf8457438d3587e73ed3f32, type: 3}
+    PlayerLinkedTo: {fileID: 11400000, guid: dff12bb2441f9c748953d3781c3fd125, type: 2}
+  - Name: Rosalina
+    Shoot:
+    - {fileID: 8300000, guid: 7f6d96b891d879a49a226a7634249584, type: 3}
+    - {fileID: 8300000, guid: 1c165dcbe3cfcdd49821ac4b2176b8eb, type: 3}
+    - {fileID: 8300000, guid: 6f596647db768d940b74b4a2756d5851, type: 3}
+    - {fileID: 8300000, guid: 201860d5c02af244d8b076d000c8ed6c, type: 3}
+    Pass:
+    - {fileID: 8300000, guid: bb14675b41d981d4baee569e32a745fe, type: 3}
+    - {fileID: 8300000, guid: e02ef729209f8b2498e6a11e4b2e27c8, type: 3}
+    ThrowItem:
+    - {fileID: 8300000, guid: 0e67f4f394acf0c46967795f63b902c9, type: 3}
+    - {fileID: 8300000, guid: 7c3fe7acf3996e74ba797acab07de09f, type: 3}
+    Celebrate:
+    - {fileID: 8300000, guid: 9666dc4d45704d74aae48ded2fb02dc7, type: 3}
+    - {fileID: 8300000, guid: cd9f202e791160f4ebc3666734f2e26a, type: 3}
+    - {fileID: 8300000, guid: b7820d2419110b94f80eb0e36fb00bf2, type: 3}
+    Electrocuted:
+    - {fileID: 8300000, guid: be6d716e449b7704296c9463b26ea712, type: 3}
+    - {fileID: 8300000, guid: 7ec458289e704184aadd29aec629d542, type: 3}
+    - {fileID: 8300000, guid: 49ba51637cf8457438d3587e73ed3f32, type: 3}
+    PlayerLinkedTo: {fileID: 11400000, guid: af6a1b2b9eb40ae42a3edfe67433b0cd, type: 2}
+  - Name: Birdo
+    Shoot:
+    - {fileID: 8300000, guid: 7f6d96b891d879a49a226a7634249584, type: 3}
+    - {fileID: 8300000, guid: 1c165dcbe3cfcdd49821ac4b2176b8eb, type: 3}
+    - {fileID: 8300000, guid: 6f596647db768d940b74b4a2756d5851, type: 3}
+    - {fileID: 8300000, guid: 201860d5c02af244d8b076d000c8ed6c, type: 3}
+    Pass:
+    - {fileID: 8300000, guid: bb14675b41d981d4baee569e32a745fe, type: 3}
+    - {fileID: 8300000, guid: e02ef729209f8b2498e6a11e4b2e27c8, type: 3}
+    ThrowItem:
+    - {fileID: 8300000, guid: 0e67f4f394acf0c46967795f63b902c9, type: 3}
+    - {fileID: 8300000, guid: 7c3fe7acf3996e74ba797acab07de09f, type: 3}
+    Celebrate:
+    - {fileID: 8300000, guid: 9666dc4d45704d74aae48ded2fb02dc7, type: 3}
+    - {fileID: 8300000, guid: cd9f202e791160f4ebc3666734f2e26a, type: 3}
+    - {fileID: 8300000, guid: b7820d2419110b94f80eb0e36fb00bf2, type: 3}
+    Electrocuted:
+    - {fileID: 8300000, guid: be6d716e449b7704296c9463b26ea712, type: 3}
+    - {fileID: 8300000, guid: 7ec458289e704184aadd29aec629d542, type: 3}
+    - {fileID: 8300000, guid: 49ba51637cf8457438d3587e73ed3f32, type: 3}
+    PlayerLinkedTo: {fileID: 11400000, guid: 2a8fc57e639adce4a96e39f19c92cc8e, type: 2}
+  - Name: Yoshi
+    Shoot:
+    - {fileID: 8300000, guid: d90222100a3398d4588f4d5b10e9f325, type: 3}
+    - {fileID: 8300000, guid: e77410a0b0f9bcd4d909c8ab278a66f7, type: 3}
+    - {fileID: 8300000, guid: 1837d35454b06a6469d14ea26d98d66d, type: 3}
+    - {fileID: 8300000, guid: 33a70008d60e1d44892c80c6100bfe73, type: 3}
+    Pass:
+    - {fileID: 8300000, guid: 4142dfb5a9ed291459ac2f5ef891a9c3, type: 3}
+    - {fileID: 8300000, guid: 407509c0f177e3f4084fe8140840eeec, type: 3}
+    - {fileID: 8300000, guid: cd0c188731d36214da499a4b509bf20d, type: 3}
+    ThrowItem:
+    - {fileID: 8300000, guid: 6a45876045301974abce94768f99c821, type: 3}
+    - {fileID: 8300000, guid: 13a222db7eff1564ea4572127e5d9d07, type: 3}
+    - {fileID: 8300000, guid: e9036a0eab7a5da4db6ff8e2aee3deb7, type: 3}
+    - {fileID: 8300000, guid: 70cb46449ad92df4da93170130650db4, type: 3}
+    - {fileID: 8300000, guid: e8c0988e36cfd8c458e6903a8db3cf06, type: 3}
+    Celebrate:
+    - {fileID: 8300000, guid: 1bef858ce67a4f246835036a41704db9, type: 3}
+    - {fileID: 8300000, guid: f0b1052b345cde74a91c90738c580472, type: 3}
+    - {fileID: 8300000, guid: c56f828db9f5eb549ba3e156eeb4a1da, type: 3}
+    - {fileID: 8300000, guid: 0eeaa72d3943d734698fe1c1ef34c343, type: 3}
+    - {fileID: 8300000, guid: 45a9b81087a13844e854139ff1a9633b, type: 3}
+    - {fileID: 8300000, guid: 280dd01d943d1aa46ac791c08fab3e79, type: 3}
+    Electrocuted:
+    - {fileID: 8300000, guid: 13014854eb2b1cb459db8f15f93233be, type: 3}
+    - {fileID: 8300000, guid: aa60d6c644e6a584ba7c4005580e5a8a, type: 3}
+    - {fileID: 8300000, guid: 6c60650369dd1ac4eab4d758468af0e3, type: 3}
+    PlayerLinkedTo: {fileID: 11400000, guid: 8175192c3e8626c45acb15345c1eb89e, type: 2}
+  - Name: BlueToad
+    Shoot:
+    - {fileID: 8300000, guid: 49ed4f7a93cccfa44a236428fff0928a, type: 3}
+    Pass:
+    - {fileID: 8300000, guid: 87914838634af8247b375c2b9fdeaf19, type: 3}
+    - {fileID: 8300000, guid: e3f65fe7d19d01d4bacd4a4347be336e, type: 3}
+    - {fileID: 8300000, guid: 67ec703334637bd49a62456f5178a717, type: 3}
+    ThrowItem:
+    - {fileID: 8300000, guid: 3402c9819befeda43bbec7b9bcc311f9, type: 3}
+    - {fileID: 8300000, guid: 62b36dece9c199845bdeb143c7251f30, type: 3}
+    - {fileID: 8300000, guid: cce2ce15e7af3304db5face7550bc1ed, type: 3}
+    Celebrate:
+    - {fileID: 8300000, guid: 31fb70687d231c44b9cbc236963798d4, type: 3}
+    - {fileID: 8300000, guid: 97121b2228a140942b2014cea069d22a, type: 3}
+    Electrocuted:
+    - {fileID: 8300000, guid: 3000422bd22e7404fac6e85ad23b06fd, type: 3}
+    - {fileID: 8300000, guid: 0ad35ea2388fa294c90821819206fdd6, type: 3}
+    - {fileID: 8300000, guid: 13ab328042569bf42b4c7a1bc3ad90fd, type: 3}
+    PlayerLinkedTo: {fileID: 11400000, guid: aa8b16f128f1eb04a82f8fc6eedb172e, type: 2}
+  - Name: RedToad
+    Shoot:
+    - {fileID: 8300000, guid: 49ed4f7a93cccfa44a236428fff0928a, type: 3}
+    Pass:
+    - {fileID: 8300000, guid: 87914838634af8247b375c2b9fdeaf19, type: 3}
+    - {fileID: 8300000, guid: e3f65fe7d19d01d4bacd4a4347be336e, type: 3}
+    - {fileID: 8300000, guid: 67ec703334637bd49a62456f5178a717, type: 3}
+    ThrowItem:
+    - {fileID: 8300000, guid: 3402c9819befeda43bbec7b9bcc311f9, type: 3}
+    - {fileID: 8300000, guid: 62b36dece9c199845bdeb143c7251f30, type: 3}
+    - {fileID: 8300000, guid: cce2ce15e7af3304db5face7550bc1ed, type: 3}
+    Celebrate:
+    - {fileID: 8300000, guid: 31fb70687d231c44b9cbc236963798d4, type: 3}
+    - {fileID: 8300000, guid: 97121b2228a140942b2014cea069d22a, type: 3}
+    Electrocuted:
+    - {fileID: 8300000, guid: 3000422bd22e7404fac6e85ad23b06fd, type: 3}
+    - {fileID: 8300000, guid: 0ad35ea2388fa294c90821819206fdd6, type: 3}
+    - {fileID: 8300000, guid: 13ab328042569bf42b4c7a1bc3ad90fd, type: 3}
+    PlayerLinkedTo: {fileID: 11400000, guid: 5175c591c741d7241b3c9bc3ccbbedff, type: 2}
+  - Name: GreenToad
+    Shoot:
+    - {fileID: 8300000, guid: 49ed4f7a93cccfa44a236428fff0928a, type: 3}
+    Pass:
+    - {fileID: 8300000, guid: 87914838634af8247b375c2b9fdeaf19, type: 3}
+    - {fileID: 8300000, guid: e3f65fe7d19d01d4bacd4a4347be336e, type: 3}
+    - {fileID: 8300000, guid: 67ec703334637bd49a62456f5178a717, type: 3}
+    ThrowItem:
+    - {fileID: 8300000, guid: 3402c9819befeda43bbec7b9bcc311f9, type: 3}
+    - {fileID: 8300000, guid: 62b36dece9c199845bdeb143c7251f30, type: 3}
+    - {fileID: 8300000, guid: cce2ce15e7af3304db5face7550bc1ed, type: 3}
+    Celebrate:
+    - {fileID: 8300000, guid: 31fb70687d231c44b9cbc236963798d4, type: 3}
+    - {fileID: 8300000, guid: 97121b2228a140942b2014cea069d22a, type: 3}
+    Electrocuted:
+    - {fileID: 8300000, guid: 3000422bd22e7404fac6e85ad23b06fd, type: 3}
+    - {fileID: 8300000, guid: 0ad35ea2388fa294c90821819206fdd6, type: 3}
+    - {fileID: 8300000, guid: 13ab328042569bf42b4c7a1bc3ad90fd, type: 3}
+    PlayerLinkedTo: {fileID: 11400000, guid: 895b9d20a2767be46bb7b703446c06db, type: 2}
+  - Name: PurpleToad
+    Shoot:
+    - {fileID: 8300000, guid: 49ed4f7a93cccfa44a236428fff0928a, type: 3}
+    Pass:
+    - {fileID: 8300000, guid: 87914838634af8247b375c2b9fdeaf19, type: 3}
+    - {fileID: 8300000, guid: e3f65fe7d19d01d4bacd4a4347be336e, type: 3}
+    - {fileID: 8300000, guid: 67ec703334637bd49a62456f5178a717, type: 3}
+    ThrowItem:
+    - {fileID: 8300000, guid: 3402c9819befeda43bbec7b9bcc311f9, type: 3}
+    - {fileID: 8300000, guid: 62b36dece9c199845bdeb143c7251f30, type: 3}
+    - {fileID: 8300000, guid: cce2ce15e7af3304db5face7550bc1ed, type: 3}
+    Celebrate:
+    - {fileID: 8300000, guid: 31fb70687d231c44b9cbc236963798d4, type: 3}
+    - {fileID: 8300000, guid: 97121b2228a140942b2014cea069d22a, type: 3}
+    Electrocuted:
+    - {fileID: 8300000, guid: 3000422bd22e7404fac6e85ad23b06fd, type: 3}
+    - {fileID: 8300000, guid: 0ad35ea2388fa294c90821819206fdd6, type: 3}
+    - {fileID: 8300000, guid: 13ab328042569bf42b4c7a1bc3ad90fd, type: 3}
+    PlayerLinkedTo: {fileID: 11400000, guid: 85f7e80895fd8d04fa942b4067423300, type: 2}
+  - Name: YellowToad
+    Shoot:
+    - {fileID: 8300000, guid: 49ed4f7a93cccfa44a236428fff0928a, type: 3}
+    Pass:
+    - {fileID: 8300000, guid: 87914838634af8247b375c2b9fdeaf19, type: 3}
+    - {fileID: 8300000, guid: e3f65fe7d19d01d4bacd4a4347be336e, type: 3}
+    - {fileID: 8300000, guid: 67ec703334637bd49a62456f5178a717, type: 3}
+    ThrowItem:
+    - {fileID: 8300000, guid: 3402c9819befeda43bbec7b9bcc311f9, type: 3}
+    - {fileID: 8300000, guid: 62b36dece9c199845bdeb143c7251f30, type: 3}
+    - {fileID: 8300000, guid: cce2ce15e7af3304db5face7550bc1ed, type: 3}
+    Celebrate:
+    - {fileID: 8300000, guid: 31fb70687d231c44b9cbc236963798d4, type: 3}
+    - {fileID: 8300000, guid: 97121b2228a140942b2014cea069d22a, type: 3}
+    Electrocuted:
+    - {fileID: 8300000, guid: 3000422bd22e7404fac6e85ad23b06fd, type: 3}
+    - {fileID: 8300000, guid: 0ad35ea2388fa294c90821819206fdd6, type: 3}
+    - {fileID: 8300000, guid: 13ab328042569bf42b4c7a1bc3ad90fd, type: 3}
+    PlayerLinkedTo: {fileID: 11400000, guid: a5c4ae3bd84a2444b95217c969e4408d, type: 2}
+  - Name: Koppa
+    Shoot:
+    - {fileID: 8300000, guid: 49ed4f7a93cccfa44a236428fff0928a, type: 3}
+    Pass:
+    - {fileID: 8300000, guid: 87914838634af8247b375c2b9fdeaf19, type: 3}
+    - {fileID: 8300000, guid: e3f65fe7d19d01d4bacd4a4347be336e, type: 3}
+    - {fileID: 8300000, guid: 67ec703334637bd49a62456f5178a717, type: 3}
+    ThrowItem:
+    - {fileID: 8300000, guid: 3402c9819befeda43bbec7b9bcc311f9, type: 3}
+    - {fileID: 8300000, guid: 62b36dece9c199845bdeb143c7251f30, type: 3}
+    - {fileID: 8300000, guid: cce2ce15e7af3304db5face7550bc1ed, type: 3}
+    Celebrate:
+    - {fileID: 8300000, guid: 31fb70687d231c44b9cbc236963798d4, type: 3}
+    - {fileID: 8300000, guid: 97121b2228a140942b2014cea069d22a, type: 3}
+    Electrocuted:
+    - {fileID: 8300000, guid: 3000422bd22e7404fac6e85ad23b06fd, type: 3}
+    - {fileID: 8300000, guid: 0ad35ea2388fa294c90821819206fdd6, type: 3}
+    - {fileID: 8300000, guid: 13ab328042569bf42b4c7a1bc3ad90fd, type: 3}
+    PlayerLinkedTo: {fileID: 11400000, guid: c474653721e8bbf4db8d01d19c5fee80, type: 2}
+  - Name: NakedKoppa
+    Shoot:
+    - {fileID: 8300000, guid: 49ed4f7a93cccfa44a236428fff0928a, type: 3}
+    Pass:
+    - {fileID: 8300000, guid: 87914838634af8247b375c2b9fdeaf19, type: 3}
+    - {fileID: 8300000, guid: e3f65fe7d19d01d4bacd4a4347be336e, type: 3}
+    - {fileID: 8300000, guid: 67ec703334637bd49a62456f5178a717, type: 3}
+    ThrowItem:
+    - {fileID: 8300000, guid: 3402c9819befeda43bbec7b9bcc311f9, type: 3}
+    - {fileID: 8300000, guid: 62b36dece9c199845bdeb143c7251f30, type: 3}
+    - {fileID: 8300000, guid: cce2ce15e7af3304db5face7550bc1ed, type: 3}
+    Celebrate:
+    - {fileID: 8300000, guid: 31fb70687d231c44b9cbc236963798d4, type: 3}
+    - {fileID: 8300000, guid: 97121b2228a140942b2014cea069d22a, type: 3}
+    Electrocuted:
+    - {fileID: 8300000, guid: 3000422bd22e7404fac6e85ad23b06fd, type: 3}
+    - {fileID: 8300000, guid: 0ad35ea2388fa294c90821819206fdd6, type: 3}
+    - {fileID: 8300000, guid: 13ab328042569bf42b4c7a1bc3ad90fd, type: 3}
+    PlayerLinkedTo: {fileID: 11400000, guid: 09ec9647a308e39468c398deb64f3bae, type: 2}
+  _crowdNomal: {fileID: 8300000, guid: 698eb34f54dacb548a539335f85e7e71, type: 3}
+  _crowdGoal: {fileID: 8300000, guid: b3d7b675bb9ed19468106a5f2d603a25, type: 3}
+--- !u!114 &525178235
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 525178231}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 621567455fd1c4ceb811cc8a00b6a1a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_NotificationBehavior: 0
+  m_MaxPlayerCount: -1
+  m_AllowJoining: 1
+  m_JoinBehavior: 2
+  m_PlayerJoinedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_PlayerLeftEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_JoinAction:
+    m_UseReference: 0
+    m_Action:
+      m_Name: Join
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: bde052e6-da8f-4b20-b6f2-c3f5cc251972
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    m_Reference: {fileID: 0}
+  m_PlayerPrefab: {fileID: 0}
+  m_SplitScreen: 0
+  m_MaintainAspectRatioInSplitScreen: 0
+  m_FixedNumberOfSplitScreens: -1
+  m_SplitScreenRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+--- !u!114 &525178236
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 525178231}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4125deaffafe701439bdf2e27157db74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _ball: {fileID: 1975457108487340, guid: ec3e8f3ed27e2244caaedaf589590a03, type: 3}
+  _virtualCameraOrbital: {fileID: 3719828912903332698, guid: b990ae970a0b68f468ac4f0ebee56c7d, type: 3}
+  _virtualCameraTop: {fileID: 3719828912903332698, guid: aca5d63aa096fab459fea5a960a53911, type: 3}
+  _items:
+  - {fileID: 11400000, guid: 867523135a98c4947aa11c7bbedcb948, type: 2}
+  - {fileID: 11400000, guid: 4e6677f6a14bca549be07da706789fd2, type: 2}
+  - {fileID: 11400000, guid: 0246aab41f398924891e2ffa85c77cf9, type: 2}
+  - {fileID: 11400000, guid: f65f93b8d138a9d4f9e9ec03d66cf244, type: 2}
+  - {fileID: 11400000, guid: 3fd300622e2a23f4e8d5cba4b9897049, type: 2}
+  - {fileID: 11400000, guid: ff0f018d771d63e4595c540b7e299d9f, type: 2}
+  - {fileID: 11400000, guid: 489a84bcd95461c46b7458e5a10f5cd8, type: 2}
+  - {fileID: 11400000, guid: 533a52d94e7a57b409a98c7e351d07c6, type: 2}
+  - {fileID: 11400000, guid: 28d9001d7dbd8bf428779767d868ef8e, type: 2}
+--- !u!114 &525178237
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 525178231}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ff4baedbbf009f459e8492fba7370d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _debugMatchDuration: 60
+  _debugOnlyPlayer: 0
+  _enemiesAreRetard: 0
+  _startWithoutAnim: 0
+  d_Captain1: {fileID: 0}
+  d_Captain2: {fileID: 0}
+  d_Mate1: {fileID: 0}
+  d_Mate2: {fileID: 0}
+  d_GoalKeeper: {fileID: 11400000, guid: 1eb34906c40bb444aa59fe79d5c9415b, type: 2}
+  d_gameTime: 0
+  d_goalToWin: 1
+  d_aIDifficulty: 3
+--- !u!4 &525178238
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 525178231}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &527039045
 GameObject:
   m_ObjectHideFlags: 0
@@ -1556,6 +2190,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: LevelLoader
       objectReference: {fileID: 0}
+    - target: {fileID: 8335287289179896488, guid: 149771b5df3df34468876a81d67137c3, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8335287289179896490, guid: 149771b5df3df34468876a81d67137c3, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -1600,8 +2238,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8335287289179896491, guid: 149771b5df3df34468876a81d67137c3, type: 3}
+      propertyPath: _transition
+      value: 
+      objectReference: {fileID: 895382739}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 149771b5df3df34468876a81d67137c3, type: 3}
+--- !u!95 &895382739 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 8335287290197235832, guid: 149771b5df3df34468876a81d67137c3, type: 3}
+  m_PrefabInstance: {fileID: 895382738}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &896832949
 GameObject:
   m_ObjectHideFlags: 0
@@ -1880,8 +2527,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65ee76b73cf7586489b7c6613868267f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slider: {fileID: 1651757202}
-  text: {fileID: 1401055625}
+  _slider: {fileID: 1651757202}
+  _text: {fileID: 1401055625}
 --- !u!222 &1040763955
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2909,679 +3556,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1536778470}
   m_CullTransparentMesh: 1
---- !u!1 &1582099116
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1582099124}
-  - component: {fileID: 1582099123}
-  - component: {fileID: 1582099122}
-  - component: {fileID: 1582099120}
-  - component: {fileID: 1582099119}
-  - component: {fileID: 1582099118}
-  - component: {fileID: 1582099117}
-  m_Layer: 0
-  m_Name: GameManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!82 &1582099117
-AudioSource:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1582099116}
-  m_Enabled: 1
-  serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: -7444480804589367763, guid: 05569034d6901cc408f8a3c12684bd66, type: 2}
-  m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
-  m_Volume: 1
-  m_Pitch: 1
-  Loop: 0
-  Mute: 0
-  Spatialize: 0
-  SpatializePostEffects: 0
-  Priority: 128
-  DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
-  Pan2D: 0
-  rolloffMode: 0
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  reverbZoneMixCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
---- !u!82 &1582099118
-AudioSource:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1582099116}
-  m_Enabled: 1
-  serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
-  m_Volume: 1
-  m_Pitch: 1
-  Loop: 1
-  Mute: 0
-  Spatialize: 0
-  SpatializePostEffects: 0
-  Priority: 128
-  DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
-  Pan2D: 0
-  rolloffMode: 0
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  reverbZoneMixCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
---- !u!114 &1582099119
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1582099116}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5baf185070e56944882d1470c13c3d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MusicAudioSource: {fileID: 1582099118}
-  SFXAudioSource: {fileID: 1582099117}
-  MenuMusic: {fileID: 8300000, guid: 3381c508bade53a46bf4b85b5cf70985, type: 3}
-  _matchMusic:
-  - {fileID: 8300000, guid: d012e2524d5bc624e8fc944324eeb543, type: 3}
-  - {fileID: 8300000, guid: 6c5b39a0e22c5894d8350a4e963dfd70, type: 3}
-  - {fileID: 8300000, guid: 48c1db6296da7f744a26f1669b2b5990, type: 3}
-  _kickoff: {fileID: 8300000, guid: 13244609a97fa2045beef550f1f6b63d, type: 3}
-  _goal:
-  - {fileID: 8300000, guid: 053134ff0fa6ca442b7f24de49219a31, type: 3}
-  - {fileID: 8300000, guid: 66e96c19a2146e8468a90b044daab3c1, type: 3}
-  - {fileID: 8300000, guid: 72b880c65d5b89d4986b3cc55058b547, type: 3}
-  - {fileID: 8300000, guid: b463f7b6f519aae418fa6f92862c95e3, type: 3}
-  - {fileID: 8300000, guid: 27ff0fc2058411c4fb91cbfdb47d61f1, type: 3}
-  - {fileID: 8300000, guid: 50c682a4b734c6149b9d95643e950bd7, type: 3}
-  _matchOver:
-  - {fileID: 8300000, guid: 93b742ad671aacd4789771a2dcfcf03a, type: 3}
-  _buttonSelected: {fileID: 8300000, guid: cab7a899856db4c449380797b8771ea7, type: 3}
-  _buttonClicked: {fileID: 8300000, guid: e7a6ef1ddd8403045af0a5ac6f318768, type: 3}
-  charaAudios:
-  - name: Mario
-    shoot:
-    - {fileID: 8300000, guid: ddf5d0b40450c774682638d12af4365c, type: 3}
-    - {fileID: 8300000, guid: b5cf72732970ee945b5f251da998de30, type: 3}
-    - {fileID: 8300000, guid: 5a4318cb7a09cf544ba6b1b67122ea97, type: 3}
-    pass:
-    - {fileID: 8300000, guid: 951b913799b7fbf4ba568e6ab083d1c5, type: 3}
-    - {fileID: 8300000, guid: c21faf23820c04442a5b5de2e1604569, type: 3}
-    - {fileID: 8300000, guid: 4df1a5cfe96952241afe2c04120c4ca8, type: 3}
-    - {fileID: 8300000, guid: 7733d9efb03bf744cba5737f853b1e09, type: 3}
-    - {fileID: 8300000, guid: ccfe58e6ca5e01542aab72922f4ffb16, type: 3}
-    - {fileID: 8300000, guid: 66e71e2278771264eb456b2dd632f631, type: 3}
-    throwItem:
-    - {fileID: 8300000, guid: 4f28f91d6982f994f880616207ff3e86, type: 3}
-    - {fileID: 8300000, guid: 49f4e6f09ce5a2f4295ab017387a483b, type: 3}
-    - {fileID: 8300000, guid: ecfa950c3bd8e944d92583d3d3d95d75, type: 3}
-    celebrate:
-    - {fileID: 8300000, guid: 688ec58c8db2351488cc47fe01e245df, type: 3}
-    - {fileID: 8300000, guid: 7d19901a42cdadc45b91a09c5cbc6abd, type: 3}
-    - {fileID: 8300000, guid: 531d82ae5ee41ca42ac28bfa1af9b567, type: 3}
-    - {fileID: 8300000, guid: 01307e829be0e8044bf19ac958dee554, type: 3}
-    - {fileID: 8300000, guid: 6b89b45e3943a114f861b81c098e9873, type: 3}
-    - {fileID: 8300000, guid: d7b0757820f25e342a6a3a9e38a84006, type: 3}
-    electrocuted:
-    - {fileID: 8300000, guid: c717e791592bdb845b5f2f3dbcb6a372, type: 3}
-    - {fileID: 8300000, guid: c681755e6b8791946ba1397e4e0a4634, type: 3}
-    - {fileID: 8300000, guid: 30c380bedf9af4442819cc2ea0fa0ffa, type: 3}
-    playerLinkedTo: {fileID: 11400000, guid: 26793e13432ba1346a58e9f5dc9a52c8, type: 2}
-  - name: Luigi
-    shoot:
-    - {fileID: 8300000, guid: ddf5d0b40450c774682638d12af4365c, type: 3}
-    - {fileID: 8300000, guid: b5cf72732970ee945b5f251da998de30, type: 3}
-    - {fileID: 8300000, guid: 5a4318cb7a09cf544ba6b1b67122ea97, type: 3}
-    pass:
-    - {fileID: 8300000, guid: 951b913799b7fbf4ba568e6ab083d1c5, type: 3}
-    - {fileID: 8300000, guid: c21faf23820c04442a5b5de2e1604569, type: 3}
-    - {fileID: 8300000, guid: 4df1a5cfe96952241afe2c04120c4ca8, type: 3}
-    - {fileID: 8300000, guid: 7733d9efb03bf744cba5737f853b1e09, type: 3}
-    - {fileID: 8300000, guid: ccfe58e6ca5e01542aab72922f4ffb16, type: 3}
-    - {fileID: 8300000, guid: 66e71e2278771264eb456b2dd632f631, type: 3}
-    throwItem:
-    - {fileID: 8300000, guid: 4f28f91d6982f994f880616207ff3e86, type: 3}
-    - {fileID: 8300000, guid: 49f4e6f09ce5a2f4295ab017387a483b, type: 3}
-    - {fileID: 8300000, guid: ecfa950c3bd8e944d92583d3d3d95d75, type: 3}
-    celebrate:
-    - {fileID: 8300000, guid: 688ec58c8db2351488cc47fe01e245df, type: 3}
-    - {fileID: 8300000, guid: 7d19901a42cdadc45b91a09c5cbc6abd, type: 3}
-    - {fileID: 8300000, guid: 531d82ae5ee41ca42ac28bfa1af9b567, type: 3}
-    - {fileID: 8300000, guid: 01307e829be0e8044bf19ac958dee554, type: 3}
-    - {fileID: 8300000, guid: 6b89b45e3943a114f861b81c098e9873, type: 3}
-    - {fileID: 8300000, guid: d7b0757820f25e342a6a3a9e38a84006, type: 3}
-    electrocuted:
-    - {fileID: 8300000, guid: c717e791592bdb845b5f2f3dbcb6a372, type: 3}
-    - {fileID: 8300000, guid: c681755e6b8791946ba1397e4e0a4634, type: 3}
-    - {fileID: 8300000, guid: 30c380bedf9af4442819cc2ea0fa0ffa, type: 3}
-    playerLinkedTo: {fileID: 11400000, guid: f5a9dca6287283a4b847a5644f44c221, type: 2}
-  - name: Peach
-    shoot:
-    - {fileID: 8300000, guid: 7f6d96b891d879a49a226a7634249584, type: 3}
-    - {fileID: 8300000, guid: 1c165dcbe3cfcdd49821ac4b2176b8eb, type: 3}
-    - {fileID: 8300000, guid: 6f596647db768d940b74b4a2756d5851, type: 3}
-    - {fileID: 8300000, guid: 201860d5c02af244d8b076d000c8ed6c, type: 3}
-    pass:
-    - {fileID: 8300000, guid: bb14675b41d981d4baee569e32a745fe, type: 3}
-    - {fileID: 8300000, guid: e02ef729209f8b2498e6a11e4b2e27c8, type: 3}
-    throwItem:
-    - {fileID: 8300000, guid: 0e67f4f394acf0c46967795f63b902c9, type: 3}
-    - {fileID: 8300000, guid: 7c3fe7acf3996e74ba797acab07de09f, type: 3}
-    celebrate:
-    - {fileID: 8300000, guid: 9666dc4d45704d74aae48ded2fb02dc7, type: 3}
-    - {fileID: 8300000, guid: cd9f202e791160f4ebc3666734f2e26a, type: 3}
-    - {fileID: 8300000, guid: b7820d2419110b94f80eb0e36fb00bf2, type: 3}
-    electrocuted:
-    - {fileID: 8300000, guid: 3000422bd22e7404fac6e85ad23b06fd, type: 3}
-    - {fileID: 8300000, guid: 0ad35ea2388fa294c90821819206fdd6, type: 3}
-    - {fileID: 8300000, guid: 13ab328042569bf42b4c7a1bc3ad90fd, type: 3}
-    - {fileID: 8300000, guid: be6d716e449b7704296c9463b26ea712, type: 3}
-    - {fileID: 8300000, guid: 7ec458289e704184aadd29aec629d542, type: 3}
-    - {fileID: 8300000, guid: 49ba51637cf8457438d3587e73ed3f32, type: 3}
-    playerLinkedTo: {fileID: 11400000, guid: dff12bb2441f9c748953d3781c3fd125, type: 2}
-  - name: Birdo
-    shoot:
-    - {fileID: 8300000, guid: 7f6d96b891d879a49a226a7634249584, type: 3}
-    - {fileID: 8300000, guid: 1c165dcbe3cfcdd49821ac4b2176b8eb, type: 3}
-    - {fileID: 8300000, guid: 6f596647db768d940b74b4a2756d5851, type: 3}
-    - {fileID: 8300000, guid: 201860d5c02af244d8b076d000c8ed6c, type: 3}
-    pass:
-    - {fileID: 8300000, guid: bb14675b41d981d4baee569e32a745fe, type: 3}
-    - {fileID: 8300000, guid: e02ef729209f8b2498e6a11e4b2e27c8, type: 3}
-    throwItem:
-    - {fileID: 8300000, guid: 0e67f4f394acf0c46967795f63b902c9, type: 3}
-    - {fileID: 8300000, guid: 7c3fe7acf3996e74ba797acab07de09f, type: 3}
-    celebrate:
-    - {fileID: 8300000, guid: 9666dc4d45704d74aae48ded2fb02dc7, type: 3}
-    - {fileID: 8300000, guid: cd9f202e791160f4ebc3666734f2e26a, type: 3}
-    - {fileID: 8300000, guid: b7820d2419110b94f80eb0e36fb00bf2, type: 3}
-    electrocuted:
-    - {fileID: 8300000, guid: 3000422bd22e7404fac6e85ad23b06fd, type: 3}
-    - {fileID: 8300000, guid: 0ad35ea2388fa294c90821819206fdd6, type: 3}
-    - {fileID: 8300000, guid: 13ab328042569bf42b4c7a1bc3ad90fd, type: 3}
-    - {fileID: 8300000, guid: be6d716e449b7704296c9463b26ea712, type: 3}
-    - {fileID: 8300000, guid: 7ec458289e704184aadd29aec629d542, type: 3}
-    - {fileID: 8300000, guid: 49ba51637cf8457438d3587e73ed3f32, type: 3}
-    playerLinkedTo: {fileID: 11400000, guid: 2a8fc57e639adce4a96e39f19c92cc8e, type: 2}
-  - name: Rosalina
-    shoot:
-    - {fileID: 8300000, guid: 7f6d96b891d879a49a226a7634249584, type: 3}
-    - {fileID: 8300000, guid: 1c165dcbe3cfcdd49821ac4b2176b8eb, type: 3}
-    - {fileID: 8300000, guid: 6f596647db768d940b74b4a2756d5851, type: 3}
-    - {fileID: 8300000, guid: 201860d5c02af244d8b076d000c8ed6c, type: 3}
-    pass:
-    - {fileID: 8300000, guid: bb14675b41d981d4baee569e32a745fe, type: 3}
-    - {fileID: 8300000, guid: e02ef729209f8b2498e6a11e4b2e27c8, type: 3}
-    throwItem:
-    - {fileID: 8300000, guid: 0e67f4f394acf0c46967795f63b902c9, type: 3}
-    - {fileID: 8300000, guid: 7c3fe7acf3996e74ba797acab07de09f, type: 3}
-    celebrate:
-    - {fileID: 8300000, guid: 9666dc4d45704d74aae48ded2fb02dc7, type: 3}
-    - {fileID: 8300000, guid: cd9f202e791160f4ebc3666734f2e26a, type: 3}
-    - {fileID: 8300000, guid: b7820d2419110b94f80eb0e36fb00bf2, type: 3}
-    electrocuted:
-    - {fileID: 8300000, guid: 3000422bd22e7404fac6e85ad23b06fd, type: 3}
-    - {fileID: 8300000, guid: 0ad35ea2388fa294c90821819206fdd6, type: 3}
-    - {fileID: 8300000, guid: 13ab328042569bf42b4c7a1bc3ad90fd, type: 3}
-    - {fileID: 8300000, guid: be6d716e449b7704296c9463b26ea712, type: 3}
-    - {fileID: 8300000, guid: 7ec458289e704184aadd29aec629d542, type: 3}
-    - {fileID: 8300000, guid: 49ba51637cf8457438d3587e73ed3f32, type: 3}
-    playerLinkedTo: {fileID: 11400000, guid: af6a1b2b9eb40ae42a3edfe67433b0cd, type: 2}
-  - name: Yoshi
-    shoot:
-    - {fileID: 8300000, guid: d90222100a3398d4588f4d5b10e9f325, type: 3}
-    - {fileID: 8300000, guid: e77410a0b0f9bcd4d909c8ab278a66f7, type: 3}
-    - {fileID: 8300000, guid: 1837d35454b06a6469d14ea26d98d66d, type: 3}
-    - {fileID: 8300000, guid: 33a70008d60e1d44892c80c6100bfe73, type: 3}
-    pass:
-    - {fileID: 8300000, guid: 4142dfb5a9ed291459ac2f5ef891a9c3, type: 3}
-    - {fileID: 8300000, guid: 407509c0f177e3f4084fe8140840eeec, type: 3}
-    - {fileID: 8300000, guid: cd0c188731d36214da499a4b509bf20d, type: 3}
-    throwItem:
-    - {fileID: 8300000, guid: 13a222db7eff1564ea4572127e5d9d07, type: 3}
-    - {fileID: 8300000, guid: e9036a0eab7a5da4db6ff8e2aee3deb7, type: 3}
-    - {fileID: 8300000, guid: 70cb46449ad92df4da93170130650db4, type: 3}
-    - {fileID: 8300000, guid: e8c0988e36cfd8c458e6903a8db3cf06, type: 3}
-    - {fileID: 8300000, guid: 6a45876045301974abce94768f99c821, type: 3}
-    celebrate:
-    - {fileID: 8300000, guid: 1bef858ce67a4f246835036a41704db9, type: 3}
-    - {fileID: 8300000, guid: f0b1052b345cde74a91c90738c580472, type: 3}
-    - {fileID: 8300000, guid: c56f828db9f5eb549ba3e156eeb4a1da, type: 3}
-    - {fileID: 8300000, guid: 0eeaa72d3943d734698fe1c1ef34c343, type: 3}
-    - {fileID: 8300000, guid: 45a9b81087a13844e854139ff1a9633b, type: 3}
-    - {fileID: 8300000, guid: 280dd01d943d1aa46ac791c08fab3e79, type: 3}
-    - {fileID: 8300000, guid: 1bef858ce67a4f246835036a41704db9, type: 3}
-    - {fileID: 8300000, guid: f0b1052b345cde74a91c90738c580472, type: 3}
-    - {fileID: 8300000, guid: c56f828db9f5eb549ba3e156eeb4a1da, type: 3}
-    - {fileID: 8300000, guid: 0eeaa72d3943d734698fe1c1ef34c343, type: 3}
-    - {fileID: 8300000, guid: 45a9b81087a13844e854139ff1a9633b, type: 3}
-    - {fileID: 8300000, guid: 280dd01d943d1aa46ac791c08fab3e79, type: 3}
-    electrocuted:
-    - {fileID: 8300000, guid: 13014854eb2b1cb459db8f15f93233be, type: 3}
-    - {fileID: 8300000, guid: aa60d6c644e6a584ba7c4005580e5a8a, type: 3}
-    - {fileID: 8300000, guid: 6c60650369dd1ac4eab4d758468af0e3, type: 3}
-    playerLinkedTo: {fileID: 11400000, guid: 8175192c3e8626c45acb15345c1eb89e, type: 2}
-  - name: BlueToad
-    shoot:
-    - {fileID: 8300000, guid: 49ed4f7a93cccfa44a236428fff0928a, type: 3}
-    pass:
-    - {fileID: 8300000, guid: 87914838634af8247b375c2b9fdeaf19, type: 3}
-    - {fileID: 8300000, guid: e3f65fe7d19d01d4bacd4a4347be336e, type: 3}
-    - {fileID: 8300000, guid: 67ec703334637bd49a62456f5178a717, type: 3}
-    throwItem:
-    - {fileID: 8300000, guid: 3402c9819befeda43bbec7b9bcc311f9, type: 3}
-    - {fileID: 8300000, guid: 62b36dece9c199845bdeb143c7251f30, type: 3}
-    - {fileID: 8300000, guid: cce2ce15e7af3304db5face7550bc1ed, type: 3}
-    celebrate:
-    - {fileID: 8300000, guid: 31fb70687d231c44b9cbc236963798d4, type: 3}
-    - {fileID: 8300000, guid: 97121b2228a140942b2014cea069d22a, type: 3}
-    electrocuted:
-    - {fileID: 8300000, guid: 3000422bd22e7404fac6e85ad23b06fd, type: 3}
-    - {fileID: 8300000, guid: 0ad35ea2388fa294c90821819206fdd6, type: 3}
-    - {fileID: 8300000, guid: 13ab328042569bf42b4c7a1bc3ad90fd, type: 3}
-    playerLinkedTo: {fileID: 11400000, guid: aa8b16f128f1eb04a82f8fc6eedb172e, type: 2}
-  - name: RedToad
-    shoot:
-    - {fileID: 8300000, guid: 49ed4f7a93cccfa44a236428fff0928a, type: 3}
-    pass:
-    - {fileID: 8300000, guid: 87914838634af8247b375c2b9fdeaf19, type: 3}
-    - {fileID: 8300000, guid: e3f65fe7d19d01d4bacd4a4347be336e, type: 3}
-    - {fileID: 8300000, guid: 67ec703334637bd49a62456f5178a717, type: 3}
-    throwItem:
-    - {fileID: 8300000, guid: 3402c9819befeda43bbec7b9bcc311f9, type: 3}
-    - {fileID: 8300000, guid: 62b36dece9c199845bdeb143c7251f30, type: 3}
-    - {fileID: 8300000, guid: cce2ce15e7af3304db5face7550bc1ed, type: 3}
-    celebrate:
-    - {fileID: 8300000, guid: 31fb70687d231c44b9cbc236963798d4, type: 3}
-    - {fileID: 8300000, guid: 97121b2228a140942b2014cea069d22a, type: 3}
-    electrocuted:
-    - {fileID: 8300000, guid: 3000422bd22e7404fac6e85ad23b06fd, type: 3}
-    - {fileID: 8300000, guid: 0ad35ea2388fa294c90821819206fdd6, type: 3}
-    - {fileID: 8300000, guid: 13ab328042569bf42b4c7a1bc3ad90fd, type: 3}
-    playerLinkedTo: {fileID: 11400000, guid: 5175c591c741d7241b3c9bc3ccbbedff, type: 2}
-  - name: GreenToad
-    shoot:
-    - {fileID: 8300000, guid: 49ed4f7a93cccfa44a236428fff0928a, type: 3}
-    pass:
-    - {fileID: 8300000, guid: 87914838634af8247b375c2b9fdeaf19, type: 3}
-    - {fileID: 8300000, guid: e3f65fe7d19d01d4bacd4a4347be336e, type: 3}
-    - {fileID: 8300000, guid: 67ec703334637bd49a62456f5178a717, type: 3}
-    throwItem:
-    - {fileID: 8300000, guid: 3402c9819befeda43bbec7b9bcc311f9, type: 3}
-    - {fileID: 8300000, guid: 62b36dece9c199845bdeb143c7251f30, type: 3}
-    - {fileID: 8300000, guid: cce2ce15e7af3304db5face7550bc1ed, type: 3}
-    celebrate:
-    - {fileID: 8300000, guid: 31fb70687d231c44b9cbc236963798d4, type: 3}
-    - {fileID: 8300000, guid: 97121b2228a140942b2014cea069d22a, type: 3}
-    electrocuted:
-    - {fileID: 8300000, guid: 3000422bd22e7404fac6e85ad23b06fd, type: 3}
-    - {fileID: 8300000, guid: 0ad35ea2388fa294c90821819206fdd6, type: 3}
-    - {fileID: 8300000, guid: 13ab328042569bf42b4c7a1bc3ad90fd, type: 3}
-    playerLinkedTo: {fileID: 11400000, guid: 895b9d20a2767be46bb7b703446c06db, type: 2}
-  - name: PurpleToad
-    shoot:
-    - {fileID: 8300000, guid: 49ed4f7a93cccfa44a236428fff0928a, type: 3}
-    pass:
-    - {fileID: 8300000, guid: 87914838634af8247b375c2b9fdeaf19, type: 3}
-    - {fileID: 8300000, guid: e3f65fe7d19d01d4bacd4a4347be336e, type: 3}
-    - {fileID: 8300000, guid: 67ec703334637bd49a62456f5178a717, type: 3}
-    throwItem:
-    - {fileID: 8300000, guid: 3402c9819befeda43bbec7b9bcc311f9, type: 3}
-    - {fileID: 8300000, guid: 62b36dece9c199845bdeb143c7251f30, type: 3}
-    - {fileID: 8300000, guid: cce2ce15e7af3304db5face7550bc1ed, type: 3}
-    celebrate:
-    - {fileID: 8300000, guid: 31fb70687d231c44b9cbc236963798d4, type: 3}
-    - {fileID: 8300000, guid: 97121b2228a140942b2014cea069d22a, type: 3}
-    electrocuted:
-    - {fileID: 8300000, guid: 3000422bd22e7404fac6e85ad23b06fd, type: 3}
-    - {fileID: 8300000, guid: 0ad35ea2388fa294c90821819206fdd6, type: 3}
-    - {fileID: 8300000, guid: 13ab328042569bf42b4c7a1bc3ad90fd, type: 3}
-    playerLinkedTo: {fileID: 11400000, guid: 85f7e80895fd8d04fa942b4067423300, type: 2}
-  - name: YellowToad
-    shoot:
-    - {fileID: 8300000, guid: 49ed4f7a93cccfa44a236428fff0928a, type: 3}
-    pass:
-    - {fileID: 8300000, guid: 87914838634af8247b375c2b9fdeaf19, type: 3}
-    - {fileID: 8300000, guid: e3f65fe7d19d01d4bacd4a4347be336e, type: 3}
-    - {fileID: 8300000, guid: 67ec703334637bd49a62456f5178a717, type: 3}
-    throwItem:
-    - {fileID: 8300000, guid: 3402c9819befeda43bbec7b9bcc311f9, type: 3}
-    - {fileID: 8300000, guid: 62b36dece9c199845bdeb143c7251f30, type: 3}
-    - {fileID: 8300000, guid: cce2ce15e7af3304db5face7550bc1ed, type: 3}
-    celebrate:
-    - {fileID: 8300000, guid: 31fb70687d231c44b9cbc236963798d4, type: 3}
-    - {fileID: 8300000, guid: 97121b2228a140942b2014cea069d22a, type: 3}
-    electrocuted:
-    - {fileID: 8300000, guid: 3000422bd22e7404fac6e85ad23b06fd, type: 3}
-    - {fileID: 8300000, guid: 0ad35ea2388fa294c90821819206fdd6, type: 3}
-    - {fileID: 8300000, guid: 13ab328042569bf42b4c7a1bc3ad90fd, type: 3}
-    playerLinkedTo: {fileID: 11400000, guid: a5c4ae3bd84a2444b95217c969e4408d, type: 2}
-  - name: Koopa
-    shoot:
-    - {fileID: 8300000, guid: 49ed4f7a93cccfa44a236428fff0928a, type: 3}
-    pass:
-    - {fileID: 8300000, guid: 87914838634af8247b375c2b9fdeaf19, type: 3}
-    - {fileID: 8300000, guid: e3f65fe7d19d01d4bacd4a4347be336e, type: 3}
-    - {fileID: 8300000, guid: 67ec703334637bd49a62456f5178a717, type: 3}
-    throwItem:
-    - {fileID: 8300000, guid: 3402c9819befeda43bbec7b9bcc311f9, type: 3}
-    - {fileID: 8300000, guid: 62b36dece9c199845bdeb143c7251f30, type: 3}
-    - {fileID: 8300000, guid: cce2ce15e7af3304db5face7550bc1ed, type: 3}
-    celebrate:
-    - {fileID: 8300000, guid: 31fb70687d231c44b9cbc236963798d4, type: 3}
-    - {fileID: 8300000, guid: 97121b2228a140942b2014cea069d22a, type: 3}
-    electrocuted:
-    - {fileID: 8300000, guid: 3000422bd22e7404fac6e85ad23b06fd, type: 3}
-    - {fileID: 8300000, guid: 0ad35ea2388fa294c90821819206fdd6, type: 3}
-    - {fileID: 8300000, guid: 13ab328042569bf42b4c7a1bc3ad90fd, type: 3}
-    playerLinkedTo: {fileID: 11400000, guid: c474653721e8bbf4db8d01d19c5fee80, type: 2}
-  - name: NakedKoopa
-    shoot:
-    - {fileID: 8300000, guid: 49ed4f7a93cccfa44a236428fff0928a, type: 3}
-    pass:
-    - {fileID: 8300000, guid: 87914838634af8247b375c2b9fdeaf19, type: 3}
-    - {fileID: 8300000, guid: e3f65fe7d19d01d4bacd4a4347be336e, type: 3}
-    - {fileID: 8300000, guid: 67ec703334637bd49a62456f5178a717, type: 3}
-    throwItem:
-    - {fileID: 8300000, guid: 3402c9819befeda43bbec7b9bcc311f9, type: 3}
-    - {fileID: 8300000, guid: 62b36dece9c199845bdeb143c7251f30, type: 3}
-    - {fileID: 8300000, guid: cce2ce15e7af3304db5face7550bc1ed, type: 3}
-    celebrate:
-    - {fileID: 8300000, guid: 31fb70687d231c44b9cbc236963798d4, type: 3}
-    - {fileID: 8300000, guid: 97121b2228a140942b2014cea069d22a, type: 3}
-    electrocuted:
-    - {fileID: 8300000, guid: 3000422bd22e7404fac6e85ad23b06fd, type: 3}
-    - {fileID: 8300000, guid: 0ad35ea2388fa294c90821819206fdd6, type: 3}
-    - {fileID: 8300000, guid: 13ab328042569bf42b4c7a1bc3ad90fd, type: 3}
-    playerLinkedTo: {fileID: 11400000, guid: 09ec9647a308e39468c398deb64f3bae, type: 2}
-  _crowdNomal: {fileID: 8300000, guid: 698eb34f54dacb548a539335f85e7e71, type: 3}
-  _crowdGoal: {fileID: 8300000, guid: b3d7b675bb9ed19468106a5f2d603a25, type: 3}
-  _playerCaptainAudio:
-    name: 
-    shoot: []
-    pass: []
-    throwItem: []
-    celebrate: []
-    electrocuted: []
-    playerLinkedTo: {fileID: 0}
-  _playerMateAudio:
-    name: 
-    shoot: []
-    pass: []
-    throwItem: []
-    celebrate: []
-    electrocuted: []
-    playerLinkedTo: {fileID: 0}
-  _aiCaptainAudio:
-    name: 
-    shoot: []
-    pass: []
-    throwItem: []
-    celebrate: []
-    electrocuted: []
-    playerLinkedTo: {fileID: 0}
-  _aiMateAudio:
-    name: 
-    shoot: []
-    pass: []
-    throwItem: []
-    celebrate: []
-    electrocuted: []
-    playerLinkedTo: {fileID: 0}
---- !u!114 &1582099120
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1582099116}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 621567455fd1c4ceb811cc8a00b6a1a5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_NotificationBehavior: 0
-  m_MaxPlayerCount: -1
-  m_AllowJoining: 1
-  m_JoinBehavior: 2
-  m_PlayerJoinedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_PlayerLeftEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_JoinAction:
-    m_UseReference: 0
-    m_Action:
-      m_Name: Join
-      m_Type: 0
-      m_ExpectedControlType: 
-      m_Id: bde052e6-da8f-4b20-b6f2-c3f5cc251972
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings: []
-      m_Flags: 0
-    m_Reference: {fileID: 0}
-  m_PlayerPrefab: {fileID: 0}
-  m_SplitScreen: 0
-  m_MaintainAspectRatioInSplitScreen: 0
-  m_FixedNumberOfSplitScreens: -1
-  m_SplitScreenRect:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
---- !u!114 &1582099122
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1582099116}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4125deaffafe701439bdf2e27157db74, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _ball: {fileID: 266137186057966708, guid: 5f9a23016bc8ab94fb2a55df45b2bfa2, type: 3}
-  _virtualCameraOrbital: {fileID: 0}
-  _virtualCameraTop: {fileID: 0}
-  _items: []
---- !u!114 &1582099123
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1582099116}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ff4baedbbf009f459e8492fba7370d6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _debugMatchDuration: 60
-  _debugOnlyPlayer: 0
-  _enemiesAreRetard: 0
-  _startWithoutAnim: 1
-  d_Captain1: {fileID: 0}
-  d_Captain2: {fileID: 0}
-  d_Mate1: {fileID: 0}
-  d_Mate2: {fileID: 0}
-  d_GoalKeeper: {fileID: 11400000, guid: e32174f7889a0ab429aeae9b2b0b2040, type: 2}
-  d_gameTime: 0
-  d_goalToWin: 0
-  d_aIDifficulty: 0
---- !u!4 &1582099124
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1582099116}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 20, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1651757200
 GameObject:
   m_ObjectHideFlags: 0
@@ -3771,8 +3745,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7b28aa61e51d5e4fbac6da1817551d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slider: {fileID: 1729313265}
-  text: {fileID: 1778756970}
+  _slider: {fileID: 1729313265}
+  _text: {fileID: 1778756970}
 --- !u!222 &1688219582
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3851,7 +3825,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: AI difficulty
+  m_Text: AIDifficulty
 --- !u!222 &1712300247
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4441,7 +4415,7 @@ MonoBehaviour:
   m_text: Match settings
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: beb84c5afd9ece84fac46c6f792537c6, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: 125cb55b44b24c4393181402bc6200e6, type: 2}
+  m_sharedMaterial: {fileID: 7880319217260027419, guid: beb84c5afd9ece84fac46c6f792537c6, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -4819,7 +4793,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Game time
+  m_Text: Game Time
 --- !u!222 &2047975774
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4860,43 +4834,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a9dedbb402380144891d576fd058d87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  charaButton: {fileID: 4979707895376117391, guid: b5bf532ea8f3e4b4bbc9afb2a82bf6f0, type: 3}
-  gameTime: 0
-  goalToWin: 0
-  AIDifficulty: 0
-  mainCharacterSelection: {fileID: 527039045}
-  allieSelection: {fileID: 523027132}
-  matchSettings: {fileID: 198709776}
-  FS_matchSettings: {fileID: 1729313263}
-  ES: {fileID: 167279101}
-  matchParams:
+  _charaButton: {fileID: 4979707895376117391, guid: b5bf532ea8f3e4b4bbc9afb2a82bf6f0, type: 3}
+  _mainCharacterSelection: {fileID: 527039045}
+  _allySelection: {fileID: 523027132}
+  _matchSettings: {fileID: 198709776}
+  _fsMatchSettings: {fileID: 1729313263}
+  _es: {fileID: 167279101}
+  _matchParams:
   - {fileID: 1688219578}
   - {fileID: 1040763951}
   - {fileID: 57584730}
-  maincharaSpecs:
+  _goalSpecs: {fileID: 11400000, guid: 1eb34906c40bb444aa59fe79d5c9415b, type: 2}
+  _maincharaSpecs:
   - {fileID: 11400000, guid: 26793e13432ba1346a58e9f5dc9a52c8, type: 2}
   - {fileID: 11400000, guid: f5a9dca6287283a4b847a5644f44c221, type: 2}
   - {fileID: 11400000, guid: 2a8fc57e639adce4a96e39f19c92cc8e, type: 2}
+  - {fileID: 11400000, guid: dff12bb2441f9c748953d3781c3fd125, type: 2}
   - {fileID: 11400000, guid: af6a1b2b9eb40ae42a3edfe67433b0cd, type: 2}
   - {fileID: 11400000, guid: 8175192c3e8626c45acb15345c1eb89e, type: 2}
-  mateSpecs:
-  - mateType: 0
-    mateSpec: {fileID: 11400000, guid: aa8b16f128f1eb04a82f8fc6eedb172e, type: 2}
-  - mateType: 0
-    mateSpec: {fileID: 11400000, guid: 5175c591c741d7241b3c9bc3ccbbedff, type: 2}
-  - mateType: 0
-    mateSpec: {fileID: 11400000, guid: a5c4ae3bd84a2444b95217c969e4408d, type: 2}
-  - mateType: 0
-    mateSpec: {fileID: 11400000, guid: 85f7e80895fd8d04fa942b4067423300, type: 2}
-  - mateType: 0
-    mateSpec: {fileID: 11400000, guid: 895b9d20a2767be46bb7b703446c06db, type: 2}
-  - mateType: 1
-    mateSpec: {fileID: 11400000, guid: 09ec9647a308e39468c398deb64f3bae, type: 2}
-  - mateType: 1
-    mateSpec: {fileID: 11400000, guid: c474653721e8bbf4db8d01d19c5fee80, type: 2}
-  accuracy: {fileID: 916590327}
-  speed: {fileID: 1190049191}
-  stunTime: {fileID: 1499072984}
+  _mateSpecs:
+  - Type: 0
+    MateSpec: {fileID: 11400000, guid: aa8b16f128f1eb04a82f8fc6eedb172e, type: 2}
+  - Type: 0
+    MateSpec: {fileID: 11400000, guid: 895b9d20a2767be46bb7b703446c06db, type: 2}
+  - Type: 0
+    MateSpec: {fileID: 11400000, guid: 85f7e80895fd8d04fa942b4067423300, type: 2}
+  - Type: 0
+    MateSpec: {fileID: 11400000, guid: 5175c591c741d7241b3c9bc3ccbbedff, type: 2}
+  - Type: 0
+    MateSpec: {fileID: 11400000, guid: a5c4ae3bd84a2444b95217c969e4408d, type: 2}
+  - Type: 1
+    MateSpec: {fileID: 11400000, guid: c474653721e8bbf4db8d01d19c5fee80, type: 2}
+  - Type: 1
+    MateSpec: {fileID: 11400000, guid: 09ec9647a308e39468c398deb64f3bae, type: 2}
+  Accuracy: {fileID: 916590327}
+  Speed: {fileID: 1190049191}
+  StunTime: {fileID: 1499072984}
 --- !u!114 &2055992507
 MonoBehaviour:
   m_ObjectHideFlags: 0

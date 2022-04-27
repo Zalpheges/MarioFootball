@@ -152,7 +152,6 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-
     #endregion
 
     #region Managing
@@ -201,7 +200,6 @@ public class GameManager : MonoBehaviour
 
         teammates[0] = Player.CreatePlayer(match.Captain2.Prefab, team2);
         teammates[0].name = "Captain Team 2";
-        Debug.Log(match.Mate2.Prefab.name);
         for (int i = 1; i < 4; ++i)
         {
             teammates[i] = Player.CreatePlayer(match.Mate2.Prefab, team2);
@@ -233,7 +231,7 @@ public class GameManager : MonoBehaviour
         _instance._inMatch = true;
     }
 
-    public static void AddMatch(PlayerSpecs playerCaptain, PlayerSpecs playerMate, PlayerSpecs AICaptain, PlayerSpecs AIMate, int gameTime, float goalToWin, int AIDifficulty)
+    public static void AddMatch(PlayerSpecs playerCaptain, PlayerSpecs playerMate, PlayerSpecs AICaptain, PlayerSpecs AIMate,PlayerSpecs GoalKeeper, int gameTime, float goalToWin, int AIDifficulty)
     {
         Match newMatch = new Match()
         {
@@ -242,7 +240,7 @@ public class GameManager : MonoBehaviour
             Mate1 = playerMate,
             Mate2 = AIMate,
 
-            GoalKeeper = _instance.d_GoalKeeper,
+            GoalKeeper = GoalKeeper,
 
             GameTime = gameTime,
             NGoalsToWin = goalToWin,

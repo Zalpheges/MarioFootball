@@ -33,6 +33,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private SpriteRenderer _item2Team2;
 
     [SerializeField] private EventSystem _es;
+    public static EventSystem ES => _instance._es;
     [SerializeField] private GameObject _pauseMenu;
     [SerializeField] private GameObject _subPauseMenu;
     [SerializeField] private GameObject _fsSubPauseMenu;
@@ -273,19 +274,6 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    private void OnGoBack()
-    {
-        if (_subPauseMenu.activeSelf)
-        {
-            _subPauseMenu.SetActive(false);
-            _es.SetSelectedGameObject(_fsPauseMenu);
-        }
-        else
-        {
-            _pauseMenu.SetActive(false);
-            TimeManager.Play();
-        }
-    }
 
     private static void DisplayOneMinuteLeft()
     {
@@ -331,12 +319,33 @@ public class UIManager : MonoBehaviour
 
     public void OnQuit()
     {
+        AudioManager.PlaySFX(AudioManager.SFXType.ButtonClicked);
         _subPauseMenu.SetActive(true);
         _es.SetSelectedGameObject(_fsSubPauseMenu);
     }
 
+    public void OnGoBack()
+    {
+        AudioManager.PlaySFX(AudioManager.SFXType.ButtonClicked);
+        if (_subPauseMenu.activeSelf)
+        {
+            _subPauseMenu.SetActive(false);
+            _es.SetSelectedGameObject(_fsPauseMenu);
+        }
+        else
+        {
+            _pauseMenu.SetActive(false);
+            TimeManager.Play();
+        }
+    }
     public void OnYes()
     {
+        AudioManager.PlaySFX(AudioManager.SFXType.ButtonClicked);
         LevelLoader.LoadNextLevel(0);
+    }
+
+    public void OnSelected()
+    {
+        AudioManager.PlaySFX(AudioManager.SFXType.ButtonSelected);
     }
 }

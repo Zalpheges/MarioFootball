@@ -510,8 +510,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9653993e22cb3143b7c7204a5433d07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slider: {fileID: 1374644611}
-  text: {fileID: 118384335}
+  _slider: {fileID: 0}
+  _text: {fileID: 0}
 --- !u!114 &199961386
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2925,8 +2925,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8335287289179896491, guid: 149771b5df3df34468876a81d67137c3, type: 3}
+      propertyPath: _transition
+      value: 
+      objectReference: {fileID: 1104056102}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 149771b5df3df34468876a81d67137c3, type: 3}
+--- !u!95 &1104056102 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 8335287290197235832, guid: 149771b5df3df34468876a81d67137c3, type: 3}
+  m_PrefabInstance: {fileID: 1104056101}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1131365988
 GameObject:
   m_ObjectHideFlags: 0
@@ -3900,8 +3909,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9653993e22cb3143b7c7204a5433d07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slider: {fileID: 87803832}
-  text: {fileID: 739210024}
+  _slider: {fileID: 0}
+  _text: {fileID: 0}
 --- !u!114 &1414938330
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4382,13 +4391,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51bd76fc6df908b498fe301359fb04a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Mixer: {fileID: 24100000, guid: 05569034d6901cc408f8a3c12684bd66, type: 2}
-  Audio_Options: {fileID: 22393619}
-  FS_Audio_Options: {fileID: 1374644609}
-  Controls_Options: {fileID: 1131365988}
-  FS_Controls: {fileID: 1440903979}
-  FS_Options: {fileID: 361941204}
-  ES: {fileID: 1403419900}
+  _mixer: {fileID: 24100000, guid: 05569034d6901cc408f8a3c12684bd66, type: 2}
+  _audioOptions: {fileID: 22393619}
+  _fsAudioOptions: {fileID: 199961383}
+  _controlsOptions: {fileID: 1131365988}
+  _fsControls: {fileID: 1440903979}
+  _fsOptions: {fileID: 361941204}
+  _es: {fileID: 1403419900}
 --- !u!114 &1774083271
 MonoBehaviour:
   m_ObjectHideFlags: 0
