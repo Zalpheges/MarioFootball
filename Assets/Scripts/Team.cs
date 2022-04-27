@@ -19,6 +19,8 @@ public class Team : MonoBehaviour
 
     public PlayerBrain Brain { get; private set; }
 
+    public Team Other => Field.Team1 == this ? Field.Team2 : Field.Team1;
+
     private Queue<ItemData> _items;
     private int _itemCapacity = 2;
 

@@ -29,6 +29,8 @@ public class Field : MonoBehaviour
     public static Team Team1 => _instance._team1;
     public static Team Team2 => _instance._team2;
 
+    public static Team[] Teams => new Team[] { _instance._team1, _instance._team2 };
+
     [SerializeField] private Vector2 _attackPosCaptain;
     [SerializeField] private Vector2 _attackPosMate1;
     [SerializeField] private Vector2 _attackPosMate2;
@@ -41,6 +43,8 @@ public class Field : MonoBehaviour
 
     [SerializeField] private Transform[] _spawnPointsTeam1;
     [SerializeField] private Transform[] _spawnPointsTeam2;
+
+    private Dictionary<Team, Transform[]> _spawnPoints = new Dictionary<Team, Transform[]>();
 
     private float _heightOneThird;
     public static float HeightOneThird => _instance._heightOneThird;
@@ -66,6 +70,9 @@ public class Field : MonoBehaviour
     {
         AudioManager.PlayMusic(AudioManager.MusicType.Match);
         AudioManager.PlayCrowdSound(AudioManager.CrowdSoundType.Normal);
+
+        _spawnPoints[Team1] = _spawnPointsTeam1;
+        _spawnPoints[Team2] = _spawnPointsTeam2;
 
         _bottomLeftCorner = transform.TransformPoint(new Vector3(-_width / 2f, 0f, -_height / 2f));
 
@@ -101,34 +108,29 @@ public class Field : MonoBehaviour
         void SpawnPlayers()
         {
             List<Vector3> startPositions = GetStartPositions();
-            Vector3 spawnPosition;
 
-            //Team 1
-            for (int i = 0; i < Team1.Players.Length; i++)
+            foreach(Team team in Teams)
             {
-                spawnPosition = _instance._spawnPointsTeam1[i % _instance._spawnPointsTeam1.Length].position;
-                HandlePlayer(Team1.Players[i], spawnPosition, startPositions[i]);
+                Vector3 spawnPosition;
+                Transform[] spawnPoints = _instance._spawnPoints[team];
+                for (int i = 0; i < team.Players.Length; i++)
+                {
+                    spawnPosition = spawnPoints[i % spawnPoints.Length].position;
+                    HandlePlayer(team.Players[i], spawnPosition, team == Team1 ? startPositions[i] : -startPositions[i + Team1.Players.Length]);
+                }
+                spawnPosition = spawnPoints[Random.Range(0, spawnPoints.Length)].position;
+                HandlePlayer(team.Goalkeeper, spawnPosition, GetGoalKeeperPosition(team));
             }
-            spawnPosition = _instance._spawnPointsTeam1[Random.Range(0, _instance._spawnPointsTeam1.Length)].position;
-            HandlePlayer(Team1.Goalkeeper, spawnPosition, GetGoalKeeperPosition(Team1));
-
-            //Team 2
-            for (int i = 0; i < Team2.Players.Length; i++)
-            {
-                spawnPosition = _instance._spawnPointsTeam2[i % _instance._spawnPointsTeam2.Length].position;
-                HandlePlayer(Team2.Players[i], spawnPosition, -startPositions[i + Team1.Players.Length]);
-            }
-            spawnPosition = _instance._spawnPointsTeam2[Random.Range(0, _instance._spawnPointsTeam2.Length)].position;
-            HandlePlayer(Team2.Goalkeeper, spawnPosition, GetGoalKeeperPosition(Team2));
 
             CameraManager.ReadQueue();
+            GameManager.CanSkip = true;
 
             void HandlePlayer(Player player, Vector3 spawnPosition, Vector3 destination)
             {
                 player.transform.position = spawnPosition;
                 player.ActionsQueue.AddAction(destination, 4f, () => player.Run(happy: true), 1f, true);
                 player.ReadQueue();
-                CameraManager.CamerasQueue.AddCameraControl(player.transform, 1.1f);
+                CameraManager.CamerasQueue.AddCameraFocus(player.transform, 1.1f);
             }
         }
     }

@@ -5,16 +5,11 @@ public abstract class PlayerBrain : MonoBehaviour
     public Player Player;
 
     protected Team Allies => Player.Team;
-    protected Team Enemies => Allies == Field.Team1 ? Field.Team2 : Field.Team1;
+    protected Team Enemies => Player.Enemies;
 
     protected virtual void Awake()
     {
         Player = GetComponent<Player>();
-    }
-
-    protected bool IsOther(Player player)
-    {
-        return player != Player;
     }
 
     /// <summary>

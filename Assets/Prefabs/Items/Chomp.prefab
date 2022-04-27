@@ -90,7 +90,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _onHitPS: {fileID: 8806679970545084028}
   _onDestroyPS: {fileID: 1558614337254153299, guid: eaa2febff507c3341bd800ce7a96eb7c, type: 3}
-  _maxRebounds: 10
+  _maxRebounds: 1
   _nTargets: 2
 --- !u!1001 &4305876714743832588
 PrefabInstance:

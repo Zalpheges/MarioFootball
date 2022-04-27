@@ -51,6 +51,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _nameCaptain2;
 
     [SerializeField] private TextMeshProUGUI _announcement;
+    [SerializeField] private TextMeshProUGUI _skipMessage;
 
     private bool _announcementDisplayed;
     private bool _timerReset = false;
@@ -62,7 +63,7 @@ public class UIManager : MonoBehaviour
     private List<string> _announcementContent = new List<string>();
     private List<float> _announcementDuration = new List<float>();
 
-    #region Public functions
+    #region Specific Events
 
     public static void DisplayAnnouncement(AnnouncementType type)
     {
@@ -109,14 +110,17 @@ public class UIManager : MonoBehaviour
             _instance._announcementFontSize.Add(100);
             _instance._announcementFontSize.Add(100);
             _instance._announcementFontSize.Add(100);
+            _instance._announcementFontSize.Add(100);
 
-            _instance._announcementContent.Add("Ready");
-            _instance._announcementContent.Add("Set");
-            _instance._announcementContent.Add("GO !");
+            _instance._announcementContent.Add("3");
+            _instance._announcementContent.Add("2");
+            _instance._announcementContent.Add("1");
+            _instance._announcementContent.Add("GO");
 
-            _instance._announcementDuration.Add(0.7f);
-            _instance._announcementDuration.Add(0.7f);
-            _instance._announcementDuration.Add(0.7f);
+            _instance._announcementDuration.Add(1.6f);
+            _instance._announcementDuration.Add(1.6f);
+            _instance._announcementDuration.Add(1.6f);
+            _instance._announcementDuration.Add(1.6f);
         }
 
         #endregion
@@ -148,6 +152,113 @@ public class UIManager : MonoBehaviour
             _instance._pressToContinue.SetActive(true);
         }
     }
+
+    private void DisplayAnnouncement()
+    {
+        if (_instance._announcementDisplayed)
+        {
+            if (_timerReset)
+            {
+                _instance._timerReset = false;
+                _instance._timer = 0f;
+                _currentTimer = _announcementDuration[0];
+                _instance._announcement.fontSize = _instance._announcementFontSize[0];
+                _instance._announcement.text = _instance._announcementContent[0];
+            }
+            else if (_instance._timer < _currentTimer)
+            {
+                _instance._timer += Time.deltaTime;
+
+                if (_instance._timer < _currentTimer / 4 || _instance._timer > 3 * _currentTimer / 4)
+                {
+                    Color color = _announcement.color;
+                    float gradient;
+
+                    if (_instance._timer < _currentTimer / 4)
+                        gradient = _instance._timer / (_currentTimer / 4);
+                    else
+                        gradient = 1 - (_instance._timer - 3 * _currentTimer / 4) / (_currentTimer / 4);
+
+                    _announcement.color = new Color(color.r, color.g, color.b, Mathf.Lerp(0, 1, gradient));
+                }
+            }
+            else
+            {
+                _instance._announcementFontSize.RemoveAt(0);
+                _instance._announcementContent.RemoveAt(0);
+                _instance._announcementDuration.RemoveAt(0);
+
+                if (_instance._announcementContent.Count == 0)
+                    _instance._announcementDisplayed = false;
+                else
+                    _instance._timerReset = true;
+            }
+
+            _announcement.gameObject.SetActive(_instance._announcementDisplayed);
+        }
+    }
+
+    public static void SkipAnnouncement()
+    {
+        if (_instance._announcementDisplayed)
+        {
+            _instance._announcementFontSize.RemoveAt(0);
+            _instance._announcementContent.RemoveAt(0);
+            _instance._announcementDuration.RemoveAt(0);
+
+            if (_instance._announcementContent.Count == 0)
+                _instance._announcementDisplayed = false;
+            else
+                _instance._timerReset = true;
+        }
+    }
+
+    #endregion
+
+    #region Awake/Update
+
+    private void Awake()
+    {
+        _fsPauseMenu = _es.firstSelectedGameObject;
+        _instance = this;
+    }
+
+    private void Update()
+    {
+        _skipMessage.gameObject.SetActive(GameManager.CanSkip);
+        if (_skipMessage.gameObject.activeSelf)
+        {
+            _skipMessage.text = $"Press {Keyboard.current?.enterKey.name ?? Gamepad.current?.startButton.name ?? ""} to skip";
+        }
+        if (_chrono.color != Color.red && _chrono.text[0] == '0' && _chrono.text[1] == '0')
+        {
+            _chrono.color = Color.red;
+            DisplayAnnouncement(AnnouncementType.OneMinuteLeft);
+        }
+        DisplayAnnouncement();
+
+        if ((Keyboard.current?.escapeKey.wasPressedThisFrame ?? false) 
+            || (Gamepad.current?.selectButton.wasPressedThisFrame ?? false))
+        {
+            if (_pauseMenu.activeSelf)
+                OnGoBack();
+            else
+            {
+                TimeManager.Pause();
+                _pauseMenu.SetActive(true);
+            }
+        }
+
+        if (((Gamepad.current?.buttonEast.wasPressedThisFrame ?? false) 
+            || (Gamepad.current?.selectButton.wasPressedThisFrame ?? false)) && _pauseMenu.activeSelf)
+        {
+            OnGoBack();
+        }
+    }
+
+    #endregion
+
+    #region Update Infos
 
     public static void SetScore(int scoreTeam1 = -1, int scoreTeam2 = -1)
     {
@@ -191,124 +302,7 @@ public class UIManager : MonoBehaviour
 
     #endregion
 
-    #region Awake/Update
-
-    private void Awake()
-    {
-        _fsPauseMenu = _es.firstSelectedGameObject;
-        _instance = this;
-    }
-
-    private void Update()
-    {
-        if (_chrono.color != Color.red && _chrono.text[0] == '0' && _chrono.text[1] == '0')
-        {
-            _chrono.color = Color.red;
-            DisplayAnnouncement(AnnouncementType.OneMinuteLeft);
-        }
-        DisplayAnnouncement();
-
-        if ((Keyboard.current?.escapeKey.wasPressedThisFrame ?? false) || (Gamepad.current?.selectButton.wasPressedThisFrame ?? false))
-        {
-            if (_pauseMenu.activeSelf)
-                OnGoBack();
-            else
-            {
-                TimeManager.Pause();
-                _pauseMenu.SetActive(true);
-            }
-        }
-
-        if (((Gamepad.current?.buttonEast.wasPressedThisFrame ?? false) || (Gamepad.current?.selectButton.wasPressedThisFrame ?? false)) && _pauseMenu.activeSelf)
-        {
-            OnGoBack();
-        }
-    }
-
-    #endregion
-
-    #region Private functions
-
-    private void DisplayAnnouncement()
-    {
-        if (_announcementDisplayed)
-        {
-            if (_timerReset)
-            {
-                _timerReset = false;
-                _instance._timer = 0f;
-                _currentTimer = _announcementDuration[0];
-                _instance._announcement.fontSize = _instance._announcementFontSize[0];
-                _instance._announcement.text = _instance._announcementContent[0];
-            }
-            else if (_instance._timer < _currentTimer)
-            {
-                _instance._timer += Time.deltaTime;
-
-                if (_instance._timer < _currentTimer / 4 || _instance._timer > 3 * _currentTimer / 4)
-                {
-                    Color color = _announcement.color;
-                    float gradient;
-
-                    if (_instance._timer < _currentTimer / 4)
-                        gradient = _instance._timer / (_currentTimer / 4);
-                    else
-                        gradient = 1 - (_instance._timer - 3 * _currentTimer / 4) / (_currentTimer / 4);
-
-                    _announcement.color = new Color(color.r, color.g, color.b, Mathf.Lerp(0, 1, gradient));
-                }
-            }
-            else
-            {
-                _instance._announcementFontSize.RemoveAt(0);
-                _instance._announcementContent.RemoveAt(0);
-                _instance._announcementDuration.RemoveAt(0);
-
-                if (_instance._announcementContent.Count == 0)
-                    _announcementDisplayed = false;
-                else
-                    _timerReset = true;
-            }
-
-            _announcement.gameObject.SetActive(_announcementDisplayed);
-        }
-    }
-
-
-    private static void DisplayOneMinuteLeft()
-    {
-        _instance._announcementFontSize.Add(50);
-
-        _instance._announcementContent.Add("One Minute left");
-
-        _instance._announcementDuration.Add(3f);
-    }
-
-    private static void DisplayReadySetGo()
-    {
-
-        _instance._announcementFontSize.Add(100);
-        _instance._announcementFontSize.Add(100);
-        _instance._announcementFontSize.Add(100);
-
-        _instance._announcementContent.Add("Ready");
-        _instance._announcementContent.Add("Set");
-        _instance._announcementContent.Add("GO");
-
-        _instance._announcementDuration.Add(0.7f);
-        _instance._announcementDuration.Add(0.7f);
-        _instance._announcementDuration.Add(0.7f);
-
-    }
-
-    public static void DisplayGoal()
-    {
-        _instance._announcementFontSize.Add(130);
-
-        _instance._announcementContent.Add("GOAL");
-
-        _instance._announcementDuration.Add(5f);
-    }
+    #region Utility
 
     private string FormatInt(int number)
     {
@@ -316,6 +310,8 @@ public class UIManager : MonoBehaviour
     }
 
     #endregion
+
+    #region OnInteraction
 
     public void OnQuit()
     {
@@ -348,4 +344,7 @@ public class UIManager : MonoBehaviour
     {
         AudioManager.PlaySFX(AudioManager.SFXType.ButtonSelected);
     }
+
+    #endregion
+
 }

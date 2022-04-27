@@ -34,7 +34,10 @@ public class GameManager : MonoBehaviour
 
     public static bool IsGoalScored = false;
 
+    public static bool CanSkip = false;
+
     public static (bool run, float value) KickOffTimer = (false, 0f);
+    public static int Difficulty { get; private set; }
 
     private static GameManager _instance;
 
@@ -46,7 +49,6 @@ public class GameManager : MonoBehaviour
     private bool _endOfGameUIDone = false;
     private bool _inMatch = false;
 
-    public static int Difficulty { get; private set; }
 
     #region Debug
 
@@ -108,12 +110,25 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (!_inMatch)//if we're not in match
+        if (!_inMatch)
             return;
+
+        if (CanSkip) 
+        {
+            if ((Keyboard.current?.enterKey.wasPressedThisFrame ?? false)
+                || (Gamepad.current?.startButton.wasPressedThisFrame ?? false))
+            {
+                UIManager.SkipAnnouncement();
+                CameraManager.SkipQueue();
+                SkipPlayersQueue();
+                CanSkip = false;
+            } 
+        }
 
         if (KickOffTimer.run)
             KickOffTimer.value += Time.deltaTime;
 
+        //Chrono check
         UIManager.SetChrono(_chrono);
         if (!ChronoStopped)
         {
@@ -149,6 +164,18 @@ public class GameManager : MonoBehaviour
                 _inMatch = false;
                 AudioManager.PlayMusic(AudioManager.MusicType.Menu);
                 LevelLoader.LoadNextLevel(0);
+            }
+        }
+
+        void SkipPlayersQueue()
+        {
+            foreach (Team team in Field.Teams)
+            {
+                foreach (Player player in team.Players)
+                {
+                    player.SkipQueue();
+                }
+                team.Goalkeeper.SkipQueue();
             }
         }
     }
@@ -267,16 +294,18 @@ public class GameManager : MonoBehaviour
         HandleScorer();
 
         if (team == Field.Team1)
-        {
             UIManager.SetScore(scoreTeam2: ++_instance._currentResult.ScoreTeam2);
-            RedirectPlayers(Field.Team1.Players, Field.Team2.Players);
-        }
         else if (team == Field.Team2)
-        {
             UIManager.SetScore(scoreTeam1: ++_instance._currentResult.ScoreTeam1);
-            RedirectPlayers(Field.Team2.Players, Field.Team1.Players);
+
+        RedirectPlayers(team.Players, team.Other.Players);
+        if (!Field.Team1.Players[0].IsPiloted)
+        {
+            Field.Team1.ChangePlayer(Field.Team1.Players[0].transform.position);
         }
 
+        CanSkip = true;
+        
         Field.Ball.transform.position = team.Players[0].transform.position;
 
         #region Local functions
@@ -287,7 +316,7 @@ public class GameManager : MonoBehaviour
             bool ownGoal = team == scorer.Team;
             void anim() => scorer.Idle(celebrate: !ownGoal, shameful: ownGoal);
             scorer.ActionsQueue.AddAction(scorer.transform.position, 10f, anim, 5f, false);
-            CameraManager.CamerasQueue.AddCameraControl(scorer.transform, 5f);
+            CameraManager.CamerasQueue.AddCameraFocus(scorer.transform, 5f);
             CameraManager.ReadQueue();
             CameraManager.LookAt(scorer.transform);
         }
@@ -327,15 +356,13 @@ public class GameManager : MonoBehaviour
 
     public static void FreePlayers()
     {
-        foreach (Player player in Field.Team1.Players)
-            player.Free();
-        foreach (Player player in Field.Team2.Players)
-            player.Free();
-
-        Field.Team1.Goalkeeper.Free();
-        Field.Team2.Goalkeeper.Free();
+        foreach (Team team in Field.Teams)
+        {
+            foreach (Player player in team.Players)
+                player.Free();
+            team.Goalkeeper.Free();
+        }
     }
-
 
     #endregion
 
