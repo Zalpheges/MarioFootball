@@ -6,26 +6,6 @@ using UnityEngine.InputSystem.Controls;
 
 public class GameManager : MonoBehaviour
 {
-    #region Debug
-
-    [SerializeField]
-    private float _debugMatchDuration = 60f;
-
-    [SerializeField]
-    private bool _debugOnlyPlayer = false;
-    public static bool DebugOnlyPlayer => _instance._debugOnlyPlayer;
-
-    [SerializeField]
-    private bool _enemiesAreRetard = false;
-    [SerializeField]
-    private bool _startWithoutAnim = true;
-
-    public static bool EnemiesAreRetard => _instance._enemiesAreRetard;
-
-    public static bool StartWithoutAnim => _instance._startWithoutAnim;
-
-    #endregion
-
     public static Team LosingTeam => _instance._currentResult.LosingTeam;
 
     public static Chrono Chrono => _instance._chrono;
@@ -49,22 +29,6 @@ public class GameManager : MonoBehaviour
     private bool _endOfGameUIDone = false;
     private bool _inMatch = false;
 
-
-    #region Debug
-
-    public PlayerSpecs d_Captain1;
-    public PlayerSpecs d_Captain2;
-    public PlayerSpecs d_Mate1;
-    public PlayerSpecs d_Mate2;
-
-    public PlayerSpecs d_GoalKeeper;
-
-    public int d_gameTime;
-    public float d_goalToWin;
-    public int d_aIDifficulty;
-
-    #endregion
-
     #region Awake/Start/Update
 
     private void Awake()
@@ -80,27 +44,6 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
 
         _matches = new Queue<Match>();
-
-        #region Debug
-
-        if (d_Captain1 == null)
-            return;
-
-        Match debugMatch = new Match()
-        {
-            Captain1 = d_Captain1,
-            Captain2 = d_Captain2,
-            GoalKeeper = d_GoalKeeper,
-            Mate1 = d_Mate1,
-            Mate2 = d_Mate2,
-            GameTime = d_gameTime,
-            NGoalsToWin = d_goalToWin,
-            AIDifficulty = d_aIDifficulty
-        };
-
-        _matches.Enqueue(debugMatch);
-
-        #endregion
     }
 
     private void Start()

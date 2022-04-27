@@ -20,11 +20,7 @@ public class S_WanderAroundPosition: Node
         float randomY = Random.Range(-1f, 1f);
         float randomRadius = Random.Range(0f, 0.7f);
 
-        //Debug.Log($"{_root.player.transform.GetSiblingIndex()}, {randomX}, {randomY}, {randomRadius}");
-
         Vector2 CenterOffset = new Vector2(randomX, randomY).normalized * randomRadius * Mathf.Min(_root.HeightDivision, _root.WidthDivision) / 2;
-
-        //Debug.Log($"{CenterOffset.x}, {CenterOffset.y}");
 
         _root.CoordinatePosition = new Vector3(CenterOffset.x, 0, CenterOffset.y) + CenterPosition;
         return (NodeState.SUCCESS, Action.None);

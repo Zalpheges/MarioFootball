@@ -194,7 +194,6 @@ public class Team : MonoBehaviour
     {
         if (other.GetComponent<Ball>())
         {
-            Debug.Log("but");
             GameManager.OnGoalScored(this);
         }
     }

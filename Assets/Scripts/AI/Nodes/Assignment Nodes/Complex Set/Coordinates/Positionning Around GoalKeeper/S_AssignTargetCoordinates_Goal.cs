@@ -25,7 +25,6 @@ public class S_AssignTargetCoordinates_Goal : Node
 
         List<Coordinate> PlayersWithCoordinates = FusePlayerCoordinate(Players, PlayersCoords);
 
-        //Debug.Log($"{_root.player.transform.GetSiblingIndex()}, {PlayersWithCoordinates.Count}, {_root.OptimalCoordinates.Count}");
         List<Coordinate> BestArrangement = FindBestArrangement(PlayersWithCoordinates);
 
         SetOptimalPositionning(BestArrangement);
@@ -68,8 +67,6 @@ public class S_AssignTargetCoordinates_Goal : Node
                 foreach (Coordinate c in PlayerCoords)
                     if (!ListBuffer.Contains(c))
                         ListBuffer.Add(c);
-
-                //Debug.Log($"{_root.player.transform.GetSiblingIndex()}, {ListBuffer.Count}");
 
                 distance = ComputeDistance(ListBuffer);
                 if (distance < shortestDistance)

@@ -64,12 +64,6 @@ public class Player : MonoBehaviour
 
     public bool IsGoalKeeper { get; private set; }
 
-    #region Debug
-
-    private bool _isRetard => GameManager.EnemiesAreRetard && Team == Field.Team2 && Time.timeSinceLevelLoad < 20f;
-
-    #endregion
-
     #region Constructor
 
     public static Player CreatePlayer(Player prefab, Team team, bool isGoalKeeper = false)
@@ -256,9 +250,6 @@ public class Player : MonoBehaviour
 
             return;
         }
-
-        if ((GameManager.DebugOnlyPlayer && (!HasBall && !IsPiloted)) || _isRetard)
-            return;
 
         if (IsGoalKeeper)
         {
