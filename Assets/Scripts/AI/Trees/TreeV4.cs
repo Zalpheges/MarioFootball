@@ -205,11 +205,13 @@ public class TreeV4
                                 new T_PlayerType_BallHolder(),
                                 new Selector(new List<Node>
                                 {
+                                    #region Kickoff Pass
                                     new Sequence(new List<Node>
                                     {
                                         new T_Kickoff(),
                                         new S_Pass()
                                     }),
+                                    #endregion
                                     #region Loading to Shoot
                                     new Sequence(new List<Node>
                                     {
