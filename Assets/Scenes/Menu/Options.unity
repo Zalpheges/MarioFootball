@@ -510,8 +510,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9653993e22cb3143b7c7204a5433d07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _slider: {fileID: 0}
-  _text: {fileID: 0}
+  _slider: {fileID: 1374644611}
+  _text: {fileID: 118384335}
 --- !u!114 &199961386
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3909,8 +3909,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9653993e22cb3143b7c7204a5433d07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _slider: {fileID: 0}
-  _text: {fileID: 0}
+  _slider: {fileID: 87803832}
+  _text: {fileID: 739210024}
 --- !u!114 &1414938330
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4393,7 +4393,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _mixer: {fileID: 24100000, guid: 05569034d6901cc408f8a3c12684bd66, type: 2}
   _audioOptions: {fileID: 22393619}
-  _fsAudioOptions: {fileID: 199961383}
+  _fsAudioOptions: {fileID: 1374644609}
   _controlsOptions: {fileID: 1131365988}
   _fsControls: {fileID: 1440903979}
   _fsOptions: {fileID: 361941204}

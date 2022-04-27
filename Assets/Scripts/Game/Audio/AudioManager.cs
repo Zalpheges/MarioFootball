@@ -68,12 +68,15 @@ public class AudioManager : MonoBehaviour
             DontDestroyOnLoad(this);
         }
         else
+        {
             Destroy(this);
+            return;
+        }
 
         AudioSource[] sources = GetComponents<AudioSource>();
         _musicAudioSource = sources[0];
         _sfxAudioSource = sources[1];
-
+        
         PlayMusic(MusicType.Menu);
     }
 
