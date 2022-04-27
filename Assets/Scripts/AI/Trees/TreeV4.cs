@@ -205,6 +205,12 @@ public class TreeV4
                                 new T_PlayerType_BallHolder(),
                                 new Selector(new List<Node>
                                 {
+                                    new Sequence(new List<Node>
+                                    {
+                                        new T_Kickoff(),
+                                        new T_NearbyAllyUnmarked(),
+                                        new S_Pass()
+                                    }),
                                     #region Loading to Shoot
                                     new Sequence(new List<Node>
                                     {
