@@ -97,7 +97,7 @@ public class Player : MonoBehaviour
         private Queue<System.Action> _animations;
         private Queue<float> _durations;
         private Queue<bool> _playWhileMovingBools;
-        private Vector3 _lastDestination;
+        public Vector3 LastDestination { get; private set; }
 
         private void Init()
         {
@@ -124,7 +124,7 @@ public class Player : MonoBehaviour
             if (_positions.Count < 1)
                 return (null, 0f);
 
-            player.SetNavDriven(_lastDestination = _positions.Dequeue(), _speeds.Dequeue());
+            player.SetNavDriven(LastDestination = _positions.Dequeue(), _speeds.Dequeue());
             System.Action anim = _animations.Dequeue();
             if (_playWhileMovingBools.Dequeue())
             {
@@ -134,35 +134,22 @@ public class Player : MonoBehaviour
             return (anim, _durations.Dequeue());
         }
 
-        public void Clear()
+        public (System.Action, float) GetLast(Player player)
         {
-            _positions.Clear();
-            _speeds.Clear();
-            _animations.Clear();
-            _durations.Clear();
-            _playWhileMovingBools.Clear();
-        }
+            if (_positions.Count < 1)
+                return (null, 0f);
 
-        public Vector3 GetFinalDestination()
-        {
-            Queue<Vector3> tmpQueue = new Queue<Vector3>();
-            Vector3 tmp = _lastDestination;
-            while(_positions.Count > 0)
+            while (_positions.Count > 1)
             {
-                if (_positions.Count == 1)
-                {
-                    Debug.Log("fdp");
-                    tmp = _positions.Peek();
-                }
-                tmpQueue.Enqueue(_positions.Dequeue());
+                _positions.Dequeue();
+                _speeds.Dequeue();
+                _animations.Dequeue();
+                _playWhileMovingBools.Dequeue();
+                _durations.Dequeue();
             }
-            foreach(Vector3 pos in tmpQueue)
-            {
-                _positions.Enqueue(pos);
-            }
-            return tmp;
-        }
 
+            return GetNext(player);
+        }
     }
 
     public PlayerActionsQueue ActionsQueue;
@@ -172,7 +159,23 @@ public class Player : MonoBehaviour
     private float _currentTimeLimit;
     private System.Action _animToPerform;
 
+    public void SkipQueue()
+    {
+        (_animToPerform, _currentTimeLimit) = ActionsQueue.GetLast(this);
+        transform.position = ActionsQueue.LastDestination;
+    }
+
+    public void ReadQueue()
+    {
+        if (_processQueue)
+            return;
+        _processQueue = true;
+        (_animToPerform, _currentTimeLimit) = ActionsQueue.GetNext(this);
+    }
+
     #endregion
+
+    #region Awake/Start/Update
 
     private void Awake()
     {
@@ -232,6 +235,7 @@ public class Player : MonoBehaviour
                     {
                         if (!GameManager.KickOffTimer.run)
                         {
+                            GameManager.CanSkip = false;
                             UIManager.DisplayAnnouncement(UIManager.AnnouncementType.ReadySetGo);
                             AudioManager.PlaySFX(AudioManager.SFXType.Kickoff);
                             GameManager.KickOffTimer.run = true;
@@ -318,7 +322,7 @@ public class Player : MonoBehaviour
 
         if (IsWaiting)
         {
-            if (action.ActionType == Action.Type.Pass && GameManager.KickOffTimer.value > 2.5f)
+            if (action.ActionType == Action.Type.Pass && GameManager.KickOffTimer.value > 6.4f)//Diplay/audio countdown duration
             {
                 GameManager.FreePlayers();
                 GameManager.ChronoStopped = false;
@@ -355,14 +359,7 @@ public class Player : MonoBehaviour
         #endregion
     }
 
-    public void ReadQueue()
-    {
-        if (_processQueue)
-            return;
-        _processQueue = true;
-        (_animToPerform, _currentTimeLimit) = ActionsQueue.GetNext(this);
-    }
-
+    #endregion
 
     private void ChangeMaterialOnElectrocution(bool enabled)
     {
@@ -496,6 +493,7 @@ public class Player : MonoBehaviour
                     Shoot(action.Force);
                     PlaySound(AudioManager.CharaSFXType.Shoot);
                     _animator.SetTrigger("Strike");
+                    _animator.SetBool("Hold Strike", false);
                 }
 
                 break;
@@ -550,6 +548,8 @@ public class Player : MonoBehaviour
 
             case Action.Type.Loading:
                 Field.Ball.SetLoading(action.Force);
+                _animator.SetTrigger("Strike");
+                _animator.SetBool("Hold Strike", true);
                 Idle();
 
                 break;

@@ -12,11 +12,6 @@ public abstract class PlayerBrain : MonoBehaviour
         Player = GetComponent<Player>();
     }
 
-    protected bool IsOther(Player player)
-    {
-        return player != Player;
-    }
-
     /// <summary>
     /// Ask the brain for an action the player will perform
     /// </summary>

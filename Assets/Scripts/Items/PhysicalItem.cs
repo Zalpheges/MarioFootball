@@ -10,6 +10,7 @@ public abstract class PhysicalItem : Item
     protected virtual void Update()
     {
         Move();
+        transform.LookAt(transform.position + _direction);
     }
     protected void Move()
     {
