@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using BehaviorTree;
+using UnityEngine;
 
 public class S_MoveGoalKeeper_Default : Node
 {
@@ -14,7 +12,7 @@ public class S_MoveGoalKeeper_Default : Node
             _root = GetRootNode();
 
         _root.actionToPerform = ActionToPerform.Move;
-        _root.Position = _root.goalParentTree.InitialGoalPosition - Mathf.Sign(_root.goalParentTree.InitialGoalPosition.x) * new Vector3(Field.GoalArea.y/2, 0, 0);
+        _root.Position = _root.goalParentTree.InitialGoalPosition - Mathf.Sign(_root.goalParentTree.InitialGoalPosition.x) * new Vector3(Field.GoalArea.y / 2, 0, 0);
 
         return (NodeState.SUCCESS, Action.None);
     }

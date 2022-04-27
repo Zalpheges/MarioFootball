@@ -2,7 +2,8 @@
 using System.Reflection;
 using UnityEditor.Experimental.SceneManagement;
 
-public class PrefabSavingUtil {
+public class PrefabSavingUtil
+{
 
     public static void SavePrefab(PrefabStage prefabStage)
     {

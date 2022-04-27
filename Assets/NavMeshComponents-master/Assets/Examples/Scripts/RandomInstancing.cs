@@ -1,6 +1,5 @@
-using UnityEngine;
-
 using System.Collections.Generic;
+using UnityEngine;
 
 // Fill 5x5 tiles around the local position procedurally by instantiating prefabs at random positions/orientations
 [DefaultExecutionOrder(-200)]

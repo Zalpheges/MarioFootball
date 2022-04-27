@@ -100,8 +100,7 @@ public class Field : MonoBehaviour
     {
         _instance._ball = ball;
 
-        if (GameManager.StartWithoutAnim) _instance.SetTeamPosition();
-        else SpawnPlayers();
+        SpawnPlayers();
 
         ball.transform.position = _instance.VectorToPosition(_instance._attackPosCaptain);
 
@@ -109,7 +108,7 @@ public class Field : MonoBehaviour
         {
             List<Vector3> startPositions = GetStartPositions();
 
-            foreach(Team team in Teams)
+            foreach (Team team in Teams)
             {
                 Vector3 spawnPosition;
                 Transform[] spawnPoints = _instance._spawnPoints[team];
@@ -134,37 +133,6 @@ public class Field : MonoBehaviour
             }
         }
     }
-
-    #region Debug
-
-    private void SetTeamPosition()
-    {
-        Vector3 offset = new Vector3(0f, 0.0f);
-
-        Team1.Players[0].transform.position = VectorToPosition(_attackPosCaptain) + offset;
-        Team1.Players[0].SetNavDriven(VectorToPosition(_attackPosCaptain));
-        Team1.Players[1].transform.position = VectorToPosition(_attackPosMate1) + offset;
-        Team1.Players[1].SetNavDriven(VectorToPosition(_attackPosMate1));
-        Team1.Players[2].transform.position = VectorToPosition(_attackPosMate2) + offset;
-        Team1.Players[2].SetNavDriven(VectorToPosition(_attackPosMate2));
-        Team1.Players[3].transform.position = VectorToPosition(_attackPosMate3) + offset;
-        Team1.Players[3].SetNavDriven(VectorToPosition(_attackPosMate3));
-        Team1.Goalkeeper.transform.position = GetGoalKeeperPosition(Team1) + offset;
-        Team1.Goalkeeper.SetNavDriven(GetGoalKeeperPosition(Team1));
-
-        Team2.Players[0].transform.position = VectorToPosition(_defPosCaptain) + offset;
-        Team2.Players[0].SetNavDriven(VectorToPosition(_defPosCaptain));
-        Team2.Players[1].transform.position = VectorToPosition(_defPosMate1) + offset;
-        Team2.Players[1].SetNavDriven(VectorToPosition(_defPosMate1));
-        Team2.Players[2].transform.position = VectorToPosition(_defPosMate2) + offset;
-        Team2.Players[2].SetNavDriven(VectorToPosition(_defPosMate2));
-        Team2.Players[3].transform.position = VectorToPosition(_defPosMate3) + offset;
-        Team2.Players[3].SetNavDriven(VectorToPosition(_defPosMate3));
-        Team2.Goalkeeper.transform.position = GetGoalKeeperPosition(Team2) + offset;
-        Team2.Goalkeeper.SetNavDriven(GetGoalKeeperPosition(Team2));
-    }
-
-    #endregion
 
     #region Utility
 

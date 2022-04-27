@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using BehaviorTree;
 
 public class T_BallHolder_enemyInRange : Node
@@ -13,7 +10,7 @@ public class T_BallHolder_enemyInRange : Node
         if (!_rootInitialized)
             _root = GetRootNode();
 
-        foreach(Player enemyPlayer in _root.parentTree.Enemies)
+        foreach (Player enemyPlayer in _root.parentTree.Enemies)
         {
             float distanceToEnemy = (_root.player.transform.position - enemyPlayer.transform.position).magnitude;
 

@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using BehaviorTree;
 
 public class T_HighestOrder : Node
@@ -13,9 +10,9 @@ public class T_HighestOrder : Node
         if (!_rootInitialized)
             _root = GetRootNode();
 
-        if (_root.allyPlayersOrder[_root.parentTree.Allies.Count-1] == _root.player)
+        if (_root.allyPlayersOrder[_root.parentTree.Allies.Count - 1] == _root.player)
             return (NodeState.SUCCESS, Action.None);
-        if (_root.allyPlayersOrder[_root.parentTree.Allies.Count - 1] == _root.ballHolder 
+        if (_root.allyPlayersOrder[_root.parentTree.Allies.Count - 1] == _root.ballHolder
                                                             && _root.allyPlayersOrder[_root.parentTree.Allies.Count - 2] == _root.player)
             return (NodeState.SUCCESS, Action.None);
 

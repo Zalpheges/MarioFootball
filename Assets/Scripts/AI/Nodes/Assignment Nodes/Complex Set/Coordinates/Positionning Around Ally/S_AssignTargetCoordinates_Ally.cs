@@ -1,7 +1,6 @@
-using System.Collections;
+using BehaviorTree;
 using System.Collections.Generic;
 using UnityEngine;
-using BehaviorTree;
 
 public class S_AssignTargetCoordinates_Ally : Node
 {
@@ -36,7 +35,7 @@ public class S_AssignTargetCoordinates_Ally : Node
     {
         for (int x = 0; x < BestArrangement.Count; x++)
             if (BestArrangement[x].player == _root.player)
-                _root.CoordinatePosition = 
+                _root.CoordinatePosition =
                     new Vector3(_root.OptimalCoordinates[x].x * _root.WidthDivision, 0, _root.OptimalCoordinates[x].y * _root.HeightDivision);
     }
 

@@ -1,5 +1,5 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 
 // Manipulation tool for displacing the vertices in a list of meshes
 public class MeshTool : MonoBehaviour

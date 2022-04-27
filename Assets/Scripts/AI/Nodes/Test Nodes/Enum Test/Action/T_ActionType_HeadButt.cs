@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using BehaviorTree;
 
 public class T_ActionType_HeadButt : Node
@@ -13,7 +10,7 @@ public class T_ActionType_HeadButt : Node
         if (!_rootInitialized)
             _root = GetRootNode();
 
-        if(_root.actionToPerform == ActionToPerform.HeadButt)
+        if (_root.actionToPerform == ActionToPerform.HeadButt)
             return (NodeState.SUCCESS, Action.None);
         return (NodeState.FAILURE, Action.None);
     }

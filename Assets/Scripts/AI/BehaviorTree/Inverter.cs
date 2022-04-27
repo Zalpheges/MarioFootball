@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace BehaviorTree
 {
     public class Inverter : Node
@@ -11,20 +9,20 @@ namespace BehaviorTree
         {
             (NodeState, Action) evaluation = this.Children[0].Evaluate();
 
-                switch (evaluation.Item1)
-                {
-                    case NodeState.FAILURE:
-                        state = NodeState.SUCCESS;
-                        break;
-                    case NodeState.SUCCESS:
-                        state = NodeState.FAILURE;
-                        break;
-                    case NodeState.RUNNING:
-                        state = NodeState.RUNNING;
-                        break;
-                    default:
-                        break;
-                }
+            switch (evaluation.Item1)
+            {
+                case NodeState.FAILURE:
+                    state = NodeState.SUCCESS;
+                    break;
+                case NodeState.SUCCESS:
+                    state = NodeState.FAILURE;
+                    break;
+                case NodeState.RUNNING:
+                    state = NodeState.RUNNING;
+                    break;
+                default:
+                    break;
+            }
             return (state, evaluation.Item2);
         }
     }

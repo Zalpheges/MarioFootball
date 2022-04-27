@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using BehaviorTree;
+using UnityEngine;
 
 public class S_MoveGoalKeeper_Support : Node
 {
@@ -26,7 +24,6 @@ public class S_MoveGoalKeeper_Support : Node
 
             desiredX = Mathf.Lerp(minX, maxX, t);
             desiredZ = _root.ballHolder.transform.position.z * Field.GoalArea.x / Field.Height;
-            //Debug.Log($"{minX}, {maxX}, {t}, {desiredX}");
         }
         else
         {

@@ -20,7 +20,7 @@ public class Match_UI_Manager : MonoBehaviour
     private MateSpecs _aiAlly;
 
     [HideInInspector] public static int GameTime;
-    [HideInInspector] public static float GoalToWin;
+    [HideInInspector] public static int GoalToWin;
     [HideInInspector] public static int AIDifficulty;
 
     //Chara buttons
@@ -287,7 +287,7 @@ public class Match_UI_Manager : MonoBehaviour
 
         GetRandomEnemies();
 
-        GameManager.AddMatch(_playerCaptain, _playerAlly.MateSpec, _aiCaptain, _aiAlly.MateSpec, _goalSpecs,GameTime, GoalToWin, AIDifficulty);
+        GameManager.AddMatch(_playerCaptain, _playerAlly.MateSpec, _aiCaptain, _aiAlly.MateSpec, _goalSpecs, GameTime, GoalToWin, AIDifficulty);
         AudioManager.SetCharaAudio(_playerCaptain, _playerAlly.MateSpec, _aiCaptain, _aiAlly.MateSpec);
 
         LevelLoader.LoadNextLevel(SceneManager.GetActiveScene().buildIndex + 1);

@@ -1,5 +1,5 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.AI;
 
 [ExecuteInEditMode]
@@ -26,7 +26,7 @@ public class NavMeshPrefabInstance : MonoBehaviour
 
     // Position Tracking
     static readonly List<NavMeshPrefabInstance> s_TrackedInstances = new List<NavMeshPrefabInstance>();
-    public static List<NavMeshPrefabInstance> trackedInstances {get {return s_TrackedInstances; }}
+    public static List<NavMeshPrefabInstance> trackedInstances { get { return s_TrackedInstances; } }
     Vector3 m_Position;
     Quaternion m_Rotation;
 
