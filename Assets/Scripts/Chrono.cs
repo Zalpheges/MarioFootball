@@ -10,11 +10,13 @@ public class Chrono
         Seconds = seconds;
     }
     #region OPERATOR OVERLOADS (+, -, <, >, ++, --)
-    public static Chrono operator +(Chrono a, Chrono b) {
+    public static Chrono operator +(Chrono a, Chrono b)
+    {
         int newSeconds = (a.Seconds + b.Seconds);
         return new Chrono(a.Minutes + b.Minutes + newSeconds / 60, newSeconds % 60);
     }
-    public static bool operator <(Chrono a, Chrono b) {
+    public static bool operator <(Chrono a, Chrono b)
+    {
         if (a.Minutes < b.Minutes)
             return true;
         else if (a.Minutes > b.Minutes)
@@ -22,7 +24,8 @@ public class Chrono
         else
             return a.Seconds < b.Seconds;
     }
-    public static bool operator >(Chrono a, Chrono b) {
+    public static bool operator >(Chrono a, Chrono b)
+    {
         if (a.Minutes > b.Minutes)
             return true;
         else if (a.Minutes < b.Minutes)
@@ -30,12 +33,13 @@ public class Chrono
         else
             return a.Seconds > b.Seconds;
     }
-    public static Chrono operator -(Chrono a, Chrono b) {
+    public static Chrono operator -(Chrono a, Chrono b)
+    {
         if (b > a)
             return new Chrono(0, 0);
         int newSeconds = (a.Seconds - b.Seconds);
         int newMinutes = (a.Minutes - b.Minutes);
-        if(newSeconds < 0)
+        if (newSeconds < 0)
         {
             newSeconds += 60;
             --newMinutes;

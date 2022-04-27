@@ -1,24 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class GameTimeSlider : MonoBehaviour, ISliderValue
 {
     [SerializeField]
-    private Slider slider;
+    private Slider _slider;
 
     [SerializeField]
-    private Text text;
+    private Text _text;
 
-    int MaxTime = 10;
+    private int _maxTime = 10;
     public void OnValueChange(float Value)
     {
-        int minutes = (int)Mathf.Floor(Value * MaxTime);
-        int seconds = (int)Mathf.Round(((Value * MaxTime) - minutes) * 60);
+        int minutes = Mathf.FloorToInt(Value * _maxTime);
+        int seconds = Mathf.RoundToInt((Value * _maxTime - minutes) * 60);
 
-        text.text = minutes.ToString() + " minutes";
+        _text.text = minutes.ToString() + " minutes";
 
-        Match_UI_Manager._instance.gameTime = minutes;
+        Match_UI_Manager.GameTime = minutes;
     }
 }

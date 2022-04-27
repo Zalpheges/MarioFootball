@@ -1,9 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class Menu_UI_Manager : MonoBehaviour
 {
@@ -12,7 +9,8 @@ public class Menu_UI_Manager : MonoBehaviour
 
     private void Update()
     {
-        if ((Keyboard.current?.escapeKey.wasPressedThisFrame ?? false) || (Gamepad.current?.buttonEast.wasPressedThisFrame ?? false))
+        if ((Keyboard.current?.escapeKey.wasPressedThisFrame ?? false) 
+            || (Gamepad.current?.buttonEast.wasPressedThisFrame ?? false))
         {
             if (Success != null && SceneManager.GetActiveScene().buildIndex == 0)
             {
@@ -24,7 +22,6 @@ public class Menu_UI_Manager : MonoBehaviour
             else
                 LevelLoader.LoadNextLevel(SceneManager.GetActiveScene().buildIndex - 1);
         }
-        
     }
     public void OnSuccess()
     {

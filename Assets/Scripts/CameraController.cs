@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Cinemachine;
+using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
@@ -18,7 +16,7 @@ public class CameraController : MonoBehaviour
     void Update()
     {
         _follow ??= _vCam.Follow;
-        if(_vCam == CameraManager.ActiveCam?.GetComponent<CinemachineVirtualCamera>())
+        if (_vCam == CameraManager.ActiveCam?.GetComponent<CinemachineVirtualCamera>())
             _vCam.Follow = CameraManager.LockerDynamic;
     }
 }

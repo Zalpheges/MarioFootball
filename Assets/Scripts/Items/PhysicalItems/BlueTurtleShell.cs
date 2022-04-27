@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class BlueTurtleShell : PhysicalItem
 {
     protected override void ApplyEffect(Player player)

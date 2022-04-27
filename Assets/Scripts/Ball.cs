@@ -1,5 +1,5 @@
-using UnityEngine;
 using System.Collections;
+using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
 public class Ball : MonoBehaviour
@@ -16,7 +16,7 @@ public class Ball : MonoBehaviour
     private Vector3 _lastVelocity;
     private float _bezierTime;
 
-    public Player Shooter { get; private set; }
+    private Player _shooter;
     public Player Target { get; private set; }
     public Player LastOwner { get; private set; }
 
@@ -26,18 +26,20 @@ public class Ball : MonoBehaviour
     [SerializeField]
     private ParticleSystem _circle;
 
-    IEnumerator SlowDown()
-    {
-        yield return new WaitForSeconds(1f);
-
-        //Time.timeScale = 0.1f;
-    }
+    #region Awake/Update
 
     private void Awake()
     {
         _rgdb = GetComponent<Rigidbody>();
 
         StartCoroutine(SlowDown());
+
+        static IEnumerator SlowDown()
+        {
+            yield return new WaitForSeconds(1f);
+
+            //Time.timeScale = 0.1f;
+        }
     }
 
     private void Update()
@@ -84,6 +86,8 @@ public class Ball : MonoBehaviour
         if (_isFree && other.tag == "Ball Constraint")
             transform.position = LastOwner.transform.position;
     }
+
+    #endregion
 
     #region Shoot
 
@@ -163,7 +167,7 @@ public class Ball : MonoBehaviour
 
     public void Free()
     {
-        Shooter = _parent;
+        _shooter = _parent;
 
         _isFree = true;
         _parent = null;
@@ -178,7 +182,7 @@ public class Ball : MonoBehaviour
 
     public void ResetShooter()
     {
-        Shooter = null;
+        _shooter = null;
     }
 
     public void Take(Player parent)
@@ -188,7 +192,7 @@ public class Ball : MonoBehaviour
         if (!_isFree && owner.State == Player.PlayerState.Dribbling)
             return;
 
-        if (parent.transform != Shooter?.transform && (!owner || owner.Team != parent?.Team))
+        if (parent.transform != _shooter?.transform && (!owner || owner.Team != parent?.Team))
         {
             _parent = LastOwner = parent;
             _isFree = false;
@@ -230,10 +234,10 @@ public class Ball : MonoBehaviour
     }
 
     #endregion
-
     public void SetLoading(float force)
     {
         var main = _circle.main;
         main.startSize = force * 3f;
     }
+
 }

@@ -1,22 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MaxGoalSlider: MonoBehaviour, ISliderValue
+public class MaxGoalSlider : MonoBehaviour, ISliderValue
 {
     [SerializeField]
-    private Slider slider;
+    private Slider _slider;
 
     [SerializeField]
-    private Text text;
+    private Text _text;
 
-    int MaxGoal = 10;
+    private int _maxGoal = 10;
     public void OnValueChange(float Value)
     {
-        int newValue = (int)Mathf.Round(Value * MaxGoal);
-        text.text = newValue.ToString();
+        int newValue = (int)Mathf.Round(Value * _maxGoal);
+        _text.text = newValue.ToString();
 
-        Match_UI_Manager._instance.goalToWin = newValue;
+        Match_UI_Manager.GoalToWin = newValue;
     }
 }

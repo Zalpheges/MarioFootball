@@ -1,29 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerHeadTriangle : MonoBehaviour
 {
-    private GameObject Cam;
-    public GameObject Triangle;
-    public Player _Player;
-    void Start()
-    {
-        Cam = GameObject.FindGameObjectWithTag("MainCamera");
-
-    }
+    [SerializeField] private GameObject _triangle;
+    [SerializeField] private Player _player;
 
     void LateUpdate()
     {
-        if (_Player.IsPiloted)
+        if (_player.IsPiloted)
         {
-            Triangle.SetActive(true);
-            Triangle.transform.LookAt(Cam.transform.position);
-
+            _triangle.SetActive(true);
+            _triangle.transform.LookAt(Camera.main.transform.position);
         }
         else
         {
-            Triangle.SetActive(false);
+            _triangle.SetActive(false);
         }
     }
 }

@@ -1,14 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.UI;
-using UnityEngine;
 using TMPro;
-using UnityEngine.InputSystem;
+using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 
 public class UIManager : MonoBehaviour
 {
-    public static UIManager _instance;
+    private static UIManager _instance;
+
+    public enum GameState
+    {
+        Win,
+        Loose,
+        Draw
+    }
+
+    public enum AnnouncementType
+    {
+        Goal,
+        CountDown,
+        OneMinuteLeft,
+        ReadySetGo
+    }
 
     [SerializeField] private TextMeshProUGUI _scoreTeam1;
     [SerializeField] private TextMeshProUGUI _scoreTeam2;
@@ -18,26 +32,26 @@ public class UIManager : MonoBehaviour
     [SerializeField] private SpriteRenderer _item1Team2;
     [SerializeField] private SpriteRenderer _item2Team2;
 
-    [SerializeField] private EventSystem ES;
-    [SerializeField] private GameObject PauseMenu;
-    private GameObject FS_PauseMenu;
-    [SerializeField] private GameObject SubPauseMenu;
-    [SerializeField] private GameObject FS_SubPauseMenu;
+    [SerializeField] private EventSystem _es;
+    [SerializeField] private GameObject _pauseMenu;
+    [SerializeField] private GameObject _subPauseMenu;
+    [SerializeField] private GameObject _fsSubPauseMenu;
+    private GameObject _fsPauseMenu;
 
     [SerializeField] private TextMeshProUGUI _endOfGameText;
     [SerializeField] private GameObject _pressToContinue;
     [SerializeField] private Animator _uIAnimator;
 
-    [SerializeField] private SpriteRenderer _CornerTeam1;
-    [SerializeField] private SpriteRenderer _CornerTeam2;
-    [SerializeField] private SpriteRenderer _IconCaptain1;
-    [SerializeField] private SpriteRenderer _IconCaptain2;
-    [SerializeField] private TextMeshProUGUI _NameCaptain1;
-    [SerializeField] private TextMeshProUGUI _NameCaptain2;
+    [SerializeField] private SpriteRenderer _cornerTeam1;
+    [SerializeField] private SpriteRenderer _cornerTeam2;
+    [SerializeField] private SpriteRenderer _iconCaptain1;
+    [SerializeField] private SpriteRenderer _iconCaptain2;
+    [SerializeField] private TextMeshProUGUI _nameCaptain1;
+    [SerializeField] private TextMeshProUGUI _nameCaptain2;
 
-    [SerializeField] private TextMeshProUGUI _Announcement;
+    [SerializeField] private TextMeshProUGUI _announcement;
 
-    private bool _AnnouncementDisplayed;
+    private bool _announcementDisplayed;
     private bool _timerReset = false;
 
     private float _timer = 0f;
@@ -47,36 +61,141 @@ public class UIManager : MonoBehaviour
     private List<string> _announcementContent = new List<string>();
     private List<float> _announcementDuration = new List<float>();
 
-    public enum gameState
+    #region Public functions
+
+    public static void DisplayAnnouncement(AnnouncementType type)
     {
-        Win,
-        Loose,
-        Draw
+        _instance._announcementDisplayed = true;
+        _instance._timerReset = true;
+
+        switch (type)
+        {
+            case AnnouncementType.Goal:
+                DisplayGoal();
+                break;
+            case AnnouncementType.OneMinuteLeft:
+                DisplayOneMinuteLeft();
+                break;
+            case AnnouncementType.ReadySetGo:
+                DisplayReadySetGo();
+                break;
+            default:
+                break;
+        }
+
+        #region Local functions
+
+        static void DisplayGoal()
+        {
+            _instance._announcementFontSize.Add(130);
+
+            _instance._announcementContent.Add("GOAL");
+
+            _instance._announcementDuration.Add(5f);
+        }
+
+        static void DisplayOneMinuteLeft()
+        {
+            _instance._announcementFontSize.Add(50);
+
+            _instance._announcementContent.Add("One Minute left");
+
+            _instance._announcementDuration.Add(3f);
+        }
+
+        static void DisplayReadySetGo()
+        {
+            _instance._announcementFontSize.Add(100);
+            _instance._announcementFontSize.Add(100);
+            _instance._announcementFontSize.Add(100);
+
+            _instance._announcementContent.Add("Ready");
+            _instance._announcementContent.Add("Set");
+            _instance._announcementContent.Add("GO !");
+
+            _instance._announcementDuration.Add(0.7f);
+            _instance._announcementDuration.Add(0.7f);
+            _instance._announcementDuration.Add(0.7f);
+        }
+
+        #endregion
+
     }
-    public enum AnnouncementType
+
+    public static void EndOfGame(GameState state)
     {
-        Goal,
-        CountDown,
-        OneMinuteLeft,
-        ReadySetGo
+        if (state == GameState.Win)
+        {
+            _instance._endOfGameText.text = "YOU WIN";
+        }
+        else if (state == GameState.Loose)
+        {
+            _instance._endOfGameText.text = "YOU LOOSE";
+        }
+        else
+        {
+            _instance._endOfGameText.text = "DRAW";
+        }
+
+        _instance._uIAnimator.SetTrigger("EndOfGame");
+
+        _instance.StartCoroutine(WaitBeforeContinue());
+
+        static IEnumerator WaitBeforeContinue()
+        {
+            yield return new WaitForSeconds(2);
+            _instance._pressToContinue.SetActive(true);
+        }
     }
+
+    public static void SetScore(int scoreTeam1 = -1, int scoreTeam2 = -1)
+    {
+        if (!_instance)
+            return;
+
+        if (scoreTeam1 != -1)
+            _instance._scoreTeam1.text = $"{scoreTeam1}";
+
+        if (scoreTeam2 != -1)
+            _instance._scoreTeam2.text = $"{scoreTeam2}";
+    }
+
+    public static void UpdateItems(Queue<ItemData> items, Team team)
+    {
+        if (!_instance)
+            return;
+
+        ItemData[] itemsArray = items.ToArray();
+        bool isTeam1 = team == Field.Team1;
+        (isTeam1 ? _instance._item1Team1 : _instance._item1Team2).sprite = items.Count > 0 ? itemsArray[0].Sprite : null;
+        (isTeam1 ? _instance._item2Team1 : _instance._item2Team2).sprite = items.Count > 1 ? itemsArray[1].Sprite : null;
+    }
+
+    public static void InitHUD(PlayerSpecs specsTeam1, PlayerSpecs specsTeam2)
+    {
+        _instance._cornerTeam1.color = specsTeam1.Color;
+        _instance._cornerTeam2.color = specsTeam2.Color;
+
+        _instance._iconCaptain1.sprite = specsTeam1.Icon;
+        _instance._iconCaptain2.sprite = specsTeam2.Icon;
+
+        _instance._nameCaptain1.text = specsTeam1.Name;
+        _instance._nameCaptain2.text = specsTeam2.Name;
+    }
+
+    public static void SetChrono(Chrono chrono)
+    {
+        _instance._chrono.text = $"{_instance.FormatInt(chrono.Minutes)}:{_instance.FormatInt(chrono.Seconds)}";
+    }
+
+    #endregion
+
+    #region Awake/Update
 
     private void Awake()
     {
-        FS_PauseMenu = ES.firstSelectedGameObject;
+        _fsPauseMenu = _es.firstSelectedGameObject;
         _instance = this;
-    }
-
-    public void InitHUD(PlayerSpecs specsTeam1, PlayerSpecs specsTeam2)
-    {
-        _CornerTeam1.color = specsTeam1.Color;
-        _CornerTeam2.color = specsTeam2.Color;
-
-        _IconCaptain1.sprite = specsTeam1.Icon;
-        _IconCaptain2.sprite = specsTeam2.Icon;
-
-        _NameCaptain1.text = specsTeam1.Name;
-        _NameCaptain2.text = specsTeam2.Name;
     }
 
     private void Update()
@@ -90,32 +209,36 @@ public class UIManager : MonoBehaviour
 
         if ((Keyboard.current?.escapeKey.wasPressedThisFrame ?? false) || (Gamepad.current?.selectButton.wasPressedThisFrame ?? false))
         {
-            if (PauseMenu.activeSelf)
+            if (_pauseMenu.activeSelf)
                 OnGoBack();
             else
             {
                 TimeManager.Pause();
-                PauseMenu.SetActive(true);
+                _pauseMenu.SetActive(true);
             }
         }
 
-        if (((Gamepad.current?.buttonEast.wasPressedThisFrame ?? false) || (Gamepad.current?.selectButton.wasPressedThisFrame ?? false)) && PauseMenu.activeSelf)
+        if (((Gamepad.current?.buttonEast.wasPressedThisFrame ?? false) || (Gamepad.current?.selectButton.wasPressedThisFrame ?? false)) && _pauseMenu.activeSelf)
         {
             OnGoBack();
         }
     }
 
+    #endregion
+
+    #region Private functions
+
     private void DisplayAnnouncement()
     {
-        if (_AnnouncementDisplayed)
+        if (_announcementDisplayed)
         {
             if (_timerReset)
             {
                 _timerReset = false;
                 _instance._timer = 0f;
                 _currentTimer = _announcementDuration[0];
-                _instance._Announcement.fontSize = _instance._announcementFontSize[0];
-                _instance._Announcement.text = _instance._announcementContent[0];
+                _instance._announcement.fontSize = _instance._announcementFontSize[0];
+                _instance._announcement.text = _instance._announcementContent[0];
             }
             else if (_instance._timer < _currentTimer)
             {
@@ -142,33 +265,25 @@ public class UIManager : MonoBehaviour
                 _instance._announcementDuration.RemoveAt(0);
 
                 if (_instance._announcementContent.Count == 0)
-                    _AnnouncementDisplayed = false;
+                    _announcementDisplayed = false;
                 else
                     _timerReset = true;
+                    _instance._announcement.fontSize = _instance._announcementFontSize[0];
             }
 
             _Announcement.gameObject.SetActive(_AnnouncementDisplayed);
         }
     }
 
-    public void DisplayAnnouncement(AnnouncementType type)
+    private void OnGoBack()
     {
         _timerReset = !_AnnouncementDisplayed;
         _instance._AnnouncementDisplayed = true;
 
         switch (type)
         {
-            case AnnouncementType.Goal:
-                DisplayGoal();
-                break;
-            case AnnouncementType.OneMinuteLeft:
-                DisplayOneMinuteLeft();
-                break;
-            case AnnouncementType.ReadySetGo:
-                DisplayReadySetGo();
-                break;
-            default:
-                break;
+            _subPauseMenu.SetActive(false);
+            _es.SetSelectedGameObject(_fsPauseMenu);
         }
     }
 
@@ -252,24 +367,15 @@ public class UIManager : MonoBehaviour
         }
         else
         {
-            _instance._endOfGameText.text = "DRAW";
+            _pauseMenu.SetActive(false);
+            TimeManager.Play();
         }
-
-        _instance._uIAnimator.SetTrigger("EndOfGame");
-
-        _instance.StartCoroutine(_instance.waitBeforeContinue());
     }
 
-
-    IEnumerator waitBeforeContinue()
-    {
-        yield return new WaitForSeconds(2);
-        _pressToContinue.SetActive(true);
-    }
     public void OnQuit()
     {
-        SubPauseMenu.SetActive(true);
-        ES.SetSelectedGameObject(FS_SubPauseMenu);
+        _subPauseMenu.SetActive(true);
+        _es.SetSelectedGameObject(_fsSubPauseMenu);
     }
 
     public void OnYes()
@@ -277,17 +383,11 @@ public class UIManager : MonoBehaviour
         LevelLoader.LoadNextLevel(0);
     }
 
-    public void OnGoBack()
+    private string FormatInt(int number)
     {
-        if (SubPauseMenu.activeSelf)
-        {
-            SubPauseMenu.SetActive(false);
-            ES.SetSelectedGameObject(FS_PauseMenu);
-        }
-        else
-        {
-            PauseMenu.SetActive(false);
-            TimeManager.Play();
-        }
+        return (number < 10 ? "0" : "") + number;
     }
+
+    #endregion
+
 }

@@ -521,8 +521,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bffb1dd9bf7a294f992beff224833be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Triangle: {fileID: 6864927505691174075}
-  _Player: {fileID: 1575265541345883406}
+  _triangle: {fileID: 6864927505691174075}
+  _player: {fileID: 1575265541345883406}
 --- !u!195 &-1198260471384059220
 NavMeshAgent:
   m_ObjectHideFlags: 0

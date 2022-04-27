@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using UnityEngine.AI;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Player : MonoBehaviour
 {
@@ -159,7 +159,7 @@ public class Player : MonoBehaviour
         ChangeMaterialOnElectrocution(false);
         _agent.avoidancePriority = Mathf.RoundToInt(Random.value * 1000f);
 
-        _lookAt = GetComponent<PlayerHeadControl>()._target.transform;
+        _lookAt = GetComponent<PlayerHeadControl>().Target.transform;
 
         ResetBoost();
     }
@@ -199,7 +199,7 @@ public class Player : MonoBehaviour
 
                     if (Field.ArePlayersAllWaiting())
                     {
-                        UIManager._instance.DisplayAnnouncement(UIManager.AnnouncementType.ReadySetGo);
+                        UIManager.DisplayAnnouncement(UIManager.AnnouncementType.ReadySetGo);
                         AudioManager.PlaySFX(AudioManager.SFXType.Kickoff);
                         GameManager.KickOffTimer.run = true;
                     }
@@ -304,9 +304,9 @@ public class Player : MonoBehaviour
         }
         else
             MakeAction(action);
-            
+
         #region Local functions
-        
+
         void UpdateNavQueue()
         {
             if ((_timer += Time.deltaTime) > _currentTimeLimit)
@@ -317,7 +317,7 @@ public class Player : MonoBehaviour
                     _processQueue = false;
             }
         }
-        
+
         #endregion
     }
 
@@ -401,7 +401,7 @@ public class Player : MonoBehaviour
     {
         _animator.SetBool("Run", true);
         _animator.SetBool("Idle", false);
-        
+
         _animator.SetBool("HappyWalk", happy);
         _animator.SetBool("SadWalk", sad);
 
@@ -560,7 +560,7 @@ public class Player : MonoBehaviour
         Ball ball = other.GetComponent<Ball>();
 
         if (Field.Ball == ball && !HasBall && CanGetBall && (!ball.LastOwner || !ball.LastOwner.IsWaiting))
-                ball.Take(this);
+            ball.Take(this);
 
         if (other.CompareTag("Wall"))
         {
@@ -727,7 +727,7 @@ public class Player : MonoBehaviour
 
             if (angle <= range && (!standOut || IsPlayerStandOut(player)))
             {
-                float score = - angle - distance;
+                float score = -angle - distance;
                 //Debug.Log(player.name + " " + score);
 
                 if (best.player == null || score > best.score)
@@ -768,7 +768,7 @@ public class Player : MonoBehaviour
         GameObject itemGo = Instantiate(data.Prefab, transform.position + transform.forward * 2f, Quaternion.identity);
         itemGo.GetComponent<Item>().Init(data, this, direction);
     }
-    
+
     #endregion
 
     #region Events
@@ -782,7 +782,7 @@ public class Player : MonoBehaviour
     {
         Team.GainItem();
     }
-    
+
     #endregion
 
     #region Special
@@ -818,7 +818,7 @@ public class Player : MonoBehaviour
     {
         State = PlayerState.Stunned;
         _animator.SetTrigger("Electrocuted");
-        ChangeMaterialOnElectrocution(true); 
+        ChangeMaterialOnElectrocution(true);
 
         if (stunType == StunType.Electrocuted)
         {
@@ -911,9 +911,9 @@ public class Player : MonoBehaviour
 
     private void PlaySound(AudioManager.CharaSFXType sfxType)
     {
-        if(Team == Field.Team1) // not AI
+        if (Team == Field.Team1) // not AI
         {
-            if(this == Team.Players[0])// captain
+            if (this == Team.Players[0])// captain
             {
                 AudioManager.PlayCharaSFX(sfxType, AudioManager.PlayerCaptainAudio);
             }
@@ -921,7 +921,7 @@ public class Player : MonoBehaviour
             {
                 AudioManager.PlayCharaSFX(sfxType, AudioManager.PlayerMateAudio);
             }
-        }   
+        }
         else // AI
         {
             if (this == Team.Players[0])// captain

@@ -20,10 +20,10 @@ public class BobBomb : PlaceableItem
         if (!_exploded)
         {
             _exploded = true;
-            foreach(Collider collider in Physics.OverlapSphere(transform.position, _explosionRadius))
+            foreach (Collider collider in Physics.OverlapSphere(transform.position, _explosionRadius))
             {
                 Player p = collider.GetComponent<Player>();
-                if(p)
+                if (p)
                 {
                     ApplyEffect(p);
                 }

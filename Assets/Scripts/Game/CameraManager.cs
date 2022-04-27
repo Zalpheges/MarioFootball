@@ -1,7 +1,6 @@
-using System.Collections;
+using Cinemachine;
 using System.Collections.Generic;
 using UnityEngine;
-using Cinemachine;
 
 public class CameraManager : MonoBehaviour
 {
@@ -43,11 +42,12 @@ public class CameraManager : MonoBehaviour
             _cameraFocusDurations.Enqueue(duration);
         }
 
-        public (Transform, float) GetNext()
+        public float GetNext()
         {
             if (_transformsToFollow.Count < 1)
-                return (null, 0f);
-            return (_transformsToFollow.Dequeue(), _cameraFocusDurations.Dequeue());
+                return 0f;
+            LookAt(_transformsToFollow.Dequeue());
+            return _cameraFocusDurations.Dequeue();
         }
     }
 
@@ -56,27 +56,16 @@ public class CameraManager : MonoBehaviour
     private bool _processQueue = false;
     private float _timer;
     private float _currentTimeLimit;
-    private Transform _nextTransformToFollow;
 
     #endregion
 
-    private Dictionary<Transform, CinemachineVirtualCamera[]> _virtualCameras;
+    private Dictionary<Transform, CinemachineVirtualCamera[]> _virtualCameras = new Dictionary<Transform, CinemachineVirtualCamera[]>();
 
     private CinemachineVirtualCamera _currentTopCamera;
 
     #region Public functions
-    public static void ReadQueue()
-    {
-        if (_instance._processQueue)
-            return;
-        _instance._processQueue = true;
-        Camera.main.GetComponent<CinemachineBrain>().m_DefaultBlend.m_Style = CinemachineBlendDefinition.Style.Cut;
-        (_instance._nextTransformToFollow, _instance._currentTimeLimit) = CamerasQueue.GetNext();
-    }
-
     public static void Init(Transform[] players, Transform ball)
     {
-        _instance._virtualCameras = new Dictionary<Transform, CinemachineVirtualCamera[]>();
         for (int i = 0; i < players.Length + 1; i++)
         {
             Transform t = i < players.Length ? players[i].transform : ball.transform;
@@ -90,10 +79,20 @@ public class CameraManager : MonoBehaviour
 
             _instance._virtualCameras[t] = new CinemachineVirtualCamera[]
             {
-                virtualCamTop, 
+                virtualCamTop,
                 virtualCamOrbital
             };
+            _instance._virtualCameras[t][1] = virtualCamOrbital;
         }
+    }
+
+    public static void ReadQueue()
+    {
+        if (_instance._processQueue)
+            return;
+        _instance._processQueue = true;
+        Camera.main.GetComponent<CinemachineBrain>().m_DefaultBlend.m_Style = CinemachineBlendDefinition.Style.Cut;
+        _instance._currentTimeLimit = CamerasQueue.GetNext();
     }
 
     public static void Follow(Transform toFollow)
@@ -134,14 +133,13 @@ public class CameraManager : MonoBehaviour
             if ((_timer += Time.deltaTime) > _currentTimeLimit)
             {
                 _timer = 0f;
-                if(_nextTransformToFollow == null)
+                if (_currentTimeLimit == 0f)
                 {
                     EndQueueProcess();
                 }
                 else
                 {
-                    LookAt(_nextTransformToFollow);
-                    (_nextTransformToFollow, _currentTimeLimit) = CamerasQueue.GetNext();
+                    _currentTimeLimit = CamerasQueue.GetNext();
                 }
             }
 

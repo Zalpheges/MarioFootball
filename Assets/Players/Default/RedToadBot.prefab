@@ -440,44 +440,9 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 590522543764663521, guid: 5ffb55f8488ae834abdd01727eef9b21, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 5ffb55f8488ae834abdd01727eef9b21, type: 3}
---- !u!4 &5664301524427015309 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 590522543755297639, guid: 5ffb55f8488ae834abdd01727eef9b21, type: 3}
-  m_PrefabInstance: {fileID: 5091971553357727722}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &5664301524426856813 stripped
+--- !u!1 &5664301524426856783 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 590522543755140743, guid: 5ffb55f8488ae834abdd01727eef9b21, type: 3}
-  m_PrefabInstance: {fileID: 5091971553357727722}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &5664301524426856827 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 590522543755140753, guid: 5ffb55f8488ae834abdd01727eef9b21, type: 3}
-  m_PrefabInstance: {fileID: 5091971553357727722}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &5664301524426856805 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 590522543755140751, guid: 5ffb55f8488ae834abdd01727eef9b21, type: 3}
-  m_PrefabInstance: {fileID: 5091971553357727722}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &5664301524426856583 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 590522543755140973, guid: 5ffb55f8488ae834abdd01727eef9b21, type: 3}
-  m_PrefabInstance: {fileID: 5091971553357727722}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &5664301524426856613 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 590522543755140943, guid: 5ffb55f8488ae834abdd01727eef9b21, type: 3}
-  m_PrefabInstance: {fileID: 5091971553357727722}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &5664301524426856659 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 590522543755140921, guid: 5ffb55f8488ae834abdd01727eef9b21, type: 3}
-  m_PrefabInstance: {fileID: 5091971553357727722}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &5664301524426856647 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 590522543755140909, guid: 5ffb55f8488ae834abdd01727eef9b21, type: 3}
+  m_CorrespondingSourceObject: {fileID: 590522543755140773, guid: 5ffb55f8488ae834abdd01727eef9b21, type: 3}
   m_PrefabInstance: {fileID: 5091971553357727722}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &5664301524427015535 stripped
@@ -485,9 +450,14 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 590522543755297413, guid: 5ffb55f8488ae834abdd01727eef9b21, type: 3}
   m_PrefabInstance: {fileID: 5091971553357727722}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &5664301524426856783 stripped
+--- !u!1 &5664301524426856813 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 590522543755140773, guid: 5ffb55f8488ae834abdd01727eef9b21, type: 3}
+  m_CorrespondingSourceObject: {fileID: 590522543755140743, guid: 5ffb55f8488ae834abdd01727eef9b21, type: 3}
+  m_PrefabInstance: {fileID: 5091971553357727722}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &5664301524427015309 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 590522543755297639, guid: 5ffb55f8488ae834abdd01727eef9b21, type: 3}
   m_PrefabInstance: {fileID: 5091971553357727722}
   m_PrefabAsset: {fileID: 0}
 --- !u!54 &8304116560352056397
@@ -552,13 +522,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _specs: {fileID: 11400000, guid: 5175c591c741d7241b3c9bc3ccbbedff, type: 2}
-  ElectrocutedBody:
-  - {fileID: 5664301524426856647}
-  - {fileID: 5664301524426856659}
-  - {fileID: 5664301524426856613}
-  - {fileID: 5664301524426856583}
-  - {fileID: 5664301524426856805}
-  - {fileID: 5664301524426856827}
   MaterialElectricity: {fileID: 2100000, guid: 98fd08f6dd93b0d4688d40de5ac8a1cd, type: 2}
   MaterialFreeze: {fileID: 2100000, guid: 9e4953594a6ce23438614852f15a6f23, type: 2}
   debug: 0
@@ -577,10 +540,10 @@ MonoBehaviour:
   _headposition: {fileID: 5664301524426856813}
   _target: {fileID: 3946086873715603309}
   _headRig: {fileID: 2365614682554846790}
-  minlookatX: -0.6
-  maxlookatX: 0.6
-  minlookatY: -1
-  maxlookatY: 1
+  _minlookatX: -0.6
+  _maxlookatX: 0.6
+  _minlookatY: 200
+  _maxlookatY: 200
 --- !u!195 &279273856175721855
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -615,8 +578,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bffb1dd9bf7a294f992beff224833be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Triangle: {fileID: 5058211133209122999}
-  _Player: {fileID: -7750388400704228978}
+  _triangle: {fileID: 5058211133209122999}
+  _player: {fileID: -7750388400704228978}
 --- !u!114 &2323038269191260164
 MonoBehaviour:
   m_ObjectHideFlags: 0

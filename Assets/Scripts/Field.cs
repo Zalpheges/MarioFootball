@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,72 +8,39 @@ public class Field : MonoBehaviour
     [SerializeField]
     private Transform _circleSpin;
 
-    [SerializeField]
-    private float _width;
+    [SerializeField] private float _width;
     public static float Width => _instance._width;
 
-    [SerializeField]
-    private float _height;
+    [SerializeField] private float _height;
     public static float Height => _instance._height;
 
-    [SerializeField]
-    private float _goalWidth;
+    [SerializeField] private float _goalWidth;
     public static float GoalWidth => _instance._goalWidth;
 
-    [SerializeField]
-    private float _goalHeight;
+    [SerializeField] private float _goalHeight;
     public static float GoalHeight => _instance._goalHeight;
 
     [SerializeField]
+    private Vector2 _goalArea;
+    public static Vector2 GoalArea => _instance._goalArea;
+
+    [SerializeField]
     private Team _team1, _team2;
-
-    [SerializeField]
-    private Vector2 _attackPosCaptain;
-
-    [SerializeField]
-    private Vector2 _attackPosMate1;
-
-    [SerializeField]
-    private Vector2 _attackPosMate2;
-
-    [SerializeField]
-    private Vector2 _attackPosMate3;
-
-    [SerializeField]
-    private Vector2 _posGoalKeeper;
-
-    [SerializeField]
-    private Vector2 _defPosCaptain;
-
-    [SerializeField]
-    private Vector2 _defPosMate1;
-
-    [SerializeField]
-    private Vector2 _defPosMate2;
-
-    [SerializeField]
-    private Vector2 _defPosMate3;
-
-    [SerializeField]
-    private Transform[] _spawnPointsTeam1;
-
-    [SerializeField]
-    private Transform[] _spawnPointsTeam2;
-
     public static Team Team1 => _instance._team1;
     public static Team Team2 => _instance._team2;
 
-    private Vector3 _bottomLeftCorner;
-    public static Vector3 BottomLeftCorner => _instance._bottomLeftCorner;
+    [SerializeField] private Vector2 _attackPosCaptain;
+    [SerializeField] private Vector2 _attackPosMate1;
+    [SerializeField] private Vector2 _attackPosMate2;
+    [SerializeField] private Vector2 _attackPosMate3;
+    [SerializeField] private Vector2 _posGoalKeeper;
+    [SerializeField] private Vector2 _defPosCaptain;
+    [SerializeField] private Vector2 _defPosMate1;
+    [SerializeField] private Vector2 _defPosMate2;
+    [SerializeField] private Vector2 _defPosMate3;
 
-    private Vector3 _bottomRightCorner;
-    public static Vector3 BottomRightCorner => _instance._bottomRightCorner;
-
-    private Vector3 _topLeftCorner;
-    public static Vector3 TopLeftCorner => _instance._topLeftCorner;
-
-    private Vector3 _topRightCorner;
-    public static Vector3 TopRightCorner => _instance._topRightCorner;
+    [SerializeField] private Transform[] _spawnPointsTeam1;
+    [SerializeField] private Transform[] _spawnPointsTeam2;
 
     private float _heightOneThird;
     public static float HeightOneThird => _instance._heightOneThird;
@@ -82,29 +48,14 @@ public class Field : MonoBehaviour
     private float _heightTwoThirds;
     public static float HeightTwoThirds => _instance._heightTwoThirds;
 
-    private float _heightOneSixths;
-    public static float HeightOneSixths => _instance._heightOneSixths;
-
-    private float _heightThreeSixths;
-    public static float HeightThreeSixths => _instance._heightThreeSixths;
-
-    private float _heightFiveSixths;
-    public static float HeightFiveSixths => _instance._heightFiveSixths;
-
-    private float _widthOneThird;
-    public static float WidthOneThird => _instance._widthOneThird;
-
-    private float _widthTwoThirds;
-    public static float WidthTwoThirds => _instance._widthTwoThirds;
-
-    [SerializeField]
-    private Vector2 _goalArea;
-    public static Vector2 GoalArea => _instance._goalArea;
-
     private Ball _ball;
     public static Ball Ball => _instance._ball;
 
     public static Transform Transform => _instance.transform;
+
+    private Vector3 _bottomLeftCorner;
+
+    #region Awake/Start/Update
 
     private void Awake()
     {
@@ -113,23 +64,13 @@ public class Field : MonoBehaviour
 
     private void Start()
     {
-        AudioManager.PlayMusic(AudioManager.MusicType.Match); //MatchMusicPlay
-        AudioManager.PlayCrowdSound(AudioManager.CrowdSoundType.Normal); //CrowdSound
+        AudioManager.PlayMusic(AudioManager.MusicType.Match);
+        AudioManager.PlayCrowdSound(AudioManager.CrowdSoundType.Normal);
 
         _bottomLeftCorner = transform.TransformPoint(new Vector3(-_width / 2f, 0f, -_height / 2f));
-        _bottomRightCorner = transform.TransformPoint(new Vector3(_width / 2f, 0f, -_height / 2f));
-        _topLeftCorner = transform.TransformPoint(new Vector3(-_width / 2f, 0f, _height / 2f));
-        _topRightCorner = transform.TransformPoint(new Vector3(_width / 2f, 0f, _height / 2f));
 
         _heightOneThird = _bottomLeftCorner.z + _height / 3f;
         _heightTwoThirds = _bottomLeftCorner.z + _height * 2f / 3f;
-
-        _heightOneSixths = _bottomLeftCorner.z + _height / 6f;
-        _heightThreeSixths = _bottomLeftCorner.z + _height * 3f / 6f;
-        _heightFiveSixths = _bottomLeftCorner.z + _height * 5f / 6f;
-
-        _widthOneThird = _topLeftCorner.z + _width / 3f;
-        _widthTwoThirds = _topLeftCorner.z + _width * 2 / 3f;
 
         GameManager.BreedMePlease(_team1, _team2);
     }
@@ -142,19 +83,57 @@ public class Field : MonoBehaviour
         _circleSpin.position -= _circleSpin.position.y * Vector3.up;
     }
 
+    #endregion
+
     /// <summary>
-    /// Assigne le ballon cr�� puis le positionne ainsi que les joueurs
+    /// Assign the given ball, then place it and place players
     /// </summary>
-    /// <param name="ball">Le ballon</param>
+    /// <param name="ball">The instantiated ball</param>
     public static void Init(Ball ball)
     {
         _instance._ball = ball;
 
-        if(GameManager.StartWithoutAnim) _instance.SetTeamPosition();
-        else _instance.SpawnPlayers();
+        if (GameManager.StartWithoutAnim) _instance.SetTeamPosition();
+        else SpawnPlayers();
 
         ball.transform.position = _instance.VectorToPosition(_instance._attackPosCaptain);
+
+        void SpawnPlayers()
+        {
+            List<Vector3> startPositions = GetStartPositions();
+            Vector3 spawnPosition;
+
+            //Team 1
+            for (int i = 0; i < Team1.Players.Length; i++)
+            {
+                spawnPosition = _instance._spawnPointsTeam1[i % _instance._spawnPointsTeam1.Length].position;
+                HandlePlayer(Team1.Players[i], spawnPosition, startPositions[i]);
+            }
+            spawnPosition = _instance._spawnPointsTeam1[Random.Range(0, _instance._spawnPointsTeam1.Length)].position;
+            HandlePlayer(Team1.Goalkeeper, spawnPosition, GetGoalKeeperPosition(Team1));
+
+            //Team 2
+            for (int i = 0; i < Team2.Players.Length; i++)
+            {
+                spawnPosition = _instance._spawnPointsTeam2[i % _instance._spawnPointsTeam2.Length].position;
+                HandlePlayer(Team2.Players[i], spawnPosition, -startPositions[i + Team1.Players.Length]);
+            }
+            spawnPosition = _instance._spawnPointsTeam2[Random.Range(0, _instance._spawnPointsTeam2.Length)].position;
+            HandlePlayer(Team2.Goalkeeper, spawnPosition, GetGoalKeeperPosition(Team2));
+
+            CameraManager.ReadQueue();
+
+            void HandlePlayer(Player player, Vector3 spawnPosition, Vector3 destination)
+            {
+                player.transform.position = spawnPosition;
+                player.ActionsQueue.AddAction(destination, 4f, () => player.Run(happy: true), 1f, true);
+                player.ReadQueue();
+                CameraManager.CamerasQueue.AddCameraControl(player.transform, 1.1f);
+            }
+        }
     }
+
+    #region Debug
 
     private void SetTeamPosition()
     {
@@ -182,6 +161,10 @@ public class Field : MonoBehaviour
         Team2.Goalkeeper.transform.position = GetGoalKeeperPosition(Team2) + offset;
         Team2.Goalkeeper.SetNavDriven(GetGoalKeeperPosition(Team2));
     }
+
+    #endregion
+
+    #region Utility
 
     public static List<Vector3> GetStartPositions()
     {
@@ -211,45 +194,11 @@ public class Field : MonoBehaviour
         return _instance.VectorToPosition(new Vector2(x, _instance._posGoalKeeper.y));
     }
 
-    private void SpawnPlayers()
-    {
-        List<Vector3> startPositions = GetStartPositions();
-
-        static void RunHappy(Player player) => player.Run(happy: true);
-        for (int i = 0; i < Team1.Players.Length; i++)
-        {
-            Player player = Team1.Players[i];
-            player.transform.position = _spawnPointsTeam1[i % _spawnPointsTeam1.Length].position;
-            player.ActionsQueue.AddAction(startPositions[i], 4f, () => RunHappy(player), 1f, true);
-            player.ReadQueue();
-            CameraManager.CamerasQueue.AddCameraControl(player.transform, i == 0 ? 0.1f : 1.1f);
-        }
-        Player goalkeeper1 = Team1.Goalkeeper;
-        goalkeeper1.transform.position = _spawnPointsTeam1[Random.Range(0, _spawnPointsTeam1.Length)].position;
-        goalkeeper1.ActionsQueue.AddAction(GetGoalKeeperPosition(Team1), 4f, () => RunHappy(goalkeeper1), 0f, true);
-        goalkeeper1.ReadQueue();
-        CameraManager.CamerasQueue.AddCameraControl(goalkeeper1.transform, 1.1f);
-
-        for (int i = 0; i < Team2.Players.Length; i++)
-        {
-            Player player = Team2.Players[i];
-            player.transform.position = _spawnPointsTeam2[i % _spawnPointsTeam2.Length].position;
-            player.ActionsQueue.AddAction(-startPositions[i + Team1.Players.Length], 4f, () => RunHappy(player), 1f, true);
-            player.ReadQueue();
-            CameraManager.CamerasQueue.AddCameraControl(player.transform, 1.1f);
-        }
-
-        Player goalkeeper2 = Team2.Goalkeeper;
-        goalkeeper2.transform.position = _spawnPointsTeam2[Random.Range(0, _spawnPointsTeam2.Length)].position;
-        goalkeeper2.ActionsQueue.AddAction(GetGoalKeeperPosition(Team2), 4f, () => RunHappy(goalkeeper2), 1f, true);
-        goalkeeper2.ReadQueue();
-        CameraManager.CamerasQueue.AddCameraControl(goalkeeper2.transform, 1.1f);
-
-        CameraManager.ReadQueue();
-    }
-
     private Vector3 VectorToPosition(Vector2 vector)
     {
         return transform.TransformPoint(new Vector3(vector.x * _width / 2f, 0f, vector.y * _height / 2f));
     }
+
+    #endregion
+
 }
