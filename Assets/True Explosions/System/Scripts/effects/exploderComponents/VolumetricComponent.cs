@@ -42,24 +42,28 @@ public class VolumetricComponent : ExploderComponent {
 		StartCoroutine("emulate");
 	}
 
-	private void initParticleSystem() {
-		GetComponent<ParticleSystem>().maxParticles = maxParticles;
-		GetComponent<ParticleSystem>().emissionRate = 0;
-		GetComponent<ParticleSystem>().startSpeed = 0;
-		GetComponent<ParticleSystem>().startSize = 1.0f;
-		GetComponent<ParticleSystem>().simulationSpace = ParticleSystemSimulationSpace.World;
-		GetComponent<ParticleSystem>().startLifetime = duration;
+	private void initParticleSystem()
+	{
+		ParticleSystem particleSystem = GetComponent<ParticleSystem>();
+		ParticleSystem.MainModule main = particleSystem.main;
+		main.maxParticles = maxParticles;
+		ParticleSystem.EmissionModule emission = particleSystem.emission;
+		emission.rateOverTime = 0;
+		main.startSpeed = 0;
+		main.startSize = 1.0f;
+		main.simulationSpace = ParticleSystemSimulationSpace.World;
+		main.startLifetime = duration;
 
-		GetComponent<ParticleSystem>().Emit(startEmission);
+		particleSystem.Emit(startEmission);
 		curCount = GetComponent<ParticleSystem>().GetParticles(particles);
 
 		for (int i = 0; i < curCount; i++) {
 			directions[i] = Random.onUnitSphere;
 			particles[i].position = transform.position;
-			particles[i].color = colorOverLifetime.Evaluate(0);
+			particles[i].startColor = colorOverLifetime.Evaluate(0);
 		}
 
-		GetComponent<ParticleSystem>().SetParticles(particles, curCount);
+		particleSystem.SetParticles(particles, curCount);
 	}
 
 	protected void emitNewParticles() {
@@ -104,7 +108,7 @@ public class VolumetricComponent : ExploderComponent {
 	private void makeStep() {
 		float curSize = 2 * speed * Mathf.Sqrt ((Time.time - exploder.explosionTime) / emission) * particleSizeMultiplyer;
 		for (int i = 0; i < curCount; i++) {
-			particles[i].size = curSize;
+			particles[i].startSize = curSize;
 			moveParticle(i, Time.deltaTime * speed);
 			particles[i].rotation = Time.time;
 		}
@@ -119,7 +123,7 @@ public class VolumetricComponent : ExploderComponent {
 		Color curColor = colorOverLifetime.Evaluate((Time.time - exploder.explosionTime) / duration);
 		curColor.a = alpha;
 		for (int i = 0; i < curCount; i++) {
-			particles[i].color = curColor;
+			particles[i].startColor = curColor;
 		}
 	}
 	
