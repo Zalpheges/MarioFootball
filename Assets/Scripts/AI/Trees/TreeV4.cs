@@ -208,7 +208,6 @@ public class TreeV4
                                     new Sequence(new List<Node>
                                     {
                                         new T_Kickoff(),
-                                        new T_NearbyAllyUnmarked(),
                                         new S_Pass()
                                     }),
                                     #region Loading to Shoot

@@ -13,8 +13,12 @@ public class T_Kickoff : Node
         if (!_rootInitialized)
             _root = GetRootNode();
 
-        if (Field.ArePlayersAllWaiting())
-            return (NodeState.SUCCESS, Action.None);
+        if (Field.ArePlayersAllWaiting()) 
+        {
+            _root.passTarget = _root.allyPlayersOrder[1];
+            return (NodeState.SUCCESS, Action.None); 
+        }
+            
         return (NodeState.FAILURE, Action.None);
     }
 
