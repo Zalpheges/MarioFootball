@@ -383,15 +383,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ad68fe6a0a2397148abe8146d9d34736, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1.12
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ad68fe6a0a2397148abe8146d9d34736, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1.12
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ad68fe6a0a2397148abe8146d9d34736, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1.12
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ad68fe6a0a2397148abe8146d9d34736, type: 3}
       propertyPath: m_LocalPosition.x
@@ -703,7 +703,7 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2317579844972356919}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.5
   m_Height: 1.88
