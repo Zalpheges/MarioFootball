@@ -185,6 +185,12 @@ public class RootNode : Node
 
     private void AllyPlayersOrderSetup()
     {
+        int i = 0;
+        foreach (Player player in parentTree.Allies)
+            allyPlayersOrder.Add(i++, player);
+
+        return;
+
         int highestIndex = 0;
         foreach (Player player in parentTree.Allies)
             if (highestIndex < player.transform.GetSiblingIndex())
@@ -197,6 +203,12 @@ public class RootNode : Node
 
     private void EnemyPlayersOrderSetup()
     {
+        int i = 0;
+        foreach (Player player in parentTree.Enemies)
+            enemyPlayersOrder.Add(i++, player);
+
+        return;
+
         int highestIndex = 0;
         foreach (Player player in parentTree.Enemies)
             if (highestIndex < player.transform.GetSiblingIndex())

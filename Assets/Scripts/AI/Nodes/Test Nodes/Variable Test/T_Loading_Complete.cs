@@ -13,7 +13,7 @@ public class T_Loading_Complete : Node
         if (!_rootInitialized)
             _root = GetRootNode();
 
-        if (_root.TimeLoad >= 1.5f)
+        if (_root.TimeLoad >= 0f)
             return (NodeState.SUCCESS, Action.None);
         return (NodeState.FAILURE, Action.None);
     }

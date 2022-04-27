@@ -64,11 +64,7 @@ public class Player : MonoBehaviour
 
     public bool IsGoalKeeper { get; private set; }
 
-    #region Debug
-
-    private bool _isRetard => GameManager.EnemiesAreRetard && Team == Field.Team2 && Time.timeSinceLevelLoad < 20f;
-
-    #endregion
+    private float _cooldown = 0f;
 
     #region Constructor
 
@@ -191,6 +187,7 @@ public class Player : MonoBehaviour
         gameObject.name += " " + _specs.Name;
 
         ChangeMaterialOnElectrocution(false);
+        ChangeMaterialOnFreeze(false);
         _agent.avoidancePriority = Mathf.RoundToInt(Random.value * 1000f);
 
         _lookAt = GetComponent<PlayerHeadControl>().Target.transform;
@@ -198,17 +195,14 @@ public class Player : MonoBehaviour
         ResetBoost();
     }
 
-    public bool debug = false;
-
     private void Update()
     {
         _lookAt.position = HasBall ? Enemies.transform.position : Field.Ball.transform.position;
 
+        _cooldown += Time.deltaTime;
+
         if (HasBall)
             Field.Ball.SetLoading(0f);
-
-        //DEBUG
-        Team.GainItem();
 
         _rgdb.angularVelocity = _rgdb.velocity = Vector3.zero;
 
@@ -257,9 +251,6 @@ public class Player : MonoBehaviour
             return;
         }
 
-        if ((GameManager.DebugOnlyPlayer && (!HasBall && !IsPiloted)) || _isRetard)
-            return;
-
         if (IsGoalKeeper)
         {
             transform.LookAt(Enemies.transform.position, Vector3.up);
@@ -292,8 +283,6 @@ public class Player : MonoBehaviour
             else
                 return;
         }
-
-        if (debug) Debug.Log(name);
 
         if (_lockFrames++ >= 100 && _agent.isOnNavMesh && _agent.remainingDistance >= 0.1f && _agent.pathStatus == NavMeshPathStatus.PathComplete && _agent.velocity == Vector3.zero)
         {
@@ -396,24 +385,35 @@ public class Player : MonoBehaviour
                         Shoot(action.Force);
                         PlaySound(AudioManager.CharaSFXType.Shoot);
                         _animator.SetTrigger("Strike");
-                        _animator.SetBool("Hold Strike", false);
                     }
 
                     break;
 
                 case Action.Type.Throw:
-                    ThrowItem(direction);
-                    PlaySound(AudioManager.CharaSFXType.ThrowItem);
+                    if (_cooldown > 1.5f)
+                    {
+                        ThrowItem(direction);
+                        PlaySound(AudioManager.CharaSFXType.ThrowItem);
+                        _cooldown = 0f;
+                    }
 
                     break;
 
                 case Action.Type.Headbutt:
-                    Headbutt(direction);
+                    if (_cooldown > 1.5f)
+                    {
+                        Headbutt(direction);
+                        _cooldown = 0f;
+                    }
 
                     break;
 
                 case Action.Type.Tackle:
-                    Tackle(direction);
+                    if (_cooldown > 1.5f)
+                    {
+                        Tackle(direction);
+                        _cooldown = 0f;
+                    }
 
                     break;
 
@@ -423,9 +423,13 @@ public class Player : MonoBehaviour
                     break;
 
                 case Action.Type.Dribble:
-                    State = PlayerState.Dribbling;
-                    Dash(direction, 9f, 1.2f);
-                    _animator.SetTrigger("Spin");
+                    if (_cooldown > 1.5f)
+                    {
+                        State = PlayerState.Dribbling;
+                        Dash(direction, 9f, 1.2f);
+                        _animator.SetTrigger("Spin");
+                        _cooldown = 0f;
+                    }
 
                     break;
 
@@ -452,7 +456,6 @@ public class Player : MonoBehaviour
                 case Action.Type.Loading:
                     Field.Ball.SetLoading(action.Force);
                     _animator.SetTrigger("Strike");
-                    _animator.SetBool("Hold Strike", true);
                     Idle();
 
                     break;
@@ -596,7 +599,6 @@ public class Player : MonoBehaviour
             if (angle <= range && (!standOut || IsPlayerStandOut(player)))
             {
                 float score = -angle - distance;
-                //Debug.Log(player.name + " " + score);
 
                 if (best.player == null || score > best.score)
                     best = (player, score);
@@ -609,7 +611,6 @@ public class Player : MonoBehaviour
         {
             Vector3 direction = player.transform.position - transform.position;
 
-            Debug.DrawRay(transform.position + Vector3.up, direction, Color.red, 10f);
             if (Physics.Raycast(transform.position + Vector3.up, direction, out RaycastHit hit, Mathf.Infinity, 1 << gameObject.layer))
             {
                 Player target = hit.transform.GetComponent<Player>();
@@ -630,13 +631,9 @@ public class Player : MonoBehaviour
 
     private void Shoot(float force)
     {
-        force = Mathf.Max(0.2f, force);
+        force = Mathf.Max(0.2f, Random.value);
 
-        if (debug) Debug.Log(_specs.Accuracy * force);
         Transform goal = Enemies.transform;
-        //DEBUG
-        //float angle = Vector3.SignedAngle(transform.forward, goal.forward, Vector3.up);
-        //angle = -(Mathf.Abs(angle) - 180f);
 
         float distance = Vector3.Distance(transform.position, goal.position);
 
@@ -646,7 +643,6 @@ public class Player : MonoBehaviour
         {
             if (Random.value > _specs.Accuracy * force)
             {
-                Debug.Log("Poteau");
                 GoalPostShoot();
             }
             else
@@ -661,11 +657,6 @@ public class Player : MonoBehaviour
             float range = Random.Range(Field.GoalWidth / 2f, Field.Height / 2f);
 
             Field.Ball.Shoot(goal.position + range * sign * goal.right, 33f);
-
-            // Debug
-            //float distance = Vector3.Distance(goal.position, _rgdb.position);
-            //string direction = sign < 0 ? "gauche" : "droite";
-            //Debug.Log($"Distance > 45m ({distance}) - Tir non cadr� � {direction} ({range}m).");
         }
 
         void GoalPostShoot()
@@ -673,11 +664,6 @@ public class Player : MonoBehaviour
             float sign = Mathf.Sign(Random.value - 0.5f);
 
             Field.Ball.Shoot(goal.position + Field.GoalWidth * sign * goal.right / 2f, 33f);
-
-            // Debug
-            //float distance = Vector3.Distance(goal.position, _rgdb.position);
-            //string direction = sign < 0 ? "gauche" : "droit";
-            //Debug.Log($"Distance < 45m ({distance}) - Tir sur poteau {direction}.");
         }
 
         void ShootOnTarget()
@@ -694,9 +680,6 @@ public class Player : MonoBehaviour
             interpolator -= Vector3.Project((endPosition - _rgdb.position) * distance / 45f, goal.right);
 
             Field.Ball.Shoot(endPosition, interpolator, 33f);
-
-            // Debug
-            //Debug.Log($"Distance < 45m ({distance}) - Tir cadr� ({x} ; {y}).");
         }
 
         #endregion
@@ -719,8 +702,6 @@ public class Player : MonoBehaviour
             }
             else
                 Field.Ball.Pass(mate, 33f);
-
-            //Debug.Log("Passe directe vers " + direction.ToString());
         }
         else
             Field.Ball.LobPass(direction, 20f);
@@ -778,15 +759,15 @@ public class Player : MonoBehaviour
     {
         State = PlayerState.Stunned;
         _animator.SetTrigger("Electrocuted");
-        ChangeMaterialOnElectrocution(true);
 
         if (stunType == StunType.Electrocuted)
         {
             ChangeMaterialOnElectrocution(true);
             PlaySound(AudioManager.CharaSFXType.Electrocuted);
         }
-        else if (stunType == StunType.Chomped) ;//TODO
-        else if (stunType == StunType.Frozen) ;//TODO
+        else if (stunType == StunType.Chomped) ;
+        else if (stunType == StunType.Frozen)
+            ChangeMaterialOnFreeze(true);
 
         Dash(Vector3.zero, 0f, duration);
 
@@ -902,7 +883,6 @@ public class Player : MonoBehaviour
             for (int i = 0; i < _electrocutedBody.Length; i++)
             {
                 Material[] Mats = new Material[] { _electrocutedBody[i].materials[0], MaterialElectricity };
-                //Debug.Log(gameObject.transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>().materials[1].name);
                 _electrocutedBody[i].materials = Mats;
             }
 
@@ -912,7 +892,6 @@ public class Player : MonoBehaviour
             for (int i = 0; i < _electrocutedBody.Length; i++)
             {
                 Material[] Mats = new Material[] { _electrocutedBody[i].materials[0] };
-                //Debug.Log(gameObject.transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>().materials[1].name);
                 _electrocutedBody[i].materials = Mats;
             }
 
@@ -926,7 +905,6 @@ public class Player : MonoBehaviour
             for (int i = 0; i < _electrocutedBody.Length; i++)
             {
                 Material[] Mats = new Material[] { _electrocutedBody[i].materials[0], MaterialFreeze };
-                //Debug.Log(gameObject.transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>().materials[1].name);
                 _electrocutedBody[i].materials = Mats;
             }
         }
@@ -935,7 +913,6 @@ public class Player : MonoBehaviour
             for (int i = 0; i < _electrocutedBody.Length; i++)
             {
                 Material[] Mats = new Material[] { _electrocutedBody[i].materials[0] };
-                //Debug.Log(gameObject.transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>().materials[1].name);
                 _electrocutedBody[i].materials = Mats;
             }
         }
@@ -988,5 +965,4 @@ public class Player : MonoBehaviour
     }
 
     #endregion
-
 }

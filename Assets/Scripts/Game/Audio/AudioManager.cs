@@ -177,7 +177,7 @@ public class AudioManager : MonoBehaviour
 
         if (SFXtype == CharaSFXType.Pass)
         {
-            if (Chara.Pass.Length > 0)
+            if (Chara?.Pass?.Length > 0)
             {
                 int rndIndex = Random.Range(0, Chara.Pass.Length);
                 clip = Chara.Pass[rndIndex];
@@ -185,7 +185,7 @@ public class AudioManager : MonoBehaviour
         }
         else if (SFXtype == CharaSFXType.Electrocuted)
         {
-            if (Chara.Electrocuted.Length > 0)
+            if (Chara?.Electrocuted?.Length > 0)
             {
                 int rndIndex = Random.Range(0, Chara.Electrocuted.Length);
                 clip = Chara.Electrocuted[rndIndex];
@@ -193,7 +193,7 @@ public class AudioManager : MonoBehaviour
         }
         else if (SFXtype == CharaSFXType.Celebrate)
         {
-            if (Chara.Celebrate.Length > 0)
+            if (Chara?.Celebrate?.Length > 0)
             {
                 int rndIndex = Random.Range(0, Chara.Celebrate.Length);
                 clip = Chara.Celebrate[rndIndex];
@@ -201,7 +201,7 @@ public class AudioManager : MonoBehaviour
         }
         else if (SFXtype == CharaSFXType.Shoot)
         {
-            if (Chara.Shoot.Length > 0)
+            if (Chara?.Shoot?.Length > 0)
             {
                 int rndIndex = Random.Range(0, Chara.Shoot.Length);
                 clip = Chara.Shoot[rndIndex];
@@ -209,7 +209,7 @@ public class AudioManager : MonoBehaviour
         }
         else if (SFXtype == CharaSFXType.ThrowItem)
         {
-            if (Chara.ThrowItem.Length > 0)
+            if (Chara?.ThrowItem?.Length > 0)
             {
                 int rndIndex = Random.Range(0, Chara.ThrowItem.Length);
                 clip = Chara.ThrowItem[rndIndex];

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using BehaviorTree;
+using System;
 
 public class S_TargetAssignment : Node
 {
@@ -22,16 +23,17 @@ public class S_TargetAssignment : Node
     {
         int enemyIndex = 0;
 
-        for(int index = 0; index < _root.parentTree.Allies.Count; index++, enemyIndex++)
+        for (int index = 0; index < _root.parentTree.Allies.Count; index++, enemyIndex++)
         {
             if (_root.enemyPlayersOrder[enemyIndex] == _root.ballHolder)
                 enemyIndex++;
-            if(_root.allyPlayersOrder[index] == _root.ballContender || _root.allyPlayersOrder[index].IsPiloted)
+            if (_root.allyPlayersOrder[index] == _root.ballContender || _root.allyPlayersOrder[index].IsPiloted)
                 index++;
             if (_root.allyPlayersOrder[index] == _root.player)
                 return enemyIndex;
         }
-        return -1;
+
+        return 0;
     }
 
     private RootNode GetRootNode()

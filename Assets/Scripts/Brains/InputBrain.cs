@@ -29,18 +29,7 @@ public class InputBrain : PlayerBrain
     }
     private void Update()
     {
-        if (_westButtonHeld)
-        {
-            _shootForce += Time.deltaTime; // Force en fonction du ntemp appuyé A REVOIR
 
-            if (_shootForce > _loadTime)
-            {
-                _shootForce = _loadTime;
-
-                _westButtonHeld = false;
-                _westButtonPressed = true;
-            }
-        }
     }
 
     //-------------------------------------------------------Revoir tout les return de GetAction() !!!!
@@ -52,19 +41,19 @@ public class InputBrain : PlayerBrain
 
             if (Player.HasBall)
             {
-                return Action.Shoot(_shootForce / _loadTime);
+                return Action.Shoot(0f);
             }
             else
                 return Action.Tackle(_movementInput);
         }
         else if (_eastButton) // Throw
         {
-            _eastButton = !_eastButton;
+            _eastButton = false;
             return Action.Throw(_movementInput);
         }
         else if (_southButton) // ChangePlayer/Pass
         {
-            _southButton = !_southButton;
+            _southButton = false;
 
             if (Player.HasBall)
             {
@@ -79,7 +68,7 @@ public class InputBrain : PlayerBrain
         }
         else if (_northButton) // Drible/HeadButt
         {
-            _northButton = !_northButton;
+            _northButton = false;
 
             if (Player.HasBall)
                 return Action.Dribble();
@@ -116,14 +105,13 @@ public class InputBrain : PlayerBrain
     {
         if (context.phase == InputActionPhase.Performed)
         {
-            _shootForce = 0f;
-            _westButtonHeld = true;
+            _westButtonPressed = true;
         }
 
         if (context.phase == InputActionPhase.Canceled)
         {
-            _westButtonHeld = false;
-            _westButtonPressed = true;
+            //_westButtonHeld = false;
+            //_westButtonPressed = true;
         }
     }
 
@@ -131,19 +119,19 @@ public class InputBrain : PlayerBrain
     {
 
         if (context.phase == InputActionPhase.Performed)
-            _eastButton = !_eastButton;
+            _eastButton = true;
     }
 
     public void NorthButton(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
-            _northButton = !_northButton;
+            _northButton = true;
     }
 
     public void SouthButton(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
-            _southButton = !_southButton;
+            _southButton = true;
     }
 
     public void LeftTrigger(InputAction.CallbackContext context)
