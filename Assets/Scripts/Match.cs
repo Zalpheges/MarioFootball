@@ -8,6 +8,6 @@ public class Match
     public PlayerSpecs GoalKeeper;
 
     public int GameTime;
-    public float NGoalsToWin;
+    public int NGoalsToWin;
     public int AIDifficulty;
 }

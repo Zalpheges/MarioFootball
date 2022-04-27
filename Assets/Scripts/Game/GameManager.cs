@@ -3,6 +3,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -18,6 +19,7 @@ public class GameManager : MonoBehaviour
 
     public static (bool run, float value) KickOffTimer = (false, 0f);
     public static int Difficulty { get; private set; }
+    public static bool IsMatchOver { get; private set; } = false;
 
     private static GameManager _instance;
 
@@ -28,6 +30,7 @@ public class GameManager : MonoBehaviour
     private float _timer = 0f;
     private bool _endOfGameUIDone = false;
     private bool _inMatch = false;
+    private int _nGoalsToWin;
 
     #region Awake/Start/Update
 
@@ -49,6 +52,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         Random.InitState(System.DateTime.Now.Millisecond);
+        IsMatchOver = false;
     }
 
     private void Update()
@@ -56,7 +60,10 @@ public class GameManager : MonoBehaviour
         if (!_inMatch)
             return;
 
-        if (CanSkip)
+        if (IsMatchOver)
+            MatchOver();
+
+        if (CanSkip && !IsMatchOver)
         {
             if ((Keyboard.current?.enterKey.wasPressedThisFrame ?? false)
                 || (Gamepad.current?.startButton.wasPressedThisFrame ?? false))
@@ -81,36 +88,13 @@ public class GameManager : MonoBehaviour
                 --_chrono;
                 if (_chrono.Finished)
                 {
-                    ChronoStopped = true;
                     MatchOver();
                 }
                 --_timer;
             }
         }
 
-        void MatchOver()
-        {
-            if (!_endOfGameUIDone)
-            {
-                _endOfGameUIDone = true;
-                if (Field.Team2 == LosingTeam)
-                    UIManager.EndOfGame(UIManager.GameState.Win);
-                else if (Field.Team1 == LosingTeam)
-                    UIManager.EndOfGame(UIManager.GameState.Loose);
-                else
-                    UIManager.EndOfGame(UIManager.GameState.Draw);
-            }
-
-            if (((Gamepad.current?.allControls.Any(x => x is ButtonControl button && x.IsPressed() && !x.synthetic) ?? false)
-                || (Keyboard.current?.anyKey.wasPressedThisFrame ?? false)) && _endOfGameUIDone)
-            {
-                _inMatch = false;
-                AudioManager.PlayMusic(AudioManager.MusicType.Menu);
-                LevelLoader.LoadNextLevel(0);
-            }
-        }
-
-        void SkipPlayersQueue()
+        static void SkipPlayersQueue()
         {
             foreach (Team team in Field.Teams)
             {
@@ -135,6 +119,7 @@ public class GameManager : MonoBehaviour
     {
         Match match = _instance._matches.Dequeue();
         Difficulty = match.AIDifficulty;
+        _instance._nGoalsToWin = match.NGoalsToWin;
 
         UIManager.InitHUD(match.Captain1, match.Captain2);
 
@@ -200,7 +185,7 @@ public class GameManager : MonoBehaviour
         _instance._inMatch = true;
     }
 
-    public static void AddMatch(PlayerSpecs playerCaptain, PlayerSpecs playerMate, PlayerSpecs AICaptain, PlayerSpecs AIMate, PlayerSpecs GoalKeeper, int gameTime, float goalToWin, int AIDifficulty)
+    public static void AddMatch(PlayerSpecs playerCaptain, PlayerSpecs playerMate, PlayerSpecs AICaptain, PlayerSpecs AIMate, PlayerSpecs GoalKeeper, int gameTime, int goalToWin, int AIDifficulty)
     {
         Match newMatch = new Match()
         {
@@ -223,6 +208,36 @@ public class GameManager : MonoBehaviour
 
     #region Gameplay
 
+    private void MatchOver()
+    {
+        IsMatchOver = true;
+        ChronoStopped = true;
+        foreach(Team team in Field.Teams)
+        {
+            foreach (Player player in team.Players)
+                player.IsWaiting = true;
+            team.Goalkeeper.IsWaiting = true;
+        }
+        if (!_endOfGameUIDone)
+        {
+            _endOfGameUIDone = true;
+            if (Field.Team2 == LosingTeam)
+                UIManager.EndOfGame(UIManager.GameState.Win);
+            else if (Field.Team1 == LosingTeam)
+                UIManager.EndOfGame(UIManager.GameState.Loose);
+            else
+                UIManager.EndOfGame(UIManager.GameState.Draw);
+        }
+
+        if (((Gamepad.current?.allControls.Any(x => x is ButtonControl button && x.IsPressed() && !x.synthetic) ?? false)
+            || (Keyboard.current?.anyKey.wasPressedThisFrame ?? false)) && _endOfGameUIDone)
+        {
+            _inMatch = false;
+            Destroy(gameObject);
+            LevelLoader.LoadNextLevel(0);
+        }
+    }
+
     public static void OnGoalScored(Team team)
     {
         AudioManager.PlaySFX(AudioManager.SFXType.Goal); //GoalScoredSound
@@ -237,9 +252,23 @@ public class GameManager : MonoBehaviour
         HandleScorer();
 
         if (team == Field.Team1)
+        {
             UIManager.SetScore(scoreTeam2: ++_instance._currentResult.ScoreTeam2);
+            if (_instance._currentResult.ScoreTeam2 >= _instance._nGoalsToWin)
+            {
+                _instance.MatchOver();
+                return;
+            }
+        }
         else if (team == Field.Team2)
+        {
             UIManager.SetScore(scoreTeam1: ++_instance._currentResult.ScoreTeam1);
+            if (_instance._currentResult.ScoreTeam1 >= _instance._nGoalsToWin)
+            {
+                _instance.MatchOver();
+                return;
+            }
+    }
 
         RedirectPlayers(team.Players, team.Other.Players);
         if (!Field.Team1.Players[0].IsPiloted)

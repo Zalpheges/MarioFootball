@@ -225,6 +225,8 @@ public class UIManager : MonoBehaviour
 
     private void Update()
     {
+        if (GameManager.IsMatchOver)
+            return;
         _skipMessage.gameObject.SetActive(GameManager.CanSkip);
         if (_skipMessage.gameObject.activeSelf)
         {

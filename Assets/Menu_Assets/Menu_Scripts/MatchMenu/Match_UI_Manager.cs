@@ -20,7 +20,7 @@ public class Match_UI_Manager : MonoBehaviour
     private MateSpecs _aiAlly;
 
     [HideInInspector] public static int GameTime;
-    [HideInInspector] public static float GoalToWin;
+    [HideInInspector] public static int GoalToWin;
     [HideInInspector] public static int AIDifficulty;
 
     //Chara buttons
