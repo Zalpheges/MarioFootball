@@ -18,7 +18,10 @@ public class Chomp : PhysicalItem
 
     protected override void Update()
     {
-        _direction = (_followedPlayer.transform.position - transform.position).normalized;
+        if (_followedPlayer)
+            _direction = (_followedPlayer.transform.position - transform.position).normalized;
+        else
+            Start();
         base.Update();
     }
     protected override void ApplyEffect(Player player)

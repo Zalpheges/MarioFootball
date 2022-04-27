@@ -6,16 +6,16 @@ public class InputBrain : PlayerBrain
     private Vector3 _movementInput;
     private Vector3 _rightStickInput;
 
-    private float shootForce;
+    private float _shootForce;
 
-    private bool leftTrigger = false;
-    private bool westButtonPressed = false;
-    private bool westButtonHeld = false;
-    private bool eastButton = false;
-    private bool northButton = false;
-    private bool southButton = false;
+    private bool _leftTrigger = false;
+    private bool _westButtonPressed = false;
+    private bool _westButtonHeld = false;
+    private bool _eastButton = false;
+    private bool _northButton = false;
+    private bool _southButton = false;
 
-    private const float loadTime = 1.5f;
+    private const float _loadTime = 1.5f;
 
     /// <summary>
     /// Compute the displacement applied to the player by the device
@@ -25,20 +25,20 @@ public class InputBrain : PlayerBrain
     /// 
     private void Start()
     {
-        shootForce = 0;
+        _shootForce = 0;
     }
     private void Update()
     {
-        if (westButtonHeld)
+        if (_westButtonHeld)
         {
-            shootForce += Time.deltaTime; // Force en fonction du ntemp appuyé A REVOIR
+            _shootForce += Time.deltaTime; // Force en fonction du ntemp appuyé A REVOIR
 
-            if (shootForce > loadTime)
+            if (_shootForce > _loadTime)
             {
-                shootForce = loadTime;
+                _shootForce = _loadTime;
 
-                westButtonHeld = false;
-                westButtonPressed = true;
+                _westButtonHeld = false;
+                _westButtonPressed = true;
             }
         }
     }
@@ -46,29 +46,29 @@ public class InputBrain : PlayerBrain
     //-------------------------------------------------------Revoir tout les return de GetAction() !!!!
     public override Action GetAction()
     {
-        if (westButtonPressed) // Shoot|Tackle
+        if (_westButtonPressed) // Shoot|Tackle
         {
-            westButtonPressed = false;
+            _westButtonPressed = false;
 
             if (Player.HasBall)
             {
-                return Action.Shoot(shootForce / loadTime);
+                return Action.Shoot(_shootForce / _loadTime);
             }
             else
                 return Action.Tackle(_movementInput);
         }
-        else if (eastButton) // Throw
+        else if (_eastButton) // Throw
         {
-            eastButton = !eastButton;
+            _eastButton = !_eastButton;
             return Action.Throw(_movementInput);
         }
-        else if (southButton) // ChangePlayer/Pass
+        else if (_southButton) // ChangePlayer/Pass
         {
-            southButton = !southButton;
+            _southButton = !_southButton;
 
             if (Player.HasBall)
             {
-                if (leftTrigger)
+                if (_leftTrigger)
                     return Action.LobPass(_movementInput); // With bezier point
                 else
                     return Action.Pass(_movementInput); // Without bezier point
@@ -77,9 +77,9 @@ public class InputBrain : PlayerBrain
                 return Action.ChangePlayer();
 
         }
-        else if (northButton) // Drible/HeadButt
+        else if (_northButton) // Drible/HeadButt
         {
-            northButton = !northButton;
+            _northButton = !_northButton;
 
             if (Player.HasBall)
                 return Action.Dribble();
@@ -88,7 +88,7 @@ public class InputBrain : PlayerBrain
         }
         else
         {
-            if (westButtonHeld)
+            if (_westButtonHeld)
                 return Action.Loading(1f);// shootForce / loadTime
             else
             {
@@ -116,14 +116,14 @@ public class InputBrain : PlayerBrain
     {
         if (context.phase == InputActionPhase.Performed)
         {
-            shootForce = 0f;
-            westButtonHeld = true;
+            _shootForce = 0f;
+            _westButtonHeld = true;
         }
 
         if (context.phase == InputActionPhase.Canceled)
         {
-            westButtonHeld = false;
-            westButtonPressed = true;
+            _westButtonHeld = false;
+            _westButtonPressed = true;
         }
     }
 
@@ -131,26 +131,26 @@ public class InputBrain : PlayerBrain
     {
 
         if (context.phase == InputActionPhase.Performed)
-            eastButton = !eastButton;
+            _eastButton = !_eastButton;
     }
 
     public void NorthButton(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
-            northButton = !northButton;
+            _northButton = !_northButton;
     }
 
     public void SouthButton(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
-            southButton = !southButton;
+            _southButton = !_southButton;
     }
 
     public void LeftTrigger(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
-            leftTrigger = true;
+            _leftTrigger = true;
         if (context.phase == InputActionPhase.Canceled)
-            leftTrigger = false;
+            _leftTrigger = false;
     }
 }

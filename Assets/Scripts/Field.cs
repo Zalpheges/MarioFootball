@@ -123,6 +123,7 @@ public class Field : MonoBehaviour
             }
 
             CameraManager.ReadQueue();
+            GameManager.CanSkip = true;
 
             void HandlePlayer(Player player, Vector3 spawnPosition, Vector3 destination)
             {
@@ -140,12 +141,9 @@ public class Field : MonoBehaviour
         {
             foreach (Player player in team.Players)
             {
-                player.transform.position = player.ActionsQueue.GetFinalDestination();
-                player.ActionsQueue.Clear();
+                player.SkipQueue();
             }
-            Player gk = team.Goalkeeper;
-            gk.transform.position = gk.ActionsQueue.GetFinalDestination();
-            gk.ActionsQueue.Clear();
+            team.Goalkeeper.SkipQueue();
         }
     }
 

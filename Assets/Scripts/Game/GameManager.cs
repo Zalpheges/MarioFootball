@@ -34,7 +34,10 @@ public class GameManager : MonoBehaviour
 
     public static bool IsGoalScored = false;
 
+    public static bool CanSkip = false;
+
     public static (bool run, float value) KickOffTimer = (false, 0f);
+    public static int Difficulty { get; private set; }
 
     private static GameManager _instance;
 
@@ -46,7 +49,6 @@ public class GameManager : MonoBehaviour
     private bool _endOfGameUIDone = false;
     private bool _inMatch = false;
 
-    public static int Difficulty { get; private set; }
 
     #region Debug
 
@@ -111,11 +113,16 @@ public class GameManager : MonoBehaviour
         if (!_inMatch)//if we're not in match
             return;
 
-        if ((Keyboard.current?.enterKey.wasPressedThisFrame ?? false)
-            || (Gamepad.current?.startButton.wasPressedThisFrame ?? false))
+        if (CanSkip) 
         {
-            CameraManager.SkipQueue();
-            Field.SkipPlayersQueue();
+            if ((Keyboard.current?.enterKey.wasPressedThisFrame ?? false)
+                || (Gamepad.current?.startButton.wasPressedThisFrame ?? false))
+            {
+                UIManager.SkipAnnouncement();
+                CameraManager.SkipQueue();
+                Field.SkipPlayersQueue();
+                CanSkip = false;
+            } 
         }
 
         if (KickOffTimer.run)
@@ -275,16 +282,18 @@ public class GameManager : MonoBehaviour
         HandleScorer();
 
         if (team == Field.Team1)
-        {
             UIManager.SetScore(scoreTeam2: ++_instance._currentResult.ScoreTeam2);
-            RedirectPlayers(Field.Team1.Players, Field.Team2.Players);
-        }
         else if (team == Field.Team2)
-        {
             UIManager.SetScore(scoreTeam1: ++_instance._currentResult.ScoreTeam1);
-            RedirectPlayers(Field.Team2.Players, Field.Team1.Players);
+
+        RedirectPlayers(team.Players, team.Other.Players);
+        if (!Field.Team1.Players[0].IsPiloted)
+        {
+            Field.Team1.ChangePlayer(Field.Team1.Players[0].transform.position);
         }
 
+        CanSkip = true;
+        
         Field.Ball.transform.position = team.Players[0].transform.position;
 
         #region Local functions
