@@ -32,7 +32,7 @@ public class Player : MonoBehaviour
 
     public PlayerState State { get; private set; }
     public Team Team { get; private set; }
-    public Team Enemies => Team == Field.Team1 ? Field.Team2 : Field.Team1;
+    public Team Enemies => Team.Other;
 
     public bool CanGetBall { get; private set; } = true;
     public bool IsStunned => State == PlayerState.Stunned || State == PlayerState.Falling;
@@ -55,7 +55,7 @@ public class Player : MonoBehaviour
     private float _dashSpeed;
     private Vector3 _dashEndPoint;
 
-    private int lockFrames = 0;
+    private int _lockFrames = 0;
     private Action _waitingAction = null;
 
     private Transform _lookAt;
@@ -207,10 +207,10 @@ public class Player : MonoBehaviour
         if (HasBall)
             Field.Ball.SetLoading(0f);
 
+        //DEBUG
         Team.GainItem();
 
-        _rgdb.angularVelocity = Vector3.zero;
-        _rgdb.velocity = Vector3.zero;
+        _rgdb.angularVelocity = _rgdb.velocity = Vector3.zero;
 
         if (_processQueue)
             UpdateNavQueue();
@@ -223,40 +223,7 @@ public class Player : MonoBehaviour
         if (IsNavDriven)
         {
             if (Vector3.Distance(transform.position, _agent.destination) <= 0.1f)
-            {
-                if (!_processQueue)
-                {
-                    IsNavDriven = false;
-                    _agent.speed = 10f;
-
-                    IsWaiting = true;
-
-                    if (Field.ArePlayersAllWaiting())
-                    {
-                        if (!GameManager.KickOffTimer.run)
-                        {
-                            GameManager.CanSkip = false;
-                            UIManager.DisplayAnnouncement(UIManager.AnnouncementType.ReadySetGo);
-                            AudioManager.PlaySFX(AudioManager.SFXType.Kickoff);
-                            GameManager.KickOffTimer.run = true;
-                        }
-                    }
-
-                    if (IsGoalKeeper)
-                        _agent.agentTypeID = GetAgentTypeIDByName("Goal Keeper");
-
-                    transform.rotation = Quaternion.LookRotation(Vector3.Project(transform.position - Team.transform.position, Field.Transform.forward));
-                }
-                else
-                {
-                    if (_animToPerform != null)
-                        _animToPerform();
-                    else
-                        _timer += _currentTimeLimit;//force the next animation to come
-
-                }
-            }
-
+                OnDestinationReached();
             return;
         }
 
@@ -270,13 +237,7 @@ public class Player : MonoBehaviour
                 _rgdb.rotation = Quaternion.Slerp(_rgdb.rotation, rotation, 50f * Time.deltaTime);
             }
 
-            if (Field.ArePlayersAllWaiting())
-            {
-                GameManager.IsGoalScored = false;
-                GameManager.KickOffTimer.run = true;
-                ResetState();
-            }
-            else
+            if (!Field.ArePlayersAllWaiting())
                 return;
         }
 
@@ -334,14 +295,14 @@ public class Player : MonoBehaviour
 
         if (debug) Debug.Log(name);
 
-        if (lockFrames++ >= 100 && _agent.isOnNavMesh && _agent.remainingDistance >= 0.1f && _agent.pathStatus == NavMeshPathStatus.PathComplete && _agent.velocity == Vector3.zero)
+        if (_lockFrames++ >= 100 && _agent.isOnNavMesh && _agent.remainingDistance >= 0.1f && _agent.pathStatus == NavMeshPathStatus.PathComplete && _agent.velocity == Vector3.zero)
         {
             _agent.enabled = false;
             _waitingAction = action;
-            lockFrames = 0;
+            _lockFrames = 0;
         }
         else
-            MakeAction(action);
+            MakeAction();
 
         #region Local functions
 
@@ -356,57 +317,153 @@ public class Player : MonoBehaviour
             }
         }
 
+        void OnDestinationReached()
+        {
+            if (!_processQueue)
+            {
+                IsNavDriven = false;
+                _agent.speed = 10f;
+
+                IsWaiting = true;
+
+                if (Field.ArePlayersAllWaiting())
+                {
+                    if (!GameManager.KickOffTimer.run)
+                    {
+                        GameManager.CanSkip = false;
+                        GameManager.IsGoalScored = false;
+                        UIManager.DisplayAnnouncement(UIManager.AnnouncementType.ReadySetGo);
+                        AudioManager.PlaySFX(AudioManager.SFXType.Kickoff);
+                        GameManager.KickOffTimer.run = true;
+                        ResetState();
+                    }
+                }
+
+                if (IsGoalKeeper)
+                    _agent.agentTypeID = GetAgentTypeIDByName("Goal Keeper");
+
+                transform.rotation = Quaternion.LookRotation(Vector3.Project(transform.position - Team.transform.position, Field.Transform.forward));
+            }
+            else
+            {
+                if (_animToPerform != null)
+                    _animToPerform();
+                else
+                    _timer += _currentTimeLimit;//force the next animation to come
+
+            }
+        }
+
+        void MakeAction()
+        {
+            Vector3 direction = ComputeDirection(action);
+
+            if (action.DirectionalAction && action.WaitForRotation && !IsGoalKeeper)
+                transform.LookAt(_rgdb.position + direction, Vector3.up);
+
+            if (!action)
+                Idle();
+
+            switch (action.ActionType)
+            {
+                case Action.Type.Move:
+                    if (_agent.enabled)
+                        _agent.Move(_speed * 2f * Time.deltaTime * direction);
+                    else
+                        _rgdb.position += _speed * 2f * Time.deltaTime * direction;
+                    Run();
+
+                    break;
+
+                case Action.Type.Stop:
+                    _agent.isStopped = true;
+                    _agent.velocity = Vector3.zero;
+                    Idle();
+
+                    break;
+
+                case Action.Type.MoveTo:
+                    _agent.enabled = true;
+                    _agent.speed = (IsGoalKeeper && Field.Ball.IsMoving) ? 30f : 10f;
+                    _agent.SetDestination(action.Position);
+                    Run();
+
+                    break;
+
+                case Action.Type.Shoot:
+                    if (HasBall)
+                    {
+                        Shoot(action.Force);
+                        PlaySound(AudioManager.CharaSFXType.Shoot);
+                        _animator.SetTrigger("Strike");
+                        _animator.SetBool("Hold Strike", false);
+                    }
+
+                    break;
+
+                case Action.Type.Throw:
+                    ThrowItem(direction);
+                    PlaySound(AudioManager.CharaSFXType.ThrowItem);
+
+                    break;
+
+                case Action.Type.Headbutt:
+                    Headbutt(direction);
+
+                    break;
+
+                case Action.Type.Tackle:
+                    Tackle(direction);
+
+                    break;
+
+                case Action.Type.ChangePlayer:
+                    Team.ChangePlayer(transform.position);
+
+                    break;
+
+                case Action.Type.Dribble:
+                    State = PlayerState.Dribbling;
+                    Dash(direction, 9f, 1.2f);
+                    _animator.SetTrigger("Spin");
+
+                    break;
+
+                case Action.Type.LobPass:
+                    if (HasBall)
+                    {
+                        Field.Ball.LobPass(direction, 20f);
+                        PlaySound(AudioManager.CharaSFXType.Pass);
+                        _animator.SetTrigger("Pass");
+                    }
+
+                    break;
+
+                case Action.Type.Pass:
+                    if (HasBall)
+                    {
+                        DirectPass(direction);
+                        PlaySound(AudioManager.CharaSFXType.Pass);
+                        _animator.SetTrigger("Pass");
+                    }
+
+                    break;
+
+                case Action.Type.Loading:
+                    Field.Ball.SetLoading(action.Force);
+                    _animator.SetTrigger("Strike");
+                    _animator.SetBool("Hold Strike", true);
+                    Idle();
+
+                    break;
+            }
+        }
         #endregion
     }
 
     #endregion
 
-    private void ChangeMaterialOnElectrocution(bool enabled)
-    {
-        if (enabled)
-        {
-            for (int i = 0; i < _electrocutedBody.Length; i++)
-            {
-                Material[] Mats = new Material[] { _electrocutedBody[i].materials[0], MaterialElectricity };
-                //Debug.Log(gameObject.transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>().materials[1].name);
-                _electrocutedBody[i].materials = Mats;
-            }
-
-        }
-        else
-        {
-            for (int i = 0; i < _electrocutedBody.Length; i++)
-            {
-                Material[] Mats = new Material[] { _electrocutedBody[i].materials[0] };
-                //Debug.Log(gameObject.transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>().materials[1].name);
-                _electrocutedBody[i].materials = Mats;
-            }
-
-        }
-    }
-
-    private void ChangeMaterialOnFreeze(bool enabled)
-    {
-        if (enabled)
-        {
-            for (int i = 0; i < _electrocutedBody.Length; i++)
-            {
-                Material[] Mats = new Material[] { _electrocutedBody[i].materials[0], MaterialFreeze };
-                //Debug.Log(gameObject.transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>().materials[1].name);
-                _electrocutedBody[i].materials = Mats;
-            }
-        }
-        else
-        {
-            for (int i = 0; i < _electrocutedBody.Length; i++)
-            {
-                Material[] Mats = new Material[] { _electrocutedBody[i].materials[0] };
-                //Debug.Log(gameObject.transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>().materials[1].name);
-                _electrocutedBody[i].materials = Mats;
-            }
-
-        }
-    }
+    #region Movement Setup
 
     public void SetNavDriven(Vector3 destination, float speed = 10f)
     {
@@ -428,146 +485,20 @@ public class Player : MonoBehaviour
         IsWaiting = false;
     }
 
-    public void Run(bool happy = false, bool sad = false)
+    private void ResetState()
     {
-        _animator.SetBool("Run", true);
-        _animator.SetBool("Idle", false);
+        CanGetBall = true;
 
-        _animator.SetBool("HappyWalk", happy);
-        _animator.SetBool("SadWalk", sad);
+        ChangeMaterialOnElectrocution(false);
 
-        _animator.SetBool("Celebrate", false);
-        _animator.SetBool("Shameful", false);
-    }
-    public void Idle(bool celebrate = false, bool shameful = false)
-    {
-        _animator.SetBool("Idle", true);
-        _animator.SetBool("Run", false);
+        _agent.enabled = true;
 
-        _animator.SetBool("Celebrate", celebrate);
-        _animator.SetBool("Shameful", shameful);
+        State = PlayerState.Moving;
 
-        _animator.SetBool("HappyWalk", false);
-        _animator.SetBool("SadWalk", false);
+        CancelInvoke();
     }
 
-    private void MakeAction(Action action)
-    {
-        Vector3 direction = ComputeDirection(action);
-
-        if (action.DirectionalAction && action.WaitForRotation && !IsGoalKeeper)
-            transform.LookAt(_rgdb.position + direction, Vector3.up);
-
-        if (!action)
-            Idle();
-
-        switch (action.ActionType)
-        {
-            case Action.Type.Move:
-                if (_agent.enabled)
-                    _agent.Move(_speed * 2f * Time.deltaTime * direction);
-                else
-                    _rgdb.position += _speed * 2f * Time.deltaTime * direction;
-                Run();
-
-                break;
-
-            case Action.Type.Stop:
-                _agent.isStopped = true;
-                _agent.velocity = Vector3.zero;
-                Idle();
-
-                break;
-
-            case Action.Type.MoveTo:
-                _agent.enabled = true;
-                _agent.speed = (IsGoalKeeper && Field.Ball.IsMoving) ? 30f : 10f;
-                _agent.SetDestination(action.Position);
-                Run();
-
-                break;
-
-            case Action.Type.Shoot:
-                if (HasBall)
-                {
-                    Shoot(action.Force);
-                    PlaySound(AudioManager.CharaSFXType.Shoot);
-                    _animator.SetTrigger("Strike");
-                    _animator.SetBool("Hold Strike", false);
-                }
-
-                break;
-
-            case Action.Type.Throw:
-                ThrowItem(direction);
-                PlaySound(AudioManager.CharaSFXType.ThrowItem);
-
-                break;
-
-            case Action.Type.Headbutt:
-                Headbutt(direction);
-
-                break;
-
-            case Action.Type.Tackle:
-                Tackle(direction);
-
-                break;
-
-            case Action.Type.ChangePlayer:
-                Team.ChangePlayer(transform.position);
-
-                break;
-
-            case Action.Type.Dribble:
-                State = PlayerState.Dribbling;
-                Dash(direction, 9f, 1.2f);
-                _animator.SetTrigger("Spin");
-
-                break;
-
-            case Action.Type.LobPass:
-                if (HasBall)
-                {
-                    Field.Ball.LobPass(direction, 20f);
-                    PlaySound(AudioManager.CharaSFXType.Pass);
-                    _animator.SetTrigger("Pass");
-                }
-
-                break;
-
-            case Action.Type.Pass:
-                if (HasBall)
-                {
-                    DirectPass(direction);
-                    PlaySound(AudioManager.CharaSFXType.Pass);
-                    _animator.SetTrigger("Pass");
-                }
-
-                break;
-
-            case Action.Type.Loading:
-                Field.Ball.SetLoading(action.Force);
-                _animator.SetTrigger("Strike");
-                _animator.SetBool("Hold Strike", true);
-                Idle();
-
-                break;
-        }
-    }
-
-    private Vector3 ComputeDirection(Action action)
-    {
-        Vector3 direction = action.Direction != Vector3.zero ? Field.Transform.TransformDirection(action.Direction) : transform.forward;
-
-        if (action.ActionType == Action.Type.Shoot)
-        {
-            direction = Enemies.transform.position - transform.position;
-            direction.y = 0f;
-        }
-
-        return direction.normalized;
-    }
+    #endregion
 
     #region Collisions
 
@@ -583,7 +514,7 @@ public class Player : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.tag == "Wall")
+        if (other.CompareTag("Wall"))
         {
             ResetState();
             InWall = false;
@@ -606,13 +537,15 @@ public class Player : MonoBehaviour
         }
 
         Player player = other.GetComponent<Player>();
+        if (!player)
+            return;
 
-        if (player && player.IsDoped)
+        if (player.IsDoped)
         {
             Fall((_rgdb.position - player.transform.position).normalized, 6f * player._specs.Weight / 70f, 1.5f, 1f);
         }
 
-        if (player && CanGetBall && !IsDoped && !IsGoalKeeper)
+        if (CanGetBall && !IsDoped && !IsGoalKeeper)
         {
             if (player.State == PlayerState.Tackling)
             {
@@ -631,107 +564,7 @@ public class Player : MonoBehaviour
 
     #endregion
 
-    #region Shoot
-
-    private void Shoot(float force)
-    {
-        force = Mathf.Max(0.2f, force);
-
-        //Debug.Log(_specs.Accuracy * force);
-        Transform goal = Enemies.transform;
-
-        //float angle = Vector3.SignedAngle(transform.forward, goal.forward, Vector3.up);
-        //angle = -(Mathf.Abs(angle) - 180f);
-
-        float distance = Vector3.Distance(transform.position, goal.position);
-
-        if (distance > Field.Width / 2f)
-            MissedShoot(goal);
-        else
-        {
-            if (Random.value > _specs.Accuracy * force)
-            {
-                Debug.Log("Poteau");
-                GoalPostShoot(goal);
-            }
-            else
-                ShootOnTarget(goal, force);
-        }
-    }
-
-    private void MissedShoot(Transform goal)
-    {
-        float sign = Mathf.Sign(Random.value - 0.5f);
-        float range = Random.Range(Field.GoalWidth / 2f, Field.Height / 2f);
-
-        Field.Ball.Shoot(goal.position + goal.right * sign * range, 33f);
-
-        // Debug
-        float distance = Vector3.Distance(goal.position, _rgdb.position);
-        string direction = sign < 0 ? "gauche" : "droite";
-        //Debug.Log($"Distance > 45m ({distance}) - Tir non cadr� � {direction} ({range}m).");
-    }
-
-    private void GoalPostShoot(Transform goal)
-    {
-        float sign = Mathf.Sign(Random.value - 0.5f);
-
-        Field.Ball.Shoot(goal.position + goal.right * sign * Field.GoalWidth / 2f, 33f);
-
-        // Debug
-        float distance = Vector3.Distance(goal.position, _rgdb.position);
-        string direction = sign < 0 ? "gauche" : "droit";
-        //Debug.Log($"Distance < 45m ({distance}) - Tir sur poteau {direction}.");
-    }
-
-    private void ShootOnTarget(Transform goal, float force)
-    {
-        float x = Random.Range(-1, 2);
-        float y = force < 1f / 3f ? -1f : (force < 2f / 3f ? 0f : 1f);
-
-        Vector3 endPosition = goal.position;
-        endPosition += goal.right * x * Field.GoalWidth * 0.85f / 2f;
-        endPosition += goal.up * y * Field.GoalHeight * 0.85f / 2f;
-
-        Vector3 interpolator = (_rgdb.position + endPosition) / 2f;
-        float distance = Vector3.Distance(goal.position, _rgdb.position);
-        interpolator -= Vector3.Project((endPosition - _rgdb.position) * distance / 45f, goal.right);
-
-        Field.Ball.Shoot(endPosition, interpolator, 33f);
-
-        // Debug
-        //Debug.Log($"Distance < 45m ({distance}) - Tir cadr� ({x} ; {y}).");
-    }
-
-    #endregion
-
-    #region Pass
-
-    private void DirectPass(Vector3 direction)
-    {
-        Player mate = FindMateInRange(direction, IsGoalKeeper ? 360f : 90f);
-
-        if (mate)
-        {
-            if (IsGoalKeeper)
-            {
-                direction = mate.transform.position - transform.position;
-                float distance = direction.magnitude;
-
-                Field.Ball.LobPass(mate);
-            }
-            else
-                Field.Ball.Pass(mate, 33f);
-
-            //Debug.Log("Passe directe vers " + direction.ToString());
-        }
-        else
-            Field.Ball.LobPass(direction, 20f);
-    }
-
-    #endregion
-
-    #region FindMate
+    #region FindPlayer
 
     public Player FindMateInRange(Vector3 direction, float range, bool standOut = false, bool includeGoalKeeper = true)
     {
@@ -771,22 +604,126 @@ public class Player : MonoBehaviour
         }
 
         return best.player;
+
+        bool IsPlayerStandOut(Player player)
+        {
+            Vector3 direction = player.transform.position - transform.position;
+
+            Debug.DrawRay(transform.position + Vector3.up, direction, Color.red, 10f);
+            if (Physics.Raycast(transform.position + Vector3.up, direction, out RaycastHit hit, Mathf.Infinity, 1 << gameObject.layer))
+            {
+                Player target = hit.transform.GetComponent<Player>();
+
+                if (target == player)
+                    return true;
+            }
+
+            return false;
+        }
     }
 
-    private bool IsPlayerStandOut(Player player)
+    #endregion
+
+    #region Actions
+
+    #region Shoot
+
+    private void Shoot(float force)
     {
-        Vector3 direction = player.transform.position - transform.position;
+        force = Mathf.Max(0.2f, force);
 
-        Debug.DrawRay(transform.position + Vector3.up, direction, Color.red, 10f);
-        if (Physics.Raycast(transform.position + Vector3.up, direction, out RaycastHit hit, Mathf.Infinity, 1 << gameObject.layer))
+        if (debug) Debug.Log(_specs.Accuracy * force);
+        Transform goal = Enemies.transform;
+        //DEBUG
+        //float angle = Vector3.SignedAngle(transform.forward, goal.forward, Vector3.up);
+        //angle = -(Mathf.Abs(angle) - 180f);
+
+        float distance = Vector3.Distance(transform.position, goal.position);
+
+        if (distance > Field.Width / 2f)
+            MissedShoot();
+        else
         {
-            Player target = hit.transform.GetComponent<Player>();
-
-            if (target == player)
-                return true;
+            if (Random.value > _specs.Accuracy * force)
+            {
+                Debug.Log("Poteau");
+                GoalPostShoot();
+            }
+            else
+                ShootOnTarget();
         }
 
-        return false;
+        #region Local functions
+
+        void MissedShoot()
+        {
+            float sign = Mathf.Sign(Random.value - 0.5f);
+            float range = Random.Range(Field.GoalWidth / 2f, Field.Height / 2f);
+
+            Field.Ball.Shoot(goal.position + range * sign * goal.right, 33f);
+
+            // Debug
+            //float distance = Vector3.Distance(goal.position, _rgdb.position);
+            //string direction = sign < 0 ? "gauche" : "droite";
+            //Debug.Log($"Distance > 45m ({distance}) - Tir non cadr� � {direction} ({range}m).");
+        }
+
+        void GoalPostShoot()
+        {
+            float sign = Mathf.Sign(Random.value - 0.5f);
+
+            Field.Ball.Shoot(goal.position + Field.GoalWidth * sign * goal.right / 2f, 33f);
+
+            // Debug
+            //float distance = Vector3.Distance(goal.position, _rgdb.position);
+            //string direction = sign < 0 ? "gauche" : "droit";
+            //Debug.Log($"Distance < 45m ({distance}) - Tir sur poteau {direction}.");
+        }
+
+        void ShootOnTarget()
+        {
+            float x = Random.Range(-1, 2);
+            float y = force < 1 / 3f ? -1f : (force < 2 / 3f ? 0f : 1f);
+
+            Vector3 endPosition = goal.position;
+            endPosition += 0.85f * Field.GoalWidth * x * goal.right / 2f;
+            endPosition += 0.85f * Field.GoalHeight * y * goal.up / 2f;
+
+            Vector3 interpolator = (_rgdb.position + endPosition) / 2f;
+            float distance = Vector3.Distance(goal.position, _rgdb.position);
+            interpolator -= Vector3.Project((endPosition - _rgdb.position) * distance / 45f, goal.right);
+
+            Field.Ball.Shoot(endPosition, interpolator, 33f);
+
+            // Debug
+            //Debug.Log($"Distance < 45m ({distance}) - Tir cadr� ({x} ; {y}).");
+        }
+
+        #endregion
+    }
+
+
+    #endregion
+
+    #region Pass
+
+    private void DirectPass(Vector3 direction)
+    {
+        Player mate = FindMateInRange(direction, IsGoalKeeper ? 360f : 90f);
+
+        if (mate)
+        {
+            if (IsGoalKeeper)
+            {
+                Field.Ball.LobPass(mate);
+            }
+            else
+                Field.Ball.Pass(mate, 33f);
+
+            //Debug.Log("Passe directe vers " + direction.ToString());
+        }
+        else
+            Field.Ball.LobPass(direction, 20f);
     }
 
     #endregion
@@ -806,22 +743,6 @@ public class Player : MonoBehaviour
 
     #endregion
 
-    #region Events
-
-    public void OnMissedShoot()
-    {
-        Team.GainItem();
-    }
-
-    public void OnHitWithNoBall()
-    {
-        Team.GainItem();
-    }
-
-    #endregion
-
-    #region Special
-
     private void Headbutt(Vector3 direction)
     {
         State = PlayerState.Headbutting;
@@ -837,6 +758,10 @@ public class Player : MonoBehaviour
 
         Dash(direction, 8f, 1.2f, 0.5f);
     }
+
+    #endregion
+
+    #region Constraints
 
     public void Fall(Vector3 direction, float distance = 4f, float time = 1.5f, float standUpDelay = 2f)
     {
@@ -898,19 +823,6 @@ public class Player : MonoBehaviour
         Invoke(nameof(ResetState), time + standUpDelay);
     }
 
-    private void ResetState()
-    {
-        CanGetBall = true;
-
-        ChangeMaterialOnElectrocution(false);
-
-        _agent.enabled = true;
-
-        State = PlayerState.Moving;
-
-        CancelInvoke();
-    }
-
     #endregion
 
     #region Boost
@@ -929,21 +841,30 @@ public class Player : MonoBehaviour
 
     #endregion
 
-    private int GetAgentTypeIDByName(string agentTypeName)
-    {
-        int count = NavMesh.GetSettingsCount();
-        for (var i = 0; i < count; i++)
-        {
-            int id = NavMesh.GetSettingsByIndex(i).agentTypeID;
-            string name = NavMesh.GetSettingsNameFromID(id);
-            if (name == agentTypeName)
-            {
-                return id;
-            }
-        }
-        return -1;
-    }
+    #region Anim & Sounds
 
+    public void Run(bool happy = false, bool sad = false)
+    {
+        _animator.SetBool("Run", true);
+        _animator.SetBool("Idle", false);
+
+        _animator.SetBool("HappyWalk", happy);
+        _animator.SetBool("SadWalk", sad);
+
+        _animator.SetBool("Celebrate", false);
+        _animator.SetBool("Shameful", false);
+    }
+    public void Idle(bool celebrate = false, bool shameful = false)
+    {
+        _animator.SetBool("Idle", true);
+        _animator.SetBool("Run", false);
+
+        _animator.SetBool("Celebrate", celebrate);
+        _animator.SetBool("Shameful", shameful);
+
+        _animator.SetBool("HappyWalk", false);
+        _animator.SetBool("SadWalk", false);
+    }
     private void PlaySound(AudioManager.CharaSFXType sfxType)
     {
         if (Team == Field.Team1) // not AI
@@ -969,4 +890,103 @@ public class Player : MonoBehaviour
             }
         }
     }
+
+    #endregion
+
+    #region Change Material
+
+    private void ChangeMaterialOnElectrocution(bool enabled)
+    {
+        if (enabled)
+        {
+            for (int i = 0; i < _electrocutedBody.Length; i++)
+            {
+                Material[] Mats = new Material[] { _electrocutedBody[i].materials[0], MaterialElectricity };
+                //Debug.Log(gameObject.transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>().materials[1].name);
+                _electrocutedBody[i].materials = Mats;
+            }
+
+        }
+        else
+        {
+            for (int i = 0; i < _electrocutedBody.Length; i++)
+            {
+                Material[] Mats = new Material[] { _electrocutedBody[i].materials[0] };
+                //Debug.Log(gameObject.transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>().materials[1].name);
+                _electrocutedBody[i].materials = Mats;
+            }
+
+        }
+    }
+
+    private void ChangeMaterialOnFreeze(bool enabled)
+    {
+        if (enabled)
+        {
+            for (int i = 0; i < _electrocutedBody.Length; i++)
+            {
+                Material[] Mats = new Material[] { _electrocutedBody[i].materials[0], MaterialFreeze };
+                //Debug.Log(gameObject.transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>().materials[1].name);
+                _electrocutedBody[i].materials = Mats;
+            }
+        }
+        else
+        {
+            for (int i = 0; i < _electrocutedBody.Length; i++)
+            {
+                Material[] Mats = new Material[] { _electrocutedBody[i].materials[0] };
+                //Debug.Log(gameObject.transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>().materials[1].name);
+                _electrocutedBody[i].materials = Mats;
+            }
+        }
+    }
+
+    #endregion
+
+    #region Events
+
+    public void OnMissedShoot()
+    {
+        Team.GainItem();
+    }
+
+    public void OnHitWithNoBall()
+    {
+        Team.GainItem();
+    }
+
+    #endregion
+
+    #region Utility
+
+    private Vector3 ComputeDirection(Action action)
+    {
+        Vector3 direction = action.Direction != Vector3.zero ? Field.Transform.TransformDirection(action.Direction) : transform.forward;
+
+        if (action.ActionType == Action.Type.Shoot)
+        {
+            direction = Enemies.transform.position - transform.position;
+            direction.y = 0f;
+        }
+
+        return direction.normalized;
+    }
+
+    private int GetAgentTypeIDByName(string agentTypeName)
+    {
+        int count = NavMesh.GetSettingsCount();
+        for (var i = 0; i < count; i++)
+        {
+            int id = NavMesh.GetSettingsByIndex(i).agentTypeID;
+            string name = NavMesh.GetSettingsNameFromID(id);
+            if (name == agentTypeName)
+            {
+                return id;
+            }
+        }
+        return -1;
+    }
+
+    #endregion
+
 }

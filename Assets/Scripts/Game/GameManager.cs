@@ -110,7 +110,7 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (!_inMatch)//if we're not in match
+        if (!_inMatch)
             return;
 
         if (CanSkip) 
@@ -120,7 +120,7 @@ public class GameManager : MonoBehaviour
             {
                 UIManager.SkipAnnouncement();
                 CameraManager.SkipQueue();
-                Field.SkipPlayersQueue();
+                SkipPlayersQueue();
                 CanSkip = false;
             } 
         }
@@ -164,6 +164,18 @@ public class GameManager : MonoBehaviour
                 _inMatch = false;
                 AudioManager.PlayMusic(AudioManager.MusicType.Menu);
                 LevelLoader.LoadNextLevel(0);
+            }
+        }
+
+        void SkipPlayersQueue()
+        {
+            foreach (Team team in Field.Teams)
+            {
+                foreach (Player player in team.Players)
+                {
+                    player.SkipQueue();
+                }
+                team.Goalkeeper.SkipQueue();
             }
         }
     }
@@ -344,15 +356,13 @@ public class GameManager : MonoBehaviour
 
     public static void FreePlayers()
     {
-        foreach (Player player in Field.Team1.Players)
-            player.Free();
-        foreach (Player player in Field.Team2.Players)
-            player.Free();
-
-        Field.Team1.Goalkeeper.Free();
-        Field.Team2.Goalkeeper.Free();
+        foreach (Team team in Field.Teams)
+        {
+            foreach (Player player in team.Players)
+                player.Free();
+            team.Goalkeeper.Free();
+        }
     }
-
 
     #endregion
 

@@ -135,19 +135,6 @@ public class Field : MonoBehaviour
         }
     }
 
-    public static void SkipPlayersQueue()
-    {
-        foreach (Team team in Teams)
-        {
-            foreach (Player player in team.Players)
-            {
-                player.SkipQueue();
-            }
-            team.Goalkeeper.SkipQueue();
-        }
-    }
-
-
     #region Debug
 
     private void SetTeamPosition()
