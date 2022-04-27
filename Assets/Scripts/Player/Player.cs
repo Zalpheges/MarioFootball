@@ -284,7 +284,7 @@ public class Player : MonoBehaviour
 
         if (IsWaiting)
         {
-            if (action.ActionType == Action.Type.Pass && GameManager.KickOffTimer.value > 2f)
+            if (action.ActionType == Action.Type.Pass && GameManager.KickOffTimer.value > 2.5f)
             {
                 GameManager.FreePlayers();
                 GameManager.ChronoStopped = false;
