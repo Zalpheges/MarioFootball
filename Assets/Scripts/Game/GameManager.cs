@@ -7,6 +7,7 @@ using UnityEngine.InputSystem.Controls;
 public class GameManager : MonoBehaviour
 {
     #region Debug
+
     [SerializeField]
     private float _debugMatchDuration = 60f;
 
@@ -61,7 +62,6 @@ public class GameManager : MonoBehaviour
     public int d_aIDifficulty;
 
     #endregion
-
 
     #region Awake/Start/Update
 
@@ -215,7 +215,6 @@ public class GameManager : MonoBehaviour
 
         #endregion
 
-
         //Create allPlayers array
         Player[] allPlayers = new Player[team1.Players.Length + team2.Players.Length + 2];
         team1.Players.CopyTo(allPlayers, 0);
@@ -273,16 +272,14 @@ public class GameManager : MonoBehaviour
         {
             UIManager.SetScore(scoreTeam2: ++_instance._currentResult.ScoreTeam2);
             RedirectPlayers(Field.Team1.Players, Field.Team2.Players);
-            //Field.Ball.transform.position = Field.Team2.Players[0].transform.position;
         }
         else if (team == Field.Team2)
         {
             UIManager.SetScore(scoreTeam1: ++_instance._currentResult.ScoreTeam1);
             RedirectPlayers(Field.Team2.Players, Field.Team1.Players);
-            //Field.Ball.transform.position = Field.Team1.Players[0].transform.position;
         }
 
-        Field.Ball.transform.position = Field.Team1.Players[0].transform.position;
+        Field.Ball.transform.position = team.Players[0].transform.position;
 
         #region Local functions
 
